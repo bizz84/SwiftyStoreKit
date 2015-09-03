@@ -9,7 +9,7 @@
 import UIKit
 import StoreKit
 
-public class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
+class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
     enum ResultType {
         case Purchased(productId: String)
@@ -68,7 +68,7 @@ public class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver
     }
     
     // MARK: SKPaymentTransactionObserver
-    public func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         for transaction in transactions {
             switch transaction.transactionState {
@@ -109,18 +109,18 @@ public class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver
         }
     }
     
-    public func paymentQueue(queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
         
     }
     
-    public func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
+    func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
         
         dispatch_async(dispatch_get_main_queue(), {
             self.callback(result: ResultType.Failed(error: error))
         })
     }
 
-    public func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
+    func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
         
         if let product = self.product {
             self.callback(result: ResultType.Restored(productId: product.productIdentifier))
@@ -135,7 +135,7 @@ public class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver
         //print("\(restored)")
     }
     
-    public func paymentQueue(queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
+    func paymentQueue(queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
         
     }
 }

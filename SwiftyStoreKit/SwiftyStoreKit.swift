@@ -39,9 +39,9 @@ public class SwiftyStoreKit {
     }
 
     // MARK: Singleton
-    static let sharedInstance = SwiftyStoreKit()
+    public static let sharedInstance = SwiftyStoreKit()
     
-    var canMakePayments: Bool {
+    public var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
     

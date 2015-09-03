@@ -14,7 +14,7 @@ public enum ResponseError : ErrorType {
     case NoProducts
     case RequestFailed(error: NSError)
 }
-public class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
+class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
     enum ResultType {
         case Success(products: [SKProduct])
@@ -42,19 +42,19 @@ public class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         return request
     }
 
-    public func start() {
+    func start() {
         dispatch_async(dispatch_get_global_queue(0, 0), {
             self.request.start()
         })
     }
-    public func cancel() {
+    func cancel() {
         dispatch_async(dispatch_get_global_queue(0, 0), {
             self.request.cancel()
         })
     }
     
     // MARK: SKProductsRequestDelegate
-    public func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         
         if response.invalidProductIdentifiers.count > 0 {
             let error = ResponseError.InvalidProducts(invalidProductIdentifiers: response.invalidProductIdentifiers)
@@ -73,10 +73,10 @@ public class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         callback(result: .Success(products: response.products))
     }
     
-    public func requestDidFinish(request: SKRequest) {
+    func requestDidFinish(request: SKRequest) {
         
     }
-    public func request(request: SKRequest, didFailWithError error: NSError) {
+    func request(request: SKRequest, didFailWithError error: NSError) {
         
         let error = ResponseError.RequestFailed(error: error)
         dispatch_async(dispatch_get_main_queue(), {

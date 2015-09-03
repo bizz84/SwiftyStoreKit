@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 import SwiftyStoreKit
 
 class ViewController: UIViewController {
@@ -46,7 +47,10 @@ class ViewController: UIViewController {
                 print("Purchase Success: \(productId)")
                 break
             case .Error(let error):
-                if case ResponseError.RequestFailed(let internalError) = error where internalError.code == 0 {
+                if case ResponseError.RequestFailed(let internalError) = error where internalError.domain == SKErrorDomain {
+                    self.showMessage("Purchase failed", message: "Please check your Internet connection or try again later")
+                }
+                else if (error as NSError).domain == SKErrorDomain {
                     self.showMessage("Purchase failed", message: "Please check your Internet connection or try again later")
                 }
                 else {

@@ -11,11 +11,10 @@
 		6502F61D1B985858004E342D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6502F6151B985858004E342D /* Assets.xcassets */; settings = {ASSET_TAGS = (); }; };
 		6502F61E1B985858004E342D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6502F6161B985858004E342D /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
 		6502F61F1B985858004E342D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6502F6181B985858004E342D /* Main.storyboard */; settings = {ASSET_TAGS = (); }; };
-		6502F6201B985858004E342D /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6502F61A1B985858004E342D /* Info.plist */; settings = {ASSET_TAGS = (); }; };
 		6502F6211B985858004E342D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F61B1B985858004E342D /* ViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		6502F6251B98586A004E342D /* InAppProductPurchaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */; settings = {ASSET_TAGS = (); }; };
 		6502F6261B98586A004E342D /* InAppProductQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */; settings = {ASSET_TAGS = (); }; };
-		6502F6271B98586A004E342D /* SwiftyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6241B98586A004E342D /* SwiftyStore.swift */; settings = {ASSET_TAGS = (); }; };
+		6502F6271B98586A004E342D /* SwiftyStoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6241B98586A004E342D /* SwiftyStoreKit.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,7 +27,7 @@
 		6502F61B1B985858004E342D /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppProductPurchaseRequest.swift; sourceTree = "<group>"; };
 		6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppProductQueryRequest.swift; sourceTree = "<group>"; };
-		6502F6241B98586A004E342D /* SwiftyStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyStore.swift; sourceTree = "<group>"; };
+		6502F6241B98586A004E342D /* SwiftyStoreKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyStoreKit.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +63,7 @@
 			children = (
 				6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */,
 				6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */,
-				6502F6241B98586A004E342D /* SwiftyStore.swift */,
+				6502F6241B98586A004E342D /* SwiftyStoreKit.swift */,
 			);
 			path = SwiftyStoreKit;
 			sourceTree = "<group>";
@@ -139,7 +138,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6502F6201B985858004E342D /* Info.plist in Resources */,
 				6502F61F1B985858004E342D /* Main.storyboard in Resources */,
 				6502F61D1B985858004E342D /* Assets.xcassets in Resources */,
 				6502F61E1B985858004E342D /* LaunchScreen.storyboard in Resources */,
@@ -157,7 +155,7 @@
 				6502F6261B98586A004E342D /* InAppProductQueryRequest.swift in Sources */,
 				6502F6251B98586A004E342D /* InAppProductPurchaseRequest.swift in Sources */,
 				6502F61C1B985858004E342D /* AppDelegate.swift in Sources */,
-				6502F6271B98586A004E342D /* SwiftyStore.swift in Sources */,
+				6502F6271B98586A004E342D /* SwiftyStoreKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

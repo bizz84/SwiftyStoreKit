@@ -1,6 +1,6 @@
 //
 //  InAppProductPurchaseRequest.swift
-//  WordShooter
+//  SwiftyStoreKit
 //
 //  Created by Andrea Bizzotto on 01/09/2015.
 //  Copyright © 2015 musevisions. All rights reserved.

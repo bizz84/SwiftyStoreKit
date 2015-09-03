@@ -37,7 +37,7 @@ class ViewController: UIViewController {
     }
     func purchase(no: String) {
         
-        SwiftyStore.sharedInstance.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.sharedInstance.purchaseProduct(AppBundleId + ".purchase" + no) { result in
             
             switch result {
             case .Success(let productId):
@@ -58,7 +58,7 @@ class ViewController: UIViewController {
     }
     @IBAction func restorePurchases() {
         
-        SwiftyStore.sharedInstance.restorePurchases() { result in
+        SwiftyStoreKit.sharedInstance.restorePurchases() { result in
             switch result {
             case .Success(let productId):
                 self.showMessage("Purchases Restored", message: "All purchases have been restored")

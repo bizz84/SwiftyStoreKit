@@ -1,6 +1,6 @@
 //
-//  InAppPurchasesHelper.swift
-//  WordShooter
+//  SwiftyStoreKit.swift
+//  SwiftyStoreKit
 //
 //  Created by Andrea Bizzotto on 01/09/2015.
 //  Copyright © 2015 musevisions. All rights reserved.
@@ -11,7 +11,7 @@ import Foundation
 import StoreKit
 
 
-public class SwiftyStore {
+public class SwiftyStoreKit {
 
     // MARK: Private declarations
     private class InAppPurchaseStore {
@@ -39,7 +39,7 @@ public class SwiftyStore {
     }
 
     // MARK: Singleton
-    static let sharedInstance = SwiftyStore()
+    static let sharedInstance = SwiftyStoreKit()
     
     var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()

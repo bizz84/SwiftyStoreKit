@@ -27,14 +27,14 @@ import StoreKit
 
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
-    enum ResultType {
+    enum TransactionResult {
         case Purchased(productId: String)
         case Restored(productId: String)
         case NothingToRestore
         case Failed(error: NSError)
     }
     
-    typealias RequestCallback = (result: ResultType) -> ()
+    typealias RequestCallback = (result: TransactionResult) -> ()
     private let callback: RequestCallback
     private var purchases : [SKPaymentTransactionState: [String]] = [:]
 
@@ -90,7 +90,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             switch transaction.transactionState {
             case .Purchased:
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.callback(result: ResultType.Purchased(productId: transaction.payment.productIdentifier))
+                    self.callback(result: .Purchased(productId: transaction.payment.productIdentifier))
                 })
                 paymentQueue.finishTransaction(transaction)
                 break
@@ -99,13 +99,13 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                     // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
                     // mandatory, return a default one if needed
                     let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
-                    self.callback(result: ResultType.Failed(error: transaction.error ?? altError))
+                    self.callback(result: .Failed(error: transaction.error ?? altError))
                 })
                 paymentQueue.finishTransaction(transaction)
                 break
             case .Restored:
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.callback(result: ResultType.Restored(productId: transaction.payment.productIdentifier))
+                    self.callback(result: .Restored(productId: transaction.payment.productIdentifier))
                 })
                 paymentQueue.finishTransaction(transaction)
                 break
@@ -132,20 +132,20 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
         
         dispatch_async(dispatch_get_main_queue(), {
-            self.callback(result: ResultType.Failed(error: error))
+            self.callback(result: .Failed(error: error))
         })
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
         
         if let product = self.product {
-            self.callback(result: ResultType.Restored(productId: product.productIdentifier))
+            self.callback(result: .Restored(productId: product.productIdentifier))
             return
         }
         // This method will be called after all purchases have been restored (includes the case of no purchases)
         guard let restored = purchases[.Restored] where restored.count > 0 else {
             
-            self.callback(result: ResultType.NothingToRestore)
+            self.callback(result: .NothingToRestore)
             return
         }
         //print("\(restored)")

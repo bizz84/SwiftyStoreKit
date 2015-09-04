@@ -101,7 +101,7 @@ public class SwiftyStoreKit {
         }
     }
 
-    private func processPurchaseResult(result: InAppProductPurchaseRequest.ResultType) -> PurchaseResultType {
+    private func processPurchaseResult(result: InAppProductPurchaseRequest.TransactionResult) -> PurchaseResultType {
         switch result {
         case .Purchased(let productId):
             // TODO: Need a way to match with current product?
@@ -115,7 +115,7 @@ public class SwiftyStoreKit {
         }
     }
     
-    private func processRestoreResult(result: InAppProductPurchaseRequest.ResultType) -> RestoreResultType {
+    private func processRestoreResult(result: InAppProductPurchaseRequest.TransactionResult) -> RestoreResultType {
         switch result {
         case .Purchased(_):
             fatalError("case Purchased is not allowed for restore flow")

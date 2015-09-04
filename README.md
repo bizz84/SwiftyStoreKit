@@ -38,12 +38,12 @@ SwiftyStoreKit.sharedInstance.restorePurchases() { result in
 ## Implementation Details
 In order to make a purchase, two operations are needed:
 - Obtain the ```SKProduct``` corresponding to the productId that identifies the app purchase, via ```SKProductRequest```.
-- Submit the payment via ```SKPaymentQueue```.
+- Submit the payment for that product via ```SKPaymentQueue```.
+
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
 
 ### Requesting a product
-```SKProductRequest``` uses a delegate based API to talk with the client.
-SwiftyStoreKit wraps ```SKProductRequest``` with a block based class named ```InAppProductQueryRequest```, which returns either a success case with a list of valid products, or an error comprising any of the following cases:
+SwiftyStoreKit wraps the delegate-based ```SKProductRequest``` API with a block based class named ```InAppProductQueryRequest```, which returns either a success case with a list of valid products, or an error comprising the following cases:
 
 ```swift
 public enum ResponseError : ErrorType {
@@ -59,10 +59,10 @@ In case of success, the product is cached and the purchase can take place via th
 ### Purchasing a product / Restoring purchases
 ```InAppProductPurchaseRequest``` is a wrapper class for ```SKPaymentQueue``` that can be use to purchase a product or restore purchases.
 
-The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to appropriately handle transactions in the payment queue. The possible outcomes of a purchase/restore action are:
+The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to appropriately handle transactions in the payment queue. The following outcomes are defined for a purchase/restore action:
 
 ```swift
-enum ResultType {
+enum TransactionResult {
     case Purchased(productId: String)
     case Restored(productId: String)
     case NothingToRestore
@@ -70,7 +70,7 @@ enum ResultType {
 }
 ```
 
-The ```SwiftyStoreKit``` class can then map the purchase/restore action into either a success or failure case and pass this back to the client.
+The ```SwiftyStoreKit``` class can then map the returned ```TransactionResult``` into either a success or failure case and pass this back to the client.
 Note that along with the success and failure case, the result of a restore purchases operation also has a NothingToRestore case. This is so that the client can know that the operation returned, but no purchases were restored.
 
 

@@ -35,16 +35,18 @@ SwiftyStoreKit.sharedInstance.restorePurchases() { result in
 }
 ```
 
-### Features
+**NOTE**: SwiftyStoreKit does not persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
+
+#### Features
 - Block based API
 - enum-based error handling
 - Support for non-consumable in app purchases
 
-### Missing Features
+#### Missing Features
 - Receipt verification
 - Ask To Buy
 
-### Untested Features
+#### Untested Features
 - Consumable in app purchases
 - Free subscriptions for Newsstand
 

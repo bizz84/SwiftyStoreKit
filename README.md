@@ -1,6 +1,5 @@
 # SwiftyStoreKit
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written in Swift 2.0.
-The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework.
 
 ### Purchase a product
 
@@ -35,7 +34,8 @@ SwiftyStoreKit.sharedInstance.restorePurchases() { result in
 }
 ```
 
-**NOTE**: SwiftyStoreKit does not persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
+**NOTE**:
+The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
 ## Installation
 SwiftyStoreKit can be installed as a Cocoapod and builds as a Swift framework. To install, include this in your Podfile.

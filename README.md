@@ -2,7 +2,7 @@
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written in Swift 2.0.
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework.
 
-## Purchase a product
+### Purchase a product
 
 ```swift
 SwiftyStoreKit.sharedInstance.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { result in
@@ -17,7 +17,7 @@ SwiftyStoreKit.sharedInstance.purchaseProduct("com.musevisions.SwiftyStoreKit.Pu
 }
 ```
 
-## Restore previous purchases
+### Restore previous purchases
 
 ```swift
 SwiftyStoreKit.sharedInstance.restorePurchases() { result in
@@ -34,6 +34,19 @@ SwiftyStoreKit.sharedInstance.restorePurchases() { result in
     }
 }
 ```
+
+### Features
+- Block based API
+- enum-based error handling
+- Support for non-consumable in app purchases
+
+### Missing Features
+- Receipt verification
+- Ask To Buy
+
+### Untested Features
+- Consumable in app purchases
+- Free subscriptions for Newsstand
 
 ## Implementation Details
 In order to make a purchase, two operations are needed:
@@ -59,7 +72,7 @@ In case of success, the product is cached and the purchase can take place via th
 ### Purchasing a product / Restoring purchases
 ```InAppProductPurchaseRequest``` is a wrapper class for ```SKPaymentQueue``` that can be use to purchase a product or restore purchases.
 
-The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to appropriately handle transactions in the payment queue. The following outcomes are defined for a purchase/restore action:
+The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
 
 ```swift
 enum TransactionResult {

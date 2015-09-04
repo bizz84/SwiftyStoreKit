@@ -47,7 +47,7 @@ pod 'SwiftyStoreKit'
 Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
 
 ## Sample Code
-The project includes a demo app showing how to use SwiftyStoreKit.
+The project includes a demo app showing [how to use](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) SwiftyStoreKit.
 Note that the pre-registered in app purchases in the demo app are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 #### Features

@@ -37,6 +37,19 @@ SwiftyStoreKit.sharedInstance.restorePurchases() { result in
 
 **NOTE**: SwiftyStoreKit does not persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
+## Installation
+SwiftyStoreKit can be installed as a Cocoapod and builds as a Swift framework. To install, include this in your Podfile.
+```
+use_frameworks!
+
+pod 'SwiftyStoreKit'
+```
+Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
+
+## Sample Code
+The project includes a demo app showing how to use SwiftyStoreKit.
+Note that the pre-registered in app purchases in the demo app are for illustration purposes only and may not work as iTunes Connect may invalidate them.
+
 #### Features
 - Super easy to use block based API
 - enum-based error handling

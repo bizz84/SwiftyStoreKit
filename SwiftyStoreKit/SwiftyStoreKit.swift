@@ -59,17 +59,17 @@ public class SwiftyStoreKit {
     }
 
     // MARK: Singleton
-    public static let sharedInstance = SwiftyStoreKit()
+    private static let sharedInstance = SwiftyStoreKit()
     
-    public var canMakePayments: Bool {
+    public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
     
     // MARK: Public methods
-    public func retrieveProductInfo(productId: String, completion: (result: RetrieveResultType) -> ()) {
-        guard let product = store.products[productId] else {
+    public class func retrieveProductInfo(productId: String, completion: (result: RetrieveResultType) -> ()) {
+        guard let product = sharedInstance.store.products[productId] else {
             
-            requestProduct(productId) { (inner: () throws -> SKProduct) -> () in
+            sharedInstance.requestProduct(productId) { (inner: () throws -> SKProduct) -> () in
                 do {
                     let product = try inner()
                     completion(result: .Success(product: product))
@@ -83,15 +83,15 @@ public class SwiftyStoreKit {
         completion(result: .Success(product: product))
     }
     
-    public func purchaseProduct(productId: String, completion: (result: PurchaseResultType) -> ()) {
+    public class func purchaseProduct(productId: String, completion: (result: PurchaseResultType) -> ()) {
         
-        if let product = store.products[productId] {
-            purchase(product: product, completion: completion)
+        if let product = sharedInstance.store.products[productId] {
+            sharedInstance.purchase(product: product, completion: completion)
         }
         else {
             retrieveProductInfo(productId) { (result) -> () in
                 if case .Success(let product) = result {
-                    self.purchase(product: product, completion: completion)
+                    sharedInstance.purchase(product: product, completion: completion)
                 }
                 else if case .Error(let error) = result {
                     completion(result: .Error(error: error))
@@ -100,12 +100,12 @@ public class SwiftyStoreKit {
         }
     }
     
-    public func restorePurchases(completion: (result: RestoreResultType) -> ()) {
+    public class func restorePurchases(completion: (result: RestoreResultType) -> ()) {
 
-        restoreRequest = InAppProductPurchaseRequest.restorePurchases() { result in
+        sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { result in
         
-            self.restoreRequest = nil
-            let returnValue = self.processRestoreResult(result)
+            sharedInstance.restoreRequest = nil
+            let returnValue = sharedInstance.processRestoreResult(result)
             completion(result: returnValue)
         }
     }

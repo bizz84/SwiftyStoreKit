@@ -87,11 +87,13 @@ public class SwiftyStoreKit {
         
         if let product = store.products[productId] {
             purchase(product: product, completion: completion)
-        } else {
+        }
+        else {
             retrieveProductInfo(productId) { (result) -> () in
                 if case .Success(let product) = result {
                     self.purchase(product: product, completion: completion)
-                }   else if case .Error(let error) = result {
+                }
+                else if case .Error(let error) = result {
                     completion(result: .Error(error: error))
                 }
             }

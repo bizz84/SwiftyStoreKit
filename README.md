@@ -1,6 +1,20 @@
 # SwiftyStoreKit
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written in Swift 2.0.
 
+### Retrieve product info
+```swift
+SwiftyStoreKit.sharedInstance.retrieveProductInfo("com.musevisions.SwiftyStoreKit.Purchase1") { result in
+    switch result {
+    case .Success(let product):
+        let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
+        print("Product: \(product.localizedDescription), price: \(priceString)")
+        break
+    case .Error(let error):
+        print("Error: \(error)")
+        break
+    }
+}
+```
 ### Purchase a product
 
 ```swift

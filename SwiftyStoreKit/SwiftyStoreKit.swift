@@ -48,6 +48,10 @@ public class SwiftyStoreKit {
         case Success(productId: String)
         case Error(error: ErrorType)
     }
+    public enum RetrieveResultType {
+        case Success(product: SKProduct)
+        case Error(error: ErrorType)
+    }
     public enum RestoreResultType {
         case Success(productId: String)
         case Error(error: ErrorType)
@@ -62,14 +66,13 @@ public class SwiftyStoreKit {
     }
     
     // MARK: Public methods
-    public func purchaseProduct(productId: String, completion: (result: PurchaseResultType) -> ()) {
-        
+    public func retrieveProductInfo(productId: String, completion: (result: RetrieveResultType) -> ()) {
         guard let product = store.products[productId] else {
-
+            
             requestProduct(productId) { (inner: () throws -> SKProduct) -> () in
                 do {
                     let product = try inner()
-                    self.purchase(product: product, completion: completion)
+                    completion(result: .Success(product: product))
                 }
                 catch let error {
                     completion(result: .Error(error: error))
@@ -77,7 +80,22 @@ public class SwiftyStoreKit {
             }
             return
         }
-        purchase(product: product, completion: completion)
+        completion(result: .Success(product: product))
+    }
+    
+    public func purchaseProduct(productId: String, completion: (result: PurchaseResultType) -> ()) {
+        
+        if let product = store.products[productId] {
+            purchase(product: product, completion: completion)
+        } else {
+            retrieveProductInfo(productId) { (result) -> () in
+                if case .Success(let product) = result {
+                    self.purchase(product: product, completion: completion)
+                }   else if case .Error(let error) = result {
+                    completion(result: .Error(error: error))
+                }
+            }
+        }
     }
     
     public func restorePurchases(completion: (result: RestoreResultType) -> ()) {

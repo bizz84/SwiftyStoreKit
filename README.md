@@ -3,7 +3,7 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written
 
 ### Retrieve product info
 ```swift
-SwiftyStoreKit.sharedInstance.retrieveProductInfo("com.musevisions.SwiftyStoreKit.Purchase1") { result in
+SwiftyStoreKit.retrieveProductInfo("com.musevisions.SwiftyStoreKit.Purchase1") { result in
     switch result {
     case .Success(let product):
         let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
@@ -18,7 +18,7 @@ SwiftyStoreKit.sharedInstance.retrieveProductInfo("com.musevisions.SwiftyStoreKi
 ### Purchase a product
 
 ```swift
-SwiftyStoreKit.sharedInstance.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { result in
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { result in
     switch result {
     case .Success(let productId):
         print("Purchase Success: \(productId)")
@@ -33,7 +33,7 @@ SwiftyStoreKit.sharedInstance.purchaseProduct("com.musevisions.SwiftyStoreKit.Pu
 ### Restore previous purchases
 
 ```swift
-SwiftyStoreKit.sharedInstance.restorePurchases() { result in
+SwiftyStoreKit.restorePurchases() { result in
     switch result {
     case .Success(let productId):
         print("Restore Success: \(productId)")

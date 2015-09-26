@@ -27,34 +27,27 @@ class ViewController: UIViewController {
             return
         }
     }
+    // MARK: actions
     @IBAction func getInfo1() {
         getInfo("1")
     }
     @IBAction func getInfo2() {
         getInfo("2")
     }
-    @IBAction func getInfo3() {
-        getInfo("3")
-    }
-
-    
     @IBAction func purchase1() {
         purchase("1")
     }
     @IBAction func purchase2() {
         purchase("2")
     }
-    @IBAction func purchase3() {
-        purchase("3")
-    }
     func getInfo(no: String) {
         
-        SwiftyStoreKit.sharedInstance.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
             
             switch result {
             case .Success(let product):
                 let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
-                self.showMessage(product.localizedDescription, message: priceString)
+                self.showMessage("\(product.localizedTitle) - \(priceString)", message: product.localizedDescription)
                 break
             case .Error(let error):
                 self.showMessage("Could not retrieve product info", message: (error as NSError).localizedDescription)
@@ -65,7 +58,7 @@ class ViewController: UIViewController {
     
     func purchase(no: String) {
         
-        SwiftyStoreKit.sharedInstance.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
             
             switch result {
             case .Success(let productId):
@@ -89,7 +82,7 @@ class ViewController: UIViewController {
     }
     @IBAction func restorePurchases() {
         
-        SwiftyStoreKit.sharedInstance.restorePurchases() { result in
+        SwiftyStoreKit.restorePurchases() { result in
             switch result {
             case .Success(let productId):
                 self.showMessage("Purchases Restored", message: "All purchases have been restored")
@@ -105,6 +98,5 @@ class ViewController: UIViewController {
             }
         }
     }
-
 }
 

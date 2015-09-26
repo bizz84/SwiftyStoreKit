@@ -27,6 +27,16 @@ class ViewController: UIViewController {
             return
         }
     }
+    @IBAction func getInfo1() {
+        getInfo("1")
+    }
+    @IBAction func getInfo2() {
+        getInfo("2")
+    }
+    @IBAction func getInfo3() {
+        getInfo("3")
+    }
+
     
     @IBAction func purchase1() {
         purchase("1")
@@ -37,6 +47,22 @@ class ViewController: UIViewController {
     @IBAction func purchase3() {
         purchase("3")
     }
+    func getInfo(no: String) {
+        
+        SwiftyStoreKit.sharedInstance.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
+            
+            switch result {
+            case .Success(let product):
+                let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
+                self.showMessage(product.localizedDescription, message: priceString)
+                break
+            case .Error(let error):
+                self.showMessage("Could not retrieve product info", message: (error as NSError).localizedDescription)
+                break
+            }
+        }
+    }
+    
     func purchase(no: String) {
         
         SwiftyStoreKit.sharedInstance.purchaseProduct(AppBundleId + ".purchase" + no) { result in

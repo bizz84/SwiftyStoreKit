@@ -24,20 +24,38 @@
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SwiftyStoreKit" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FTs-3H-z8C">
+                                <rect key="frame" x="218" y="40" width="163" height="32.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lightweight In App Purchases framework for iOS 8.0+" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gg1-bw-Mzz">
+                                <rect key="frame" x="10" y="74.5" width="580" height="16"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available purchases:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="s8k-6i-mKn">
+                                <rect key="frame" x="222" y="143.5" width="156" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FII-Z2-VOo" userLabel="Purchases Holder">
-                                <rect key="frame" x="159" y="194" width="282" height="112.5"/>
+                                <rect key="frame" x="159" y="194" width="282" height="113"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C8u-2D-Dst" userLabel="ProductHolder1">
-                                        <rect key="frame" x="0.0" y="0.0" width="91" height="112.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="91" height="113"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uz9-cT-1WH">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="5 days" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uz9-cT-1WH">
                                                 <rect key="frame" x="0.0" y="0.0" width="91" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miS-cF-iGP">
-                                                <rect key="frame" x="0.0" y="35" width="91" height="36"/>
+                                                <rect key="frame" x="0.0" y="35.5" width="91" height="36"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <state key="normal" title="Get Info">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -47,7 +65,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DnE-MP-9Li">
-                                                <rect key="frame" x="0.0" y="76" width="91" height="36"/>
+                                                <rect key="frame" x="0.0" y="76.5" width="91" height="36"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <state key="normal" title="Purchase">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -86,16 +104,16 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oS1-xb-Emp" userLabel="ProductHolder2">
-                                        <rect key="frame" x="191" y="0.0" width="91" height="112.5"/>
+                                        <rect key="frame" x="191" y="0.0" width="91" height="113"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product 2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6UI-uh-w5n">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="10 days" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6UI-uh-w5n">
                                                 <rect key="frame" x="0.0" y="0.0" width="91" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L02-jg-tgd">
-                                                <rect key="frame" x="0.0" y="35" width="91" height="36"/>
+                                                <rect key="frame" x="0.0" y="35.5" width="91" height="36"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <state key="normal" title="Get Info">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -105,7 +123,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XP6-KY-8rd">
-                                                <rect key="frame" x="0.0" y="76" width="91" height="36"/>
+                                                <rect key="frame" x="0.0" y="76.5" width="91" height="36"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <state key="normal" title="Purchase">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -154,7 +172,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CG8-Ue-vcg">
-                                <rect key="frame" x="210" y="346.5" width="181" height="36"/>
+                                <rect key="frame" x="210" y="347" width="181" height="36"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <state key="normal" title="Restore Purchases">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -166,18 +184,25 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="FII-Z2-VOo" firstAttribute="top" secondItem="s8k-6i-mKn" secondAttribute="bottom" constant="30" id="4jU-Ih-evH"/>
                             <constraint firstItem="FII-Z2-VOo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="5RH-5E-DHg"/>
                             <constraint firstAttribute="trailing" secondItem="JDz-7n-4vD" secondAttribute="trailing" id="GBV-Mt-YQc"/>
                             <constraint firstItem="JDz-7n-4vD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="GlE-OZ-BQY"/>
+                            <constraint firstAttribute="trailing" secondItem="gg1-bw-Mzz" secondAttribute="trailing" constant="10" id="HVm-oI-bi4"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R2x-3P-rjx" secondAttribute="bottom" id="JpO-AG-cGD"/>
                             <constraint firstAttribute="trailing" secondItem="R2x-3P-rjx" secondAttribute="trailing" id="Pyv-8m-m9C"/>
                             <constraint firstItem="FII-Z2-VOo" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-50" id="SHm-Hf-pUS"/>
+                            <constraint firstItem="FTs-3H-z8C" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="TtN-Oa-eRf"/>
                             <constraint firstItem="CG8-Ue-vcg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="U3y-1n-HiO"/>
                             <constraint firstItem="R2x-3P-rjx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="U9f-il-AMN"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="JDz-7n-4vD" secondAttribute="bottom" id="Uxb-Hz-CCC"/>
+                            <constraint firstItem="gg1-bw-Mzz" firstAttribute="top" secondItem="FTs-3H-z8C" secondAttribute="bottom" constant="2" id="X0K-RO-cp1"/>
                             <constraint firstItem="CG8-Ue-vcg" firstAttribute="top" secondItem="FII-Z2-VOo" secondAttribute="bottom" constant="40" id="ZEX-Nc-VGE"/>
                             <constraint firstItem="JDz-7n-4vD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="eKg-Cq-0M3"/>
                             <constraint firstItem="R2x-3P-rjx" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="gD0-3o-Ni3"/>
+                            <constraint firstItem="s8k-6i-mKn" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="kNl-ka-qbp"/>
+                            <constraint firstItem="gg1-bw-Mzz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="lx2-KO-4yZ"/>
+                            <constraint firstItem="FTs-3H-z8C" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="20" id="paF-3I-iVD"/>
                             <constraint firstItem="FII-Z2-VOo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x6e-Ni-abV"/>
                         </constraints>
                         <variation key="default">

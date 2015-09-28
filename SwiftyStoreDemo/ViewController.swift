@@ -49,7 +49,7 @@ class ViewController: UIViewController {
             switch result {
             case .Success(let product):
                 let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
-                self.showMessage("\(product.localizedTitle) - \(priceString)", message: product.localizedDescription)
+                self.showMessage(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
                 break
             case .Error(let error):
                 self.showMessage("Could not retrieve product info", message: (error as NSError).localizedDescription)

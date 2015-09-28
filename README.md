@@ -115,6 +115,12 @@ enum TransactionResult {
 The ```SwiftyStoreKit``` class can then map the returned ```TransactionResult``` into either a success or failure case and pass this back to the client.
 Note that along with the success and failure case, the result of a restore purchases operation also has a ```NothingToRestore``` case. This is so that the client can know that the operation returned, but no purchases were restored.
 
+Preview
+-------------------------------------------------------
+
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="375">
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.PNG" width="375">
+
 ## License
 
 Copyright (c) 2015 Andrea Bizzotto bizz84@gmail.com

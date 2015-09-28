@@ -42,7 +42,9 @@ class ViewController: UIViewController {
     }
     func getInfo(no: String) {
         
+        NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             
             switch result {
             case .Success(let product):
@@ -58,7 +60,9 @@ class ViewController: UIViewController {
     
     func purchase(no: String) {
         
+        NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             
             switch result {
             case .Success(let productId):
@@ -82,7 +86,9 @@ class ViewController: UIViewController {
     }
     @IBAction func restorePurchases() {
         
+        NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.restorePurchases() { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
             switch result {
             case .Success(let productId):
                 self.showMessage("Purchases Restored", message: "All purchases have been restored")
@@ -97,6 +103,10 @@ class ViewController: UIViewController {
                 break
             }
         }
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
 }
 

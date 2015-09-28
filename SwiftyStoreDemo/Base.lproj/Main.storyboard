@@ -17,36 +17,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="JDz-7n-4vD" userLabel="Background">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R2x-3P-rjx" userLabel="Opaque">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FII-Z2-VOo" userLabel="Purchases Holder">
-                                <rect key="frame" x="166" y="70" width="268" height="112.5"/>
+                                <rect key="frame" x="159" y="194" width="282" height="112.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="C8u-2D-Dst" userLabel="ProductHolder1">
-                                        <rect key="frame" x="0.0" y="0.0" width="84" height="112.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="91" height="112.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product 1" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uz9-cT-1WH">
-                                                <rect key="frame" x="0.0" y="0.0" width="84" height="20.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="91" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="miS-cF-iGP">
-                                                <rect key="frame" x="0.0" y="35" width="84" height="36"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Get Info"/>
+                                                <rect key="frame" x="0.0" y="35" width="91" height="36"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <state key="normal" title="Get Info">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="getInfo1" destination="BYZ-38-t0r" eventType="touchUpInside" id="uBH-iw-Ywz"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DnE-MP-9Li">
-                                                <rect key="frame" x="0.0" y="76" width="84" height="36"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Purchase"/>
+                                                <rect key="frame" x="0.0" y="76" width="91" height="36"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <state key="normal" title="Purchase">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="purchase1" destination="BYZ-38-t0r" eventType="touchUpInside" id="oEV-gi-Mfe"/>
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstItem="DnE-MP-9Li" firstAttribute="top" secondItem="miS-cF-iGP" secondAttribute="bottom" constant="5" id="9xW-r1-sYh"/>
                                             <constraint firstAttribute="bottom" secondItem="miS-cF-iGP" secondAttribute="bottom" id="NIo-yq-z4d"/>
@@ -75,32 +86,36 @@
                                         </variation>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oS1-xb-Emp" userLabel="ProductHolder2">
-                                        <rect key="frame" x="184" y="0.0" width="84" height="112.5"/>
+                                        <rect key="frame" x="191" y="0.0" width="91" height="112.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product 2" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6UI-uh-w5n">
-                                                <rect key="frame" x="0.0" y="0.0" width="84" height="20.5"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="91" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L02-jg-tgd">
-                                                <rect key="frame" x="0.0" y="35" width="84" height="36"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Get Info"/>
+                                                <rect key="frame" x="0.0" y="35" width="91" height="36"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <state key="normal" title="Get Info">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="getInfo2" destination="BYZ-38-t0r" eventType="touchUpInside" id="vnQ-wj-iaC"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XP6-KY-8rd">
-                                                <rect key="frame" x="0.0" y="76" width="84" height="36"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <state key="normal" title="Purchase"/>
+                                                <rect key="frame" x="0.0" y="76" width="91" height="36"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                                <state key="normal" title="Purchase">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
                                                 <connections>
                                                     <action selector="purchase2" destination="BYZ-38-t0r" eventType="touchUpInside" id="1VN-sv-h1e"/>
                                                 </connections>
                                             </button>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="6UI-uh-w5n" secondAttribute="trailing" id="03a-NV-XOi"/>
                                             <constraint firstAttribute="trailing" secondItem="L02-jg-tgd" secondAttribute="trailing" id="7JI-OP-Nya"/>
@@ -127,7 +142,7 @@
                                         </variation>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="oS1-xb-Emp" secondAttribute="bottom" id="7cE-EF-yfA"/>
                                     <constraint firstItem="oS1-xb-Emp" firstAttribute="leading" secondItem="C8u-2D-Dst" secondAttribute="trailing" constant="100" id="C1j-40-kYE"/>
@@ -139,9 +154,11 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CG8-Ue-vcg">
-                                <rect key="frame" x="217" y="232.5" width="167" height="36"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                <state key="normal" title="Restore Purchases"/>
+                                <rect key="frame" x="210" y="346.5" width="181" height="36"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <state key="normal" title="Restore Purchases">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
                                 <connections>
                                     <action selector="restorePurchases" destination="BYZ-38-t0r" eventType="touchUpInside" id="ulP-6V-3dz"/>
                                 </connections>
@@ -150,10 +167,24 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="FII-Z2-VOo" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="50" id="5RH-5E-DHg"/>
+                            <constraint firstAttribute="trailing" secondItem="JDz-7n-4vD" secondAttribute="trailing" id="GBV-Mt-YQc"/>
+                            <constraint firstItem="JDz-7n-4vD" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="GlE-OZ-BQY"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="R2x-3P-rjx" secondAttribute="bottom" id="JpO-AG-cGD"/>
+                            <constraint firstAttribute="trailing" secondItem="R2x-3P-rjx" secondAttribute="trailing" id="Pyv-8m-m9C"/>
+                            <constraint firstItem="FII-Z2-VOo" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="-50" id="SHm-Hf-pUS"/>
                             <constraint firstItem="CG8-Ue-vcg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="U3y-1n-HiO"/>
-                            <constraint firstItem="CG8-Ue-vcg" firstAttribute="top" secondItem="FII-Z2-VOo" secondAttribute="bottom" constant="50" id="ZEX-Nc-VGE"/>
+                            <constraint firstItem="R2x-3P-rjx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="U9f-il-AMN"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="JDz-7n-4vD" secondAttribute="bottom" id="Uxb-Hz-CCC"/>
+                            <constraint firstItem="CG8-Ue-vcg" firstAttribute="top" secondItem="FII-Z2-VOo" secondAttribute="bottom" constant="40" id="ZEX-Nc-VGE"/>
+                            <constraint firstItem="JDz-7n-4vD" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="eKg-Cq-0M3"/>
+                            <constraint firstItem="R2x-3P-rjx" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="gD0-3o-Ni3"/>
                             <constraint firstItem="FII-Z2-VOo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="x6e-Ni-abV"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="5RH-5E-DHg"/>
+                            </mask>
+                        </variation>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -161,4 +192,7 @@
             <point key="canvasLocation" x="308" y="374"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Background" width="375" height="667"/>
+    </resources>
 </document>

@@ -3,8 +3,8 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written
 
 ### Preview
 
-<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="375">
-<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png" width="375">
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png" width="320">
 
 ### Retrieve product info
 ```swift

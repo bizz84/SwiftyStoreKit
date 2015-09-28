@@ -99,7 +99,7 @@ If ```InAppProductQueryRequest``` returns an error, this is surfaced directly to
 In case of success, the product is cached and the purchase can take place via the ```InAppProductPurchaseRequest``` class.
 
 ### Purchasing a product / Restoring purchases
-```InAppProductPurchaseRequest``` is a wrapper class for ```SKPaymentQueue``` that can be use to purchase a product or restore purchases.
+```InAppProductPurchaseRequest``` is a wrapper class for ```SKPaymentQueue``` that can be used to purchase a product or restore purchases.
 
 The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
 
@@ -113,7 +113,7 @@ enum TransactionResult {
 ```
 
 The ```SwiftyStoreKit``` class can then map the returned ```TransactionResult``` into either a success or failure case and pass this back to the client.
-Note that along with the success and failure case, the result of a restore purchases operation also has a NothingToRestore case. This is so that the client can know that the operation returned, but no purchases were restored.
+Note that along with the success and failure case, the result of a restore purchases operation also has a ```NothingToRestore``` case. This is so that the client can know that the operation returned, but no purchases were restored.
 
 ## License
 

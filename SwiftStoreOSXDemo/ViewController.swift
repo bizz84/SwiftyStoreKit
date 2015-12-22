@@ -1,55 +1,58 @@
 //
 //  ViewController.swift
-//  SwiftyStoreKit
+//  SwiftStoreOSXDemo
 //
-//  Created by Andrea Bizzotto on 03/09/2015.
+//  Created by phimage on 22/12/15.
 //  Copyright © 2015 musevisions. All rights reserved.
 //
 
-import UIKit
+import Cocoa
 import StoreKit
 import SwiftyStoreKit
 
-class ViewController: UIViewController {
+class ViewController: NSViewController {
 
-    let AppBundleId = "com.musevisions.iOS.SwiftyStoreKit"
-    
+    let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     func showMessage(title: String, message: String) {
-        
-        guard let _ = self.presentedViewController else {
-            let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-            return
+
+        let alert: NSAlert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = NSAlertStyle.InformationalAlertStyle
+        if let window = NSApplication.sharedApplication().keyWindow {
+            alert.beginSheetModalForWindow(window) { (response: NSModalResponse) in
+            }
+        } else {
+            alert.runModal()
         }
+        return
     }
     // MARK: actions
-    @IBAction func getInfo1() {
+    @IBAction func getInfo1(sender: AnyObject?) {
         getInfo("1")
     }
-    @IBAction func getInfo2() {
+    @IBAction func getInfo2(sender: AnyObject!) {
         getInfo("2")
     }
-    @IBAction func purchase1() {
+    @IBAction func purchase1(sender: AnyObject!) {
         purchase("1")
     }
-    @IBAction func purchase2() {
+    @IBAction func purchase2(sender: AnyObject!) {
         purchase("2")
     }
     func getInfo(no: String) {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+
         SwiftyStoreKit.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
+
             switch result {
             case .Success(let product):
-                let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
-                self.showMessage(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
+                let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)
+                self.showMessage(product.localizedTitle ?? "no title", message: "\(product.localizedDescription) - \(priceString)")
                 break
             case .Error(let error):
                 self.showMessage("Could not retrieve product info", message: String(error))
@@ -57,13 +60,11 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
     func purchase(no: String) {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+
         SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
+
             switch result {
             case .Success(let productId):
                 self.showMessage("Thank You", message: "Purchase completed")
@@ -84,11 +85,9 @@ class ViewController: UIViewController {
             }
         }
     }
-    @IBAction func restorePurchases() {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+    @IBAction func restorePurchases(sender: AnyObject?) {
+
         SwiftyStoreKit.restorePurchases() { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
             switch result {
             case .Success(let productId):
                 self.showMessage("Purchases Restored", message: "All purchases have been restored")
@@ -104,9 +103,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
-    }
+
 }
 

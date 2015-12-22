@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
 import StoreKit
 
 public enum ResponseError : ErrorType {
@@ -72,28 +71,42 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     // MARK: SKProductsRequestDelegate
     func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         
-        if response.invalidProductIdentifiers.count > 0 {
-            let error = ResponseError.InvalidProducts(invalidProductIdentifiers: response.invalidProductIdentifiers)
+        if let invalidProductIdentifiers = response._invalidProductIdentifiers where invalidProductIdentifiers.count > 0 {
+            let error = ResponseError.InvalidProducts(invalidProductIdentifiers: invalidProductIdentifiers)
             dispatch_async(dispatch_get_main_queue(), {
                 self.callback(result: .Error(e: error))
             })
             return
         }
-        if response.products.count == 0 {
+        guard let products = response._products where products.count > 0 else {
             let error = ResponseError.NoProducts
             dispatch_async(dispatch_get_main_queue(), {
                 self.callback(result: .Error(e: error))
             })
             return
         }
-        callback(result: .Success(products: response.products))
+        callback(result: .Success(products: products))
     }
     
     func requestDidFinish(request: SKRequest) {
         
     }
+    // MARK: - missing SKPaymentTransactionState on OSX
+    #if os(iOS)
     func request(request: SKRequest, didFailWithError error: NSError) {
-        
+        requestFailed(error)
+    }
+    #elseif os(OSX)
+    func request(request: SKRequest, didFailWithError error: NSError?) {
+        if let notNilError = error{
+            requestFailed(notNilError)
+        }
+        else {
+            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error (empty)" ]))
+        }
+    }
+    #endif
+    func requestFailed(error: NSError){
         let error = ResponseError.RequestFailed(error: error)
         dispatch_async(dispatch_get_main_queue(), {
             self.callback(result: .Error(e: error))

@@ -22,10 +22,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
 import StoreKit
+import Foundation
 
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
+
 
     enum TransactionResult {
         case Purchased(productId: String)
@@ -36,7 +37,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     
     typealias RequestCallback = (result: TransactionResult) -> ()
     private let callback: RequestCallback
-    private var purchases : [SKPaymentTransactionState: [String]] = [:]
+    private var purchases : [PaymentTransactionState: [String]] = [:]
 
     var paymentQueue: SKPaymentQueue {
         get {
@@ -71,6 +72,9 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     
     // MARK: Private methods
     private func startPayment(product: SKProduct) {
+        guard let _ = product._productIdentifier else {
+            return
+        }
         let payment = SKMutablePayment(product: product)
         dispatch_async(dispatch_get_global_queue(0, 0), {
             self.paymentQueue.addPayment(payment)
@@ -87,7 +91,14 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         for transaction in transactions {
-            switch transaction.transactionState {
+
+            #if os(iOS)
+                let transactionState = transaction.transactionState
+            #elseif os(OSX)
+                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
+            #endif
+
+            switch transactionState {
             case .Purchased:
                 dispatch_async(dispatch_get_main_queue(), {
                     self.callback(result: .Purchased(productId: transaction.payment.productIdentifier))
@@ -116,11 +127,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 break
             }
             // Keep track of payments
-            if let _ = purchases[transaction.transactionState] {
-                purchases[transaction.transactionState]?.append(transaction.payment.productIdentifier)
+            if let _ = purchases[transactionState] {
+                purchases[transactionState]?.append(transaction.payment.productIdentifier)
             }
             else {
-                purchases[transaction.transactionState] = [ transaction.payment.productIdentifier ]
+                purchases[transactionState] = [ transaction.payment.productIdentifier ]
             }
         }
     }
@@ -137,9 +148,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
-        
-        if let product = self.product {
-            self.callback(result: .Restored(productId: product.productIdentifier))
+        if let product = self.product, productIdentifier = product._productIdentifier {
+            self.callback(result: .Restored(productId: productIdentifier))
             return
         }
         // This method will be called after all purchases have been restored (includes the case of no purchases)

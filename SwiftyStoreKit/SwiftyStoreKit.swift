@@ -22,10 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
-import Foundation
 import StoreKit
-
 
 public class SwiftyStoreKit {
 
@@ -33,7 +30,9 @@ public class SwiftyStoreKit {
     private class InAppPurchaseStore {
         var products: [String: SKProduct] = [:]
         func addProduct(product: SKProduct) {
-            products[product.productIdentifier] = product
+            if let productIdentifier = product._productIdentifier {
+                products[productIdentifier] = product
+            }
         }
     }
     private var store: InAppPurchaseStore = InAppPurchaseStore()
@@ -112,10 +111,17 @@ public class SwiftyStoreKit {
 
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {
-    
-        inflightPurchases[product.productIdentifier] = InAppProductPurchaseRequest.startPayment(product) { result in
+        guard let productIdentifier = product._productIdentifier else {
+            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "No product identifier" ])
+            completion(result: PurchaseResultType.Error(error: error))
+            return
+        }
 
-            self.inflightPurchases[product.productIdentifier] = nil
+        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product) { result in
+
+            if let productIdentifier = product._productIdentifier {
+                self.inflightPurchases[productIdentifier] = nil
+            }
             let returnValue = self.processPurchaseResult(result)
             completion(result: returnValue)
         }

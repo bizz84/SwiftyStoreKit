@@ -111,6 +111,12 @@ public class SwiftyStoreKit {
 
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {
+        guard SwiftyStoreKit.canMakePayments else {
+            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Cannot make payments" ])
+            completion(result: PurchaseResultType.Error(error: error))
+            return
+        }
+
         guard let productIdentifier = product._productIdentifier else {
             let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "No product identifier" ])
             completion(result: PurchaseResultType.Error(error: error))

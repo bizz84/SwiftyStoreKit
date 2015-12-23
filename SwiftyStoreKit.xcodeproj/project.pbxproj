@@ -19,8 +19,11 @@
 		6502F63B1B985CA1004E342D /* InAppProductQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */; };
 		6502F63C1B985CA4004E342D /* SwiftyStoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6241B98586A004E342D /* SwiftyStoreKit.swift */; };
 		65C1B5DF1BB9DE9B00F7BF4E /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65C1B5DE1BB9DE9B00F7BF4E /* NetworkActivityIndicatorManager.swift */; };
+		C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */; };
+		C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */; };
 		C40C68101C29414C00B60B7E /* OS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40C680F1C29414C00B60B7E /* OS.swift */; };
 		C40C68111C29419500B60B7E /* OS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40C680F1C29414C00B60B7E /* OS.swift */; };
+		C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */; };
 		C4D74BBE1C24CECA0071AD3E /* SwiftyStoreKitOSX.h in Headers */ = {isa = PBXBuildFile; fileRef = C4D74BBD1C24CECA0071AD3E /* SwiftyStoreKitOSX.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */; };
 		C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */; };
@@ -90,7 +93,9 @@
 		6502F62F1B985C40004E342D /* SwiftyStoreKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStoreKit.h; sourceTree = "<group>"; };
 		6502F6311B985C40004E342D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		65C1B5DE1BB9DE9B00F7BF4E /* NetworkActivityIndicatorManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkActivityIndicatorManager.swift; sourceTree = "<group>"; };
+		C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptRefreshRequest.swift; sourceTree = "<group>"; };
 		C40C680F1C29414C00B60B7E /* OS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OS.swift; sourceTree = "<group>"; };
+		C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; };
 		C4D74BBB1C24CEC90071AD3E /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D74BBD1C24CECA0071AD3E /* SwiftyStoreKitOSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStoreKitOSX.h; sourceTree = "<group>"; };
 		C4D74BBF1C24CECA0071AD3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -163,6 +168,8 @@
 			children = (
 				6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */,
 				6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */,
+				C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */,
+				C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */,
 				6502F6241B98586A004E342D /* SwiftyStoreKit.swift */,
 				C40C680F1C29414C00B60B7E /* OS.swift */,
 				6502F62F1B985C40004E342D /* SwiftyStoreKit.h */,
@@ -399,8 +406,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6502F63A1B985C9E004E342D /* InAppProductPurchaseRequest.swift in Sources */,
+				C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */,
 				C40C68101C29414C00B60B7E /* OS.swift in Sources */,
 				6502F63B1B985CA1004E342D /* InAppProductQueryRequest.swift in Sources */,
+				C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */,
 				6502F63C1B985CA4004E342D /* SwiftyStoreKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -410,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */,
+				C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */,
 				C40C68111C29419500B60B7E /* OS.swift in Sources */,
 				C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */,
 				C4D74BC51C24CEDC0071AD3E /* SwiftyStoreKit.swift in Sources */,
@@ -745,6 +755,7 @@
 				C4FD3A0F1C2954C10035CFF3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

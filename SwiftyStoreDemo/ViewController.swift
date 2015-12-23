@@ -104,7 +104,42 @@ class ViewController: UIViewController {
             }
         }
     }
-    
+
+    @IBAction func verifyReceipt() {
+
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        SwiftyStoreKit.verifyReceipt() { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            switch result {
+            case .Success(let receipt):
+                self.showMessage("Receipt verified", message: "Receipt verified remotly")
+                print("Verify receipt Success: \(receipt)")
+                break
+            case .Error(let error):
+                print("Verify receipt Failed: \(error)")
+                switch (error) {
+                case .NoReceiptData :
+                    self.showMessage("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
+
+                    SwiftyStoreKit.receiptRefresh { (result) -> () in
+                        switch result {
+                        case .Success:
+                            self.showMessage("Receipt refreshed", message: "Receipt refreshed with success")
+                            print("Receipt refreshed Success")
+                            break
+                        case .Error(let error):
+                            print("Receipt refreshed Failed: \(error)")
+                            break
+                        }
+                    }
+
+                default: break
+                }
+                break
+            }
+        }
+    }
+
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }

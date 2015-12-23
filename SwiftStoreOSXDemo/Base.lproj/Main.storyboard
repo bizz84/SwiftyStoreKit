@@ -669,11 +669,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="SwiftStoreOSXDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="305"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4ix-eb-y5G">
-                                <rect key="frame" x="162" y="13" width="156" height="32"/>
+                                <rect key="frame" x="162" y="48" width="156" height="32"/>
                                 <buttonCell key="cell" type="push" title="Restore Purchases" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mmO-hG-Xyq">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -683,7 +683,7 @@
                                 </buttonCell>
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="aBh-sv-MN6">
-                                <rect key="frame" x="0.0" y="49" width="480" height="176"/>
+                                <rect key="frame" x="0.0" y="84" width="480" height="176"/>
                                 <subviews>
                                     <splitView focusRingType="none" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZR-88-4H6">
                                         <rect key="frame" x="0.0" y="0.0" width="480" height="176"/>
@@ -787,19 +787,31 @@
                                 </constraints>
                             </customView>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fQC-8G-INF">
-                                <rect key="frame" x="175" y="233" width="131" height="17"/>
+                                <rect key="frame" x="175" y="268" width="131" height="17"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Available purchases:" id="Ntg-PD-43y">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yzl-nj-7ol">
+                                <rect key="frame" x="178" y="15" width="125" height="32"/>
+                                <buttonCell key="cell" type="push" title="Verify Receipt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6bY-Fv-W6P">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="verifyReceipt:" target="XfG-lQ-9wD" id="uf9-Pe-MRz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="22" id="979-EH-fNb"/>
+                            <constraint firstItem="Yzl-nj-7ol" firstAttribute="top" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="12" id="B88-P1-tBj"/>
                             <constraint firstAttribute="trailing" secondItem="aBh-sv-MN6" secondAttribute="trailing" id="F8t-R2-cad"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="RDD-02-SB0"/>
                             <constraint firstItem="4ix-eb-y5G" firstAttribute="top" secondItem="aBh-sv-MN6" secondAttribute="bottom" constant="8" id="b6U-zT-POc"/>
-                            <constraint firstAttribute="bottom" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="20" id="crv-3H-ZKn"/>
+                            <constraint firstItem="Yzl-nj-7ol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="dQi-Vh-Bwb"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="enN-Hg-kUA"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="kMt-Ye-T67"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="top" secondItem="fQC-8G-INF" secondAttribute="bottom" constant="8" id="rz5-by-FYa"/>
@@ -809,7 +821,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="75" y="672.5"/>
         </scene>
     </scenes>
 </document>

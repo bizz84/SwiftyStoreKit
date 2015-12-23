@@ -85,6 +85,7 @@ class ViewController: NSViewController {
             }
         }
     }
+
     @IBAction func restorePurchases(sender: AnyObject?) {
 
         SwiftyStoreKit.restorePurchases() { result in
@@ -99,6 +100,23 @@ class ViewController: NSViewController {
                 break
             case .Error(let error):
                 print("Restore Failed: \(error)")
+                break
+            }
+        }
+    }
+
+    @IBAction func verifyReceipt(ender: AnyObject?) {
+
+        SwiftyStoreKit.verifyReceipt() { result in
+            switch result {
+            case .Success(let receipt):
+                self.showMessage("Receipt verified", message: "Receipt verified remotly")
+                print("Verify receipt Success: \(receipt)")
+                break
+            case .Error(let error):
+                print("Verify receipt Failed: \(error)")
+                self.showMessage("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developper id to test and be outside of XCode")
+                exit(ReceiptExitCode.NotValid.rawValue)
                 break
             }
         }

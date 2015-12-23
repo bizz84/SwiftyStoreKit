@@ -18,17 +18,18 @@ class ViewController: NSViewController {
         super.viewDidLoad()
     }
 
-    func showMessage(title: String, message: String) {
-
+    func showMessage(title: String, message: String, handler: ((NSModalResponse) -> Void)? = nil) {
         let alert: NSAlert = NSAlert()
         alert.messageText = title
         alert.informativeText = message
         alert.alertStyle = NSAlertStyle.InformationalAlertStyle
         if let window = NSApplication.sharedApplication().keyWindow {
             alert.beginSheetModalForWindow(window) { (response: NSModalResponse) in
+                handler?(response)
             }
         } else {
-            alert.runModal()
+            let response = alert.runModal()
+            handler?(response)
         }
         return
     }
@@ -115,8 +116,9 @@ class ViewController: NSViewController {
                 break
             case .Error(let error):
                 print("Verify receipt Failed: \(error)")
-                self.showMessage("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developper id to test and be outside of XCode")
-                exit(ReceiptExitCode.NotValid.rawValue)
+                self.showMessage("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application for app store with your developper id to test") { response in
+                    exit(ReceiptExitCode.NotValid.rawValue)
+                }
                 break
             }
         }

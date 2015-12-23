@@ -117,20 +117,22 @@ public class SwiftyStoreKit {
     }
 
     /**
-     *  - Parameter test: if true use test environment remote URL otherwise production one (default: true)
+     *  Verify application receipt
+     *  - Parameter receiptVerifyURL: receipt verify url (default: Test)
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      *  - Parameter session: the session used to make remote call.
      *  - Parameter completion: handler for result
      */
     public class func verifyReceipt(
-        test: Bool = true,
+        receiptVerifyURL url: ReceiptVerifyURL = .Test,
         password: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
         completion:(result: ValidReceiptResultType) -> ()) {
-            InAppReceipt.verify(test, password: password, session: session, completion: completion)
+            InAppReceipt.verify(receiptVerifyURL: url, password: password, session: session, completion: completion)
     }
 
     #if os(iOS)
+    // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
     public class func receiptRefresh(receiptProperties: [String : AnyObject]? = nil, completion: (result: RefreshReceiptResultType) -> ()) {
         sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
 
@@ -149,7 +151,6 @@ public class SwiftyStoreKit {
                 break
             }
         }
-
     }
     #endif
 

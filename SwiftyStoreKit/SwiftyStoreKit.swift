@@ -46,6 +46,8 @@ public class SwiftyStoreKit {
     public enum PurchaseResultType {
         case Success(productId: String)
         case Error(error: ErrorType)
+        case NoProductIdentifier
+        case PaymentNotAllowed
     }
     public enum RetrieveResultType {
         case Success(product: SKProduct)
@@ -111,9 +113,12 @@ public class SwiftyStoreKit {
 
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {
+        guard SwiftyStoreKit.canMakePayments else {
+            completion(result: PurchaseResultType.PaymentNotAllowed)
+            return
+        }
         guard let productIdentifier = product._productIdentifier else {
-            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "No product identifier" ])
-            completion(result: PurchaseResultType.Error(error: error))
+            completion(result: PurchaseResultType.NoProductIdentifier)
             return
         }
 

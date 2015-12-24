@@ -1,5 +1,5 @@
 # SwiftyStoreKit
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, written in Swift 2.0.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 9.0+, written in Swift 2.0.
 
 ### Preview
 
@@ -58,6 +58,7 @@ The framework provides a simple block based API with robust error handling on to
 
 ## Installation
 SwiftyStoreKit can be installed as a Cocoapod and builds as a Swift framework. To install, include this in your Podfile.
+
 ```
 use_frameworks!
 
@@ -66,16 +67,18 @@ pod 'SwiftyStoreKit'
 Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
 
 ## Sample Code
-The project includes a demo app showing [how to use](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) SwiftyStoreKit.
-Note that the pre-registered in app purchases in the demo app are for illustration purposes only and may not work as iTunes Connect may invalidate them.
+The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.
+Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 #### Features
 - Super easy to use block based API
 - enum-based error handling
 - Support for non-consumable in app purchases
 
-#### Missing Features
+#### Planned Features
 - Receipt verification
+
+#### Missing Features
 - Ask To Buy
 
 #### Untested Features
@@ -84,7 +87,9 @@ Note that the pre-registered in app purchases in the demo app are for illustrati
 
 ## Implementation Details
 In order to make a purchase, two operations are needed:
+
 - Obtain the ```SKProduct``` corresponding to the productId that identifies the app purchase, via ```SKProductRequest```.
+ 
 - Submit the payment for that product via ```SKPaymentQueue```.
 
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
@@ -119,6 +124,9 @@ enum TransactionResult {
 
 The ```SwiftyStoreKit``` class can then map the returned ```TransactionResult``` into either a success or failure case and pass this back to the client.
 Note that along with the success and failure case, the result of a restore purchases operation also has a ```NothingToRestore``` case. This is so that the client can know that the operation returned, but no purchases were restored.
+
+## Credits
+Many thanks to [phimage](https://github.com/phimage) for adding OSX support and receipt verification.
 
 ## License
 

@@ -1,6 +1,16 @@
 # SwiftyStoreKit
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 9.0+, written in Swift 2.0.
 
+[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat
+            )](http://mit-license.org)
+[![Platform](http://img.shields.io/badge/platform-ios%20%7C%20osx-lightgrey.svg?style=flat
+             )](https://developer.apple.com/resources/)
+[![Language](http://img.shields.io/badge/language-swift-orange.svg?style=flat
+             )](https://developer.apple.com/swift)
+[![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat
+           )](https://github.com/bizz84/SwiftyStoreKit/issues)
+[![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
+
 ### Preview
 
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">

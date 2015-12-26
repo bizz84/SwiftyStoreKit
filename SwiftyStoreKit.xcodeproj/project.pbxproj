@@ -28,6 +28,7 @@
 		C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6221B98586A004E342D /* InAppProductPurchaseRequest.swift */; };
 		C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */; };
 		C4D74BC51C24CEDC0071AD3E /* SwiftyStoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6241B98586A004E342D /* SwiftyStoreKit.swift */; };
+		C4F69A8A1C2E0D21009DD8BD /* InAppReceiptRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */; };
 		C4FD3A041C2954C10035CFF3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FD3A031C2954C10035CFF3 /* AppDelegate.swift */; };
 		C4FD3A061C2954C10035CFF3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4FD3A051C2954C10035CFF3 /* ViewController.swift */; };
 		C4FD3A081C2954C10035CFF3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C4FD3A071C2954C10035CFF3 /* Assets.xcassets */; };
@@ -99,7 +100,7 @@
 		C4D74BBB1C24CEC90071AD3E /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4D74BBD1C24CECA0071AD3E /* SwiftyStoreKitOSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SwiftyStoreKitOSX.h; sourceTree = "<group>"; };
 		C4D74BBF1C24CECA0071AD3E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C4FD3A011C2954C10035CFF3 /* SwiftStoreOSXDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftStoreOSXDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4FD3A011C2954C10035CFF3 /* SwiftyStoreOSXDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyStoreOSXDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FD3A031C2954C10035CFF3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C4FD3A051C2954C10035CFF3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		C4FD3A071C2954C10035CFF3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -147,7 +148,7 @@
 				6502F6001B985833004E342D /* SwiftyStoreKit */,
 				6502F6131B985858004E342D /* SwiftyStoreDemo */,
 				C4D74BBC1C24CECA0071AD3E /* SwiftyStoreKitOSX */,
-				C4FD3A021C2954C10035CFF3 /* SwiftStoreOSXDemo */,
+				C4FD3A021C2954C10035CFF3 /* SwiftyStoreOSXDemo */,
 				6502F5FF1B985833004E342D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -158,7 +159,7 @@
 				6502F5FE1B985833004E342D /* SwiftyStoreDemo.app */,
 				6502F62D1B985C40004E342D /* SwiftyStoreKit.framework */,
 				C4D74BBB1C24CEC90071AD3E /* SwiftyStoreKit.framework */,
-				C4FD3A011C2954C10035CFF3 /* SwiftStoreOSXDemo.app */,
+				C4FD3A011C2954C10035CFF3 /* SwiftyStoreOSXDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,7 +202,7 @@
 			path = SwiftyStoreKitOSX;
 			sourceTree = "<group>";
 		};
-		C4FD3A021C2954C10035CFF3 /* SwiftStoreOSXDemo */ = {
+		C4FD3A021C2954C10035CFF3 /* SwiftyStoreOSXDemo */ = {
 			isa = PBXGroup;
 			children = (
 				C4FD3A031C2954C10035CFF3 /* AppDelegate.swift */,
@@ -210,7 +211,7 @@
 				C4FD3A091C2954C10035CFF3 /* Main.storyboard */,
 				C4FD3A0C1C2954C10035CFF3 /* Info.plist */,
 			);
-			path = SwiftStoreOSXDemo;
+			path = SwiftyStoreOSXDemo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -290,9 +291,9 @@
 			productReference = C4D74BBB1C24CEC90071AD3E /* SwiftyStoreKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		C4FD3A001C2954C10035CFF3 /* SwiftStoreOSXDemo */ = {
+		C4FD3A001C2954C10035CFF3 /* SwiftyStoreOSXDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C4FD3A0D1C2954C10035CFF3 /* Build configuration list for PBXNativeTarget "SwiftStoreOSXDemo" */;
+			buildConfigurationList = C4FD3A0D1C2954C10035CFF3 /* Build configuration list for PBXNativeTarget "SwiftyStoreOSXDemo" */;
 			buildPhases = (
 				C4FD39FD1C2954C10035CFF3 /* Sources */,
 				C4FD39FE1C2954C10035CFF3 /* Frameworks */,
@@ -304,9 +305,9 @@
 			dependencies = (
 				C4FD3A131C2954CD0035CFF3 /* PBXTargetDependency */,
 			);
-			name = SwiftStoreOSXDemo;
-			productName = SwiftStoreOSXDemo;
-			productReference = C4FD3A011C2954C10035CFF3 /* SwiftStoreOSXDemo.app */;
+			name = SwiftyStoreOSXDemo;
+			productName = SwiftyStoreOSXDemo;
+			productReference = C4FD3A011C2954C10035CFF3 /* SwiftyStoreOSXDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -348,7 +349,7 @@
 			targets = (
 				6502F5FD1B985833004E342D /* SwiftyStoreDemo */,
 				6502F62C1B985C40004E342D /* SwiftyStoreKit */,
-				C4FD3A001C2954C10035CFF3 /* SwiftStoreOSXDemo */,
+				C4FD3A001C2954C10035CFF3 /* SwiftyStoreOSXDemo */,
 				C4D74BBA1C24CEC90071AD3E /* SwiftyStoreKitOSX */,
 			);
 		};
@@ -405,11 +406,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6502F63A1B985C9E004E342D /* InAppProductPurchaseRequest.swift in Sources */,
-				C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */,
 				C40C68101C29414C00B60B7E /* OS.swift in Sources */,
+				6502F63A1B985C9E004E342D /* InAppProductPurchaseRequest.swift in Sources */,
 				6502F63B1B985CA1004E342D /* InAppProductQueryRequest.swift in Sources */,
 				C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */,
+				C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */,
 				6502F63C1B985CA4004E342D /* SwiftyStoreKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,10 +419,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */,
-				C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */,
 				C40C68111C29419500B60B7E /* OS.swift in Sources */,
+				C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */,
 				C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */,
+				C4F69A8A1C2E0D21009DD8BD /* InAppReceiptRefreshRequest.swift in Sources */,
+				C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */,
 				C4D74BC51C24CEDC0071AD3E /* SwiftyStoreKit.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -684,7 +686,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = SwiftStoreOSXDemo/Info.plist;
+				INFOPLIST_FILE = SwiftyStoreOSXDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.OSX.SwiftyStoreDemo;
@@ -700,7 +702,7 @@
 				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				INFOPLIST_FILE = SwiftStoreOSXDemo/Info.plist;
+				INFOPLIST_FILE = SwiftyStoreOSXDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
 				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.OSX.SwiftyStoreDemo;
@@ -748,7 +750,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C4FD3A0D1C2954C10035CFF3 /* Build configuration list for PBXNativeTarget "SwiftStoreOSXDemo" */ = {
+		C4FD3A0D1C2954C10035CFF3 /* Build configuration list for PBXNativeTarget "SwiftyStoreOSXDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C4FD3A0E1C2954C10035CFF3 /* Debug */,

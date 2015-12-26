@@ -48,6 +48,8 @@ public class SwiftyStoreKit {
     public enum PurchaseResultType {
         case Success(productId: String)
         case Error(error: ErrorType)
+        case NoProductIdentifier
+        case PaymentNotAllowed
     }
     public enum RetrieveResultType {
         case Success(product: SKProduct)
@@ -127,8 +129,13 @@ public class SwiftyStoreKit {
         receiptVerifyURL url: ReceiptVerifyURL = .Test,
         password: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
+<<<<<<< HEAD
+        completion:(result: VerifyReceiptResultType) -> ()) {
+            InAppReceipt.verify(test, password: password, session: session, completion: completion)
+=======
         completion:(result: ValidReceiptResultType) -> ()) {
             InAppReceipt.verify(receiptVerifyURL: url, password: password, session: session, completion: completion)
+>>>>>>> Use receipt URL enum instead of boolean in verify method
     }
 
     #if os(iOS)
@@ -156,9 +163,12 @@ public class SwiftyStoreKit {
 
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {
+        guard SwiftyStoreKit.canMakePayments else {
+            completion(result: PurchaseResultType.PaymentNotAllowed)
+            return
+        }
         guard let productIdentifier = product._productIdentifier else {
-            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "No product identifier" ])
-            completion(result: PurchaseResultType.Error(error: error))
+            completion(result: PurchaseResultType.NoProductIdentifier)
             return
         }
 

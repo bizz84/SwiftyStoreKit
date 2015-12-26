@@ -29,10 +29,11 @@ import Foundation
 public typealias ReceiptInfo = [String: AnyObject]
 
 // MARK: - Enumeration
-
-public enum ValidReceiptResultType {
-    case Success(receipt: ReceiptInfo)
-    case Error(error: ReceiptError)
+extension SwiftyStoreKit {
+    public enum VerifyReceiptResultType {
+        case Success(receipt: ReceiptInfo)
+        case Error(error: ReceiptError)
+    }
 }
 
 // Error when managing receipt
@@ -168,7 +169,7 @@ internal class InAppReceipt {
         receiptVerifyURL url: ReceiptVerifyURL = .Test,
         password autoRenewPassword: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
-        completion:(result: ValidReceiptResultType) -> ()) {
+        completion:(result: SwiftyStoreKit.VerifyReceiptResultType) -> ()) {
 
             // If no receipt is present, validation fails.
             guard let base64EncodedString = self.base64EncodedString else {

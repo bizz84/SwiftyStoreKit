@@ -63,6 +63,32 @@ SwiftyStoreKit.restorePurchases() { result in
 }
 ```
 
+### Verify Receipts
+
+```
+SwiftyStoreKit.verifyReceipt() { result in
+    if case .Error(let error) = result {
+        if case .NoReceiptData = error {
+            self.refreshReceipt()
+        }
+    }
+}
+
+func refreshReceipt() {
+    SwiftyStoreKit.refreshReceipt { result in
+        switch result {
+        case .Success:
+            print("Receipt refresh success")
+            break
+        case .Error(let error):
+            print("Receipt refresh failed: \(error)")
+            break
+        }
+    }
+}
+```
+
+
 **NOTE**:
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 

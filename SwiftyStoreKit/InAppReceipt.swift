@@ -97,7 +97,7 @@ public enum ReceiptInfoField: String {
     // The receipt for an in-app purchase.
     case in_app
 
-    public enum InApp {
+    public enum InApp: String {
         // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.
         case quantity
         // The product identifier of the item that was purchased. This value corresponds to the productIdentifier property of the SKPayment object stored in the transaction’s payment property.

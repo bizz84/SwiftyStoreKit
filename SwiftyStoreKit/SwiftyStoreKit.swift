@@ -129,18 +129,13 @@ public class SwiftyStoreKit {
         receiptVerifyURL url: ReceiptVerifyURL = .Test,
         password: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
-<<<<<<< HEAD
         completion:(result: VerifyReceiptResultType) -> ()) {
-            InAppReceipt.verify(test, password: password, session: session, completion: completion)
-=======
-        completion:(result: ValidReceiptResultType) -> ()) {
             InAppReceipt.verify(receiptVerifyURL: url, password: password, session: session, completion: completion)
->>>>>>> Use receipt URL enum instead of boolean in verify method
     }
 
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
-    public class func receiptRefresh(receiptProperties: [String : AnyObject]? = nil, completion: (result: RefreshReceiptResultType) -> ()) {
+    public class func refreshReceipt(receiptProperties: [String : AnyObject]? = nil, completion: (result: RefreshReceiptResultType) -> ()) {
         sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
 
             sharedInstance.receiptRefreshRequest = nil
@@ -158,6 +153,11 @@ public class SwiftyStoreKit {
                 break
             }
         }
+    }
+    #elseif os(OSX)
+     // Call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
+    public class func refreshReceipt() {
+         exit(ReceiptExitCode.NotValid.rawValue)
     }
     #endif
 

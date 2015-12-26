@@ -57,7 +57,7 @@ class ViewController: NSViewController {
 
             self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
-                exit(ReceiptExitCode.NotValid.rawValue)
+                SwiftyStoreKit.refreshReceipt()
             }
         }
     }

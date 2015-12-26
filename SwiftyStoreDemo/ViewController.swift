@@ -56,7 +56,36 @@ class ViewController: UIViewController {
             self.showAlert(self.alertForRestorePurchases(result))
         }
     }
-    
+
+    @IBAction func verifyReceipt() {
+
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        SwiftyStoreKit.verifyReceipt() { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
+
+            self.showAlert(self.alertForVerifyReceipt(result))
+
+            switch result {
+            case .Error(let error):
+                switch (error) {
+                case .NoReceiptData :
+                    self.refreshReceipt()
+                default: break
+                }
+            default: break
+            }
+
+        }
+    }
+
+    func refreshReceipt() {
+        SwiftyStoreKit.refreshReceipt { (result) -> () in
+
+            self.showAlert(self.alertForRefreshReceipt(result))
+
+        }
+    }
+
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
@@ -125,5 +154,36 @@ extension ViewController {
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
     }
+
+
+    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResultType) -> UIAlertController{
+
+        switch result {
+        case .Success(let receipt):
+            print("Verify receipt Success: \(receipt)")
+            return alertWithTitle("Receipt verified", message: "Receipt verified remotly")
+        case .Error(let error):
+            print("Verify receipt Failed: \(error)")
+            switch (error) {
+            case .NoReceiptData :
+                return alertWithTitle("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
+            default:
+                return alertWithTitle("Receipt verification", message: "Receipt verification failed")
+            }
+        }
+
+    }
+
+    func alertForRefreshReceipt(result: SwiftyStoreKit.RefreshReceiptResultType) -> UIAlertController {
+        switch result {
+        case .Success:
+            print("Receipt refreshed Success")
+            return self.alertWithTitle("Receipt refreshed", message: "Receipt refreshed with success")
+        case .Error(let error):
+            print("Receipt refreshed Failed: \(error)")
+            return self.alertWithTitle("Receipt refreshed Failed", message: "Receipt refreshed Failed")
+        }
+    }
+
 }
 

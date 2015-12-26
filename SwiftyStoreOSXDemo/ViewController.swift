@@ -42,7 +42,7 @@ class ViewController: NSViewController {
             self.showAlert(self.alertForPurchaseResult(result))
         }
     }
-    
+
     @IBAction func restorePurchases(sender: AnyObject?) {
 
         SwiftyStoreKit.restorePurchases() { result in
@@ -50,6 +50,18 @@ class ViewController: NSViewController {
             self.showAlert(self.alertForRestorePurchases(result))
         }
     }
+
+    @IBAction func verifyReceipt(ender: AnyObject?) {
+
+        SwiftyStoreKit.verifyReceipt() { result in
+
+            self.showAlert(self.alertForVerifyReceipt(result)) { response in
+
+                SwiftyStoreKit.refreshReceipt()
+            }
+        }
+    }
+
 
 }
 
@@ -64,16 +76,18 @@ extension ViewController {
         alert.alertStyle = NSAlertStyle.InformationalAlertStyle
         return alert
     }
-    func showAlert(alert: NSAlert) {
+    func showAlert(alert: NSAlert, handler: ((NSModalResponse) -> Void)? = nil) {
         
         if let window = NSApplication.sharedApplication().keyWindow {
-            alert.beginSheetModalForWindow(window) { (response: NSModalResponse) in
+            alert.beginSheetModalForWindow(window)  { (response: NSModalResponse) in
+                handler?(response)
             }
         } else {
-            alert.runModal()
+            let response = alert.runModal()
+            handler?(response)
         }
     }
-    
+
     func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResultType) -> NSAlert {
         
         switch result {
@@ -121,5 +135,18 @@ extension ViewController {
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
     }
+
+    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResultType) -> NSAlert {
+
+        switch result {
+        case .Success(let receipt):
+            print("Verify receipt Success: \(receipt)")
+            return self.alertWithTitle("Receipt verified", message: "Receipt verified remotly")
+        case .Error(let error):
+            print("Verify receipt Failed: \(error)")
+            return  self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developper id to test and be outside of XCode")
+        }
+    }
+
 }
 

@@ -669,11 +669,11 @@
             <objects>
                 <viewController id="XfG-lQ-9wD" customClass="ViewController" customModule="SwiftStoreOSXDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="m2S-Jp-Qdl">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="270"/>
+                        <rect key="frame" x="0.0" y="0.0" width="480" height="305"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4ix-eb-y5G">
-                                <rect key="frame" x="162" y="13" width="156" height="32"/>
+                                <rect key="frame" x="162" y="48" width="156" height="32"/>
                                 <buttonCell key="cell" type="push" title="Restore Purchases" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mmO-hG-Xyq">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -683,7 +683,7 @@
                                 </buttonCell>
                             </button>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="aBh-sv-MN6">
-                                <rect key="frame" x="0.0" y="49" width="480" height="176"/>
+                                <rect key="frame" x="0.0" y="84" width="480" height="176"/>
                                 <subviews>
                                     <splitView focusRingType="none" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZR-88-4H6">
                                         <rect key="frame" x="0.0" y="0.0" width="480" height="176"/>
@@ -692,8 +692,8 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="176"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypp-fu-oEb">
-                                                        <rect key="frame" x="80" y="103" width="90" height="32"/>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ypp-fu-oEb">
+                                                        <rect key="frame" x="82" y="103" width="90" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Get Info" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vSi-fu-wrI">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -702,16 +702,16 @@
                                                             <action selector="getInfo1:" target="XfG-lQ-9wD" id="PTC-RY-Aom"/>
                                                         </connections>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23w-eX-lGC">
-                                                        <rect key="frame" x="102" y="139" width="45" height="17"/>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23w-eX-lGC">
+                                                        <rect key="frame" x="105" y="139" width="45" height="17"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="5 days" id="U2h-U7-cdn">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-z0-TRG">
-                                                        <rect key="frame" x="76" y="70" width="98" height="32"/>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-z0-TRG">
+                                                        <rect key="frame" x="78" y="70" width="98" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5bl-kX-gwW">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -734,16 +734,16 @@
                                                 <rect key="frame" x="255" y="0.0" width="225" height="176"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gj2-Z2-1qo">
-                                                        <rect key="frame" x="84" y="139" width="53" height="17"/>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gj2-Z2-1qo">
+                                                        <rect key="frame" x="86" y="139" width="53" height="17"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="10 days" id="XkC-cw-jpP">
                                                             <font key="font" metaFont="system"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32D-7s-IOR">
-                                                        <rect key="frame" x="66" y="103" width="90" height="32"/>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="32D-7s-IOR">
+                                                        <rect key="frame" x="68" y="103" width="90" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Get Info" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F8O-DF-BZX">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -752,8 +752,8 @@
                                                             <action selector="getInfo2:" target="XfG-lQ-9wD" id="u4g-Qb-RyE"/>
                                                         </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GkW-aD-XKc">
-                                                        <rect key="frame" x="62" y="70" width="98" height="32"/>
+                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GkW-aD-XKc">
+                                                        <rect key="frame" x="64" y="70" width="98" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TDW-1n-a4d">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                             <font key="font" metaFont="system"/>
@@ -787,19 +787,31 @@
                                 </constraints>
                             </customView>
                             <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="fQC-8G-INF">
-                                <rect key="frame" x="175" y="233" width="131" height="17"/>
+                                <rect key="frame" x="175" y="268" width="131" height="17"/>
                                 <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Available purchases:" id="Ntg-PD-43y">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yzl-nj-7ol">
+                                <rect key="frame" x="178" y="15" width="125" height="32"/>
+                                <buttonCell key="cell" type="push" title="Verify Receipt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6bY-Fv-W6P">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="verifyReceipt:" target="XfG-lQ-9wD" id="uf9-Pe-MRz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="22" id="979-EH-fNb"/>
+                            <constraint firstItem="Yzl-nj-7ol" firstAttribute="top" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="12" id="B88-P1-tBj"/>
                             <constraint firstAttribute="trailing" secondItem="aBh-sv-MN6" secondAttribute="trailing" id="F8t-R2-cad"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="RDD-02-SB0"/>
                             <constraint firstItem="4ix-eb-y5G" firstAttribute="top" secondItem="aBh-sv-MN6" secondAttribute="bottom" constant="8" id="b6U-zT-POc"/>
-                            <constraint firstAttribute="bottom" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="20" id="crv-3H-ZKn"/>
+                            <constraint firstItem="Yzl-nj-7ol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="dQi-Vh-Bwb"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="enN-Hg-kUA"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="kMt-Ye-T67"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="top" secondItem="fQC-8G-INF" secondAttribute="bottom" constant="8" id="rz5-by-FYa"/>
@@ -809,7 +821,7 @@
                 </viewController>
                 <customObject id="rPt-NT-nkU" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="75" y="655"/>
+            <point key="canvasLocation" x="75" y="672.5"/>
         </scene>
     </scenes>
 </document>

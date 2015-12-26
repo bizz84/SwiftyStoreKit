@@ -41,7 +41,9 @@ public class SwiftyStoreKit {
     private var inflightQueries: [String: InAppProductQueryRequest] = [:]
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
-
+    #if os(iOS)
+    private var receiptRefreshRequest: InAppReceiptRefreshRequest?
+    #endif
     // MARK: Enums
     public enum PurchaseResultType {
         case Success(productId: String)
@@ -58,6 +60,11 @@ public class SwiftyStoreKit {
         case Error(error: ErrorType)
         case NothingToRestore
     }
+    public enum RefreshReceiptResultType {
+        case Success
+        case Error(error: ErrorType)
+    }
+
 
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
@@ -110,6 +117,49 @@ public class SwiftyStoreKit {
             completion(result: returnValue)
         }
     }
+
+    /**
+     *  Verify application receipt
+     *  - Parameter receiptVerifyURL: receipt verify url (default: Test)
+     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
+     *  - Parameter session: the session used to make remote call.
+     *  - Parameter completion: handler for result
+     */
+    public class func verifyReceipt(
+        receiptVerifyURL url: ReceiptVerifyURL = .Test,
+        password: String? = nil,
+        session: NSURLSession = NSURLSession.sharedSession(),
+        completion:(result: VerifyReceiptResultType) -> ()) {
+            InAppReceipt.verify(receiptVerifyURL: url, password: password, session: session, completion: completion)
+    }
+
+    #if os(iOS) || os(tvOS)
+    // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
+    public class func refreshReceipt(receiptProperties: [String : AnyObject]? = nil, completion: (result: RefreshReceiptResultType) -> ()) {
+        sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
+
+            sharedInstance.receiptRefreshRequest = nil
+
+            switch result {
+            case .Success:
+                if InAppReceipt.data == nil {
+                    completion(result: .Error(error: ReceiptError.NoReceiptData))
+                } else {
+                    completion(result: .Success)
+                }
+                break
+            case .Error(let e):
+                completion(result: .Error(error: e))
+                break
+            }
+        }
+    }
+    #elseif os(OSX)
+     // Call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
+    public class func refreshReceipt() {
+         exit(ReceiptExitCode.NotValid.rawValue)
+    }
+    #endif
 
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {

@@ -110,8 +110,6 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 - Super easy to use block based API
 - enum-based error handling
 - Support for non-consumable in app purchases
-
-#### Planned Features
 - Receipt verification
 
 #### Missing Features

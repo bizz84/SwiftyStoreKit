@@ -160,7 +160,7 @@ extension ViewController {
             return self.alertWithTitle("Receipt verified", message: "Receipt verified remotly")
         case .Error(let error):
             print("Verify receipt Failed: \(error)")
-            return  self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developper id to test and be outside of XCode")
+            return self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developer id to test and be outside of XCode")
         }
     }
 

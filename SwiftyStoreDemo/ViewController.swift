@@ -3,8 +3,24 @@
 //  SwiftyStoreKit
 //
 //  Created by Andrea Bizzotto on 03/09/2015.
-//  Copyright © 2015 musevisions. All rights reserved.
 //
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
 
 import UIKit
 import StoreKit
@@ -65,24 +81,19 @@ class ViewController: UIViewController {
 
             self.showAlert(self.alertForVerifyReceipt(result))
 
-            switch result {
-            case .Error(let error):
-                switch (error) {
-                case .NoReceiptData :
+            if case .Error(let error) = result {
+                if case .NoReceiptData = error {
                     self.refreshReceipt()
-                default: break
                 }
-            default: break
             }
-
         }
     }
 
     func refreshReceipt() {
+
         SwiftyStoreKit.refreshReceipt { (result) -> () in
 
             self.showAlert(self.alertForRefreshReceipt(result))
-
         }
     }
 
@@ -177,11 +188,11 @@ extension ViewController {
     func alertForRefreshReceipt(result: SwiftyStoreKit.RefreshReceiptResultType) -> UIAlertController {
         switch result {
         case .Success:
-            print("Receipt refreshed Success")
-            return self.alertWithTitle("Receipt refreshed", message: "Receipt refreshed with success")
+            print("Receipt refresh Success")
+            return self.alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
         case .Error(let error):
-            print("Receipt refreshed Failed: \(error)")
-            return self.alertWithTitle("Receipt refreshed Failed", message: "Receipt refreshed Failed")
+            print("Receipt refresh Failed: \(error)")
+            return self.alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
         }
     }
 

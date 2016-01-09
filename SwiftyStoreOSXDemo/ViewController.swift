@@ -121,19 +121,22 @@ extension ViewController {
         case .Success(let productId):
             print("Purchase Success: \(productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
-        case .NoProductIdentifier:
-            return alertWithTitle("Purchase failed", message: "Product not found")
-        case .PaymentNotAllowed:
-            return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
         case .Error(let error):
             print("Purchase Failed: \(error)")
-            if case ResponseError.RequestFailed(let internalError) = error where internalError.domain == SKErrorDomain {
-                return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
+            switch error {
+            case .Failed(let error):
+                if case ResponseError.RequestFailed(let internalError) = error where internalError.domain == SKErrorDomain {
+                    return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
+                }
+                if (error as NSError).domain == SKErrorDomain {
+                    return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
+                }
+                return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .NoProductIdentifier:
+                return alertWithTitle("Purchase failed", message: "Product not found")
+            case .PaymentNotAllowed:
+                return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
             }
-            if (error as NSError).domain == SKErrorDomain {
-                return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-            }
-            return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
         }
     }
     

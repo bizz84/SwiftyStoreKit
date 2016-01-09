@@ -45,11 +45,14 @@ public class SwiftyStoreKit {
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
     // MARK: Enums
-    public enum PurchaseResultType {
-        case Success(productId: String)
-        case Error(error: ErrorType)
+    public enum PurchaseErrorType {
+        case Failed(error: ErrorType)
         case NoProductIdentifier
         case PaymentNotAllowed
+    }
+    public enum PurchaseResultType {
+        case Success(productId: String)
+        case Error(error: PurchaseErrorType)
     }
     public enum RetrieveResultType {
         case Success(product: SKProduct)
@@ -102,7 +105,7 @@ public class SwiftyStoreKit {
                     sharedInstance.purchase(product: product, completion: completion)
                 }
                 else if case .Error(let error) = result {
-                    completion(result: .Error(error: error))
+                    completion(result: .Error(error: .Failed(error: error)))
                 }
             }
         }
@@ -164,11 +167,11 @@ public class SwiftyStoreKit {
     // MARK: private methods
     private func purchase(product product: SKProduct, completion: (result: PurchaseResultType) -> ()) {
         guard SwiftyStoreKit.canMakePayments else {
-            completion(result: PurchaseResultType.PaymentNotAllowed)
+            completion(result: .Error(error: .PaymentNotAllowed))
             return
         }
         guard let productIdentifier = product._productIdentifier else {
-            completion(result: PurchaseResultType.NoProductIdentifier)
+            completion(result: .Error(error: .NoProductIdentifier))
             return
         }
 
@@ -188,7 +191,7 @@ public class SwiftyStoreKit {
             // TODO: Need a way to match with current product?
             return .Success(productId: productId)
         case .Failed(let error):
-            return .Error(error: error)
+            return .Error(error: .Failed(error: error))
         case .Restored(_):
             fatalError("case Restored is not allowed for purchase flow")
         case .NothingToRestore:

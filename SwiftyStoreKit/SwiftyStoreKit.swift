@@ -201,8 +201,8 @@ public class SwiftyStoreKit {
     
     private func processRestoreResult(result: InAppProductPurchaseRequest.TransactionResult) -> RestoreResultType {
         switch result {
-        case .Purchased(_):
-            fatalError("case Purchased is not allowed for restore flow")
+        case .Purchased(let productId):
+            return .Success(productId: productId)
         case .Failed(let error):
             return .Error(error: error)
         case .Restored(let productId):

@@ -67,7 +67,11 @@ public class SwiftyStoreKit {
         case Success
         case Error(error: ErrorType)
     }
-
+    public enum InternalErrorCode: Int {
+        case RestoredPurchaseWhenPurchasing = 0
+        case NothingToRestoreWhenPurchasing = 1
+        case PurchasedWhenRestoringPurchase = 2
+    }
 
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
@@ -188,21 +192,20 @@ public class SwiftyStoreKit {
     private func processPurchaseResult(result: InAppProductPurchaseRequest.TransactionResult) -> PurchaseResultType {
         switch result {
         case .Purchased(let productId):
-            // TODO: Need a way to match with current product?
             return .Success(productId: productId)
         case .Failed(let error):
             return .Error(error: .Failed(error: error))
-        case .Restored(_):
-            fatalError("case Restored is not allowed for purchase flow")
+        case .Restored(let productId):
+            return .Error(error: .Failed(error: storeInternalError(code: InternalErrorCode.RestoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(productId) from purchase path")))
         case .NothingToRestore:
-            fatalError("case NothingToRestore is not allowed for purchase flow")
+            return .Error(error: .Failed(error: storeInternalError(code: InternalErrorCode.NothingToRestoreWhenPurchasing.rawValue, description: "Cannot restore product from purchase path")))
         }
     }
     
     private func processRestoreResult(result: InAppProductPurchaseRequest.TransactionResult) -> RestoreResultType {
         switch result {
         case .Purchased(let productId):
-            return .Success(productId: productId)
+            return .Error(error: storeInternalError(code: InternalErrorCode.PurchasedWhenRestoringPurchase.rawValue, description: "Cannot purchase product \(productId) from restore purchases path"))
         case .Failed(let error):
             return .Error(error: error)
         case .Restored(let productId):
@@ -236,5 +239,9 @@ public class SwiftyStoreKit {
                 completion(result: { throw error })
             }
         }
+    }
+    
+    private func storeInternalError(code code: Int = 0, description: String = "") -> NSError {
+        return NSError(domain: "SwiftyStoreKit", code: code, userInfo: [ NSLocalizedDescriptionKey: description ])
     }
 }

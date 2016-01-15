@@ -30,7 +30,7 @@ public typealias ReceiptInfo = [String: AnyObject]
 
 // MARK: - Enumeration
 extension SwiftyStoreKit {
-    public enum VerifyReceiptResultType {
+    public enum VerifyReceiptResult {
         case Success(receipt: ReceiptInfo)
         case Error(error: ReceiptError)
     }
@@ -169,7 +169,7 @@ internal class InAppReceipt {
         receiptVerifyURL url: ReceiptVerifyURL = .Test,
         password autoRenewPassword: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
-        completion:(result: SwiftyStoreKit.VerifyReceiptResultType) -> ()) {
+        completion:(result: SwiftyStoreKit.VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.
             guard let base64EncodedString = self.base64EncodedString else {

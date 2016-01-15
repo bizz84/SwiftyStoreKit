@@ -104,7 +104,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResultType) -> NSAlert {
+    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResult) -> NSAlert {
         
         switch result {
         case .Success(let product):
@@ -115,7 +115,7 @@ extension ViewController {
         }
     }
     
-    func alertForPurchaseResult(result: SwiftyStoreKit.PurchaseResultType) -> NSAlert {
+    func alertForPurchaseResult(result: SwiftyStoreKit.PurchaseResult) -> NSAlert {
 
         switch result {
         case .Success(let productId):
@@ -140,7 +140,7 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResultType) -> NSAlert {
+    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResult) -> NSAlert {
         
         switch result {
         case .Success(let productId):
@@ -155,7 +155,7 @@ extension ViewController {
         }
     }
 
-    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResultType) -> NSAlert {
+    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResult) -> NSAlert {
 
         switch result {
         case .Success(let receipt):

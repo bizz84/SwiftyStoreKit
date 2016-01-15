@@ -119,7 +119,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResultType) -> UIAlertController {
+    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResult) -> UIAlertController {
         
         switch result {
         case .Success(let product):
@@ -130,7 +130,7 @@ extension ViewController {
         }
     }
 
-    func alertForPurchaseResult(result: SwiftyStoreKit.PurchaseResultType) -> UIAlertController {
+    func alertForPurchaseResult(result: SwiftyStoreKit.PurchaseResult) -> UIAlertController {
         switch result {
         case .Success(let productId):
             print("Purchase Success: \(productId)")
@@ -154,7 +154,7 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResultType) -> UIAlertController {
+    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResult) -> UIAlertController {
         
         switch result {
         case .Success(let productId):
@@ -170,7 +170,7 @@ extension ViewController {
     }
 
 
-    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResultType) -> UIAlertController{
+    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResult) -> UIAlertController{
 
         switch result {
         case .Success(let receipt):
@@ -188,7 +188,7 @@ extension ViewController {
 
     }
 
-    func alertForRefreshReceipt(result: SwiftyStoreKit.RefreshReceiptResultType) -> UIAlertController {
+    func alertForRefreshReceipt(result: SwiftyStoreKit.RefreshReceiptResult) -> UIAlertController {
         switch result {
         case .Success:
             print("Receipt refresh Success")

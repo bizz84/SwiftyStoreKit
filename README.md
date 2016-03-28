@@ -10,6 +10,8 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat
            )](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+
 
 ### Preview
 
@@ -93,7 +95,10 @@ func refreshReceipt() {
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
 ## Installation
-SwiftyStoreKit can be installed as a Cocoapod and builds as a Swift framework. To install, include this in your Podfile.
+
+### CocoaPods
+
+SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
 
 ```
 use_frameworks!
@@ -101,6 +106,17 @@ use_frameworks!
 pod 'SwiftyStoreKit'
 ```
 Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
+
+### Carthage
+
+To integrate SwiftyStoreKit into your Xcode project using [Carthage](https://github.com/Carthage/Carthage), specify it in your Cartfile:
+
+```
+github "bizz84/SwiftyStoreKit"
+```
+
+**NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
+
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.

@@ -1,5 +1,5 @@
 # SwiftyStoreKit
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 9.0+, written in Swift 2.0.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 9.0+, written in Swift.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat
             )](http://mit-license.org)

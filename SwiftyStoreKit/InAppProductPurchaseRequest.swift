@@ -104,7 +104,6 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                     self.callback(result: .Purchased(productId: transaction.payment.productIdentifier))
                 })
                 paymentQueue.finishTransaction(transaction)
-                break
             case .Failed:
                 dispatch_async(dispatch_get_main_queue(), {
                     // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
@@ -113,13 +112,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                     self.callback(result: .Failed(error: transaction.error ?? altError))
                 })
                 paymentQueue.finishTransaction(transaction)
-                break
             case .Restored:
                 dispatch_async(dispatch_get_main_queue(), {
                     self.callback(result: .Restored(productId: transaction.payment.productIdentifier))
                 })
                 paymentQueue.finishTransaction(transaction)
-                break
             case .Purchasing:
                 // In progress: do nothing
                 break

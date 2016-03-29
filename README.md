@@ -25,10 +25,8 @@ SwiftyStoreKit.retrieveProductInfo("com.musevisions.SwiftyStoreKit.Purchase1") {
     case .Success(let product):
         let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
         print("Product: \(product.localizedDescription), price: \(priceString)")
-        break
     case .Error(let error):
         print("Error: \(error)")
-        break
     }
 }
 ```
@@ -39,10 +37,8 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { res
     switch result {
     case .Success(let productId):
         print("Purchase Success: \(productId)")
-        break
     case .Error(let error):
         print("Purchase Failed: \(error)")
-        break
     }
 }
 ```
@@ -54,13 +50,10 @@ SwiftyStoreKit.restorePurchases() { result in
     switch result {
     case .Success(let productId):
         print("Restore Success: \(productId)")
-        break
     case .NothingToRestore:
         print("Nothing to Restore")
-        break
     case .Error(let error):
         print("Restore Failed: \(error)")
-        break
     }
 }
 ```
@@ -81,10 +74,8 @@ func refreshReceipt() {
         switch result {
         case .Success:
             print("Receipt refresh success")
-            break
         case .Error(let error):
             print("Receipt refresh failed: \(error)")
-            break
         }
     }
 }

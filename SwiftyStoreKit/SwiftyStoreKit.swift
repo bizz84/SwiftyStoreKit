@@ -154,10 +154,8 @@ public class SwiftyStoreKit {
                 } else {
                     completion(result: .Success)
                 }
-                break
             case .Error(let e):
                 completion(result: .Error(error: e))
-                break
             }
         }
     }

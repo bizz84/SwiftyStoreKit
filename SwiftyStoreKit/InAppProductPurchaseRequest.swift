@@ -40,9 +40,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     private var purchases : [PaymentTransactionState: [String]] = [:]
 
     var paymentQueue: SKPaymentQueue {
-        get {
-            return  SKPaymentQueue.defaultQueue()
-        }
+        return SKPaymentQueue.defaultQueue()
     }
     
     let product : SKProduct?
@@ -76,15 +74,15 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             return
         }
         let payment = SKMutablePayment(product: product)
-        dispatch_async(dispatch_get_global_queue(0, 0), {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.paymentQueue.addPayment(payment)
-        })
+        }
     }
     private func startRestorePurchases() {
         
-        dispatch_async(dispatch_get_global_queue(0, 0), {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.paymentQueue.restoreCompletedTransactions()
-        })
+        }
     }
     
     // MARK: SKPaymentTransactionObserver
@@ -100,22 +98,22 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
             switch transactionState {
             case .Purchased:
-                dispatch_async(dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue()) {
                     self.callback(result: .Purchased(productId: transaction.payment.productIdentifier))
-                })
+                }
                 paymentQueue.finishTransaction(transaction)
             case .Failed:
-                dispatch_async(dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue()) {
                     // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
                     // mandatory, return a default one if needed
                     let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
                     self.callback(result: .Failed(error: transaction.error ?? altError))
-                })
+                }
                 paymentQueue.finishTransaction(transaction)
             case .Restored:
-                dispatch_async(dispatch_get_main_queue(), {
+                dispatch_async(dispatch_get_main_queue()) {
                     self.callback(result: .Restored(productId: transaction.payment.productIdentifier))
-                })
+                }
                 paymentQueue.finishTransaction(transaction)
             case .Purchasing:
                 // In progress: do nothing
@@ -139,9 +137,9 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     
     func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
         
-        dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue()) {
             self.callback(result: .Failed(error: error))
-        })
+        }
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {

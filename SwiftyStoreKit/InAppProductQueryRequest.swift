@@ -58,14 +58,14 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func start() {
-        dispatch_async(dispatch_get_global_queue(0, 0), {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.request.start()
-        })
+        }
     }
     func cancel() {
-        dispatch_async(dispatch_get_global_queue(0, 0), {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.request.cancel()
-        })
+        }
     }
     
     // MARK: SKProductsRequestDelegate
@@ -73,16 +73,16 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         
         if let invalidProductIdentifiers = response._invalidProductIdentifiers where invalidProductIdentifiers.count > 0 {
             let error = ResponseError.InvalidProducts(invalidProductIdentifiers: invalidProductIdentifiers)
-            dispatch_async(dispatch_get_main_queue(), {
+            dispatch_async(dispatch_get_main_queue()) {
                 self.callback(result: .Error(e: error))
-            })
+            }
             return
         }
         guard let products = response._products where products.count > 0 else {
             let error = ResponseError.NoProducts
-            dispatch_async(dispatch_get_main_queue(), {
+            dispatch_async(dispatch_get_main_queue()) {
                 self.callback(result: .Error(e: error))
-            })
+            }
             return
         }
         callback(result: .Success(products: products))
@@ -98,7 +98,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
     #elseif os(OSX)
     func request(request: SKRequest, didFailWithError error: NSError?) {
-        if let notNilError = error{
+        if let notNilError = error {
             requestFailed(notNilError)
         }
         else {
@@ -108,8 +108,8 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     #endif
     func requestFailed(error: NSError){
         let error = ResponseError.RequestFailed(error: error)
-        dispatch_async(dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue()) {
             self.callback(result: .Error(e: error))
-        })
+        }
     }
 }

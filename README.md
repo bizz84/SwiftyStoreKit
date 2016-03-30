@@ -60,7 +60,7 @@ SwiftyStoreKit.restorePurchases() { result in
 
 ### Verify Receipts
 
-```
+```swift
 SwiftyStoreKit.verifyReceipt() { result in
     if case .Error(let error) = result {
         if case .NoReceiptData = error {
@@ -91,7 +91,7 @@ The framework provides a simple block based API with robust error handling on to
 
 SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
 
-```
+```ruby
 use_frameworks!
 
 pod 'SwiftyStoreKit'
@@ -102,7 +102,7 @@ Once installed, just ```import SwiftyStoreKit``` in your classes and you're good
 
 To integrate SwiftyStoreKit into your Xcode project using [Carthage](https://github.com/Carthage/Carthage), specify it in your Cartfile:
 
-```
+```ogdl
 github "bizz84/SwiftyStoreKit"
 ```
 

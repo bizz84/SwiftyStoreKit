@@ -154,18 +154,19 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResult) -> UIAlertController {
-        
-        switch result {
-        case .Success(let productId):
-            print("Restore Success: \(productId)")
+    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResults) -> UIAlertController {
+
+        if result.restoreFailedProducts.count > 0 {
+            print("Restore Failed: \(result.restoreFailedProducts)")
+            return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
+        }
+        else if result.restoredProductIds.count > 0 {
+            print("Restore Success: \(result.restoredProductIds)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
-        case .NothingToRestore:
+        }
+        else {
             print("Nothing to Restore")
             return alertWithTitle("Nothing to restore", message: "No previous purchases were found")
-        case .Error(let error):
-            print("Restore Failed: \(error)")
-            return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
     }
 

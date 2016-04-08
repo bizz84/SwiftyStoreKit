@@ -61,9 +61,9 @@ class ViewController: NSViewController {
 
     @IBAction func restorePurchases(sender: AnyObject?) {
 
-        SwiftyStoreKit.restorePurchases() { result in
+        SwiftyStoreKit.restorePurchases() { results in
             
-            self.showAlert(self.alertForRestorePurchases(result))
+            self.showAlert(self.alertForRestorePurchases(results))
         }
     }
 
@@ -140,21 +140,22 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResult) -> NSAlert {
+    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResults) -> NSAlert {
         
-        switch result {
-        case .Success(let productId):
-            print("Restore Success: \(productId)")
-            return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
-        case .NothingToRestore:
-            print("Nothing to Restore")
-            return alertWithTitle("Nothing to restore", message: "No previous purchases were found")
-        case .Error(let error):
-            print("Restore Failed: \(error)")
+        if result.restoreFailedProducts.count > 0 {
+            print("Restore Failed: \(result.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
+        else if result.restoredProductIds.count > 0 {
+            print("Restore Success: \(result.restoredProductIds)")
+            return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
+        }
+        else {
+            print("Nothing to Restore")
+            return alertWithTitle("Nothing to restore", message: "No previous purchases were found")
+        }
     }
-
+    
     func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResult) -> NSAlert {
 
         switch result {

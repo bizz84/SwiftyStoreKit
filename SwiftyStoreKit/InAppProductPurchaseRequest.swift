@@ -31,11 +31,10 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     enum TransactionResult {
         case Purchased(productId: String)
         case Restored(productId: String)
-        case NothingToRestore
         case Failed(error: NSError)
     }
     
-    typealias RequestCallback = (result: TransactionResult) -> ()
+    typealias RequestCallback = (results: [TransactionResult]) -> ()
     private let callback: RequestCallback
     private var purchases : [PaymentTransactionState: [String]] = [:]
 
@@ -88,6 +87,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
+        var transactionResults: [TransactionResult] = []
+        
         for transaction in transactions {
 
             #if os(iOS)
@@ -98,22 +99,16 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
             switch transactionState {
             case .Purchased:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.callback(result: .Purchased(productId: transaction.payment.productIdentifier))
-                }
+                transactionResults.append(.Purchased(productId: transaction.payment.productIdentifier))
                 paymentQueue.finishTransaction(transaction)
             case .Failed:
-                dispatch_async(dispatch_get_main_queue()) {
-                    // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
-                    // mandatory, return a default one if needed
-                    let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
-                    self.callback(result: .Failed(error: transaction.error ?? altError))
-                }
+                // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
+                // mandatory, return a default one if needed
+                let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
+                transactionResults.append(.Failed(error: transaction.error ?? altError))
                 paymentQueue.finishTransaction(transaction)
             case .Restored:
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.callback(result: .Restored(productId: transaction.payment.productIdentifier))
-                }
+                transactionResults.append(.Restored(productId: transaction.payment.productIdentifier))
                 paymentQueue.finishTransaction(transaction)
             case .Purchasing:
                 // In progress: do nothing
@@ -129,6 +124,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 purchases[transactionState] = [ transaction.payment.productIdentifier ]
             }
         }
+        if transactionResults.count > 0 {
+            dispatch_async(dispatch_get_main_queue()) {
+                self.callback(results: transactionResults)
+            }
+        }
     }
     
     func paymentQueue(queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
@@ -138,19 +138,19 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     func paymentQueue(queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
         
         dispatch_async(dispatch_get_main_queue()) {
-            self.callback(result: .Failed(error: error))
+            self.callback(results: [.Failed(error: error)])
         }
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
         if let product = self.product, productIdentifier = product._productIdentifier {
-            self.callback(result: .Restored(productId: productIdentifier))
+            self.callback(results: [.Restored(productId: productIdentifier)])
             return
         }
         // This method will be called after all purchases have been restored (includes the case of no purchases)
         guard let restored = purchases[.Restored] where restored.count > 0 else {
             
-            self.callback(result: .NothingToRestore)
+            self.callback(results: [])
             return
         }
         //print("\(restored)")

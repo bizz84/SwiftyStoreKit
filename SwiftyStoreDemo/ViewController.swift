@@ -66,10 +66,10 @@ class ViewController: UIViewController {
     @IBAction func restorePurchases() {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.restorePurchases() { result in
+        SwiftyStoreKit.restorePurchases() { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
-            self.showAlert(self.alertForRestorePurchases(result))
+            self.showAlert(self.alertForRestorePurchases(results))
         }
     }
 
@@ -154,14 +154,14 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(result: SwiftyStoreKit.RestoreResults) -> UIAlertController {
+    func alertForRestorePurchases(results: SwiftyStoreKit.RestoreResults) -> UIAlertController {
 
-        if result.restoreFailedProducts.count > 0 {
-            print("Restore Failed: \(result.restoreFailedProducts)")
+        if results.restoreFailedProducts.count > 0 {
+            print("Restore Failed: \(results.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
-        else if result.restoredProductIds.count > 0 {
-            print("Restore Success: \(result.restoredProductIds)")
+        else if results.restoredProductIds.count > 0 {
+            print("Restore Success: \(results.restoredProductIds)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         }
         else {

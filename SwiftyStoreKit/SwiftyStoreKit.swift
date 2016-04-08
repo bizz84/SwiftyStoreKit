@@ -68,8 +68,7 @@ public class SwiftyStoreKit {
     }
     public enum InternalErrorCode: Int {
         case RestoredPurchaseWhenPurchasing = 0
-        case NothingToRestoreWhenPurchasing = 1
-        case PurchasedWhenRestoringPurchase = 2
+        case PurchasedWhenRestoringPurchase = 1
     }
 
     // MARK: Singleton

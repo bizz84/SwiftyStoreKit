@@ -153,7 +153,6 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             self.callback(results: [])
             return
         }
-        //print("\(restored)")
     }
     
     func paymentQueue(queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {

@@ -46,14 +46,15 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { res
 ### Restore previous purchases
 
 ```swift
-SwiftyStoreKit.restorePurchases() { result in
-    switch result {
-    case .Success(let productId):
-        print("Restore Success: \(productId)")
-    case .NothingToRestore:
+SwiftyStoreKit.restorePurchases() { results in
+    if results.restoreFailedProducts.count > 0 {
+        print("Restore Failed: \(results.restoreFailedProducts)")
+    }
+    else if results.restoredProductIds.count > 0 {
+        print("Restore Success: \(results.restoredProductIds)")
+    }
+    else {
         print("Nothing to Restore")
-    case .Error(let error):
-        print("Restore Failed: \(error)")
     }
 }
 ```

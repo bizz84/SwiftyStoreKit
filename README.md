@@ -170,6 +170,14 @@ Note that along with the success and failure case, the result of a restore purch
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding OSX support and receipt verification.
 
+## Apps using SwiftyStoreKit
+
+It would be great to showcase apps using SwiftyStoreKit here. Pull requests welcome :)
+
+* [Pixel Picker](https://itunes.apple.com/app/id930804327) - Image Color Picker
+* [KType](https://itunes.apple.com/app/id1037000234) - Space shooter game
+
+
 ## License
 
 Copyright (c) 2015 Andrea Bizzotto bizz84@gmail.com

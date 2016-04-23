@@ -104,7 +104,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(result: RetrieveResult) -> NSAlert {
+    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResults) -> NSAlert {
         
         if let product = result.retrievedProducts.first {
             let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)

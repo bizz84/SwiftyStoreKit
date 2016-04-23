@@ -55,6 +55,12 @@ public class SwiftyStoreKit {
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
     // MARK: Enums
+    public struct RetrieveResults {
+        public let retrievedProducts: Set<SKProduct>
+        public let invalidProductIDs: Set<String>
+        public let error: NSError?
+    }
+
     public enum PurchaseError {
         case Failed(error: NSError)
         case InvalidProductId(productId: String)
@@ -86,14 +92,14 @@ public class SwiftyStoreKit {
     }
     
     // MARK: Public methods
-    public class func retrieveProductsInfo(productIds: Set<String>, completion: (result: RetrieveResult) -> ()) {
+    public class func retrieveProductsInfo(productIds: Set<String>, completion: (result: RetrieveResults) -> ()) {
         
         guard let products = sharedInstance.store.allProductsMatching(productIds) else {
             
             sharedInstance.requestProducts(productIds, completion: completion)
             return
         }
-        completion(result: RetrieveResult(retrievedProducts: products, invalidProductIDs: [], error: nil))
+        completion(result: RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
     }
     
     public class func purchaseProduct(productId: String, completion: (result: PurchaseResult) -> ()) {
@@ -217,7 +223,7 @@ public class SwiftyStoreKit {
         return RestoreResults(restoredProductIds: restoredProductIds, restoreFailedProducts: restoreFailedProducts)
     }
     
-    private func requestProducts(productIds: Set<String>, completion: (result: RetrieveResult) -> ()) {
+    private func requestProducts(productIds: Set<String>, completion: (result: RetrieveResults) -> ()) {
         
         inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
         

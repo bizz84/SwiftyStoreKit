@@ -47,7 +47,7 @@ class ViewController: UIViewController {
     func getInfo(no: String) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.retrieveProductInfo(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + ".purchase" + no]) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForProductRetrievalInfo(result))
@@ -119,14 +119,18 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResult) -> UIAlertController {
+    func alertForProductRetrievalInfo(result: SwiftyStoreKit.RetrieveResults) -> UIAlertController {
         
-        switch result {
-        case .Success(let product):
+        if let product = result.retrievedProducts.first {
             let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
             return alertWithTitle(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
-        case .Error(let error):
-            return alertWithTitle("Could not retrieve product info", message: String(error))
+        }
+        else if let invalidProductId = result.invalidProductIDs.first {
+            return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
+        }
+        else {
+            let errorString = result.error?.localizedDescription ?? "Unknown error. Please contact support"
+            return alertWithTitle("Could not retrieve product info", message: errorString)
         }
     }
 
@@ -139,13 +143,12 @@ extension ViewController {
             print("Purchase Failed: \(error)")
             switch error {
                 case .Failed(let error):
-                    if case ResponseError.RequestFailed(let internalError) = error where internalError.domain == SKErrorDomain {
-                        return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-                    }
-                    if (error as NSError).domain == SKErrorDomain {
+                    if error.domain == SKErrorDomain {
                         return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
                     }
                     return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+                case .InvalidProductId(let productId):
+                    return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
                 case .NoProductIdentifier:
                     return alertWithTitle("Purchase failed", message: "Product not found")
                 case .PaymentNotAllowed:

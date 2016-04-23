@@ -24,19 +24,15 @@
 
 import StoreKit
 
-public enum ResponseError : ErrorType {
-    case InvalidProducts(invalidProductIdentifiers: [String])
-    case NoProducts
-    case RequestFailed(error: NSError)
+public struct RetrieveResult {
+    public let retrievedProducts: Set<SKProduct>
+    public let invalidProductIDs: Set<String>
+    public let error: NSError?
 }
+
 class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
-    enum ResultType {
-        case Success(products: [SKProduct])
-        case Error(e: ResponseError)
-    }
-
-    typealias RequestCallback = (result: ResultType) -> ()
+    typealias RequestCallback = (result: RetrieveResult) -> ()
     private let callback: RequestCallback
     private let request: SKProductsRequest
     // http://stackoverflow.com/questions/24011575/what-is-the-difference-between-a-weak-reference-and-an-unowned-reference
@@ -71,21 +67,13 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     // MARK: SKProductsRequestDelegate
     func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         
-        if let invalidProductIdentifiers = response._invalidProductIdentifiers where invalidProductIdentifiers.count > 0 {
-            let error = ResponseError.InvalidProducts(invalidProductIdentifiers: invalidProductIdentifiers)
-            dispatch_async(dispatch_get_main_queue()) {
-                self.callback(result: .Error(e: error))
-            }
-            return
+        dispatch_async(dispatch_get_main_queue()) {
+            
+            let retrievedProducts = Set<SKProduct>(response.products ?? [])
+            let invalidProductIDs = Set<String>(response.invalidProductIdentifiers ?? [])
+            self.callback(result: RetrieveResult(retrievedProducts: retrievedProducts,
+                invalidProductIDs: invalidProductIDs, error: nil))
         }
-        guard let products = response._products where products.count > 0 else {
-            let error = ResponseError.NoProducts
-            dispatch_async(dispatch_get_main_queue()) {
-                self.callback(result: .Error(e: error))
-            }
-            return
-        }
-        callback(result: .Success(products: products))
     }
     
     func requestDidFinish(request: SKRequest) {
@@ -107,9 +95,9 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
     #endif
     func requestFailed(error: NSError){
-        let error = ResponseError.RequestFailed(error: error)
         dispatch_async(dispatch_get_main_queue()) {
-            self.callback(result: .Error(e: error))
+            self.callback(result: RetrieveResult(retrievedProducts: [],
+                invalidProductIDs: [], error: error))
         }
     }
 }

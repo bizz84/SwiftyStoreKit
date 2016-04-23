@@ -34,11 +34,21 @@ public class SwiftyStoreKit {
                 products[productIdentifier] = product
             }
         }
+        func allProductsMatching(productIds: Set<String>) -> Set<SKProduct>? {
+            var requestedProducts = Set<SKProduct>()
+            for productId in productIds {
+                guard let product = products[productId] else {
+                    return nil
+                }
+                requestedProducts.insert(product)
+            }
+            return requestedProducts
+        }
     }
     private var store: InAppPurchaseStore = InAppPurchaseStore()
 
     // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
-    private var inflightQueries: [String: InAppProductQueryRequest] = [:]
+    private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
     #if os(iOS)
@@ -46,17 +56,14 @@ public class SwiftyStoreKit {
     #endif
     // MARK: Enums
     public enum PurchaseError {
-        case Failed(error: ErrorType)
+        case Failed(error: NSError)
+        case InvalidProductId(productId: String)
         case NoProductIdentifier
         case PaymentNotAllowed
     }
     public enum PurchaseResult {
         case Success(productId: String)
         case Error(error: PurchaseError)
-    }
-    public enum RetrieveResult {
-        case Success(product: SKProduct)
-        case Error(error: ErrorType)
     }
     public struct RestoreResults {
         public let restoredProductIds: [String]
@@ -79,21 +86,14 @@ public class SwiftyStoreKit {
     }
     
     // MARK: Public methods
-    public class func retrieveProductInfo(productId: String, completion: (result: RetrieveResult) -> ()) {
-        guard let product = sharedInstance.store.products[productId] else {
+    public class func retrieveProductsInfo(productIds: Set<String>, completion: (result: RetrieveResult) -> ()) {
+        
+        guard let products = sharedInstance.store.allProductsMatching(productIds) else {
             
-            sharedInstance.requestProduct(productId) { (inner: () throws -> SKProduct) -> () in
-                do {
-                    let product = try inner()
-                    completion(result: .Success(product: product))
-                }
-                catch let error {
-                    completion(result: .Error(error: error))
-                }
-            }
+            sharedInstance.requestProducts(productIds, completion: completion)
             return
         }
-        completion(result: .Success(product: product))
+        completion(result: RetrieveResult(retrievedProducts: products, invalidProductIDs: [], error: nil))
     }
     
     public class func purchaseProduct(productId: String, completion: (result: PurchaseResult) -> ()) {
@@ -102,12 +102,15 @@ public class SwiftyStoreKit {
             sharedInstance.purchase(product: product, completion: completion)
         }
         else {
-            retrieveProductInfo(productId) { (result) -> () in
-                if case .Success(let product) = result {
+            retrieveProductsInfo(Set([productId])) { result -> () in
+                if let product = result.retrievedProducts.first {
                     sharedInstance.purchase(product: product, completion: completion)
                 }
-                else if case .Error(let error) = result {
+                else if let error = result.error {
                     completion(result: .Error(error: .Failed(error: error)))
+                }
+                else if let invalidProductId = result.invalidProductIDs.first {
+                    completion(result: .Error(error: .InvalidProductId(productId: invalidProductId)))
                 }
             }
         }
@@ -115,7 +118,6 @@ public class SwiftyStoreKit {
     
     public class func restorePurchases(completion: (results: RestoreResults) -> ()) {
 
-        // Called multiple
         sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { results in
         
             sharedInstance.restoreRequest = nil
@@ -215,30 +217,15 @@ public class SwiftyStoreKit {
         return RestoreResults(restoredProductIds: restoredProductIds, restoreFailedProducts: restoreFailedProducts)
     }
     
-    
-    // http://appventure.me/2015/06/19/swift-try-catch-asynchronous-closures/
-    private func requestProduct(productId: String, completion: (result: (() throws -> SKProduct)) -> ()) -> () {
+    private func requestProducts(productIds: Set<String>, completion: (result: RetrieveResult) -> ()) {
         
-        inflightQueries[productId] = InAppProductQueryRequest.startQuery([productId]) { result in
+        inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
         
-            self.inflightQueries[productId] = nil
-            if case .Success(let products) = result {
-                
-                // Add to Store
-                for product in products {
-                    //print("Received product with ID: \(product.productIdentifier)")
-                    self.store.addProduct(product)
-                }
-                guard let product = self.store.products[productId] else {
-                    completion(result: { throw ResponseError.NoProducts })
-                    return
-                }
-                completion(result: { return product })
+            self.inflightQueries[productIds] = nil
+            for product in result.retrievedProducts {
+                self.store.addProduct(product)
             }
-            else if case .Error(let error) = result {
-                
-                completion(result: { throw error })
-            }
+            completion(result: result)
         }
     }
     

@@ -115,10 +115,8 @@ public class SwiftyStoreKit {
     
     public class func restorePurchases(completion: (results: RestoreResults) -> ()) {
 
-        print("> begin restore purchases")
         sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { results in
         
-            print("< end restore purchases")
             sharedInstance.restoreRequest = nil
             let results = sharedInstance.processRestoreResults(results)
             completion(results: results)
@@ -177,10 +175,8 @@ public class SwiftyStoreKit {
             return
         }
 
-        print("> begin purchase: \(productIdentifier)")
         inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product) { results in
 
-            print("< end purchase: \(productIdentifier)")
             self.inflightPurchases[productIdentifier] = nil
             
             if let purchasedProductTransaction = results.first {

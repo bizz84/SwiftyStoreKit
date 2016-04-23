@@ -20,13 +20,16 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 
 
 ### Retrieve product info
 ```swift
-SwiftyStoreKit.retrieveProductInfo("com.musevisions.SwiftyStoreKit.Purchase1") { result in
-    switch result {
-    case .Success(let product):
-        let priceString = NSNumberFormatter.localizedStringFromNumber(product.price, numberStyle: .CurrencyStyle)
+SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
+    if let product = result.retrievedProducts.first {
+        let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)
         print("Product: \(product.localizedDescription), price: \(priceString)")
-    case .Error(let error):
-        print("Error: \(error)")
+    }
+    else if let invalidProductId = result.invalidProductIDs.first {
+        return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
+    }
+    else {
+	     print("Error: \(result.error)")
     }
 }
 ```

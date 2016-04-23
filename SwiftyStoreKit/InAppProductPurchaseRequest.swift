@@ -57,6 +57,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     }
     // MARK: Public methods
     class func startPayment(product: SKProduct, callback: RequestCallback) -> InAppProductPurchaseRequest {
+        //print("start payment: \(product._productIdentifier)")
         let request = InAppProductPurchaseRequest(product: product, callback: callback)
         request.startPayment(product)
         return request
@@ -90,6 +91,12 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         var transactionResults: [TransactionResult] = []
         
         for transaction in transactions {
+            if let productIdentifier = product?._productIdentifier {
+                if transaction.payment.productIdentifier != productIdentifier {
+                    //print("productId: \(productIdentifier). Discarding queue transaction for \(transaction.payment.productIdentifier)")
+                    continue
+                }
+            }
 
             #if os(iOS)
                 let transactionState = transaction.transactionState

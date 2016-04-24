@@ -138,7 +138,7 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 ### Version 0.2.5
 
-* The `restorePurchases()` completion closure has been changed to return all restored purchases can be returned in one call. [Related issue #18](https://github.com/bizz84/SwiftyStoreKit/issues/18)
+* The `restorePurchases()` completion closure has been changed to return all restored purchases in one call. [Related issue #18](https://github.com/bizz84/SwiftyStoreKit/issues/18)
 
 ### Version 0.2.4
 

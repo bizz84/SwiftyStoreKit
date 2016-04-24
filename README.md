@@ -132,20 +132,24 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 ## Changelog
 
-### Version 0.2.6
+#### Version 0.2.7
+
+* Fixed **critical issue** that was causing the callbacks for `purchaseProduct()` and `restorePurchases()` to get mixed up when multiple requests were running concurrently. Related issues: [#3](https://github.com/bizz84/SwiftyStoreKit/issues/3), [#22](https://github.com/bizz84/SwiftyStoreKit/issues/22), [#26](https://github.com/bizz84/SwiftyStoreKit/issues/26). _Note that while code analysis and various testing scenarios indicate that this is now resolved, this has not yet been confirmed by the reporters of the issues._
+
+#### Version 0.2.6
 
 * Retrieve multiple products info at once. Introduces the new `retrieveProductsInfo()` API call, which takes a set of product IDs and returns a struct with information about the corresponding SKProducts. [Related issue #21](https://github.com/bizz84/SwiftyStoreKit/issues/21)
 
-### Version 0.2.5
+#### Version 0.2.5
 
 * The `restorePurchases()` completion closure has been changed to return all restored purchases in one call. [Related issue #18](https://github.com/bizz84/SwiftyStoreKit/issues/18)
 
-### Version 0.2.4
+#### Version 0.2.4
 
 * Carthage compatible
 * Fixed Swift 2.2 warnings
 
-### Previous versions
+#### Previous versions
 
 * Receipt verification
 * OS X support

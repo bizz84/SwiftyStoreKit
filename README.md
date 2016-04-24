@@ -130,6 +130,26 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 - Consumable in app purchases
 - Free subscriptions for Newsstand
 
+## Changelog
+
+### Version 0.2.6
+
+* Retrieve multiple products info at once. Introduces the new `retrieveProductsInfo()` API call, which takes a set of product IDs and returns a struct with information about the corresponding SKProducts. [Related issue #21](https://github.com/bizz84/SwiftyStoreKit/issues/21)
+
+### Version 0.2.5
+
+* The `restorePurchases()` completion closure has been changed to return all restored purchases can be returned in one call. [Related issue #18](https://github.com/bizz84/SwiftyStoreKit/issues/18)
+
+### Version 0.2.4
+
+* Carthage compatible
+* Fixed Swift 2.2 warnings
+
+### Previous versions
+
+* Receipt verification
+* OS X support
+
 ## Implementation Details
 In order to make a purchase, two operations are needed:
 

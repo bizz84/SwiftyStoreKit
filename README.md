@@ -159,36 +159,32 @@ In order to make a purchase, two operations are needed:
 
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
 
-### Requesting a product
-SwiftyStoreKit wraps the delegate-based ```SKProductRequest``` API with a block based class named ```InAppProductQueryRequest```, which returns either a success case with a list of valid products, or an error comprising the following cases:
+### Requesting products information
+
+SwiftyStoreKit wraps the delegate-based ```SKProductRequest``` API with a block based class named ```InAppProductQueryRequest```, which returns a `RetrieveResults` value with information about the obtained products:
 
 ```swift
-public enum ResponseError : ErrorType {
-    case InvalidProducts(invalidProductIdentifiers: [String])
-    case NoProducts
-    case RequestFailed(error: NSError)
+public struct RetrieveResults {
+    public let retrievedProducts: Set<SKProduct>
+    public let invalidProductIDs: Set<String>
+    public let error: NSError?
 }
 ```
-
-If ```InAppProductQueryRequest``` returns an error, this is surfaced directly to the completion block of ```SwiftyStoreKit.purchaseProduct```, so that the client can examine it and react accordingly.
-In case of success, the product is cached and the purchase can take place via the ```InAppProductPurchaseRequest``` class.
+This value is then surfaced back to the caller of the `retrieveProductsInfo()` method the completion closure so that the client can update accordingly.
 
 ### Purchasing a product / Restoring purchases
-```InAppProductPurchaseRequest``` is a wrapper class for ```SKPaymentQueue``` that can be used to purchase a product or restore purchases.
+`InAppProductPurchaseRequest` is a wrapper class for `SKPaymentQueue` that can be used to purchase a product or restore purchases.
 
-The class conforms to the ```SKPaymentTransactionObserver``` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
+The class conforms to the `SKPaymentTransactionObserver` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
 
 ```swift
 enum TransactionResult {
     case Purchased(productId: String)
     case Restored(productId: String)
-    case NothingToRestore
     case Failed(error: NSError)
 }
 ```
-
-The ```SwiftyStoreKit``` class can then map the returned ```TransactionResult``` into either a success or failure case and pass this back to the client.
-Note that along with the success and failure case, the result of a restore purchases operation also has a ```NothingToRestore``` case. This is so that the client can know that the operation returned, but no purchases were restored.
+Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.
 
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding OSX support and receipt verification.
@@ -203,7 +199,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 
 ## License
 
-Copyright (c) 2015 Andrea Bizzotto bizz84@gmail.com
+Copyright (c) 2015-2016 Andrea Bizzotto bizz84@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

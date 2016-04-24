@@ -186,9 +186,8 @@ public class SwiftyStoreKit {
 
         inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product) { results in
 
-            if let productIdentifier = product._productIdentifier {
-                self.inflightPurchases[productIdentifier] = nil
-            }
+            self.inflightPurchases[productIdentifier] = nil
+            
             if let purchasedProductTransaction = results.first {
                 let returnValue = self.processPurchaseResult(purchasedProductTransaction)
                 completion(result: returnValue)

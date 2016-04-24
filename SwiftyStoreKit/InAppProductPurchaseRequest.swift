@@ -70,6 +70,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     // MARK: Private methods
     private func startPayment(product: SKProduct) {
         guard let _ = product._productIdentifier else {
+            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Missing product identifier" ])
+            callback(results: [ TransactionResult.Failed(error: error) ])
             return
         }
         let payment = SKMutablePayment(product: product)
@@ -83,13 +85,23 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             self.paymentQueue.restoreCompletedTransactions()
         }
     }
-    
+        
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         var transactionResults: [TransactionResult] = []
         
         for transaction in transactions {
+            
+            let transactionProductIdentifier = transaction.payment.productIdentifier
+            
+            var isPurchaseRequest = false
+            if let productIdentifier = product?._productIdentifier {
+                if transactionProductIdentifier != productIdentifier {
+                    continue
+                }
+                isPurchaseRequest = true
+            }
 
             #if os(iOS)
                 let transactionState = transaction.transactionState
@@ -99,17 +111,22 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
             switch transactionState {
             case .Purchased:
-                transactionResults.append(.Purchased(productId: transaction.payment.productIdentifier))
-                paymentQueue.finishTransaction(transaction)
+                if isPurchaseRequest {
+                    transactionResults.append(.Purchased(productId: transactionProductIdentifier))
+                    paymentQueue.finishTransaction(transaction)
+                }
             case .Failed:
+                // TODO: How to discriminate between purchase and restore?
                 // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
                 // mandatory, return a default one if needed
                 let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
                 transactionResults.append(.Failed(error: transaction.error ?? altError))
                 paymentQueue.finishTransaction(transaction)
             case .Restored:
-                transactionResults.append(.Restored(productId: transaction.payment.productIdentifier))
-                paymentQueue.finishTransaction(transaction)
+                if !isPurchaseRequest {
+                    transactionResults.append(.Restored(productId: transactionProductIdentifier))
+                    paymentQueue.finishTransaction(transaction)
+                }
             case .Purchasing:
                 // In progress: do nothing
                 break
@@ -118,10 +135,10 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             }
             // Keep track of payments
             if let _ = purchases[transactionState] {
-                purchases[transactionState]?.append(transaction.payment.productIdentifier)
+                purchases[transactionState]?.append(transactionProductIdentifier)
             }
             else {
-                purchases[transactionState] = [ transaction.payment.productIdentifier ]
+                purchases[transactionState] = [ transactionProductIdentifier ]
             }
         }
         if transactionResults.count > 0 {
@@ -143,10 +160,6 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     }
 
     func paymentQueueRestoreCompletedTransactionsFinished(queue: SKPaymentQueue) {
-        if let product = self.product, productIdentifier = product._productIdentifier {
-            self.callback(results: [.Restored(productId: productIdentifier)])
-            return
-        }
         // This method will be called after all purchases have been restored (includes the case of no purchases)
         guard let restored = purchases[.Restored] where restored.count > 0 else {
             

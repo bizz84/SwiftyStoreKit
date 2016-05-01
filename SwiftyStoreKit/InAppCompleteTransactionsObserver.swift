@@ -1,5 +1,5 @@
 //
-// InAppPurchaseObserver.swift
+// InAppCompleteTransactionsObserver.swift
 // SwiftyStoreKit
 //
 // Copyright (c) 2016 Andrea Bizzotto (bizz84@gmail.com)

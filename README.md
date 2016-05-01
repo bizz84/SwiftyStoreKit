@@ -147,7 +147,33 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 - Consumable in app purchases
 - Free subscriptions for Newsstand
 
+## Known issues
+
+#### Requests lifecycle
+
+While SwiftyStoreKit tries handle concurrent purchase or restore purchases requests, it is not guaranteed that this will always work flawlessly.
+This is in part because using a closure-based API does not map perfectly well with the lifecycle of payments in `SKPaymentQueue`.
+
+In real applications the following could happen:
+
+1. User starts a purchase
+2. User kills the app
+3. OS continues processing this, resulting in a failed or successful purchase
+4. App is restarted (payment queue is not updated yet)
+5. User starts another purchase (the old transaction may interfere with the new purchase)
+
+To prevent situations like this from happening, a `completeTransactions()` method has been added in version 0.2.8. This should be called when the app starts as it can take care of clearing the payment queue and notifying the app of the transactions that have finished.
+
+#### Multiple accounts
+
+The user can background the hosting application and change the Apple ID used with the App Store, then foreground the app. This has been observed to cause problems with SwiftyStoreKit - other IAP implementations may suffer from this as well.
+
+
 ## Changelog
+
+#### Version 0.2.8
+
+* Added `completeTransactions()` method to clear payment queue and return information about payments that have completed / failed.
 
 #### Version 0.2.7
 

@@ -26,9 +26,9 @@ import StoreKit
 
 // MARK: - missing SKPaymentTransactionState on OSX
 #if os(iOS)
-    typealias PaymentTransactionState = SKPaymentTransactionState
+    public typealias PaymentTransactionState = SKPaymentTransactionState
 #elseif os(OSX)
-    enum PaymentTransactionState : Int {
+    public enum PaymentTransactionState : Int {
         case Purchasing // Transaction is being added to the server queue.
         case Purchased // Transaction is in queue, user has been charged.  Client should complete the transaction.
         case Failed // Transaction was cancelled or failed before being added to the server queue.

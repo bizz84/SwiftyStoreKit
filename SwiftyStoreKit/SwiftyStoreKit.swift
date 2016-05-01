@@ -51,6 +51,7 @@ public class SwiftyStoreKit {
     private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
+    private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
     #if os(iOS)
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
@@ -79,6 +80,11 @@ public class SwiftyStoreKit {
         case Success
         case Error(error: ErrorType)
     }
+    public struct CompletedTransaction {
+        public let productId: String
+        public let transactionState: PaymentTransactionState
+    }
+
     public enum InternalErrorCode: Int {
         case RestoredPurchaseWhenPurchasing = 0
         case PurchasedWhenRestoringPurchase = 1
@@ -89,6 +95,14 @@ public class SwiftyStoreKit {
     
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
+    }
+    
+    class var hasInFlightPayments: Bool {
+        return sharedInstance.inflightPurchases.count > 0 || sharedInstance.restoreRequest != nil
+    }
+    
+    public class func completeTransactions(completion: (completedTransactions: [CompletedTransaction]) -> ()) {
+        sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(callback: completion)
     }
     
     // MARK: Public methods

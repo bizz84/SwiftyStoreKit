@@ -86,7 +86,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
                 
                 completedTransactions.append(completedTransaction)
                 
-                print("Removing unregistered payment \"\(transaction.payment.productIdentifier)\", state: \(transactionState.stringValue)")
+                print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
                 
                 paymentQueue.finishTransaction(transaction)
             }

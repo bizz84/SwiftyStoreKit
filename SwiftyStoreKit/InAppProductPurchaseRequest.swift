@@ -27,7 +27,6 @@ import Foundation
 
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
-
     enum TransactionResult {
         case Purchased(productId: String)
         case Restored(productId: String)
@@ -119,7 +118,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 // TODO: How to discriminate between purchase and restore?
                 // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
                 // mandatory, return a default one if needed
-                let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error" ])
+                let message = "Transaction failed for product ID: \(transactionProductIdentifier)"
+                let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ])
                 transactionResults.append(.Failed(error: transaction.error ?? altError))
                 paymentQueue.finishTransaction(transaction)
             case .Restored:

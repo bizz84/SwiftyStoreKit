@@ -84,7 +84,8 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
             requestFailed(notNilError)
         }
         else {
-            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Unknown error (empty)" ]))
+            let message = "Query failed for request: \(request.debugDescription)"
+            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ]))
         }
     }
     #endif

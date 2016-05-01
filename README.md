@@ -85,6 +85,23 @@ func refreshReceipt() {
 }
 ```
 
+### Complete Transactions
+
+This can be used to finish any transactions that were pending in the payment queue after the app has been terminated. Should be called when the app starts.
+
+```swift
+SwiftyStoreKit.completeTransactions() { completedTransactions in
+    
+    for completedTransaction in completedTransactions {
+        
+        if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+            
+            print("purchased: \(completedTransaction.productId)")
+        }
+    }
+}
+```
+
 
 **NOTE**:
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).

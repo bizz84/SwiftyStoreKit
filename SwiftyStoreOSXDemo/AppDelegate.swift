@@ -23,16 +23,28 @@
 // THE SOFTWARE.
 
 import Cocoa
+import SwiftyStoreKit
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
-        // Insert code here to initialize your application
-    }
 
-    func applicationWillTerminate(aNotification: NSNotification) {
-        // Insert code here to tear down your application
+        completeIAPTransactions()
+    }
+    
+    func completeIAPTransactions() {
+        
+        SwiftyStoreKit.completeTransactions() { completedTransactions in
+            
+            for completedTransaction in completedTransactions {
+                
+                if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+                    
+                    print("purchased: \(completedTransaction.productId)")
+                }
+            }
+        }
     }
 }
 

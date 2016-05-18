@@ -34,6 +34,12 @@ extension SwiftyStoreKit {
         case Success(receipt: ReceiptInfo)
         case Error(error: ReceiptError)
     }
+  
+    public enum VerifyPurchaseResult {
+        case Purchased(expiresDate: NSDate?)
+        case Expired(expiresDate: NSDate)
+        case NotPurchased
+    }
 }
 
 // Error when managing receipt
@@ -235,5 +241,68 @@ internal class InAppReceipt {
             }
             task.resume()
     }
-    
+
+    /**
+     *  Verify the purchase of a product in a receipt
+     *  - Parameter productId: the product id of the purchase to verify
+     *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     */
+    class func verifyPurchase(
+      productId productId: String,
+      inReceipt receipt: ReceiptInfo,
+      validUntil: NSDate? = nil
+    ) -> SwiftyStoreKit.VerifyPurchaseResult {
+      
+          // Force type of the latest_receipt_info
+          guard let inAppPurchases = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
+          else {
+              return .NotPurchased
+          }
+      
+          // Filter receipt with right product id
+          let receiptsWithGoodProductId = inAppPurchases
+          .filter { (receipt) -> Bool in
+              let product_id = receipt["product_id"] as? String
+              return product_id == productId
+          }
+      
+          // Verify that at least one receipt has the right product id
+          guard receiptsWithGoodProductId.count >= 1 else {
+              return .NotPurchased
+          }
+      
+          guard let validUntil = validUntil else {
+              // Do not need to verify the expiration date
+              return .Purchased(expiresDate: nil)
+          }
+      
+          // Return the expires dates sorted desc
+          let expiresDates = receiptsWithGoodProductId
+          .map { (receipt) -> NSDate in
+              let expires_date = receipt["expires_date_ms"] as? NSString
+              let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
+              return NSDate(timeIntervalSince1970: expires_date_double)
+          }
+          .sort { (a, b) -> Bool in
+              return a.compare(b) == .OrderedDescending
+          }
+      
+          // Filter expired date
+          let validExpiresDate = expiresDates
+          .filter { (expires_date) -> Bool in
+              return expires_date.compare(validUntil) == .OrderedDescending
+          }
+      
+          // Check if at least 1 receipt is valid
+          if validExpiresDate.count >= 1 {
+              // The subscription is valid
+              return .Purchased(expiresDate: validExpiresDate.first!)
+          }
+          else {
+              // The subscription is expired
+              return .Expired(expiresDate: expiresDates.first!)
+          }
+      }
+  
 }

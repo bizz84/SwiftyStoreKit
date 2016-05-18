@@ -160,6 +160,20 @@ public class SwiftyStoreKit {
         completion:(result: VerifyReceiptResult) -> ()) {
             InAppReceipt.verify(receiptVerifyURL: url, password: password, session: session, completion: completion)
     }
+  
+    /**
+     *  Verify the purchase of a product in a receipt
+     *  - Parameter productId: the product id of the purchase to verify
+     *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     */
+    public class func verifyPurchase(
+        productId productId: String,
+        inReceipt receipt: ReceiptInfo,
+        validUntil: NSDate? = nil
+    ) -> SwiftyStoreKit.VerifyPurchaseResult {
+        return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt, validUntil: validUntil)
+    }
 
     #if os(iOS) || os(tvOS)
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method

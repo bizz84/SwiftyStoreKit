@@ -85,6 +85,35 @@ func refreshReceipt() {
 }
 ```
 
+### Verify purchase of a product in a receipt
+
+```swift
+SwiftyStoreKit.verifyReceipt() { result in
+    switch result {
+    case .Success(let receipt):
+
+        let purchaseResult = SwiftyStoreKit.verifyPurchase(
+            productId: "com.musevisions.SwiftyStoreKit.Purchase1",
+            inReceipt: receipt
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is purchased.")
+            if expiresDate != nil { // Only for Automatically Renewable Subscription
+              print("Product is valid until \(expiresDate)")
+            }
+        case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
+            print("Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+
+    case .Error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
 ### Complete Transactions
 
 This can be used to finish any transactions that were pending in the payment queue after the app has been terminated. Should be called when the app starts.

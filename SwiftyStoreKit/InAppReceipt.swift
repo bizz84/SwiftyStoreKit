@@ -254,21 +254,20 @@ internal class InAppReceipt {
       validUntil: NSDate? = nil
     ) -> SwiftyStoreKit.VerifyPurchaseResult {
       
-          // Force type of the latest_receipt_info
-          guard let inAppPurchases = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
-          else {
+          // Get all receipts
+          guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
               return .NotPurchased
           }
       
-          // Filter receipt with right product id
-          let receiptsWithGoodProductId = inAppPurchases
+          // Filter receipts with matching product id
+          let receiptsMatchingProductId = allReceipts
           .filter { (receipt) -> Bool in
-              let product_id = receipt["product_id"] as? String
-              return product_id == productId
+                let product_id = receipt["product_id"] as? String
+                return product_id == productId
           }
       
           // Verify that at least one receipt has the right product id
-          guard receiptsWithGoodProductId.count >= 1 else {
+          guard receiptsMatchingProductId.count >= 1 else {
               return .NotPurchased
           }
       
@@ -278,8 +277,10 @@ internal class InAppReceipt {
           }
       
           // Return the expires dates sorted desc
-          let expiresDates = receiptsWithGoodProductId
+          let expiresDates = receiptsMatchingProductId
           .map { (receipt) -> NSDate in
+            // TODO: should use 'expires_date' or 'expiration_date' instead? See:
+            // https://developer.apple.com/library/mac/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
               let expires_date = receipt["expires_date_ms"] as? NSString
               let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
               return NSDate(timeIntervalSince1970: expires_date_double)
@@ -295,14 +296,14 @@ internal class InAppReceipt {
           }
       
           // Check if at least 1 receipt is valid
-          if validExpiresDate.count >= 1 {
+          if let firstValidExpiresDate = validExpiresDate.first {
               // The subscription is valid
-              return .Purchased(expiresDate: validExpiresDate.first!)
+              return .Purchased(expiresDate: firstValidExpiresDate)
           }
           else {
               // The subscription is expired
               return .Expired(expiresDate: expiresDates.first!)
           }
       }
-  
+
 }

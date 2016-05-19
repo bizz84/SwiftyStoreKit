@@ -32,22 +32,22 @@ class ViewController: UIViewController {
     
     // MARK: actions
     @IBAction func getInfo1() {
-        getInfo("1")
+        getInfo("purchase1")
     }
     @IBAction func getInfo2() {
-        getInfo("2")
+        getInfo("consumablePurchase")
     }
     @IBAction func purchase1() {
-        purchase("1")
+        purchase("purchase1")
     }
     @IBAction func purchase2() {
-        purchase("2")
+        purchase("consumablePurchase")
     }
     
     func getInfo(no: String) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + ".purchase" + no]) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + no]) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForProductRetrievalInfo(result))
@@ -57,7 +57,7 @@ class ViewController: UIViewController {
     func purchase(no: String) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + no) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForPurchaseResult(result))
@@ -82,6 +82,31 @@ class ViewController: UIViewController {
             self.showAlert(self.alertForVerifyReceipt(result))
 
             if case .Error(let error) = result {
+                if case .NoReceiptData = error {
+                    self.refreshReceipt()
+                }
+            }
+        }
+    }
+    
+    @IBAction func verifyPurchase() {
+     
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        SwiftyStoreKit.verifyReceipt() { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            
+            switch result {
+            case .Success(let receipt):
+                
+                let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                    productId: self.AppBundleId + "consumablePurchase",
+                    inReceipt: receipt,
+                    validUntil: NSDate()
+                )
+                self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                
+            case .Error(let error):
+                self.showAlert(self.alertForVerifyReceipt(result))
                 if case .NoReceiptData = error {
                     self.refreshReceipt()
                 }
@@ -174,7 +199,7 @@ extension ViewController {
     }
 
 
-    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResult) -> UIAlertController{
+    func alertForVerifyReceipt(result: SwiftyStoreKit.VerifyReceiptResult) -> UIAlertController {
 
         switch result {
         case .Success(let receipt):
@@ -189,7 +214,21 @@ extension ViewController {
                 return alertWithTitle("Receipt verification", message: "Receipt verification failed")
             }
         }
+    }
 
+    func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyPurchaseResult) -> UIAlertController {
+        
+        switch result {
+        case .Purchased(let expiresDate):
+            if let expiresDate = expiresDate {
+                return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
+            }
+            return alertWithTitle("Product is purchased", message: "Product will not expire")
+        case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
+            return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            return alertWithTitle("Not purchased", message: "This product has never been purchased")
+        }
     }
 
     func alertForRefreshReceipt(result: SwiftyStoreKit.RefreshReceiptResult) -> UIAlertController {

@@ -32,20 +32,21 @@ class ViewController: NSViewController {
     
     // MARK: actions
     @IBAction func getInfo1(sender: AnyObject?) {
-        getInfo("1")
+        getInfo("purchase1")
     }
-    @IBAction func getInfo2(sender: AnyObject!) {
-        getInfo("2")
+    @IBAction func getInfo2(sender: AnyObject?) {
+        getInfo("consumablePurchase")
     }
-    @IBAction func purchase1(sender: AnyObject!) {
-        purchase("1")
+    @IBAction func purchase1(sender: AnyObject?) {
+        purchase("purchase1")
     }
-    @IBAction func purchase2(sender: AnyObject!) {
-        purchase("2")
+    @IBAction func purchase2(sender: AnyObject?) {
+        purchase("consumablePurchase")
     }
+
     func getInfo(no: String) {
 
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + ".purchase" + no]) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + no]) { result in
 
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
@@ -53,7 +54,7 @@ class ViewController: NSViewController {
 
     func purchase(no: String) {
 
-        SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + no) { result in
 
             self.showAlert(self.alertForPurchaseResult(result))
         }
@@ -67,7 +68,7 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func verifyReceipt(ender: AnyObject?) {
+    @IBAction func verifyReceipt(sender: AnyObject?) {
 
         SwiftyStoreKit.verifyReceipt() { result in
 
@@ -77,6 +78,27 @@ class ViewController: NSViewController {
             }
         }
     }
+
+    @IBAction func verifyPurchase(sender: AnyObject?) {
+        
+        SwiftyStoreKit.verifyReceipt() { result in
+            
+            switch result {
+            case .Success(let receipt):
+                
+                let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                    productId: self.AppBundleId + "consumablePurchase",
+                    inReceipt: receipt,
+                    validUntil: NSDate()
+                )
+                self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                
+            case .Error(_):
+                self.showAlert(self.alertForVerifyReceipt(result))
+            }
+        }
+    }
+    
 
 
 }
@@ -168,6 +190,21 @@ extension ViewController {
         case .Error(let error):
             print("Verify receipt Failed: \(error)")
             return self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developer id to test and be outside of XCode")
+        }
+    }
+
+    func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyPurchaseResult) -> NSAlert {
+        
+        switch result {
+        case .Purchased(let expiresDate):
+            if let expiresDate = expiresDate {
+                return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
+            }
+            return alertWithTitle("Product is purchased", message: "Product will not expire")
+        case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
+            return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15B42" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="9531"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="10117"/>
     </dependencies>
     <scenes>
         <!--Application-->
@@ -673,7 +673,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="4ix-eb-y5G">
-                                <rect key="frame" x="163" y="48" width="154" height="32"/>
+                                <rect key="frame" x="163" y="73" width="154" height="32"/>
                                 <buttonCell key="cell" type="push" title="Restore Purchases" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="mmO-hG-Xyq">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -682,17 +682,17 @@
                                     </connections>
                                 </buttonCell>
                             </button>
-                            <customView translatesAutoresizingMaskIntoConstraints="NO" id="aBh-sv-MN6">
-                                <rect key="frame" x="0.0" y="84" width="480" height="176"/>
+                            <customView misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aBh-sv-MN6">
+                                <rect key="frame" x="0.0" y="121" width="480" height="139"/>
                                 <subviews>
-                                    <splitView focusRingType="none" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZR-88-4H6">
-                                        <rect key="frame" x="0.0" y="0.0" width="480" height="176"/>
+                                    <splitView focusRingType="none" misplaced="YES" dividerStyle="thin" vertical="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZR-88-4H6">
+                                        <rect key="frame" x="0.0" y="-37" width="480" height="176"/>
                                         <subviews>
-                                            <customView id="rDg-4M-vFs">
+                                            <customView misplaced="YES" id="rDg-4M-vFs">
                                                 <rect key="frame" x="0.0" y="0.0" width="254" height="176"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ypp-fu-oEb">
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ypp-fu-oEb">
                                                         <rect key="frame" x="83" y="103" width="89" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Get Info" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="vSi-fu-wrI">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -702,7 +702,7 @@
                                                             <action selector="getInfo1:" target="XfG-lQ-9wD" id="PTC-RY-Aom"/>
                                                         </connections>
                                                     </button>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="23w-eX-lGC">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="23w-eX-lGC">
                                                         <rect key="frame" x="105" y="139" width="44" height="17"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="5 days" id="U2h-U7-cdn">
                                                             <font key="font" metaFont="system"/>
@@ -710,7 +710,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-z0-TRG">
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hez-z0-TRG">
                                                         <rect key="frame" x="79" y="70" width="97" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="5bl-kX-gwW">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -730,11 +730,11 @@
                                                     <constraint firstItem="ypp-fu-oEb" firstAttribute="centerX" secondItem="rDg-4M-vFs" secondAttribute="centerX" id="jeS-t3-Km1"/>
                                                 </constraints>
                                             </customView>
-                                            <customView id="ecz-ZL-FwI">
+                                            <customView misplaced="YES" id="ecz-ZL-FwI">
                                                 <rect key="frame" x="255" y="0.0" width="225" height="176"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
-                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="gj2-Z2-1qo">
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gj2-Z2-1qo">
                                                         <rect key="frame" x="88" y="139" width="50" height="17"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="10 days" id="XkC-cw-jpP">
                                                             <font key="font" metaFont="system"/>
@@ -742,7 +742,7 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="32D-7s-IOR">
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="32D-7s-IOR">
                                                         <rect key="frame" x="68" y="103" width="89" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Get Info" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F8O-DF-BZX">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -752,7 +752,7 @@
                                                             <action selector="getInfo2:" target="XfG-lQ-9wD" id="u4g-Qb-RyE"/>
                                                         </connections>
                                                     </button>
-                                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="GkW-aD-XKc">
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GkW-aD-XKc">
                                                         <rect key="frame" x="64" y="70" width="97" height="32"/>
                                                         <buttonCell key="cell" type="push" title="Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="TDW-1n-a4d">
                                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -795,7 +795,7 @@
                                 </textFieldCell>
                             </textField>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Yzl-nj-7ol">
-                                <rect key="frame" x="178" y="15" width="125" height="32"/>
+                                <rect key="frame" x="178" y="40" width="125" height="32"/>
                                 <buttonCell key="cell" type="push" title="Verify Receipt" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="6bY-Fv-W6P">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
@@ -804,9 +804,19 @@
                                     <action selector="verifyReceipt:" target="XfG-lQ-9wD" id="uf9-Pe-MRz"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NrD-IB-ZDO">
+                                <rect key="frame" x="172" y="7" width="136" height="32"/>
+                                <buttonCell key="cell" type="push" title="Verify Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h9Q-rT-k8Y">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="verifyPurchase:" target="XfG-lQ-9wD" id="mJm-dC-8lz"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="22" id="979-EH-fNb"/>
+                            <constraint firstItem="NrD-IB-ZDO" firstAttribute="top" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="12" id="76n-kS-EhS"/>
                             <constraint firstItem="Yzl-nj-7ol" firstAttribute="top" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="12" id="B88-P1-tBj"/>
                             <constraint firstAttribute="trailing" secondItem="aBh-sv-MN6" secondAttribute="trailing" id="F8t-R2-cad"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="RDD-02-SB0"/>
@@ -814,8 +824,10 @@
                             <constraint firstItem="Yzl-nj-7ol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="dQi-Vh-Bwb"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="enN-Hg-kUA"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="kMt-Ye-T67"/>
+                            <constraint firstItem="NrD-IB-ZDO" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="qX4-iL-s2W"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="top" secondItem="fQC-8G-INF" secondAttribute="bottom" constant="8" id="rz5-by-FYa"/>
                             <constraint firstItem="4ix-eb-y5G" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="vs9-D1-ALb"/>
+                            <constraint firstAttribute="bottom" secondItem="NrD-IB-ZDO" secondAttribute="bottom" constant="14" id="w90-uB-Om3"/>
                         </constraints>
                     </view>
                 </viewController>

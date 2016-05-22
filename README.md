@@ -94,7 +94,8 @@ SwiftyStoreKit.verifyReceipt() { result in
 
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
-            inReceipt: receipt
+            inReceipt: receipt,
+            purchaseType: .NonConsumable
         )
         switch purchaseResult {
         case .Purchased(let expiresDate):

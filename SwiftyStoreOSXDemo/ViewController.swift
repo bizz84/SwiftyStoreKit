@@ -26,35 +26,54 @@ import Cocoa
 import StoreKit
 import SwiftyStoreKit
 
+enum RegisteredPurchase : String {
+    
+    case Purchase1 = "purchase1"
+    case Purchase2 = "purchase2"
+    case NonConsumablePurchase = "nonConsumablePurchase"
+    case ConsumablePurchase = "consumablePurchase"
+    case AutoRenewablePurchase = "autoRenewablePurchase"
+}
+
 class ViewController: NSViewController {
 
     let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
     
+    let Purchase1 = RegisteredPurchase.Purchase1.rawValue
+    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase.rawValue
+
     // MARK: actions
     @IBAction func getInfo1(sender: AnyObject?) {
-        getInfo("purchase1")
-    }
-    @IBAction func getInfo2(sender: AnyObject?) {
-        getInfo("consumablePurchase")
+        getInfo(Purchase1)
     }
     @IBAction func purchase1(sender: AnyObject?) {
-        purchase("purchase1")
+        purchase(Purchase1)
+    }
+    @IBAction func verifyPurchase1(sender: AnyObject?) {
+        verifyPurchase(Purchase1)
+    }
+
+    @IBAction func getInfo2(sender: AnyObject?) {
+        getInfo(Purchase2)
     }
     @IBAction func purchase2(sender: AnyObject?) {
-        purchase("consumablePurchase")
+        purchase(Purchase2)
+    }
+    @IBAction func verifyPurchase2(sender: AnyObject?) {
+        verifyPurchase(Purchase2)
     }
 
-    func getInfo(no: String) {
+    func getInfo(purchaseName: String) {
 
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + no]) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchaseName]) { result in
 
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
     }
 
-    func purchase(no: String) {
+    func purchase(purchaseName: String) {
 
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchaseName) { result in
 
             self.showAlert(self.alertForPurchaseResult(result))
         }
@@ -79,7 +98,7 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func verifyPurchase(sender: AnyObject?) {
+    func verifyPurchase(purchaseName: String) {
         
         SwiftyStoreKit.verifyReceipt() { result in
             
@@ -87,9 +106,9 @@ class ViewController: NSViewController {
             case .Success(let receipt):
                 
                 let purchaseResult = SwiftyStoreKit.verifyPurchase(
-                    productId: self.AppBundleId + "consumablePurchase",
+                    productId: self.AppBundleId + "." + purchaseName,
                     inReceipt: receipt,
-                    validUntil: NSDate()
+                    validUntil: nil
                 )
                 self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 

@@ -720,11 +720,23 @@
                                                             <action selector="purchase1:" target="XfG-lQ-9wD" id="vds-cI-c90"/>
                                                         </connections>
                                                     </button>
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mmd-5V-ZlT">
+                                                        <rect key="frame" x="59" y="37" width="136" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Verify Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7F7-3v-kkM">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="verifyPurchase1:" target="XfG-lQ-9wD" id="38W-SD-m1J"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="ypp-fu-oEb" firstAttribute="top" secondItem="23w-eX-lGC" secondAttribute="bottom" constant="8" id="HsY-yu-fTe"/>
                                                     <constraint firstItem="Hez-z0-TRG" firstAttribute="top" secondItem="ypp-fu-oEb" secondAttribute="bottom" constant="12" id="LrL-rs-Cvu"/>
+                                                    <constraint firstItem="mmd-5V-ZlT" firstAttribute="centerX" secondItem="Hez-z0-TRG" secondAttribute="centerX" id="MP8-pj-dj9"/>
                                                     <constraint firstItem="Hez-z0-TRG" firstAttribute="centerX" secondItem="rDg-4M-vFs" secondAttribute="centerX" id="Txa-bs-hn6"/>
+                                                    <constraint firstItem="mmd-5V-ZlT" firstAttribute="top" secondItem="Hez-z0-TRG" secondAttribute="bottom" constant="12" id="VtJ-vO-b5h"/>
                                                     <constraint firstItem="23w-eX-lGC" firstAttribute="top" secondItem="rDg-4M-vFs" secondAttribute="top" constant="20" id="dv9-p8-n6y"/>
                                                     <constraint firstItem="23w-eX-lGC" firstAttribute="centerX" secondItem="rDg-4M-vFs" secondAttribute="centerX" id="h4c-nW-umA"/>
                                                     <constraint firstItem="ypp-fu-oEb" firstAttribute="centerX" secondItem="rDg-4M-vFs" secondAttribute="centerX" id="jeS-t3-Km1"/>
@@ -762,13 +774,25 @@
                                                             <action selector="purchase2:" target="XfG-lQ-9wD" id="wP2-Fe-Uee"/>
                                                         </connections>
                                                     </button>
+                                                    <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eaU-oc-e9m">
+                                                        <rect key="frame" x="44" y="37" width="136" height="32"/>
+                                                        <buttonCell key="cell" type="push" title="Verify Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="e9S-YC-oMc">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="verifyPurchase2:" target="XfG-lQ-9wD" id="i3P-qj-mFY"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <constraints>
                                                     <constraint firstItem="32D-7s-IOR" firstAttribute="top" secondItem="gj2-Z2-1qo" secondAttribute="bottom" constant="8" id="7nw-8P-EZz"/>
                                                     <constraint firstItem="GkW-aD-XKc" firstAttribute="top" secondItem="32D-7s-IOR" secondAttribute="bottom" constant="12" id="9ht-Vg-3pn"/>
                                                     <constraint firstItem="GkW-aD-XKc" firstAttribute="centerX" secondItem="ecz-ZL-FwI" secondAttribute="centerX" id="FOu-2O-PY7"/>
                                                     <constraint firstItem="32D-7s-IOR" firstAttribute="centerX" secondItem="ecz-ZL-FwI" secondAttribute="centerX" id="FyQ-66-nvQ"/>
+                                                    <constraint firstItem="eaU-oc-e9m" firstAttribute="centerX" secondItem="GkW-aD-XKc" secondAttribute="centerX" id="I5Z-mc-plm"/>
                                                     <constraint firstItem="gj2-Z2-1qo" firstAttribute="top" secondItem="ecz-ZL-FwI" secondAttribute="top" constant="20" id="MKZ-lm-5CM"/>
+                                                    <constraint firstItem="eaU-oc-e9m" firstAttribute="top" secondItem="GkW-aD-XKc" secondAttribute="bottom" constant="12" id="PhS-uW-Y9r"/>
                                                     <constraint firstItem="gj2-Z2-1qo" firstAttribute="centerX" secondItem="ecz-ZL-FwI" secondAttribute="centerX" id="wOt-5L-Iq5"/>
                                                 </constraints>
                                             </customView>
@@ -804,19 +828,8 @@
                                     <action selector="verifyReceipt:" target="XfG-lQ-9wD" id="uf9-Pe-MRz"/>
                                 </connections>
                             </button>
-                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="NrD-IB-ZDO">
-                                <rect key="frame" x="172" y="7" width="136" height="32"/>
-                                <buttonCell key="cell" type="push" title="Verify Purchase" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h9Q-rT-k8Y">
-                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
-                                </buttonCell>
-                                <connections>
-                                    <action selector="verifyPurchase:" target="XfG-lQ-9wD" id="mJm-dC-8lz"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="NrD-IB-ZDO" firstAttribute="top" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="12" id="76n-kS-EhS"/>
                             <constraint firstItem="Yzl-nj-7ol" firstAttribute="top" secondItem="4ix-eb-y5G" secondAttribute="bottom" constant="12" id="B88-P1-tBj"/>
                             <constraint firstAttribute="trailing" secondItem="aBh-sv-MN6" secondAttribute="trailing" id="F8t-R2-cad"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="RDD-02-SB0"/>
@@ -824,10 +837,9 @@
                             <constraint firstItem="Yzl-nj-7ol" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="dQi-Vh-Bwb"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="leading" secondItem="m2S-Jp-Qdl" secondAttribute="leading" id="enN-Hg-kUA"/>
                             <constraint firstItem="fQC-8G-INF" firstAttribute="top" secondItem="m2S-Jp-Qdl" secondAttribute="top" constant="20" id="kMt-Ye-T67"/>
-                            <constraint firstItem="NrD-IB-ZDO" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="qX4-iL-s2W"/>
+                            <constraint firstAttribute="bottom" secondItem="Yzl-nj-7ol" secondAttribute="bottom" constant="47" id="oJS-dD-6Gz"/>
                             <constraint firstItem="aBh-sv-MN6" firstAttribute="top" secondItem="fQC-8G-INF" secondAttribute="bottom" constant="8" id="rz5-by-FYa"/>
                             <constraint firstItem="4ix-eb-y5G" firstAttribute="centerX" secondItem="m2S-Jp-Qdl" secondAttribute="centerX" id="vs9-D1-ALb"/>
-                            <constraint firstAttribute="bottom" secondItem="NrD-IB-ZDO" secondAttribute="bottom" constant="14" id="w90-uB-Om3"/>
                         </constraints>
                     </view>
                 </viewController>

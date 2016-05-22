@@ -33,14 +33,24 @@ enum RegisteredPurchase : String {
     case NonConsumablePurchase = "nonConsumablePurchase"
     case ConsumablePurchase = "consumablePurchase"
     case AutoRenewablePurchase = "autoRenewablePurchase"
+    
+    var purchaseType: SwiftyStoreKit.PurchaseType {
+        switch self {
+        case .Purchase1: return .NonConsumable
+        case .Purchase2: return .NonConsumable
+        case .NonConsumablePurchase: return .NonConsumable
+        case .ConsumablePurchase: return .Consumable
+        case .AutoRenewablePurchase: return .AutomaticallyRenewableSubscription(validUntilDate: NSDate())
+        }
+    }
 }
 
 class ViewController: NSViewController {
 
     let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
     
-    let Purchase1 = RegisteredPurchase.Purchase1.rawValue
-    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase.rawValue
+    let Purchase1 = RegisteredPurchase.Purchase1
+    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase
 
     // MARK: actions
     @IBAction func getInfo1(sender: AnyObject?) {
@@ -63,17 +73,17 @@ class ViewController: NSViewController {
         verifyPurchase(Purchase2)
     }
 
-    func getInfo(purchaseName: String) {
+    func getInfo(purchase: RegisteredPurchase) {
 
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchaseName]) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchase.rawValue]) { result in
 
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
     }
 
-    func purchase(purchaseName: String) {
+    func purchase(purchase: RegisteredPurchase) {
 
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchaseName) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
 
             self.showAlert(self.alertForPurchaseResult(result))
         }
@@ -98,7 +108,7 @@ class ViewController: NSViewController {
         }
     }
 
-    func verifyPurchase(purchaseName: String) {
+    func verifyPurchase(purchase: RegisteredPurchase) {
         
         SwiftyStoreKit.verifyReceipt() { result in
             
@@ -106,9 +116,9 @@ class ViewController: NSViewController {
             case .Success(let receipt):
                 
                 let purchaseResult = SwiftyStoreKit.verifyPurchase(
-                    productId: self.AppBundleId + "." + purchaseName,
+                    productId: self.AppBundleId + "." + purchase.rawValue,
                     inReceipt: receipt,
-                    validUntil: nil
+                    purchaseType: purchase.purchaseType
                 )
                 self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 

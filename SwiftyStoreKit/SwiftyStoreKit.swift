@@ -175,9 +175,9 @@ public class SwiftyStoreKit {
     public class func verifyPurchase(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil: NSDate? = nil
+                  purchaseType: PurchaseType
     ) -> SwiftyStoreKit.VerifyPurchaseResult {
-        return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt, validUntil: validUntil)
+        return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt, purchaseType: purchaseType)
     }
 
     #if os(iOS) || os(tvOS)

@@ -33,6 +33,16 @@ enum RegisteredPurchase : String {
     case NonConsumablePurchase = "nonConsumablePurchase"
     case ConsumablePurchase = "consumablePurchase"
     case AutoRenewablePurchase = "autoRenewablePurchase"
+    
+    var purchaseType: SwiftyStoreKit.PurchaseType {
+        switch self {
+        case .Purchase1: return .NonConsumable
+        case .Purchase2: return .NonConsumable
+        case .NonConsumablePurchase: return .NonConsumable
+        case .ConsumablePurchase: return .Consumable
+        case .AutoRenewablePurchase: return .AutomaticallyRenewableSubscription(validUntilDate: NSDate())
+        }
+    }
 }
 
 
@@ -40,8 +50,8 @@ class ViewController: UIViewController {
 
     let AppBundleId = "com.musevisions.iOS.SwiftyStoreKit"
     
-    let Purchase1 = RegisteredPurchase.Purchase1.rawValue
-    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase.rawValue
+    let Purchase1 = RegisteredPurchase.Purchase1
+    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase
     
     // MARK: actions
     @IBAction func getInfo1() {
@@ -63,20 +73,20 @@ class ViewController: UIViewController {
         verifyPurchase(Purchase2)
     }
 
-    func getInfo(purchaseName: String) {
+    func getInfo(purchase: RegisteredPurchase) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchaseName]) { result in
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchase.rawValue]) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
     }
     
-    func purchase(no: String) {
+    func purchase(purchase: RegisteredPurchase) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForPurchaseResult(result))
@@ -108,7 +118,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func verifyPurchase(purchaseName: String) {
+    func verifyPurchase(purchase: RegisteredPurchase) {
      
         NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.verifyReceipt() { result in
@@ -118,9 +128,9 @@ class ViewController: UIViewController {
             case .Success(let receipt):
                 
                 let purchaseResult = SwiftyStoreKit.verifyPurchase(
-                    productId: self.AppBundleId + "." + purchaseName,
+                    productId: self.AppBundleId + "." + purchase.rawValue,
                     inReceipt: receipt,
-                    validUntil: nil
+                    purchaseType: purchase.purchaseType
                 )
                 self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 
@@ -240,12 +250,16 @@ extension ViewController {
         switch result {
         case .Purchased(let expiresDate):
             if let expiresDate = expiresDate {
+                print("Product is valid until \(expiresDate)")
                 return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
             }
+            print("Product is purchased")
             return alertWithTitle("Product is purchased", message: "Product will not expire")
         case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
+            print("Product is expired since \(expiresDate)")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
         case .NotPurchased:
+            print("This product has never been purchased")
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }

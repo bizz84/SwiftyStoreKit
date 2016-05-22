@@ -30,6 +30,18 @@ public typealias ReceiptInfo = [String: AnyObject]
 
 // MARK: - Enumeration
 extension SwiftyStoreKit {
+    public enum PurchaseType {
+        // A consumable In-App Purchase must be purchased every time the user downloads it.
+        case Consumable
+        // Non-consumable In-App Purchases only need to be purchased once by users.
+        case NonConsumable
+        // Automatically renewable subscriptions allow the user to purchase updating and dynamic content for a set duration of time.
+        case AutomaticallyRenewableSubscription(validUntilDate: NSDate)
+        // Free subscriptions don’t expire and can only be offered in apps that are in the Magazines & Newspapers category.
+        case FreeSubscription
+        // Non-Renewing Subscriptions allow the sale of services with a limited duration.
+        case NonRenewingSubscription(validUntilDate: NSDate)
+    }
     public enum VerifyReceiptResult {
         case Success(receipt: ReceiptInfo)
         case Error(error: ReceiptError)
@@ -251,59 +263,65 @@ internal class InAppReceipt {
     class func verifyPurchase(
       productId productId: String,
       inReceipt receipt: ReceiptInfo,
-      validUntil: NSDate? = nil
+      purchaseType: SwiftyStoreKit.PurchaseType
     ) -> SwiftyStoreKit.VerifyPurchaseResult {
       
-          // Get all receipts
-          guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
-              return .NotPurchased
-          }
+        // Get all receipts
+        guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
+            return .NotPurchased
+        }
       
-          // Filter receipts with matching product id
-          let receiptsMatchingProductId = allReceipts
-          .filter { (receipt) -> Bool in
+        // Filter receipts with matching product id
+        let receiptsMatchingProductId = allReceipts
+            .filter { (receipt) -> Bool in
                 let product_id = receipt["product_id"] as? String
                 return product_id == productId
-          }
+        }
       
-          // Verify that at least one receipt has the right product id
-          guard receiptsMatchingProductId.count >= 1 else {
-              return .NotPurchased
-          }
+        // Verify that at least one receipt has the right product id
+        guard receiptsMatchingProductId.count >= 1 else {
+            return .NotPurchased
+        }
       
-          guard let validUntil = validUntil else {
-              // Do not need to verify the expiration date
-              return .Purchased(expiresDate: nil)
-          }
-      
-          // Return the expires dates sorted desc
-          let expiresDates = receiptsMatchingProductId
-          .map { (receipt) -> NSDate in
-            // TODO: should use 'expires_date' or 'expiration_date' instead? See:
-            // https://developer.apple.com/library/mac/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
-              let expires_date = receipt["expires_date_ms"] as? NSString
-              let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
-              return NSDate(timeIntervalSince1970: expires_date_double)
-          }
-          .sort { (a, b) -> Bool in
-              return a.compare(b) == .OrderedDescending
-          }
-      
-          // Filter expired date
-          let validExpiresDate = expiresDates
-          .filter { (expires_date) -> Bool in
-              return expires_date.compare(validUntil) == .OrderedDescending
-          }
-      
-          // Check if at least 1 receipt is valid
-          if let firstValidExpiresDate = validExpiresDate.first {
-              // The subscription is valid
-              return .Purchased(expiresDate: firstValidExpiresDate)
-          }
-          else {
-              // The subscription is expired
-              return .Expired(expiresDate: expiresDates.first!)
-          }
-      }
-
+        switch purchaseType {
+            // Do not need to verify the expiration date
+            case .Consumable, .NonConsumable, .FreeSubscription:
+                return .Purchased(expiresDate: nil)
+            case .AutomaticallyRenewableSubscription(let validUntilDate):
+                return verifyPurchase(receiptsMatchingProductId, validUntilDate: validUntilDate)
+            case .NonRenewingSubscription(let validUntilDate):
+                return verifyPurchase(receiptsMatchingProductId, validUntilDate: validUntilDate)
+        }
+    }
+    
+    private class func verifyPurchase(receiptsMatchingProductId: [ReceiptInfo], validUntilDate date: NSDate) -> SwiftyStoreKit.VerifyPurchaseResult {
+        // Return the expires dates sorted desc
+        let expiresDates = receiptsMatchingProductId
+            .map { (receipt) -> NSDate in
+                // TODO: should use 'expires_date' or 'expiration_date' instead? See:
+                // https://developer.apple.com/library/mac/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
+                let expires_date = receipt["expires_date_ms"] as? NSString
+                let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
+                return NSDate(timeIntervalSince1970: expires_date_double)
+            }
+            .sort { (a, b) -> Bool in
+                return a.compare(b) == .OrderedDescending
+        }
+        
+        // Filter expired date
+        let validExpiresDate = expiresDates
+            .filter { (expires_date) -> Bool in
+                return expires_date.compare(date) == .OrderedDescending
+        }
+        
+        // Check if at least 1 receipt is valid
+        if let firstValidExpiresDate = validExpiresDate.first {
+            // The subscription is valid
+            return .Purchased(expiresDate: firstValidExpiresDate)
+        }
+        else {
+            // The subscription is expired
+            return .Expired(expiresDate: expiresDates.first!)
+        }
+    }
 }

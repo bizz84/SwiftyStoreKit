@@ -298,8 +298,6 @@ internal class InAppReceipt {
         // Return the expires dates sorted desc
         let expiresDates = receiptsMatchingProductId
             .map { (receipt) -> NSDate in
-                // TODO: should use 'expires_date' or 'expiration_date' instead? See:
-                // https://developer.apple.com/library/mac/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html
                 let expires_date = receipt["expires_date_ms"] as? NSString
                 let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
                 return NSDate(timeIntervalSince1970: expires_date_double)

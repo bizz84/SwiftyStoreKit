@@ -33,16 +33,6 @@ enum RegisteredPurchase : String {
     case NonConsumablePurchase = "nonConsumablePurchase"
     case ConsumablePurchase = "consumablePurchase"
     case AutoRenewablePurchase = "autoRenewablePurchase"
-    
-    var purchaseType: SwiftyStoreKit.PurchaseType {
-        switch self {
-        case .Purchase1: return .NonConsumable
-        case .Purchase2: return .NonConsumable
-        case .NonConsumablePurchase: return .NonConsumable
-        case .ConsumablePurchase: return .Consumable
-        case .AutoRenewablePurchase: return .AutomaticallyRenewableSubscription(validUntilDate: NSDate())
-        }
-    }
 }
 
 
@@ -126,13 +116,23 @@ class ViewController: UIViewController {
             
             switch result {
             case .Success(let receipt):
-                
-                let purchaseResult = SwiftyStoreKit.verifyPurchase(
-                    productId: self.AppBundleId + "." + purchase.rawValue,
-                    inReceipt: receipt,
-                    purchaseType: purchase.purchaseType
-                )
-                self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+              
+                // Specific behaviour for AutoRenewablePurchase
+                if purchase == .AutoRenewablePurchase {
+                    let purchaseResult = SwiftyStoreKit.verifyAutomaticallyRenewableSubscription(
+                        productId: self.AppBundleId + "." + purchase.rawValue,
+                        validUntil: NSDate(),
+                        inReceipt: receipt
+                    )
+                    self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                }
+                else {
+                    let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                        productId: self.AppBundleId + "." + purchase.rawValue,
+                        inReceipt: receipt
+                    )
+                    self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                }
                 
             case .Error(let error):
                 self.showAlert(self.alertForVerifyReceipt(result))
@@ -244,20 +244,28 @@ extension ViewController {
             }
         }
     }
+  
+    func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyAutomaticallyRenewableSubscriptionResult) -> UIAlertController {
+    
+        switch result {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+            return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
+            print("Product is expired since \(expiresDate)")
+            return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("This product has never been purchased")
+            return alertWithTitle("Not purchased", message: "This product has never been purchased")
+        }
+    }
 
     func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyPurchaseResult) -> UIAlertController {
         
         switch result {
-        case .Purchased(let expiresDate):
-            if let expiresDate = expiresDate {
-                print("Product is valid until \(expiresDate)")
-                return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
-            }
+        case .Purchased:
             print("Product is purchased")
             return alertWithTitle("Product is purchased", message: "Product will not expire")
-        case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
-            print("Product is expired since \(expiresDate)")
-            return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
         case .NotPurchased:
             print("This product has never been purchased")
             return alertWithTitle("Not purchased", message: "This product has never been purchased")

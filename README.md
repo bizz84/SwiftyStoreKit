@@ -92,18 +92,28 @@ SwiftyStoreKit.verifyReceipt() { result in
     switch result {
     case .Success(let receipt):
 
+        // Verify the purchase of Consumable, NonConsumable, FreeSubscription or NonRenewingSubscription
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
-            inReceipt: receipt,
-            purchaseType: .NonConsumable
+            inReceipt: receipt
         )
         switch purchaseResult {
         case .Purchased(let expiresDate):
             print("Product is purchased.")
-            if expiresDate != nil { // Only for Automatically Renewable Subscription
-              print("Product is valid until \(expiresDate)")
-            }
-        case .Expired(let expiresDate): // Only for Automatically Renewable Subscription
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+        
+        // Verify the purchase of AutomaticallyRenewableSubscription only
+        let purchaseResult = SwiftyStoreKit.verifyAutomaticallyRenewableSubscription(
+            productId: "com.musevisions.SwiftyStoreKit.Purchase1",
+            validUntil: NSDate(),
+            inReceipt: receipt
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
             print("Product is expired since \(expiresDate)")
         case .NotPurchased:
             print("The user has never purchased this product")

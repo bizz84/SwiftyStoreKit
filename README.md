@@ -92,7 +92,7 @@ SwiftyStoreKit.verifyReceipt() { result in
     switch result {
     case .Success(let receipt):
 
-        // Verify the purchase of Consumable, NonConsumable, FreeSubscription or NonRenewingSubscription
+        // Verify the purchase of Consumable or NonConsumable
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
             inReceipt: receipt
@@ -104,11 +104,27 @@ SwiftyStoreKit.verifyReceipt() { result in
             print("The user has never purchased this product")
         }
         
-        // Verify the purchase of AutomaticallyRenewableSubscription only
-        let purchaseResult = SwiftyStoreKit.verifyAutomaticallyRenewableSubscription(
-            productId: "com.musevisions.SwiftyStoreKit.Purchase1",
+        // Example for an Automatically Renewable Subscription
+        let purchaseResult = SwiftyStoreKit.verifySubscription(
+            productId: "com.musevisions.SwiftyStoreKit.AutomaticallyRenewableSubscription",
+            inReceipt: receipt,
+            validUntil: NSDate()
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
+            print("Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+        
+        // Example for a Non Renewing Subscription
+        let purchaseResult = SwiftyStoreKit.verifySubscription(
+            productId: "com.musevisions.SwiftyStoreKit.1MonthNonRenewingSubscription",
+            inReceipt: receipt,
             validUntil: NSDate(),
-            inReceipt: receipt
+            validDuration: 3600 * 24 * 30, //1 month duration
         )
         switch purchaseResult {
         case .Purchased(let expiresDate):
@@ -124,6 +140,10 @@ SwiftyStoreKit.verifyReceipt() { result in
     }
 }
 ```
+
+To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in second.
+
+Note for the purchase of a consumable product, the receipt will contain it only for a couples of minutes after the purchase.
 
 ### Complete Transactions
 

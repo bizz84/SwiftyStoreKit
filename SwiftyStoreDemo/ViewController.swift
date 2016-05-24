@@ -33,6 +33,7 @@ enum RegisteredPurchase : String {
     case NonConsumablePurchase = "nonConsumablePurchase"
     case ConsumablePurchase = "consumablePurchase"
     case AutoRenewablePurchase = "autoRenewablePurchase"
+    case NonRenewingPurchase = "nonRenewingPurchase"
 }
 
 

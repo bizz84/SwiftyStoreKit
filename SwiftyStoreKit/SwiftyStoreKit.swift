@@ -185,11 +185,11 @@ public class SwiftyStoreKit {
      *  - Parameter inReceipt: the receipt to test in
      */
     public class func verifyAutomaticallyRenewableSubscription(
-      productId productId: String,
-      validUntil date: NSDate = NSDate(),
-      inReceipt receipt: ReceiptInfo
+        productId productId: String,
+        inReceipt receipt: ReceiptInfo,
+        validUntil date: NSDate = NSDate()
     ) -> SwiftyStoreKit.VerifyAutomaticallyRenewableSubscriptionResult {
-        return InAppReceipt.verifyAutomaticallyRenewableSubscription(productId: productId, validUntil: date, inReceipt: receipt)
+        return InAppReceipt.verifyAutomaticallyRenewableSubscription(productId: productId, inReceipt: receipt, validUntil: date)
     }
 
     #if os(iOS) || os(tvOS)

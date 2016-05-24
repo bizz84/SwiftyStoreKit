@@ -121,8 +121,8 @@ class ViewController: UIViewController {
                 if purchase == .AutoRenewablePurchase {
                     let purchaseResult = SwiftyStoreKit.verifyAutomaticallyRenewableSubscription(
                         productId: self.AppBundleId + "." + purchase.rawValue,
-                        validUntil: NSDate(),
-                        inReceipt: receipt
+                        inReceipt: receipt,
+                        validUntil: NSDate()
                     )
                     self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 }

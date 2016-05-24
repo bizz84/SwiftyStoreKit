@@ -274,8 +274,8 @@ internal class InAppReceipt {
      */
     class func verifyAutomaticallyRenewableSubscription(
         productId productId: String,
-       validUntil date: NSDate = NSDate(),
-        inReceipt receipt: ReceiptInfo
+        inReceipt receipt: ReceiptInfo,
+        validUntil date: NSDate = NSDate()
     ) -> SwiftyStoreKit.VerifyAutomaticallyRenewableSubscriptionResult {
       
         // Verify that at least one receipt has the right product id

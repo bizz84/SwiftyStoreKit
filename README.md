@@ -171,6 +171,9 @@ The user can background the hosting application and change the Apple ID used wit
 
 ## Changelog
 
+#### Version 0.2.9 (unreleased)
+* The `purchaseProduct()` now takes an optional `applicationUsername` string which can be used to help detect irregular activity on transactions. Read more about this on the [Apple docs](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/RequestPayment.html).
+
 #### Version 0.2.8
 
 * Added `completeTransactions()` method to clear payment queue and return information about payments that have completed / failed.

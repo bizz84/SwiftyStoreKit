@@ -55,9 +55,9 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         paymentQueue.addTransactionObserver(self)
     }
     // MARK: Public methods
-    class func startPayment(product: SKProduct, callback: RequestCallback) -> InAppProductPurchaseRequest {
+    class func startPayment(product: SKProduct, applicationUsername: String = "", callback: RequestCallback) -> InAppProductPurchaseRequest {
         let request = InAppProductPurchaseRequest(product: product, callback: callback)
-        request.startPayment(product)
+        request.startPayment(product, applicationUsername: applicationUsername)
         return request
     }
     class func restorePurchases(callback: RequestCallback) -> InAppProductPurchaseRequest {
@@ -67,13 +67,14 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     }
     
     // MARK: Private methods
-    private func startPayment(product: SKProduct) {
+    private func startPayment(product: SKProduct, applicationUsername: String = "") {
         guard let _ = product._productIdentifier else {
             let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Missing product identifier" ])
             callback(results: [ TransactionResult.Failed(error: error) ])
             return
         }
         let payment = SKMutablePayment(product: product)
+        payment.applicationUsername = applicationUsername
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
             self.paymentQueue.addPayment(payment)
         }

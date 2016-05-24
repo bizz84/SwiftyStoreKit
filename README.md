@@ -159,7 +159,6 @@ SwiftyStoreKit.completeTransactions() { completedTransactions in
 }
 ```
 
-
 **NOTE**:
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
@@ -193,16 +192,11 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 #### Features
 - Super easy to use block based API
-- enum-based error handling
-- Support for non-consumable in app purchases
+- Support for consumable, non-consumable in-app purchases
+- Support for free, auto renewable and non renewing subscriptions
 - Receipt verification
-
-#### Missing Features
-- Ask To Buy
-
-#### Untested Features
-- Consumable in app purchases
-- Free subscriptions for Newsstand
+- iOS and OS X compatible
+- enum-based error handling
 
 ## Known issues
 

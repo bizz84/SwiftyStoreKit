@@ -30,25 +30,20 @@ public typealias ReceiptInfo = [String: AnyObject]
 
 // MARK: - Enumeration
 extension SwiftyStoreKit {
-    public enum PurchaseType {
-        // A consumable In-App Purchase must be purchased every time the user downloads it.
-        case Consumable
-        // Non-consumable In-App Purchases only need to be purchased once by users.
-        case NonConsumable
-        // Automatically renewable subscriptions allow the user to purchase updating and dynamic content for a set duration of time.
-        case AutomaticallyRenewableSubscription(validUntilDate: NSDate)
-        // Free subscriptions don’t expire and can only be offered in apps that are in the Magazines & Newspapers category.
-        case FreeSubscription
-        // Non-Renewing Subscriptions allow the sale of services with a limited duration.
-        case NonRenewingSubscription(validUntilDate: NSDate)
-    }
     public enum VerifyReceiptResult {
         case Success(receipt: ReceiptInfo)
         case Error(error: ReceiptError)
     }
   
+    // Result for Consumable and NonConsumable
     public enum VerifyPurchaseResult {
-        case Purchased(expiresDate: NSDate?)
+        case Purchased
+        case NotPurchased
+    }
+  
+    //  Result for Subscription
+    public enum verifySubscriptionResult {
+        case Purchased(expiresDate: NSDate)
         case Expired(expiresDate: NSDate)
         case NotPurchased
     }
@@ -253,65 +248,80 @@ internal class InAppReceipt {
             }
             task.resume()
     }
-
+  
     /**
-     *  Verify the purchase of a product in a receipt
+     *  Verify the purchase of a Consumable, NonConsumable, FreeSubscription or NonRenewingSubscription product in a receipt
+     *  - Parameter productId: the product id of the purchase to verify
+     *  - Parameter inReceipt: the receipt to test in
+     */
+    class func verifyPurchase(
+        productId productId: String,
+        inReceipt receipt: ReceiptInfo
+    ) -> SwiftyStoreKit.VerifyPurchaseResult {
+      
+        // Get receipts info for the product
+        let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)
+      
+        // Verify that at least one receipt has the right product id
+        return receiptsInfo?.count >= 1 ? .Purchased : .NotPurchased
+    }
+  
+    /**
+     *  Verify the purchase of a AutomaticallyRenewableSubscription product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to test in
      *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
      */
-    class func verifyPurchase(
-      productId productId: String,
-      inReceipt receipt: ReceiptInfo,
-      purchaseType: SwiftyStoreKit.PurchaseType
-    ) -> SwiftyStoreKit.VerifyPurchaseResult {
-      
-        // Get all receipts
-        guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
-            return .NotPurchased
-        }
-      
-        // Filter receipts with matching product id
-        let receiptsMatchingProductId = allReceipts
-            .filter { (receipt) -> Bool in
-                let product_id = receipt["product_id"] as? String
-                return product_id == productId
-        }
+    class func verifySubscription(
+        productId productId: String,
+        inReceipt receipt: ReceiptInfo,
+        validUntil date: NSDate = NSDate(),
+        validDuration duration: NSTimeInterval? = nil
+    ) -> SwiftyStoreKit.verifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
-        guard receiptsMatchingProductId.count >= 1 else {
+        guard let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)
+          where receiptsInfo.count >= 1 else {
             return .NotPurchased
         }
-      
-        switch purchaseType {
-            // Do not need to verify the expiration date
-            case .Consumable, .NonConsumable, .FreeSubscription:
-                return .Purchased(expiresDate: nil)
-            case .AutomaticallyRenewableSubscription(let validUntilDate):
-                return verifyPurchase(receiptsMatchingProductId, validUntilDate: validUntilDate)
-            case .NonRenewingSubscription(let validUntilDate):
-                return verifyPurchase(receiptsMatchingProductId, validUntilDate: validUntilDate)
-        }
-    }
     
-    private class func verifyPurchase(receiptsMatchingProductId: [ReceiptInfo], validUntilDate date: NSDate) -> SwiftyStoreKit.VerifyPurchaseResult {
         // Return the expires dates sorted desc
-        let expiresDates = receiptsMatchingProductId
-            .map { (receipt) -> NSDate in
-                let expires_date = receipt["expires_date_ms"] as? NSString
-                let expires_date_double = (expires_date?.doubleValue ?? 0.0) / 1000
+        let expiresDates = receiptsInfo
+            .map { (receipt) -> NSString? in
+                // If duration is set, create a expires dates calculated from the purchase date
+                return duration != nil
+                  ? receipt["original_purchase_date_ms"] as? NSString
+                  : receipt["expires_date_ms"] as? NSString
+            }
+            .filter { (dateString) -> Bool in
+                return dateString != nil
+            }
+            .map { (dateString) -> NSDate in
+                let expires_date_double = dateString!.doubleValue / 1000
                 return NSDate(timeIntervalSince1970: expires_date_double)
+            }
+            .map { (date) -> NSDate in
+                // If duration is set, create a expires dates calculated from the purchase date
+                if let duration = duration {
+                  return date.dateByAddingTimeInterval(duration)
+                }
+                return date
             }
             .sort { (a, b) -> Bool in
                 return a.compare(b) == .OrderedDescending
+            }
+      
+        guard expiresDates.count >= 1 else {
+            return .NotPurchased
         }
-        
+      
         // Filter expired date
         let validExpiresDate = expiresDates
             .filter { (expires_date) -> Bool in
                 return expires_date.compare(date) == .OrderedDescending
-        }
-        
+            }
+    
         // Check if at least 1 receipt is valid
         if let firstValidExpiresDate = validExpiresDate.first {
             // The subscription is valid
@@ -321,5 +331,27 @@ internal class InAppReceipt {
             // The subscription is expired
             return .Expired(expiresDate: expiresDates.first!)
         }
+    }
+  
+    /**
+     *  Get all the receipts info for a specific product
+     *  - Parameter productId: the product id
+     *  - Parameter inReceipt: the receipt to grab info from
+     */
+    private class func getReceiptInfo(
+        forProductId productId: String,
+        inReceipt receipt: ReceiptInfo
+    ) -> [ReceiptInfo]? {
+        // Get all receipts
+        let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
+      
+        // Filter receipts with matching product id
+        let receiptsMatchingProductId = allReceipts?
+            .filter { (receipt) -> Bool in
+                let product_id = receipt["product_id"] as? String
+                return product_id == productId
+            }
+      
+        return receiptsMatchingProductId
     }
 }

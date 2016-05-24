@@ -260,10 +260,10 @@ internal class InAppReceipt {
     ) -> SwiftyStoreKit.VerifyPurchaseResult {
       
         // Get receipts info for the product
-        let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)
+        let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
       
         // Verify that at least one receipt has the right product id
-        return receiptsInfo?.count >= 1 ? .Purchased : .NotPurchased
+        return receiptsInfo.count >= 1 ? .Purchased : .NotPurchased
     }
   
     /**
@@ -281,55 +281,44 @@ internal class InAppReceipt {
     ) -> SwiftyStoreKit.verifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
-        guard let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)
-          where receiptsInfo.count >= 1 else {
+        let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
+        if receiptsInfo.count == 0 {
             return .NotPurchased
         }
     
         // Return the expires dates sorted desc
-        let expiresDates = receiptsInfo
+        let expiryDateValues = receiptsInfo
             .map { (receipt) -> NSString? in
-                // If duration is set, create a expires dates calculated from the purchase date
-                return duration != nil
-                  ? receipt["original_purchase_date_ms"] as? NSString
-                  : receipt["expires_date_ms"] as? NSString
+                let key = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
+                return receipt[key] as? NSString
             }
             .filter { (dateString) -> Bool in
                 return dateString != nil
             }
             .map { (dateString) -> NSDate in
-                let expires_date_double = dateString!.doubleValue / 1000
-                return NSDate(timeIntervalSince1970: expires_date_double)
-            }
-            .map { (date) -> NSDate in
-                // If duration is set, create a expires dates calculated from the purchase date
-                if let duration = duration {
-                  return date.dateByAddingTimeInterval(duration)
-                }
-                return date
+                // If duration is set, create an "expires date" value calculated from the original purchase date
+                let addDuration = duration ?? 0
+                let expiresDateDouble = (dateString!.doubleValue / 1000 + addDuration)
+                return NSDate(timeIntervalSince1970: expiresDateDouble)
             }
             .sort { (a, b) -> Bool in
+                // Sort by descending date order
                 return a.compare(b) == .OrderedDescending
             }
       
-        guard expiresDates.count >= 1 else {
+        guard let firstExpiryDate = expiryDateValues.first else {
             return .NotPurchased
         }
       
-        // Filter expired date
-        let validExpiresDate = expiresDates
-            .filter { (expires_date) -> Bool in
-                return expires_date.compare(date) == .OrderedDescending
-            }
-    
         // Check if at least 1 receipt is valid
-        if let firstValidExpiresDate = validExpiresDate.first {
+        if firstExpiryDate.compare(date) == .OrderedDescending {
+            
             // The subscription is valid
-            return .Purchased(expiresDate: firstValidExpiresDate)
+            return .Purchased(expiresDate: firstExpiryDate)
         }
         else {
             // The subscription is expired
-            return .Expired(expiresDate: expiresDates.first!)
+            return .Expired(expiresDate: firstExpiryDate)
         }
     }
   
@@ -338,15 +327,17 @@ internal class InAppReceipt {
      *  - Parameter productId: the product id
      *  - Parameter inReceipt: the receipt to grab info from
      */
-    private class func getReceiptInfo(
+    private class func getReceiptsInfo(
         forProductId productId: String,
         inReceipt receipt: ReceiptInfo
-    ) -> [ReceiptInfo]? {
+    ) -> [ReceiptInfo] {
         // Get all receipts
-        let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
+        guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
+            return []
+        }
       
         // Filter receipts with matching product id
-        let receiptsMatchingProductId = allReceipts?
+        let receiptsMatchingProductId = allReceipts
             .filter { (receipt) -> Bool in
                 let product_id = receipt["product_id"] as? String
                 return product_id == productId

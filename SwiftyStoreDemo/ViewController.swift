@@ -119,7 +119,7 @@ class ViewController: UIViewController {
               
                 // Specific behaviour for AutoRenewablePurchase
                 if purchase == .AutoRenewablePurchase {
-                    let purchaseResult = SwiftyStoreKit.verifyAutomaticallyRenewableSubscription(
+                    let purchaseResult = SwiftyStoreKit.verifyAutoRenewableSubscription(
                         productId: self.AppBundleId + "." + purchase.rawValue,
                         inReceipt: receipt,
                         validUntil: NSDate()
@@ -245,7 +245,7 @@ extension ViewController {
         }
     }
   
-    func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyAutomaticallyRenewableSubscriptionResult) -> UIAlertController {
+    func alertForVerifyPurchase(result: SwiftyStoreKit.verifyAutoRenewableSubscriptionResult) -> UIAlertController {
     
         switch result {
         case .Purchased(let expiresDate):

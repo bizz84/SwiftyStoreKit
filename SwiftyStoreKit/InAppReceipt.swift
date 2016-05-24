@@ -42,7 +42,7 @@ extension SwiftyStoreKit {
     }
   
     //  Result for AutomaticallyRenewableSubscription
-    public enum VerifyAutomaticallyRenewableSubscriptionResult {
+    public enum verifyAutoRenewableSubscriptionResult {
         case Purchased(expiresDate: NSDate)
         case Expired(expiresDate: NSDate)
         case NotPurchased
@@ -272,11 +272,11 @@ internal class InAppReceipt {
      *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
      *  - Parameter inReceipt: the receipt to test in
      */
-    class func verifyAutomaticallyRenewableSubscription(
+    class func verifyAutoRenewableSubscription(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
         validUntil date: NSDate = NSDate()
-    ) -> SwiftyStoreKit.VerifyAutomaticallyRenewableSubscriptionResult {
+    ) -> SwiftyStoreKit.verifyAutoRenewableSubscriptionResult {
       
         // Verify that at least one receipt has the right product id
         guard let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)

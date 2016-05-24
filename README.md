@@ -62,7 +62,7 @@ SwiftyStoreKit.restorePurchases() { results in
 }
 ```
 
-### Verify Receipts
+### Verify Receipt
 
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
@@ -85,13 +85,12 @@ func refreshReceipt() {
 }
 ```
 
-### Verify purchase of a product in a receipt
+### Verify Purchase
 
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
     switch result {
     case .Success(let receipt):
-
         // Verify the purchase of Consumable or NonConsumable
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
@@ -103,47 +102,45 @@ SwiftyStoreKit.verifyReceipt() { result in
         case .NotPurchased:
             print("The user has never purchased this product")
         }
-        
-        // Example for an Automatically Renewable Subscription
-        let purchaseResult = SwiftyStoreKit.verifySubscription(
-            productId: "com.musevisions.SwiftyStoreKit.AutomaticallyRenewableSubscription",
-            inReceipt: receipt,
-            validUntil: NSDate()
-        )
-        switch purchaseResult {
-        case .Purchased(let expiresDate):
-            print("Product is valid until \(expiresDate)")
-        case .Expired(let expiresDate):
-            print("Product is expired since \(expiresDate)")
-        case .NotPurchased:
-            print("The user has never purchased this product")
-        }
-        
-        // Example for a Non Renewing Subscription
-        let purchaseResult = SwiftyStoreKit.verifySubscription(
-            productId: "com.musevisions.SwiftyStoreKit.1MonthNonRenewingSubscription",
-            inReceipt: receipt,
-            validUntil: NSDate(),
-            validDuration: 3600 * 24 * 30, //1 month duration
-        )
-        switch purchaseResult {
-        case .Purchased(let expiresDate):
-            print("Product is valid until \(expiresDate)")
-        case .Expired(let expiresDate):
-            print("Product is expired since \(expiresDate)")
-        case .NotPurchased:
-            print("The user has never purchased this product")
-        }
-
     case .Error(let error):
         print("Receipt verification failed: \(error)")
     }
 }
 ```
 
-To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in second.
+Note that for consumable products, the receipt will only include the information for a couples of minutes after the purchase.
 
-Note for the purchase of a consumable product, the receipt will contain it only for a couples of minutes after the purchase.
+### Verify Subscription
+
+```swift
+SwiftyStoreKit.verifyReceipt() { result in
+    switch result {
+    case .Success(let receipt):
+        // Verify the purchase of a Subscription
+        let purchaseResult = SwiftyStoreKit.verifySubscription(
+            productId: "com.musevisions.SwiftyStoreKit.Subscription",
+            inReceipt: receipt,
+            validUntil: NSDate()
+            validDuration: 3600 * 24 * 30, // Non Renewing Subscription only
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
+            print("Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+        
+    case .Error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
+
+To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in seconds.
+
 
 ### Complete Transactions
 

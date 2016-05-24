@@ -35,14 +35,14 @@ extension SwiftyStoreKit {
         case Error(error: ReceiptError)
     }
   
-    // Result for Consumable, NonConsumable, FreeSubscription and NonRenewingSubscription
+    // Result for Consumable and NonConsumable
     public enum VerifyPurchaseResult {
         case Purchased
         case NotPurchased
     }
   
-    //  Result for AutomaticallyRenewableSubscription
-    public enum verifyAutoRenewableSubscriptionResult {
+    //  Result for Subscription
+    public enum verifySubscriptionResult {
         case Purchased(expiresDate: NSDate)
         case Expired(expiresDate: NSDate)
         case NotPurchased
@@ -269,25 +269,30 @@ internal class InAppReceipt {
     /**
      *  Verify the purchase of a AutomaticallyRenewableSubscription product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
      *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
      */
-    class func verifyAutoRenewableSubscription(
+    class func verifySubscription(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil date: NSDate = NSDate()
-    ) -> SwiftyStoreKit.verifyAutoRenewableSubscriptionResult {
+        validUntil date: NSDate = NSDate(),
+        validDuration duration: NSTimeInterval? = nil
+    ) -> SwiftyStoreKit.verifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
         guard let receiptsInfo = self.getReceiptInfo(forProductId: productId, inReceipt: receipt)
           where receiptsInfo.count >= 1 else {
             return .NotPurchased
         }
-      
+    
         // Return the expires dates sorted desc
         let expiresDates = receiptsInfo
             .map { (receipt) -> NSString? in
-                return receipt["expires_date_ms"] as? NSString
+                // If duration is set, create a expires dates calculated from the purchase date
+                return duration != nil
+                  ? receipt["original_purchase_date_ms"] as? NSString
+                  : receipt["expires_date_ms"] as? NSString
             }
             .filter { (dateString) -> Bool in
                 return dateString != nil
@@ -296,6 +301,13 @@ internal class InAppReceipt {
                 let expires_date_double = dateString!.doubleValue / 1000
                 return NSDate(timeIntervalSince1970: expires_date_double)
             }
+            .map { (date) -> NSDate in
+                // If duration is set, create a expires dates calculated from the purchase date
+                if let duration = duration {
+                  return date.dateByAddingTimeInterval(duration)
+                }
+                return date
+            }
             .sort { (a, b) -> Bool in
                 return a.compare(b) == .OrderedDescending
             }
@@ -303,7 +315,6 @@ internal class InAppReceipt {
         guard expiresDates.count >= 1 else {
             return .NotPurchased
         }
-      
       
         // Filter expired date
         let validExpiresDate = expiresDates

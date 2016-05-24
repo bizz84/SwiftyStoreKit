@@ -179,17 +179,19 @@ public class SwiftyStoreKit {
     }
   
     /**
-     *  Verify the purchase of a AutomaticallyRenewableSubscription product in a receipt
+     *  Verify the purchase of a subscription in a receipt
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
      *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
      */
-    public class func verifyAutoRenewableSubscription(
+    public class func verifySubscription(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil date: NSDate = NSDate()
-    ) -> SwiftyStoreKit.verifyAutoRenewableSubscriptionResult {
-        return InAppReceipt.verifyAutoRenewableSubscription(productId: productId, inReceipt: receipt, validUntil: date)
+        validUntil date: NSDate = NSDate(),
+        validDuration duration: NSTimeInterval? = nil
+    ) -> SwiftyStoreKit.verifySubscriptionResult {
+      return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
     }
 
     #if os(iOS) || os(tvOS)

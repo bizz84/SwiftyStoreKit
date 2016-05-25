@@ -167,31 +167,33 @@ public class SwiftyStoreKit {
     }
   
     /**
-     *  Verify the purchase of a Consumable, NonConsumable, FreeSubscription or NonRenewingSubscription product in a receipt
+     *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter inReceipt: the receipt to use for looking up the purchase
+     *  - return: either NotPurchased or Purchased
      */
     public class func verifyPurchase(
         productId productId: String,
         inReceipt receipt: ReceiptInfo
-    ) -> SwiftyStoreKit.VerifyPurchaseResult {
+    ) -> VerifyPurchaseResult {
         return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt)
     }
   
     /**
-     *  Verify the purchase of a subscription in a receipt
+     *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter inReceipt: the receipt to test in
-     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     *  - Parameter inReceipt: the receipt to use for looking up the subscription
+     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
      *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
+     *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
     public class func verifySubscription(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
         validUntil date: NSDate = NSDate(),
         validDuration duration: NSTimeInterval? = nil
-    ) -> SwiftyStoreKit.verifySubscriptionResult {
-      return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
+    ) -> VerifySubscriptionResult {
+        return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
     }
 
     #if os(iOS) || os(tvOS)

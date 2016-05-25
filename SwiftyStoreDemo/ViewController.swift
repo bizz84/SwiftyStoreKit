@@ -248,7 +248,7 @@ extension ViewController {
         }
     }
   
-    func alertForVerifySubscription(result: SwiftyStoreKit.verifySubscriptionResult) -> UIAlertController {
+    func alertForVerifySubscription(result: SwiftyStoreKit.VerifySubscriptionResult) -> UIAlertController {
     
         switch result {
         case .Purchased(let expiresDate):

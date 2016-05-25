@@ -42,9 +42,9 @@ extension SwiftyStoreKit {
     }
   
     //  Result for Subscription
-    public enum verifySubscriptionResult {
-        case Purchased(expiresDate: NSDate)
-        case Expired(expiresDate: NSDate)
+    public enum VerifySubscriptionResult {
+        case Purchased(expiryDate: NSDate)
+        case Expired(expiryDate: NSDate)
         case NotPurchased
     }
 }
@@ -250,9 +250,10 @@ internal class InAppReceipt {
     }
   
     /**
-     *  Verify the purchase of a Consumable, NonConsumable, FreeSubscription or NonRenewingSubscription product in a receipt
+     *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter inReceipt: the receipt to test in
+     *  - Parameter inReceipt: the receipt to use for looking up the purchase
+     *  - return: either NotPurchased or Purchased
      */
     class func verifyPurchase(
         productId productId: String,
@@ -267,18 +268,19 @@ internal class InAppReceipt {
     }
   
     /**
-     *  Verify the purchase of a AutomaticallyRenewableSubscription product in a receipt
+     *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter inReceipt: the receipt to test in
-     *  - Parameter validUntil: the expires date of the subscription must be valid until this date. If nil, no verification
+     *  - Parameter inReceipt: the receipt to use for looking up the subscription
+     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
      *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
+     *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
     class func verifySubscription(
         productId productId: String,
         inReceipt receipt: ReceiptInfo,
         validUntil date: NSDate = NSDate(),
         validDuration duration: NSTimeInterval? = nil
-    ) -> SwiftyStoreKit.verifySubscriptionResult {
+    ) -> SwiftyStoreKit.VerifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
         let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
@@ -298,8 +300,8 @@ internal class InAppReceipt {
             .map { (dateString) -> NSDate in
                 // If duration is set, create an "expires date" value calculated from the original purchase date
                 let addDuration = duration ?? 0
-                let expiresDateDouble = (dateString!.doubleValue / 1000 + addDuration)
-                return NSDate(timeIntervalSince1970: expiresDateDouble)
+                let expiryDateDouble = (dateString!.doubleValue / 1000 + addDuration)
+                return NSDate(timeIntervalSince1970: expiryDateDouble)
             }
             .sort { (a, b) -> Bool in
                 // Sort by descending date order
@@ -314,11 +316,11 @@ internal class InAppReceipt {
         if firstExpiryDate.compare(date) == .OrderedDescending {
             
             // The subscription is valid
-            return .Purchased(expiresDate: firstExpiryDate)
+            return .Purchased(expiryDate: firstExpiryDate)
         }
         else {
             // The subscription is expired
-            return .Expired(expiresDate: firstExpiryDate)
+            return .Expired(expiryDate: firstExpiryDate)
         }
     }
   

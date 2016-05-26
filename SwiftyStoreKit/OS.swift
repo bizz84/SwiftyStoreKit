@@ -25,7 +25,7 @@
 import StoreKit
 
 // MARK: - missing SKPaymentTransactionState on OSX
-#if os(iOS)
+#if os(iOS) || os(tvOS)
     public typealias PaymentTransactionState = SKPaymentTransactionState
 #elseif os(OSX)
     public enum PaymentTransactionState : Int {

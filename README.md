@@ -222,8 +222,12 @@ The user can background the hosting application and change the Apple ID used wit
 
 ## Changelog
 
-#### Version 0.2.9 (unreleased)
+#### Version 0.2.9
+
+* Added support for verifying purchases and subscriptions. This includes consumable and non consumable purchases, auto-renewing, free and non-renewing subscriptions.
 * The `purchaseProduct()` now takes an optional `applicationUsername` string which can be used to help detect irregular activity on transactions. Read more about this on the [Apple docs](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/RequestPayment.html).
+* Updated `verifyReceipt()` so that the completion block is called on the main thread.
+
 
 #### Version 0.2.8
 

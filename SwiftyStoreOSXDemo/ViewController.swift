@@ -26,34 +26,56 @@ import Cocoa
 import StoreKit
 import SwiftyStoreKit
 
+enum RegisteredPurchase : String {
+    
+    case Purchase1 = "purchase1"
+    case Purchase2 = "purchase2"
+    case NonConsumablePurchase = "nonConsumablePurchase"
+    case ConsumablePurchase = "consumablePurchase"
+    case AutoRenewablePurchase = "autoRenewablePurchase"
+    case NonRenewingPurchase = "nonRenewingPurchase"
+    
+}
+
 class ViewController: NSViewController {
 
     let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
     
+    let Purchase1 = RegisteredPurchase.Purchase1
+    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase
+
     // MARK: actions
     @IBAction func getInfo1(sender: AnyObject?) {
-        getInfo("1")
+        getInfo(Purchase1)
     }
-    @IBAction func getInfo2(sender: AnyObject!) {
-        getInfo("2")
+    @IBAction func purchase1(sender: AnyObject?) {
+        purchase(Purchase1)
     }
-    @IBAction func purchase1(sender: AnyObject!) {
-        purchase("1")
+    @IBAction func verifyPurchase1(sender: AnyObject?) {
+        verifyPurchase(Purchase1)
     }
-    @IBAction func purchase2(sender: AnyObject!) {
-        purchase("2")
-    }
-    func getInfo(no: String) {
 
-        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + ".purchase" + no]) { result in
+    @IBAction func getInfo2(sender: AnyObject?) {
+        getInfo(Purchase2)
+    }
+    @IBAction func purchase2(sender: AnyObject?) {
+        purchase(Purchase2)
+    }
+    @IBAction func verifyPurchase2(sender: AnyObject?) {
+        verifyPurchase(Purchase2)
+    }
+
+    func getInfo(purchase: RegisteredPurchase) {
+
+        SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchase.rawValue]) { result in
 
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
     }
 
-    func purchase(no: String) {
+    func purchase(purchase: RegisteredPurchase) {
 
-        SwiftyStoreKit.purchaseProduct(AppBundleId + ".purchase" + no) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
 
             self.showAlert(self.alertForPurchaseResult(result))
         }
@@ -67,7 +89,7 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func verifyReceipt(ender: AnyObject?) {
+    @IBAction func verifyReceipt(sender: AnyObject?) {
 
         SwiftyStoreKit.verifyReceipt() { result in
 
@@ -77,6 +99,39 @@ class ViewController: NSViewController {
             }
         }
     }
+
+    func verifyPurchase(purchase: RegisteredPurchase) {
+        
+        SwiftyStoreKit.verifyReceipt() { result in
+            
+            switch result {
+            case .Success(let receipt):
+                
+                let productId = self.AppBundleId + "." + purchase.rawValue
+                
+                // Specific behaviour for AutoRenewablePurchase
+                if purchase == .AutoRenewablePurchase {
+                    let purchaseResult = SwiftyStoreKit.verifySubscription(
+                        productId: productId,
+                        inReceipt: receipt,
+                        validUntil: NSDate()
+                    )
+                    self.showAlert(self.alertForVerifySubscription(purchaseResult))
+                }
+                else {
+                    let purchaseResult = SwiftyStoreKit.verifyPurchase(
+                        productId: productId,
+                        inReceipt: receipt
+                    )
+                    self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                }
+                            
+            case .Error(_):
+                self.showAlert(self.alertForVerifyReceipt(result))
+            }
+        }
+    }
+    
 
 
 }
@@ -170,6 +225,33 @@ extension ViewController {
             return self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developer id to test and be outside of XCode")
         }
     }
+    
+    func alertForVerifySubscription(result: SwiftyStoreKit.verifySubscriptionResult) -> NSAlert {
+        
+        switch result {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+            return alertWithTitle("Product is purchased", message: "Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
+            print("Product is expired since \(expiresDate)")
+            return alertWithTitle("Product expired", message: "Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("This product has never been purchased")
+            return alertWithTitle("Not purchased", message: "This product has never been purchased")
+        }
+    }
 
+
+    func alertForVerifyPurchase(result: SwiftyStoreKit.VerifyPurchaseResult) -> NSAlert {
+        
+        switch result {
+        case .Purchased:
+            print("Product is purchased")
+            return alertWithTitle("Product is purchased", message: "Product will not expire")
+        case .NotPurchased:
+            print("This product has never been purchased")
+            return alertWithTitle("Not purchased", message: "This product has never been purchased")
+        }
+    }
 }
 

@@ -62,7 +62,7 @@ SwiftyStoreKit.restorePurchases() { results in
 }
 ```
 
-### Verify Receipts
+### Verify Receipt
 
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
@@ -85,6 +85,63 @@ func refreshReceipt() {
 }
 ```
 
+### Verify Purchase
+
+```swift
+SwiftyStoreKit.verifyReceipt() { result in
+    switch result {
+    case .Success(let receipt):
+        // Verify the purchase of Consumable or NonConsumable
+        let purchaseResult = SwiftyStoreKit.verifyPurchase(
+            productId: "com.musevisions.SwiftyStoreKit.Purchase1",
+            inReceipt: receipt
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is purchased.")
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+    case .Error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
+Note that for consumable products, the receipt will only include the information for a couples of minutes after the purchase.
+
+### Verify Subscription
+
+```swift
+SwiftyStoreKit.verifyReceipt() { result in
+    switch result {
+    case .Success(let receipt):
+        // Verify the purchase of a Subscription
+        let purchaseResult = SwiftyStoreKit.verifySubscription(
+            productId: "com.musevisions.SwiftyStoreKit.Subscription",
+            inReceipt: receipt,
+            validUntil: NSDate()
+            validDuration: 3600 * 24 * 30, // Non Renewing Subscription only
+        )
+        switch purchaseResult {
+        case .Purchased(let expiresDate):
+            print("Product is valid until \(expiresDate)")
+        case .Expired(let expiresDate):
+            print("Product is expired since \(expiresDate)")
+        case .NotPurchased:
+            print("The user has never purchased this product")
+        }
+        
+    case .Error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
+
+To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in seconds.
+
+
 ### Complete Transactions
 
 This can be used to finish any transactions that were pending in the payment queue after the app has been terminated. Should be called when the app starts.
@@ -101,7 +158,6 @@ SwiftyStoreKit.completeTransactions() { completedTransactions in
     }
 }
 ```
-
 
 **NOTE**:
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
@@ -136,16 +192,11 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 #### Features
 - Super easy to use block based API
-- enum-based error handling
-- Support for non-consumable in app purchases
+- Support for consumable, non-consumable in-app purchases
+- Support for free, auto renewable and non renewing subscriptions
 - Receipt verification
-
-#### Missing Features
-- Ask To Buy
-
-#### Untested Features
-- Consumable in app purchases
-- Free subscriptions for Newsstand
+- iOS and OS X compatible
+- enum-based error handling
 
 ## Known issues
 

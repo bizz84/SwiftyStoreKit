@@ -290,17 +290,15 @@ internal class InAppReceipt {
     
         // Return the expires dates sorted desc
         let expiryDateValues = receiptsInfo
-            .map { (receipt) -> NSString? in
-                let key = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
-                return receipt[key] as? NSString
+            .flatMap { (receipt) -> String? in
+                let key: String = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
+                return receipt[key] as? String
             }
-            .filter { (dateString) -> Bool in
-                return dateString != nil
-            }
-            .map { (dateString) -> NSDate in
+            .flatMap { (dateString) -> NSDate? in
                 // If duration is set, create an "expires date" value calculated from the original purchase date
-                let addDuration = duration ?? 0
-                let expiryDateDouble = (dateString!.doubleValue / 1000 + addDuration)
+                let addDuration: NSTimeInterval = duration ?? 0
+                guard let doubleValue = Double(dateString) else { return nil }
+                let expiryDateDouble = (doubleValue / 1000 + addDuration)
                 return NSDate(timeIntervalSince1970: expiryDateDouble)
             }
             .sort { (a, b) -> Bool in

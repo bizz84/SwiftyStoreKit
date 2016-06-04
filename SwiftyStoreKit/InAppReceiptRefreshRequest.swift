@@ -45,7 +45,11 @@ import Foundation
         let refreshReceiptRequest: SKReceiptRefreshRequest
         let callback: RequestCallback
 
-        init(receiptProperties: [String : AnyObject]? = nil, callback: RequestCallback) {
+        deinit {
+            refreshReceiptRequest.delegate = nil
+        }
+
+        private init(receiptProperties: [String : AnyObject]? = nil, callback: RequestCallback) {
             self.callback = callback
             self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
             super.init()

@@ -52,7 +52,7 @@ public class SwiftyStoreKit {
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
     private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
     // MARK: Enums

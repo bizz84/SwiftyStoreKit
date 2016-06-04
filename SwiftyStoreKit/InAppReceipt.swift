@@ -127,7 +127,7 @@ public enum ReceiptInfoField: String {
         case expires_date
         // For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.
         case cancellation_date
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
         // A string that the App Store uses to uniquely identify the application that created the transaction. If your server supports multiple applications, you can use this value to differentiate between them. Apps are assigned an identifier only in the production environment, so this key is not present for receipts created in the test environment. This field is not present for Mac apps. See also Bundle Identifier.
         case app_item_id
         #endif

@@ -26,7 +26,7 @@
 import StoreKit
 import Foundation
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
     class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
 
         enum ResultType {

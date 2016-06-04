@@ -103,7 +103,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 isPurchaseRequest = true
             }
 
-            #if os(iOS)
+            #if os(iOS) || os(tvOS)
                 let transactionState = transaction.transactionState
             #elseif os(OSX)
                 let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!

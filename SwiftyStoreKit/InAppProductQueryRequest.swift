@@ -74,7 +74,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         
     }
     // MARK: - missing SKPaymentTransactionState on OSX
-    #if os(iOS)
+    #if os(iOS) || os(tvOS)
     func request(request: SKRequest, didFailWithError error: NSError) {
         requestFailed(error)
     }

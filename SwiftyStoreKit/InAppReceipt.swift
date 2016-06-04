@@ -295,10 +295,10 @@ internal class InAppReceipt {
                 return receipt[key] as? String
             }
             .flatMap { (dateString) -> NSDate? in
-                // If duration is set, create an "expires date" value calculated from the original purchase date
-                let addDuration: NSTimeInterval = duration ?? 0
                 guard let doubleValue = Double(dateString) else { return nil }
-                let expiryDateDouble = (doubleValue / 1000 + addDuration)
+                // If duration is set, create an "expires date" value calculated from the original purchase date
+                let addedDuration = duration ?? 0
+                let expiryDateDouble = (doubleValue / 1000 + addedDuration)
                 return NSDate(timeIntervalSince1970: expiryDateDouble)
             }
             .sort { (a, b) -> Bool in

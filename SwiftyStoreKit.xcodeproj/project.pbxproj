@@ -578,7 +578,7 @@
 				INFOPLIST_FILE = SwiftyStoreKitTV/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.florianweich.SwiftyStoreKitTV;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.tvOS.SwiftyStoreKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -601,7 +601,7 @@
 				INFOPLIST_FILE = SwiftyStoreKitTV/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = me.florianweich.SwiftyStoreKitTV;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.tvOS.SwiftyStoreKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				SKIP_INSTALL = YES;
@@ -778,7 +778,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.phimage.SwiftyStoreKitOSX;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.OSX.SwiftyStoreKit;
 				PRODUCT_NAME = SwiftyStoreKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
@@ -802,7 +802,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.9;
-				PRODUCT_BUNDLE_IDENTIFIER = fr.phimage.SwiftyStoreKitOSX;
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.OSX.SwiftyStoreKit;
 				PRODUCT_NAME = SwiftyStoreKit;
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;

@@ -1,5 +1,5 @@
 # SwiftyStoreKit
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+ and OSX 9.0+, written in Swift.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and OS X 10.9+, written in Swift.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat
             )](http://mit-license.org)
@@ -131,7 +131,7 @@ SwiftyStoreKit.verifyReceipt() { result in
         case .NotPurchased:
             print("The user has never purchased this product")
         }
-        
+
     case .Error(let error):
         print("Receipt verification failed: \(error)")
     }
@@ -148,11 +148,11 @@ This can be used to finish any transactions that were pending in the payment que
 
 ```swift
 SwiftyStoreKit.completeTransactions() { completedTransactions in
-    
+
     for completedTransaction in completedTransactions {
-        
+
         if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
-            
+
             print("purchased: \(completedTransaction.productId)")
         }
     }
@@ -259,7 +259,7 @@ The user can background the hosting application and change the Apple ID used wit
 In order to make a purchase, two operations are needed:
 
 - Obtain the ```SKProduct``` corresponding to the productId that identifies the app purchase, via ```SKProductRequest```.
- 
+
 - Submit the payment for that product via ```SKPaymentQueue```.
 
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
@@ -312,9 +312,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
-
-
-

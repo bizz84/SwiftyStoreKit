@@ -195,7 +195,7 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 - Support for consumable, non-consumable in-app purchases
 - Support for free, auto renewable and non renewing subscriptions
 - Receipt verification
-- iOS and OS X compatible
+- iOS, tvOS and OS X compatible
 - enum-based error handling
 
 ## Known issues
@@ -221,6 +221,11 @@ The user can background the hosting application and change the Apple ID used wit
 
 
 ## Changelog
+
+#### Version 0.2.10
+
+* Added **tvOS** support
+* Faster compilation time for `verifySubscription()` implementation
 
 #### Version 0.2.9
 

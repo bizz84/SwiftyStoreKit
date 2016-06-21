@@ -18,6 +18,31 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png" width="320">
 
+### Setup + Complete Transactions
+
+Apple recommends to register a transaction observer [as soon as the app starts](https://developer.apple.com/library/ios/technotes/tn2387/_index.html):
+> Adding your app's observer at launch ensures that it will persist during all launches of your app, thus allowing your app to receive all the payment queue notifications.
+
+SwiftyStoreKit supports this by calling `completeTransactions()` when the app starts:
+
+```swift
+func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+
+	SwiftyStoreKit.completeTransactions() { completedTransactions in
+	
+	    for completedTransaction in completedTransactions {
+	
+	        if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+	
+	            print("purchased: \(completedTransaction.productId)")
+	        }
+	    }
+	}
+}
+```
+
+If there are any pending transactions at this point, these will be reported by the completion block so that the app state and UI can be updated.
+
 ### Retrieve products info
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
@@ -142,22 +167,6 @@ SwiftyStoreKit.verifyReceipt() { result in
 To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in seconds.
 
 
-### Complete Transactions
-
-This can be used to finish any transactions that were pending in the payment queue after the app has been terminated. Should be called when the app starts.
-
-```swift
-SwiftyStoreKit.completeTransactions() { completedTransactions in
-
-    for completedTransaction in completedTransactions {
-
-        if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
-
-            print("purchased: \(completedTransaction.productId)")
-        }
-    }
-}
-```
 
 **NOTE**:
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).

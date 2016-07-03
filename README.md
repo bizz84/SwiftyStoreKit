@@ -315,6 +315,8 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [MDacne](https://itunes.apple.com/app/id1044050208) - Acne analysis and treatment
 * [Pixel Picker](https://itunes.apple.com/app/id930804327) - Image Color Picker
 * [KType](https://itunes.apple.com/app/id1037000234) - Space shooter game
+* [iPic](https://itunes.apple.com/app/id1101244278?ls=1&mt=12) - Automatically upload images and save Markdown links
+* [iHosts](https://itunes.apple.com/app/id1102004240?ls=1&mt=12) - Perfect for editing /etc/hosts
 
 
 ## License

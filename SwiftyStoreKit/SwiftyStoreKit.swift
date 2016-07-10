@@ -154,13 +154,13 @@ public class SwiftyStoreKit {
 
     /**
      *  Verify application receipt
-     *  - Parameter receiptVerifyURL: receipt verify url (default: Test)
+     *  - Parameter receiptVerifyURL: receipt verify url (default: Production)
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      *  - Parameter session: the session used to make remote call.
      *  - Parameter completion: handler for result
      */
     public class func verifyReceipt(
-        receiptVerifyURL url: ReceiptVerifyURL = .Test,
+        receiptVerifyURL url: ReceiptVerifyURL = .Production,
         password: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
         completion:(result: VerifyReceiptResult) -> ()) {

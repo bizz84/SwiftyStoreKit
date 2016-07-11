@@ -138,12 +138,6 @@ public enum ReceiptInfoField: String {
     }
 }
 
-// URL used to verify remotely receipt
-public enum ReceiptVerifyURL: String {
-    case Production = "https://buy.itunes.apple.com/verifyReceipt"
-    case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
-}
-
 #if os(OSX)
     public enum ReceiptExitCode: Int32 {
         // If validation fails in OS X, call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
@@ -153,6 +147,12 @@ public enum ReceiptVerifyURL: String {
 
 // MARK - receipt mangement
 internal class InAppReceipt {
+
+    // URL used to verify remotely receipt
+    enum ReceiptVerifyURL: String {
+        case Production = "https://buy.itunes.apple.com/verifyReceipt"
+        case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
+    }
 
     static var URL: NSURL? {
         return NSBundle.mainBundle().appStoreReceiptURL

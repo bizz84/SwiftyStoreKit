@@ -110,6 +110,12 @@ func refreshReceipt() {
 }
 ```
 
+When using auto-renewable subscriptions, the shared secret can be specified like so:
+
+```
+SwiftyStoreKit.verifyReceipt(password: "your_shared_secret")
+```
+
 ### Verify Purchase
 
 ```swift
@@ -230,6 +236,10 @@ The user can background the hosting application and change the Apple ID used wit
 
 
 ## Changelog
+
+#### Version 0.3.0
+
+* Fixed the `verifyReceipt()` method to use production environment by default. This falls back to the test environment if the receipt is a sandbox receipt.
 
 #### Version 0.2.10
 

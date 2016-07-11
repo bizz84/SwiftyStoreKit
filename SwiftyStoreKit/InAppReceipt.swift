@@ -138,12 +138,6 @@ public enum ReceiptInfoField: String {
     }
 }
 
-// URL used to verify remotely receipt
-public enum ReceiptVerifyURL: String {
-    case Production = "https://buy.itunes.apple.com/verifyReceipt"
-    case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
-}
-
 #if os(OSX)
     public enum ReceiptExitCode: Int32 {
         // If validation fails in OS X, call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
@@ -153,6 +147,12 @@ public enum ReceiptVerifyURL: String {
 
 // MARK - receipt mangement
 internal class InAppReceipt {
+
+    // URL used to verify remotely receipt
+    enum ReceiptVerifyURL: String {
+        case Production = "https://buy.itunes.apple.com/verifyReceipt"
+        case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
+    }
 
     static var URL: NSURL? {
         return NSBundle.mainBundle().appStoreReceiptURL
@@ -173,13 +173,13 @@ internal class InAppReceipt {
     // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
    /**
-    *  - Parameter receiptVerifyURL: receipt verify url (default: Test)
+    *  - Parameter receiptVerifyURL: receipt verify url (default: Production)
     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
     *  - Parameter session: the session used to make remote call.
     *  - Parameter completion: handler for result
     */
     class func verify(
-        receiptVerifyURL url: ReceiptVerifyURL = .Test,
+        receiptVerifyURL url: ReceiptVerifyURL = .Production,
         password autoRenewPassword: String? = nil,
         session: NSURLSession = NSURLSession.sharedSession(),
         completion:(result: SwiftyStoreKit.VerifyReceiptResult) -> ()) {
@@ -234,12 +234,29 @@ internal class InAppReceipt {
 
                 // get status from info
                 if let status = receiptInfo["status"] as? Int {
+                    /*
+                     * http://stackoverflow.com/questions/16187231/how-do-i-know-if-an-in-app-purchase-receipt-comes-from-the-sandbox
+                     * How do I verify my receipt (iOS)?
+                     * Always verify your receipt first with the production URL; proceed to verify
+                     * with the sandbox URL if you receive a 21007 status code. Following this
+                     * approach ensures that you do not have to switch between URLs while your
+                     * application is being tested or reviewed in the sandbox or is live in the
+                     * App Store.
+
+                     * Note: The 21007 status code indicates that this receipt is a sandbox receipt,
+                     * but it was sent to the production service for verification.
+                     */
                     let receiptStatus = ReceiptStatus(rawValue: status) ?? ReceiptStatus.Unknown
-                    if receiptStatus.isValid {
-                        completion(result: .Success(receipt: receiptInfo))
+                    if case .TestReceipt = receiptStatus {
+                        verify(receiptVerifyURL: .Test, password: autoRenewPassword, session: session, completion: completion)
                     }
                     else {
-                        completion(result: .Error(error: .ReceiptInvalid(receipt: receiptInfo, status: receiptStatus)))
+                        if receiptStatus.isValid {
+                            completion(result: .Success(receipt: receiptInfo))
+                        }
+                        else {
+                            completion(result: .Error(error: .ReceiptInvalid(receipt: receiptInfo, status: receiptStatus)))
+                        }
                     }
                 }
                 else {

@@ -25,7 +25,7 @@
 
 import StoreKit
 
-extension PaymentTransactionState {
+extension SKPaymentTransactionState {
     
     var stringValue: String {
         switch self {
@@ -74,11 +74,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
         
         for transaction in transactions {
             
-            #if os(iOS) || os(tvOS)
-                let transactionState = transaction.transactionState
-            #elseif os(OSX)
-                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
-            #endif
+            let transactionState = transaction.transactionState
 
             if transactionState != .purchasing {
                 

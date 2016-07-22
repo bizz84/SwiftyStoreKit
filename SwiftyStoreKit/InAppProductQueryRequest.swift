@@ -73,22 +73,11 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     func requestDidFinish(_ request: SKRequest) {
         
     }
-    // MARK: - missing SKPaymentTransactionState on OSX
-    #if os(iOS) || os(tvOS)
+
     func request(_ request: SKRequest, didFailWithError error: NSError) {
         requestFailed(error)
     }
-    #elseif os(OSX)
-    func request(request: SKRequest, didFailWithError error: NSError?) {
-        if let notNilError = error {
-            requestFailed(notNilError)
-        }
-        else {
-            let message = "Query failed for request: \(request.debugDescription)"
-            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ]))
-        }
-    }
-    #endif
+
     func requestFailed(_ error: NSError){
         DispatchQueue.main.async {
             self.callback(result: SwiftyStoreKit.RetrieveResults(retrievedProducts: [],

@@ -35,7 +35,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     
     typealias RequestCallback = (results: [TransactionResult]) -> ()
     private let callback: RequestCallback
-    private var purchases : [PaymentTransactionState: [String]] = [:]
+    private var purchases : [SKPaymentTransactionState: [String]] = [:]
 
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
@@ -103,11 +103,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 isPurchaseRequest = true
             }
 
-            #if os(iOS) || os(tvOS)
-                let transactionState = transaction.transactionState
-            #elseif os(OSX)
-                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
-            #endif
+            let transactionState = transaction.transactionState
 
             switch transactionState {
             case .purchased:

@@ -82,7 +82,7 @@ public class SwiftyStoreKit {
     }
     public struct CompletedTransaction {
         public let productId: String
-        public let transactionState: PaymentTransactionState
+        public let transactionState: SKPaymentTransactionState
     }
 
     public enum InternalErrorCode: Int {

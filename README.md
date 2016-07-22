@@ -200,6 +200,19 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
+## Swift 3.0
+
+Swift 3.0 support is currently available on the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0) and compiles correctly as of Xcode 8 beta 3.
+
+Swift 2.2 compatibility is preserved on the master branch. Once Xcode 8 is officially released:
+
+* the master branch will be renamed to `swift-2.2`
+* the `swift-3.0` branch will be renamed to `master`
+
+As for versioning:
+
+* Swift 3.0 work will be tagged as version `0.5.x`
+* Swift 2.2 work will be tagged as version `0.3.x`
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.

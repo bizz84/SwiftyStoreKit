@@ -31,7 +31,7 @@ class NetworkActivityIndicatorManager: NSObject {
     class func networkOperationStarted() {
         
         if loadingCount == 0 {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+            UIApplication.shared().isNetworkActivityIndicatorVisible = true
         }
         loadingCount += 1
     }
@@ -41,7 +41,7 @@ class NetworkActivityIndicatorManager: NSObject {
             loadingCount -= 1
         }
         if loadingCount == 0 {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+            UIApplication.shared().isNetworkActivityIndicatorVisible = false
         }
     }
 }

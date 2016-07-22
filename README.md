@@ -12,6 +12,7 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
+#### NOTE: Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).
 
 ### Preview
 

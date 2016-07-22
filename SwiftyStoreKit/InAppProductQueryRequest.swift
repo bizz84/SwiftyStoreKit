@@ -41,27 +41,27 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         request.delegate = self
     }
     
-    class func startQuery(productIds: Set<String>, callback: RequestCallback) -> InAppProductQueryRequest {
+    class func startQuery(_ productIds: Set<String>, callback: RequestCallback) -> InAppProductQueryRequest {
         let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
         request.start()
         return request
     }
 
     func start() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
             self.request.start()
         }
     }
     func cancel() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
             self.request.cancel()
         }
     }
     
     // MARK: SKProductsRequestDelegate
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             
             let retrievedProducts = Set<SKProduct>(response.products ?? [])
             let invalidProductIDs = Set<String>(response.invalidProductIdentifiers ?? [])
@@ -70,12 +70,12 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         }
     }
     
-    func requestDidFinish(request: SKRequest) {
+    func requestDidFinish(_ request: SKRequest) {
         
     }
     // MARK: - missing SKPaymentTransactionState on OSX
     #if os(iOS) || os(tvOS)
-    func request(request: SKRequest, didFailWithError error: NSError) {
+    func request(_ request: SKRequest, didFailWithError error: NSError) {
         requestFailed(error)
     }
     #elseif os(OSX)
@@ -89,8 +89,8 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         }
     }
     #endif
-    func requestFailed(error: NSError){
-        dispatch_async(dispatch_get_main_queue()) {
+    func requestFailed(_ error: NSError){
+        DispatchQueue.main.async {
             self.callback(result: SwiftyStoreKit.RetrieveResults(retrievedProducts: [],
                 invalidProductIDs: [], error: error))
         }

@@ -29,11 +29,11 @@ extension PaymentTransactionState {
     
     var stringValue: String {
         switch self {
-        case Purchasing: return "Purchasing"
-        case Purchased: return "Purchased"
-        case Failed: return "Failed"
-        case Restored: return "Restored"
-        case Deferred: return "Deferred"
+        case purchasing: return "Purchasing"
+        case purchased: return "Purchased"
+        case failed: return "Failed"
+        case restored: return "Restored"
+        case deferred: return "Deferred"
         }
     }
 }
@@ -45,11 +45,11 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     typealias TransactionsCallback = (completedTransactions: [SwiftyStoreKit.CompletedTransaction]) -> ()
     
     var paymentQueue: SKPaymentQueue {
-        return SKPaymentQueue.defaultQueue()
+        return SKPaymentQueue.default()
     }
 
     deinit {
-        paymentQueue.removeTransactionObserver(self)
+        paymentQueue.remove(self)
     }
 
     let callback: TransactionsCallback
@@ -58,10 +58,10 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     
         self.callback = callback
         super.init()
-        paymentQueue.addTransactionObserver(self)
+        paymentQueue.add(self)
     }
 
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         if callbackCalled {
             return
@@ -80,7 +80,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
                 let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
             #endif
 
-            if transactionState != .Purchasing {
+            if transactionState != .purchasing {
                 
                 let completedTransaction = SwiftyStoreKit.CompletedTransaction(productId: transaction.payment.productIdentifier, transactionState: transactionState)
                 

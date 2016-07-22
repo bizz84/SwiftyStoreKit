@@ -28,12 +28,12 @@ import SwiftyStoreKit
 
 enum RegisteredPurchase : String {
     
-    case Purchase1 = "purchase1"
-    case Purchase2 = "purchase2"
-    case NonConsumablePurchase = "nonConsumablePurchase"
-    case ConsumablePurchase = "consumablePurchase"
-    case AutoRenewablePurchase = "autoRenewablePurchase"
-    case NonRenewingPurchase = "nonRenewingPurchase"
+    case purchase1 = "purchase1"
+    case purchase2 = "purchase2"
+    case nonConsumablePurchase = "nonConsumablePurchase"
+    case consumablePurchase = "consumablePurchase"
+    case autoRenewablePurchase = "autoRenewablePurchase"
+    case nonRenewingPurchase = "nonRenewingPurchase"
     
 }
 
@@ -41,8 +41,8 @@ class ViewController: NSViewController {
 
     let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
     
-    let Purchase1 = RegisteredPurchase.Purchase1
-    let Purchase2 = RegisteredPurchase.AutoRenewablePurchase
+    let Purchase1 = RegisteredPurchase.purchase1
+    let Purchase2 = RegisteredPurchase.autoRenewablePurchase
 
     // MARK: actions
     @IBAction func getInfo1(_ sender: AnyObject?) {
@@ -110,7 +110,7 @@ class ViewController: NSViewController {
                 let productId = self.AppBundleId + "." + purchase.rawValue
                 
                 // Specific behaviour for AutoRenewablePurchase
-                if purchase == .AutoRenewablePurchase {
+                if purchase == .autoRenewablePurchase {
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
                         productId: productId,
                         inReceipt: receipt,

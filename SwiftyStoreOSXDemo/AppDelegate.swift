@@ -28,7 +28,7 @@ import SwiftyStoreKit
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
-    func applicationDidFinishLaunching(aNotification: NSNotification) {
+    func applicationDidFinishLaunching(_ aNotification: Notification) {
 
         completeIAPTransactions()
     }
@@ -39,7 +39,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             
             for completedTransaction in completedTransactions {
                 
-                if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+                if completedTransaction.transactionState == .purchased || completedTransaction.transactionState == .restored {
                     
                     print("purchased: \(completedTransaction.productId)")
                 }

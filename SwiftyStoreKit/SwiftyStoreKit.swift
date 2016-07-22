@@ -222,7 +222,7 @@ public class SwiftyStoreKit {
     #elseif os(OSX)
      // Call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
     public class func refreshReceipt() {
-         exit(ReceiptExitCode.NotValid.rawValue)
+         exit(ReceiptExitCode.notValid.rawValue)
     }
     #endif
 

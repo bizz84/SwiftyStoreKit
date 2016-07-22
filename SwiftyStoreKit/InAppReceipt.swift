@@ -141,7 +141,7 @@ public enum ReceiptInfoField: String {
 #if os(OSX)
     public enum ReceiptExitCode: Int32 {
         // If validation fails in OS X, call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
-        case NotValid = 173
+        case notValid = 173
     }
 #endif
 

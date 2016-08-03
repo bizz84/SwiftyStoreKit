@@ -29,11 +29,11 @@ extension SKPaymentTransactionState {
     
     var stringValue: String {
         switch self {
-        case purchasing: return "Purchasing"
-        case purchased: return "Purchased"
-        case failed: return "Failed"
-        case restored: return "Restored"
-        case deferred: return "Deferred"
+        case .purchasing: return "Purchasing"
+        case .purchased: return "Purchased"
+        case .failed: return "Failed"
+        case .restored: return "Restored"
+        case .deferred: return "Deferred"
         }
     }
 }

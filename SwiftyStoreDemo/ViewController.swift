@@ -154,7 +154,7 @@ class ViewController: UIViewController {
         }
     }
 
-    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
 }

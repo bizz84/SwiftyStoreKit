@@ -384,7 +384,9 @@
 					};
 					6502F5FD1B985833004E342D = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = U3DJQK3H6X;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Automatic;
 					};
 					6502F62C1B985C40004E342D = {
 						CreatedOnToolsVersion = 7.0;
@@ -706,6 +708,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = U3DJQK3H6X;
 				INFOPLIST_FILE = SwiftyStoreDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -721,6 +725,8 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = U3DJQK3H6X;
 				INFOPLIST_FILE = SwiftyStoreDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

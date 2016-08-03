@@ -50,15 +50,15 @@ extension SwiftyStoreKit {
 }
 
 // Error when managing receipt
-public enum ReceiptError: ErrorProtocol {
+public enum ReceiptError: Swift.Error {
     // No receipt data
     case noReceiptData
     // No data receice
     case noRemoteData
     // Error when encoding HTTP body into JSON
-    case requestBodyEncodeError(error: ErrorProtocol)
+    case requestBodyEncodeError(error: Swift.Error)
     // Error when proceeding request
-    case networkError(error: ErrorProtocol)
+    case networkError(error: Swift.Error)
     // Error when decoding response
     case jsonDecodeError(string: String?)
     // Receive invalid - bad status returned

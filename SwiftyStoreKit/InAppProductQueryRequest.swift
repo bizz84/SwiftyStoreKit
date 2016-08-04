@@ -48,12 +48,12 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func start() {
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
+        DispatchQueue.global(qos: .default).async {
             self.request.start()
         }
     }
     func cancel() {
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
+        DispatchQueue.global(qos: .default).async {
             self.request.cancel()
         }
     }
@@ -74,7 +74,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         
     }
 
-    func request(_ request: SKRequest, didFailWithError error: NSError) {
+    func request(_ request: SKRequest, didFailWithError error: Error) {
         requestFailed(error)
     }
 

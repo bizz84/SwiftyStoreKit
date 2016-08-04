@@ -75,13 +75,14 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         }
         let payment = SKMutablePayment(product: product)
         payment.applicationUsername = applicationUsername
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
+        
+        DispatchQueue.global(qos: .default).async {
             self.paymentQueue.add(payment)
         }
     }
     private func startRestorePurchases() {
         
-        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault).async {
+        DispatchQueue.global(qos: .default).async {
             self.paymentQueue.restoreCompletedTransactions()
         }
     }
@@ -149,7 +150,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         
     }
     
-    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: NSError) {
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         
         DispatchQueue.main.async {
             self.callback(results: [.failed(error: error)])

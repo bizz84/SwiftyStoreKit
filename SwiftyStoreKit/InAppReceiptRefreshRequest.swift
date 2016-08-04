@@ -69,7 +69,7 @@ import Foundation
             }*/
             callback(result: .success)
         }
-        func request(_ request: SKRequest, didFailWithError error: NSError) {
+        func request(_ request: SKRequest, didFailWithError error: Error) {
             // XXX could here check domain and error code to return typed exception
             callback(result: .error(e: error))
         }

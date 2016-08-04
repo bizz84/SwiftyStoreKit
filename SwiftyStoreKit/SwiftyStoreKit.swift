@@ -74,11 +74,11 @@ public class SwiftyStoreKit {
     }
     public struct RestoreResults {
         public let restoredProductIds: [String]
-        public let restoreFailedProducts: [(ErrorProtocol, String?)]
+        public let restoreFailedProducts: [(Swift.Error, String?)]
     }
     public enum RefreshReceiptResult {
         case success
-        case error(error: ErrorProtocol)
+        case error(error: Swift.Error)
     }
     public struct CompletedTransaction {
         public let productId: String
@@ -261,7 +261,7 @@ public class SwiftyStoreKit {
     
     private func processRestoreResults(_ results: [InAppProductPurchaseRequest.TransactionResult]) -> RestoreResults {
         var restoredProductIds: [String] = []
-        var restoreFailedProducts: [(ErrorProtocol, String?)] = []
+        var restoreFailedProducts: [(Swift.Error, String?)] = []
         for result in results {
             switch result {
             case .purchased(let productId):

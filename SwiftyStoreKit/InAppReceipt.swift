@@ -224,6 +224,12 @@ internal class InAppReceipt {
                     completion(result:.Error(error: .NoRemoteData))
                     return
                 }
+                
+                // data is empty
+                if safeData.length == 0 {
+                    completion(result:.Error(error: .NoRemoteData))
+                    return
+                }
 
                 // cannot decode data
                 guard let receiptInfo = try? NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? ReceiptInfo ?? [:] else {

@@ -30,10 +30,10 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     enum TransactionResult {
         case purchased(productId: String)
         case restored(productId: String)
-        case failed(error: NSError)
+        case failed(error: Error)
     }
     
-    typealias RequestCallback = (results: [TransactionResult]) -> ()
+    typealias RequestCallback = ([TransactionResult]) -> ()
     private let callback: RequestCallback
     private var purchases : [SKPaymentTransactionState: [String]] = [:]
 
@@ -70,7 +70,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     private func startPayment(_ product: SKProduct, applicationUsername: String = "") {
         guard let _ = product._productIdentifier else {
             let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Missing product identifier" ])
-            callback(results: [ TransactionResult.failed(error: error) ])
+            callback([TransactionResult.failed(error: error)])
             return
         }
         let payment = SKMutablePayment(product: product)
@@ -141,7 +141,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         }
         if transactionResults.count > 0 {
             DispatchQueue.main.async {
-                self.callback(results: transactionResults)
+                self.callback(transactionResults)
             }
         }
     }
@@ -153,7 +153,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         
         DispatchQueue.main.async {
-            self.callback(results: [.failed(error: error)])
+            self.callback([.failed(error: error)])
         }
     }
 
@@ -161,7 +161,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         // This method will be called after all purchases have been restored (includes the case of no purchases)
         guard let restored = purchases[.restored], restored.count > 0 else {
             
-            self.callback(results: [])
+            self.callback([])
             return
         }
     }

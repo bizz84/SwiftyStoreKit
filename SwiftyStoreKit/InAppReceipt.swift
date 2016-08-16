@@ -182,11 +182,11 @@ internal class InAppReceipt {
         receiptVerifyURL url: ReceiptVerifyURL = .Production,
         password autoRenewPassword: String? = nil,
         session: URLSession = URLSession.shared,
-        completion:(result: SwiftyStoreKit.VerifyReceiptResult) -> ()) {
+        completion: @escaping (SwiftyStoreKit.VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.
             guard let base64EncodedString = self.base64EncodedString else {
-                completion(result: .error(error: .noReceiptData))
+                completion(.error(error: .noReceiptData))
                 return
             }
 
@@ -206,7 +206,7 @@ internal class InAppReceipt {
             do {
                 storeRequest.httpBody = try JSONSerialization.data(withJSONObject: requestContents, options: [])
             } catch let e {
-                completion(result: .error(error: .requestBodyEncodeError(error: e)))
+                completion(.error(error: .requestBodyEncodeError(error: e)))
                 return
             }
 
@@ -215,20 +215,20 @@ internal class InAppReceipt {
 
                 // there is an error
                 if let networkError = error {
-                    completion(result: .error(error: .networkError(error: networkError)))
+                    completion(.error(error: .networkError(error: networkError)))
                     return
                 }
 
                 // there is no data
                 guard let safeData = data else {
-                    completion(result:.error(error: .noRemoteData))
+                    completion(.error(error: .noRemoteData))
                     return
                 }
 
                 // cannot decode data
                 guard let receiptInfo = try? JSONSerialization.jsonObject(with: data!, options: .mutableLeaves) as? ReceiptInfo ?? [:] else {
                     let jsonStr = String(data: safeData, encoding: String.Encoding.utf8)
-                    completion(result: .error(error: .jsonDecodeError(string: jsonStr)))
+                    completion(.error(error: .jsonDecodeError(string: jsonStr)))
                     return
                 }
 
@@ -252,15 +252,15 @@ internal class InAppReceipt {
                     }
                     else {
                         if receiptStatus.isValid {
-                            completion(result: .success(receipt: receiptInfo))
+                            completion(.success(receipt: receiptInfo))
                         }
                         else {
-                            completion(result: .error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
+                            completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
                         }
                     }
                 }
                 else {
-                    completion(result: .error(error: .receiptInvalid(receipt: receiptInfo, status: ReceiptStatus.none)))
+                    completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: ReceiptStatus.none)))
                 }
             }
             task.resume()

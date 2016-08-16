@@ -59,11 +59,11 @@ public class SwiftyStoreKit {
     public struct RetrieveResults {
         public let retrievedProducts: Set<SKProduct>
         public let invalidProductIDs: Set<String>
-        public let error: NSError?
+        public let error: Error?
     }
 
     public enum PurchaseError {
-        case failed(error: NSError)
+        case failed(error: Error)
         case invalidProductId(productId: String)
         case noProductIdentifier
         case paymentNotAllowed
@@ -78,7 +78,7 @@ public class SwiftyStoreKit {
     }
     public enum RefreshReceiptResult {
         case success
-        case error(error: Swift.Error)
+        case error(error: Error)
     }
     public struct CompletedTransaction {
         public let productId: String
@@ -101,19 +101,19 @@ public class SwiftyStoreKit {
         return sharedInstance.inflightPurchases.count > 0 || sharedInstance.restoreRequest != nil
     }
     
-    public class func completeTransactions(_ completion: (completedTransactions: [CompletedTransaction]) -> ()) {
+    public class func completeTransactions(_ completion: @escaping ([CompletedTransaction]) -> ()) {
         sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(callback: completion)
     }
     
     // MARK: Public methods
-    public class func retrieveProductsInfo(_ productIds: Set<String>, completion: (result: RetrieveResults) -> ()) {
+    public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
         
         guard let products = sharedInstance.store.allProductsMatching(productIds) else {
             
             sharedInstance.requestProducts(productIds, completion: completion)
             return
         }
-        completion(result: RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
+        completion(RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
     }
     
     /**
@@ -122,7 +122,7 @@ public class SwiftyStoreKit {
      *  - Parameter applicationUsername: an opaque identifier for the user’s account on your system
      *  - Parameter completion: handler for result
      */
-    public class func purchaseProduct(_ productId: String, applicationUsername: String = "", completion: (result: PurchaseResult) -> ()) {
+    public class func purchaseProduct(_ productId: String, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
         
         if let product = sharedInstance.store.products[productId] {
             sharedInstance.purchase(product: product, applicationUsername: applicationUsername, completion: completion)
@@ -133,22 +133,22 @@ public class SwiftyStoreKit {
                     sharedInstance.purchase(product: product, applicationUsername: applicationUsername, completion: completion)
                 }
                 else if let error = result.error {
-                    completion(result: .error(error: .failed(error: error)))
+                    completion(.error(error: .failed(error: error)))
                 }
                 else if let invalidProductId = result.invalidProductIDs.first {
-                    completion(result: .error(error: .invalidProductId(productId: invalidProductId)))
+                    completion(.error(error: .invalidProductId(productId: invalidProductId)))
                 }
             }
         }
     }
     
-    public class func restorePurchases(_ completion: (results: RestoreResults) -> ()) {
+    public class func restorePurchases(_ completion: @escaping (RestoreResults) -> ()) {
 
         sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { results in
         
             sharedInstance.restoreRequest = nil
             let results = sharedInstance.processRestoreResults(results)
-            completion(results: results)
+            completion(results)
         }
     }
 
@@ -161,11 +161,11 @@ public class SwiftyStoreKit {
     public class func verifyReceipt(
         password: String? = nil,
         session: URLSession = URLSession.shared,
-        completion:(result: VerifyReceiptResult) -> ()) {
+        completion:@escaping (VerifyReceiptResult) -> ()) {
         InAppReceipt.verify(receiptVerifyURL: .Production, password: password, session: session) { result in
          
             DispatchQueue.main.async {
-                completion(result: result)
+                completion(result)
             }
         }
     }
@@ -202,7 +202,7 @@ public class SwiftyStoreKit {
 
     #if os(iOS) || os(tvOS)
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
-    public class func refreshReceipt(_ receiptProperties: [String : AnyObject]? = nil, completion: (result: RefreshReceiptResult) -> ()) {
+    public class func refreshReceipt(_ receiptProperties: [String : AnyObject]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
         sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
 
             sharedInstance.receiptRefreshRequest = nil
@@ -210,12 +210,12 @@ public class SwiftyStoreKit {
             switch result {
             case .success:
                 if InAppReceipt.data == nil {
-                    completion(result: .error(error: ReceiptError.noReceiptData))
+                    completion(.error(error: ReceiptError.noReceiptData))
                 } else {
-                    completion(result: .success)
+                    completion(.success)
                 }
             case .error(let e):
-                completion(result: .error(error: e))
+                completion(.error(error: e))
             }
         }
     }
@@ -227,13 +227,13 @@ public class SwiftyStoreKit {
     #endif
 
     // MARK: private methods
-    private func purchase(product: SKProduct, applicationUsername: String = "", completion: (result: PurchaseResult) -> ()) {
+    private func purchase(product: SKProduct, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
         guard SwiftyStoreKit.canMakePayments else {
-            completion(result: .error(error: .paymentNotAllowed))
+            completion(.error(error: .paymentNotAllowed))
             return
         }
         guard let productIdentifier = product._productIdentifier else {
-            completion(result: .error(error: .noProductIdentifier))
+            completion(.error(error: .noProductIdentifier))
             return
         }
 
@@ -243,7 +243,7 @@ public class SwiftyStoreKit {
             
             if let purchasedProductTransaction = results.first {
                 let returnValue = self.processPurchaseResult(purchasedProductTransaction)
-                completion(result: returnValue)
+                completion(returnValue)
             }
         }
     }
@@ -275,7 +275,7 @@ public class SwiftyStoreKit {
         return RestoreResults(restoredProductIds: restoredProductIds, restoreFailedProducts: restoreFailedProducts)
     }
     
-    private func requestProducts(_ productIds: Set<String>, completion: (result: RetrieveResults) -> ()) {
+    private func requestProducts(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
         
         inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
         
@@ -283,7 +283,7 @@ public class SwiftyStoreKit {
             for product in result.retrievedProducts {
                 self.store.addProduct(product)
             }
-            completion(result: result)
+            completion(result)
         }
     }
     

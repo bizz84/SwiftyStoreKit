@@ -49,7 +49,10 @@ If there are any pending transactions at this point, these will be reported by t
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
     if let product = result.retrievedProducts.first {
-        let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)
+        let numberFormatter = NSNumberFormatter()
+        numberFormatter.locale = product.priceLocale
+        numberFormatter.numberStyle = .CurrencyStyle
+        let priceString = numberFormatter.stringFromNumber(product.price ?? 0) ?? ""
         print("Product: \(product.localizedDescription), price: \(priceString)")
     }
     else if let invalidProductId = result.invalidProductIDs.first {

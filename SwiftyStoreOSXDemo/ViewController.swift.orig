@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  SwiftyStoreKit
+//  SwiftStoreOSXDemo
 //
-//  Created by Andrea Bizzotto on 03/09/2015.
+//  Created by phimage on 22/12/15.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
+import Cocoa
 import StoreKit
 import SwiftyStoreKit
 
@@ -34,90 +34,79 @@ enum RegisteredPurchase : String {
     case consumablePurchase = "consumablePurchase"
     case autoRenewablePurchase = "autoRenewablePurchase"
     case nonRenewingPurchase = "nonRenewingPurchase"
+    
 }
 
+class ViewController: NSViewController {
 
-class ViewController: UIViewController {
-
-    let AppBundleId = "com.musevisions.iOS.SwiftyStoreKit"
+    let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
     
     let Purchase1 = RegisteredPurchase.purchase1
     let Purchase2 = RegisteredPurchase.autoRenewablePurchase
-    
+
     // MARK: actions
-    @IBAction func getInfo1() {
+    @IBAction func getInfo1(_ sender: AnyObject?) {
         getInfo(Purchase1)
     }
-    @IBAction func purchase1() {
+    @IBAction func purchase1(_ sender: AnyObject?) {
         purchase(Purchase1)
     }
-    @IBAction func verifyPurchase1() {
+    @IBAction func verifyPurchase1(_ sender: AnyObject?) {
         verifyPurchase(Purchase1)
     }
-    @IBAction func getInfo2() {
+
+    @IBAction func getInfo2(_ sender: AnyObject?) {
         getInfo(Purchase2)
     }
-    @IBAction func purchase2() {
+    @IBAction func purchase2(_ sender: AnyObject?) {
         purchase(Purchase2)
     }
-    @IBAction func verifyPurchase2() {
+    @IBAction func verifyPurchase2(_ sender: AnyObject?) {
         verifyPurchase(Purchase2)
     }
 
     func getInfo(_ purchase: RegisteredPurchase) {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+
         SwiftyStoreKit.retrieveProductsInfo([AppBundleId + "." + purchase.rawValue]) { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
+
             self.showAlert(self.alertForProductRetrievalInfo(result))
         }
     }
-    
+
     func purchase(_ purchase: RegisteredPurchase) {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+
         SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
-            
+
             self.showAlert(self.alertForPurchaseResult(result))
         }
     }
-    @IBAction func restorePurchases() {
-        
-        NetworkActivityIndicatorManager.networkOperationStarted()
+
+    @IBAction func restorePurchases(_ sender: AnyObject?) {
+
         SwiftyStoreKit.restorePurchases() { results in
-            NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForRestorePurchases(results))
         }
     }
 
-    @IBAction func verifyReceipt() {
+    @IBAction func verifyReceipt(_ sender: AnyObject?) {
 
-        NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.verifyReceipt() { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
 
-            self.showAlert(self.alertForVerifyReceipt(result))
+            self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
-            if case .error(let error) = result {
-                if case .noReceiptData = error {
-                    self.refreshReceipt()
-                }
+                SwiftyStoreKit.refreshReceipt()
             }
         }
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
-     
-        NetworkActivityIndicatorManager.networkOperationStarted()
+        
         SwiftyStoreKit.verifyReceipt() { result in
-            NetworkActivityIndicatorManager.networkOperationFinished()
             
             switch result {
             case .success(let receipt):
-              
+                
                 let productId = self.AppBundleId + "." + purchase.rawValue
                 
                 // Specific behaviour for AutoRenewablePurchase
@@ -136,54 +125,52 @@ class ViewController: UIViewController {
                     )
                     self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 }
-                
-            case .error(let error):
+                            
+            case .error(_):
                 self.showAlert(self.alertForVerifyReceipt(result))
-                if case .noReceiptData = error {
-                    self.refreshReceipt()
-                }
             }
         }
     }
+    
 
-    func refreshReceipt() {
 
-        SwiftyStoreKit.refreshReceipt { (result) -> () in
-
-            self.showAlert(self.alertForRefreshReceipt(result))
-        }
-    }
-
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
 }
 
 // MARK: User facing alerts
 extension ViewController {
     
-    func alertWithTitle(_ title: String, message: String) -> UIAlertController {
+    func alertWithTitle(_ title: String, message: String) -> NSAlert {
         
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        let alert: NSAlert = NSAlert()
+        alert.messageText = title
+        alert.informativeText = message
+        alert.alertStyle = NSAlertStyle.informational
         return alert
     }
-    
-    func showAlert(_ alert: UIAlertController) {
-        guard let _ = self.presentedViewController else {
-            self.present(alert, animated: true, completion: nil)
-            return
+    func showAlert(_ alert: NSAlert, handler: ((NSModalResponse) -> Void)? = nil) {
+        
+        if let window = NSApplication.shared().keyWindow {
+            alert.beginSheetModal(for: window)  { (response: NSModalResponse) in
+                handler?(response)
+            }
+        } else {
+            let response = alert.runModal()
+            handler?(response)
         }
     }
 
-    func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> UIAlertController {
+    func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> NSAlert {
         
         if let product = result.retrievedProducts.first {
+<<<<<<< HEAD
+            let priceString = NumberFormatter.localizedString(from: product.price ?? 0, number: .currency)
+=======
             let numberFormatter = NSNumberFormatter()
             numberFormatter.locale = product.priceLocale
             numberFormatter.numberStyle = .CurrencyStyle
             let priceString = numberFormatter.stringFromNumber(product.price ?? 0) ?? ""
-            return alertWithTitle(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
+>>>>>>> e479b888a82f58b456df6df13e7ec260fbc3a726
+            return alertWithTitle(product.localizedTitle ?? "no title", message: "\(product.localizedDescription) - \(priceString)")
         }
         else if let invalidProductId = result.invalidProductIDs.first {
             return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
@@ -193,8 +180,9 @@ extension ViewController {
             return alertWithTitle("Could not retrieve product info", message: errorString)
         }
     }
+    
+    func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> NSAlert {
 
-    func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> UIAlertController {
         switch result {
         case .success(let productId):
             print("Purchase Success: \(productId)")
@@ -202,23 +190,23 @@ extension ViewController {
         case .error(let error):
             print("Purchase Failed: \(error)")
             switch error {
-                case .failed(let error):
-                    if error.domain == SKErrorDomain {
-                        return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-                    }
-                    return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
-                case .invalidProductId(let productId):
-                    return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-                case .noProductIdentifier:
-                    return alertWithTitle("Purchase failed", message: "Product not found")
-                case .paymentNotAllowed:
-                    return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
+            case .failed(let error):
+                if error.domain == SKErrorDomain {
+                    return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
+                }
+                return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .invalidProductId(let productId):
+                return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
+            case .noProductIdentifier:
+                return alertWithTitle("Purchase failed", message: "Product not found")
+            case .paymentNotAllowed:
+                return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
             }
         }
     }
     
-    func alertForRestorePurchases(_ results: SwiftyStoreKit.RestoreResults) -> UIAlertController {
-
+    func alertForRestorePurchases(_ results: SwiftyStoreKit.RestoreResults) -> NSAlert {
+        
         if results.restoreFailedProducts.count > 0 {
             print("Restore Failed: \(results.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
@@ -232,27 +220,21 @@ extension ViewController {
             return alertWithTitle("Nothing to restore", message: "No previous purchases were found")
         }
     }
-
-
-    func alertForVerifyReceipt(_ result: SwiftyStoreKit.VerifyReceiptResult) -> UIAlertController {
+    
+    func alertForVerifyReceipt(_ result: SwiftyStoreKit.VerifyReceiptResult) -> NSAlert {
 
         switch result {
         case .success(let receipt):
             print("Verify receipt Success: \(receipt)")
-            return alertWithTitle("Receipt verified", message: "Receipt verified remotly")
+            return self.alertWithTitle("Receipt verified", message: "Receipt verified remotly")
         case .error(let error):
             print("Verify receipt Failed: \(error)")
-            switch (error) {
-            case .noReceiptData :
-                return alertWithTitle("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
-            default:
-                return alertWithTitle("Receipt verification", message: "Receipt verification failed")
-            }
+            return self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developer id to test and be outside of XCode")
         }
     }
-  
-    func alertForVerifySubscription(_ result: SwiftyStoreKit.VerifySubscriptionResult) -> UIAlertController {
     
+    func alertForVerifySubscription(_ result: SwiftyStoreKit.VerifySubscriptionResult) -> NSAlert {
+        
         switch result {
         case .purchased(let expiresDate):
             print("Product is valid until \(expiresDate)")
@@ -266,7 +248,8 @@ extension ViewController {
         }
     }
 
-    func alertForVerifyPurchase(_ result: SwiftyStoreKit.VerifyPurchaseResult) -> UIAlertController {
+
+    func alertForVerifyPurchase(_ result: SwiftyStoreKit.VerifyPurchaseResult) -> NSAlert {
         
         switch result {
         case .purchased:
@@ -277,17 +260,5 @@ extension ViewController {
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
-
-    func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> UIAlertController {
-        switch result {
-        case .success:
-            print("Receipt refresh Success")
-            return self.alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
-        case .error(let error):
-            print("Receipt refresh Failed: \(error)")
-            return self.alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
-        }
-    }
-
 }
 

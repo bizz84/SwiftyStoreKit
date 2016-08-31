@@ -42,7 +42,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     
     private var callbackCalled: Bool = false
         
-    typealias TransactionsCallback = (completedTransactions: [SwiftyStoreKit.CompletedTransaction]) -> ()
+    typealias TransactionsCallback = (_ completedTransactions: [SwiftyStoreKit.CompletedTransaction]) -> ()
     
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
@@ -89,6 +89,6 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
         }
         callbackCalled = true
 
-        callback(completedTransactions: completedTransactions)
+        callback(completedTransactions)
     }
 }

@@ -25,15 +25,15 @@
 
 import StoreKit
 
-extension PaymentTransactionState {
+extension SKPaymentTransactionState {
     
     var stringValue: String {
         switch self {
-        case Purchasing: return "Purchasing"
-        case Purchased: return "Purchased"
-        case Failed: return "Failed"
-        case Restored: return "Restored"
-        case Deferred: return "Deferred"
+        case .purchasing: return "Purchasing"
+        case .purchased: return "Purchased"
+        case .failed: return "Failed"
+        case .restored: return "Restored"
+        case .deferred: return "Deferred"
         }
     }
 }
@@ -42,26 +42,26 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     
     private var callbackCalled: Bool = false
         
-    typealias TransactionsCallback = (completedTransactions: [SwiftyStoreKit.CompletedTransaction]) -> ()
+    typealias TransactionsCallback = ([SwiftyStoreKit.CompletedTransaction]) -> ()
     
     var paymentQueue: SKPaymentQueue {
-        return SKPaymentQueue.defaultQueue()
+        return SKPaymentQueue.default()
     }
 
     deinit {
-        paymentQueue.removeTransactionObserver(self)
+        paymentQueue.remove(self)
     }
 
     let callback: TransactionsCallback
     
-    init(callback: TransactionsCallback) {
+    init(callback: @escaping TransactionsCallback) {
     
         self.callback = callback
         super.init()
-        paymentQueue.addTransactionObserver(self)
+        paymentQueue.add(self)
     }
 
-    func paymentQueue(queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         if callbackCalled {
             return
@@ -74,13 +74,9 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
         
         for transaction in transactions {
             
-            #if os(iOS) || os(tvOS)
-                let transactionState = transaction.transactionState
-            #elseif os(OSX)
-                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
-            #endif
+            let transactionState = transaction.transactionState
 
-            if transactionState != .Purchasing {
+            if transactionState != .purchasing {
                 
                 let completedTransaction = SwiftyStoreKit.CompletedTransaction(productId: transaction.payment.productIdentifier, transactionState: transactionState)
                 
@@ -93,6 +89,6 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
         }
         callbackCalled = true
 
-        callback(completedTransactions: completedTransactions)
+        callback(completedTransactions)
     }
 }

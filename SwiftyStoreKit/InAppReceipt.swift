@@ -31,67 +31,67 @@ public typealias ReceiptInfo = [String: AnyObject]
 // MARK: - Enumeration
 extension SwiftyStoreKit {
     public enum VerifyReceiptResult {
-        case Success(receipt: ReceiptInfo)
-        case Error(error: ReceiptError)
+        case success(receipt: ReceiptInfo)
+        case error(error: ReceiptError)
     }
   
     // Result for Consumable and NonConsumable
     public enum VerifyPurchaseResult {
-        case Purchased
-        case NotPurchased
+        case purchased
+        case notPurchased
     }
   
     //  Result for Subscription
     public enum VerifySubscriptionResult {
-        case Purchased(expiryDate: NSDate)
-        case Expired(expiryDate: NSDate)
-        case NotPurchased
+        case purchased(expiryDate: Date)
+        case expired(expiryDate: Date)
+        case notPurchased
     }
 }
 
 // Error when managing receipt
-public enum ReceiptError: ErrorType {
+public enum ReceiptError: Swift.Error {
     // No receipt data
-    case NoReceiptData
+    case noReceiptData
     // No data receice
-    case NoRemoteData
+    case noRemoteData
     // Error when encoding HTTP body into JSON
-    case RequestBodyEncodeError(error: ErrorType)
+    case requestBodyEncodeError(error: Swift.Error)
     // Error when proceeding request
-    case NetworkError(error: ErrorType)
+    case networkError(error: Swift.Error)
     // Error when decoding response
-    case JSONDecodeError(string: String?)
+    case jsonDecodeError(string: String?)
     // Receive invalid - bad status returned
-    case ReceiptInvalid(receipt: ReceiptInfo, status: ReceiptStatus)
+    case receiptInvalid(receipt: ReceiptInfo, status: ReceiptStatus)
 }
 
 // Status code returned by remote server
 // see Table 2-1  Status codes
 public enum ReceiptStatus: Int {
     // Not decodable status
-    case Unknown = -2
+    case unknown = -2
     // No status returned
-    case None = -1
+    case none = -1
     // valid statu
-    case Valid = 0
+    case valid = 0
     // The App Store could not read the JSON object you provided.
-    case JSONNotReadable = 21000
+    case jsonNotReadable = 21000
     // The data in the receipt-data property was malformed or missing.
-    case MalformedOrMissingData = 21002
+    case malformedOrMissingData = 21002
     // The receipt could not be authenticated.
-    case ReceiptCouldNotBeAuthenticated = 21003
+    case receiptCouldNotBeAuthenticated = 21003
     // The shared secret you provided does not match the shared secret on file for your account.
-    case SecretNotMatching = 21004
+    case secretNotMatching = 21004
     // The receipt server is not currently available.
-    case ReceiptServerUnavailable = 21005
+    case receiptServerUnavailable = 21005
     // This receipt is valid but the subscription has expired. When this status code is returned to your server, the receipt data is also decoded and returned as part of the response.
-    case SubscriptionExpired = 21006
+    case subscriptionExpired = 21006
     //  This receipt is from the test environment, but it was sent to the production environment for verification. Send it to the test environment instead.
-    case TestReceipt = 21007
+    case testReceipt = 21007
     // This receipt is from the production environment, but it was sent to the test environment for verification. Send it to the production environment instead.
-    case ProductionEnvironment = 21008
+    case productionEnvironment = 21008
 
-    var isValid: Bool { return self == .Valid}
+    var isValid: Bool { return self == .valid}
 }
 
 // Receipt field as defined in : https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html#//apple_ref/doc/uid/TP40010573-CH106-SW1
@@ -141,7 +141,7 @@ public enum ReceiptInfoField: String {
 #if os(OSX)
     public enum ReceiptExitCode: Int32 {
         // If validation fails in OS X, call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
-        case NotValid = 173
+        case notValid = 173
     }
 #endif
 
@@ -154,12 +154,12 @@ internal class InAppReceipt {
         case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
     }
 
-    static var URL: NSURL? {
-        return NSBundle.mainBundle().appStoreReceiptURL
+    static var URL: Foundation.URL? {
+        return Bundle.main.appStoreReceiptURL
     }
 
-    static var data: NSData? {
-        if let receiptDataURL = URL, data = NSData(contentsOfURL: receiptDataURL) {
+    static var data: Data? {
+        if let receiptDataURL = URL, let data = try? Data(contentsOf: receiptDataURL) {
             return data
         }
         return nil
@@ -167,7 +167,7 @@ internal class InAppReceipt {
 
     // The base64 encoded receipt data.
     static var base64EncodedString: String? {
-        return data?.base64EncodedStringWithOptions([])
+        return data?.base64EncodedString(options: [])
     }
 
     // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
@@ -181,19 +181,19 @@ internal class InAppReceipt {
     class func verify(
         receiptVerifyURL url: ReceiptVerifyURL = .Production,
         password autoRenewPassword: String? = nil,
-        session: NSURLSession = NSURLSession.sharedSession(),
-        completion:(result: SwiftyStoreKit.VerifyReceiptResult) -> ()) {
+        session: URLSession = URLSession.shared,
+        completion: @escaping (SwiftyStoreKit.VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.
             guard let base64EncodedString = self.base64EncodedString else {
-                completion(result: .Error(error: .NoReceiptData))
+                completion(.error(error: .noReceiptData))
                 return
             }
 
             // Create request
-            let storeURL = NSURL(string: url.rawValue)! // safe (until no more)
-            let storeRequest = NSMutableURLRequest(URL: storeURL)
-            storeRequest.HTTPMethod = "POST"
+            let storeURL = Foundation.URL(string: url.rawValue)! // safe (until no more)
+            let storeRequest = NSMutableURLRequest(url: storeURL)
+            storeRequest.httpMethod = "POST"
 
 
             let requestContents :NSMutableDictionary = [ "receipt-data" : base64EncodedString]
@@ -204,31 +204,31 @@ internal class InAppReceipt {
 
             // Encore request body
             do {
-                storeRequest.HTTPBody = try NSJSONSerialization.dataWithJSONObject(requestContents, options: [])
+                storeRequest.httpBody = try JSONSerialization.data(withJSONObject: requestContents, options: [])
             } catch let e {
-                completion(result: .Error(error: .RequestBodyEncodeError(error: e)))
+                completion(.error(error: .requestBodyEncodeError(error: e)))
                 return
             }
 
             // Remote task
-            let task = session.dataTaskWithRequest(storeRequest) { data, response, error -> Void in
+            let task = session.dataTask(with: storeRequest as URLRequest) { data, response, error -> Void in
 
                 // there is an error
                 if let networkError = error {
-                    completion(result: .Error(error: .NetworkError(error: networkError)))
+                    completion(.error(error: .networkError(error: networkError)))
                     return
                 }
 
                 // there is no data
                 guard let safeData = data else {
-                    completion(result:.Error(error: .NoRemoteData))
+                    completion(.error(error: .noRemoteData))
                     return
                 }
 
                 // cannot decode data
-                guard let receiptInfo = try? NSJSONSerialization.JSONObjectWithData(data!, options: .MutableLeaves) as? ReceiptInfo ?? [:] else {
-                    let jsonStr = String(data: safeData, encoding: NSUTF8StringEncoding)
-                    completion(result: .Error(error: .JSONDecodeError(string: jsonStr)))
+                guard let receiptInfo = try? JSONSerialization.jsonObject(with: data!, options: .mutableLeaves) as? ReceiptInfo ?? [:] else {
+                    let jsonStr = String(data: safeData, encoding: String.Encoding.utf8)
+                    completion(.error(error: .jsonDecodeError(string: jsonStr)))
                     return
                 }
 
@@ -246,21 +246,21 @@ internal class InAppReceipt {
                      * Note: The 21007 status code indicates that this receipt is a sandbox receipt,
                      * but it was sent to the production service for verification.
                      */
-                    let receiptStatus = ReceiptStatus(rawValue: status) ?? ReceiptStatus.Unknown
-                    if case .TestReceipt = receiptStatus {
+                    let receiptStatus = ReceiptStatus(rawValue: status) ?? ReceiptStatus.unknown
+                    if case .testReceipt = receiptStatus {
                         verify(receiptVerifyURL: .Test, password: autoRenewPassword, session: session, completion: completion)
                     }
                     else {
                         if receiptStatus.isValid {
-                            completion(result: .Success(receipt: receiptInfo))
+                            completion(.success(receipt: receiptInfo))
                         }
                         else {
-                            completion(result: .Error(error: .ReceiptInvalid(receipt: receiptInfo, status: receiptStatus)))
+                            completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
                         }
                     }
                 }
                 else {
-                    completion(result: .Error(error: .ReceiptInvalid(receipt: receiptInfo, status: ReceiptStatus.None)))
+                    completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: ReceiptStatus.none)))
                 }
             }
             task.resume()
@@ -273,7 +273,7 @@ internal class InAppReceipt {
      *  - return: either NotPurchased or Purchased
      */
     class func verifyPurchase(
-        productId productId: String,
+        productId: String,
         inReceipt receipt: ReceiptInfo
     ) -> SwiftyStoreKit.VerifyPurchaseResult {
       
@@ -281,7 +281,7 @@ internal class InAppReceipt {
         let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
       
         // Verify that at least one receipt has the right product id
-        return receiptsInfo.count >= 1 ? .Purchased : .NotPurchased
+        return receiptsInfo.count >= 1 ? .purchased : .notPurchased
     }
   
     /**
@@ -293,16 +293,16 @@ internal class InAppReceipt {
      *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
     class func verifySubscription(
-        productId productId: String,
+        productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil date: NSDate = NSDate(),
-        validDuration duration: NSTimeInterval? = nil
+        validUntil date: Date = Date(),
+        validDuration duration: TimeInterval? = nil
     ) -> SwiftyStoreKit.VerifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
         let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
         if receiptsInfo.count == 0 {
-            return .NotPurchased
+            return .notPurchased
         }
     
         // Return the expires dates sorted desc
@@ -311,31 +311,31 @@ internal class InAppReceipt {
                 let key: String = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
                 return receipt[key] as? String
             }
-            .flatMap { (dateString) -> NSDate? in
+            .flatMap { (dateString) -> Date? in
                 guard let doubleValue = Double(dateString) else { return nil }
                 // If duration is set, create an "expires date" value calculated from the original purchase date
                 let addedDuration = duration ?? 0
                 let expiryDateDouble = (doubleValue / 1000 + addedDuration)
-                return NSDate(timeIntervalSince1970: expiryDateDouble)
+                return Date(timeIntervalSince1970: expiryDateDouble)
             }
-            .sort { (a, b) -> Bool in
+            .sorted { (a, b) -> Bool in
                 // Sort by descending date order
-                return a.compare(b) == .OrderedDescending
+                return a.compare(b) == .orderedDescending
             }
       
         guard let firstExpiryDate = expiryDateValues.first else {
-            return .NotPurchased
+            return .notPurchased
         }
       
         // Check if at least 1 receipt is valid
-        if firstExpiryDate.compare(date) == .OrderedDescending {
+        if firstExpiryDate.compare(date) == .orderedDescending {
             
             // The subscription is valid
-            return .Purchased(expiryDate: firstExpiryDate)
+            return .purchased(expiryDate: firstExpiryDate)
         }
         else {
             // The subscription is expired
-            return .Expired(expiryDate: firstExpiryDate)
+            return .expired(expiryDate: firstExpiryDate)
         }
     }
   

@@ -1,5 +1,5 @@
 # SwiftyStoreKit
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and OS X 10.9+, written in Swift.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and OS X 10.10+, written in Swift.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat
             )](http://mit-license.org)
@@ -49,10 +49,10 @@ If there are any pending transactions at this point, these will be reported by t
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
     if let product = result.retrievedProducts.first {
-        let numberFormatter = NSNumberFormatter()
+        let numberFormatter = NumberFormatter()
         numberFormatter.locale = product.priceLocale
-        numberFormatter.numberStyle = .CurrencyStyle
-        let priceString = numberFormatter.stringFromNumber(product.price ?? 0) ?? ""
+        numberFormatter.numberStyle = .currency
+        let priceString = numberFormatter.string(from: product.price)
         print("Product: \(product.localizedDescription), price: \(priceString)")
     }
     else if let invalidProductId = result.invalidProductIDs.first {
@@ -68,9 +68,9 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 ```swift
 SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { result in
     switch result {
-    case .Success(let productId):
+    case .success(let productId):
         print("Purchase Success: \(productId)")
-    case .Error(let error):
+    case .error(let error):
         print("Purchase Failed: \(error)")
     }
 }
@@ -96,8 +96,8 @@ SwiftyStoreKit.restorePurchases() { results in
 
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
-    if case .Error(let error) = result {
-        if case .NoReceiptData = error {
+    if case .error(let error) = result {
+        if case .noReceiptData = error {
             self.refreshReceipt()
         }
     }
@@ -106,9 +106,9 @@ SwiftyStoreKit.verifyReceipt() { result in
 func refreshReceipt() {
     SwiftyStoreKit.refreshReceipt { result in
         switch result {
-        case .Success:
+        case .success:
             print("Receipt refresh success")
-        case .Error(let error):
+        case .error(let error):
             print("Receipt refresh failed: \(error)")
         }
     }
@@ -126,16 +126,16 @@ SwiftyStoreKit.verifyReceipt(password: "your_shared_secret")
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
     switch result {
-    case .Success(let receipt):
+    case .success(let receipt):
         // Verify the purchase of Consumable or NonConsumable
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
             inReceipt: receipt
         )
         switch purchaseResult {
-        case .Purchased(let expiresDate):
+        case .purchased(let expiresDate):
             print("Product is purchased.")
-        case .NotPurchased:
+        case .notPurchased:
             print("The user has never purchased this product")
         }
     case .Error(let error):
@@ -151,7 +151,7 @@ Note that for consumable products, the receipt will only include the information
 ```swift
 SwiftyStoreKit.verifyReceipt() { result in
     switch result {
-    case .Success(let receipt):
+    case .success(let receipt):
         // Verify the purchase of a Subscription
         let purchaseResult = SwiftyStoreKit.verifySubscription(
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
@@ -160,15 +160,15 @@ SwiftyStoreKit.verifyReceipt() { result in
             validDuration: 3600 * 24 * 30, // Non Renewing Subscription only
         )
         switch purchaseResult {
-        case .Purchased(let expiresDate):
+        case .purchased(let expiresDate):
             print("Product is valid until \(expiresDate)")
-        case .Expired(let expiresDate):
+        case .expired(let expiresDate):
             print("Product is expired since \(expiresDate)")
-        case .NotPurchased:
+        case .notPurchased:
             print("The user has never purchased this product")
         }
 
-    case .Error(let error):
+    case .error(let error):
         print("Receipt verification failed: \(error)")
     }
 }
@@ -255,6 +255,10 @@ The user can background the hosting application and change the Apple ID used wit
 
 ## Changelog
 
+#### Version 0.5.0 (planned from swift-3.0 branch)
+* Port SwiftyStoreKit to Swift 3.0
+* Increased minimum deployment target for OS X to version 10.10
+
 #### Version 0.3.0
 
 * Fixed the `verifyReceipt()` method to use production environment by default. This falls back to the test environment if the receipt is a sandbox receipt.
@@ -326,9 +330,9 @@ The class conforms to the `SKPaymentTransactionObserver` protocol in order to re
 
 ```swift
 enum TransactionResult {
-    case Purchased(productId: String)
-    case Restored(productId: String)
-    case Failed(error: NSError)
+    case purchased(productId: String)
+    case restored(productId: String)
+    case failed(error: NSError)
 }
 ```
 Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.

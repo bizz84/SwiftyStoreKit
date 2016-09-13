@@ -30,13 +30,13 @@ import Foundation
     class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
 
         enum ResultType {
-            case Success
-            case Error(e: NSError)
+            case success
+            case error(e: Error)
         }
 
-        typealias RequestCallback = (result: ResultType) -> ()
+        typealias RequestCallback = (ResultType) -> ()
 
-        class func refresh(receiptProperties: [String : AnyObject]? = nil, callback: RequestCallback) -> InAppReceiptRefreshRequest {
+        class func refresh(_ receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
             let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
             request.start()
             return request
@@ -49,7 +49,7 @@ import Foundation
             refreshReceiptRequest.delegate = nil
         }
 
-        private init(receiptProperties: [String : AnyObject]? = nil, callback: RequestCallback) {
+        private init(receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) {
             self.callback = callback
             self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
             super.init()
@@ -60,18 +60,18 @@ import Foundation
             self.refreshReceiptRequest.start()
         }
 
-        func requestDidFinish(request: SKRequest) {
+        func requestDidFinish(_ request: SKRequest) {
             /*if let resoreRequest = request as? SKReceiptRefreshRequest {
                 let receiptProperties = resoreRequest.receiptProperties ?? [:]
                 for (k, v) in receiptProperties {
                     print("\(k): \(v)")
                 }
             }*/
-            callback(result: .Success)
+            callback(.success)
         }
-        func request(request: SKRequest, didFailWithError error: NSError) {
+        func request(_ request: SKRequest, didFailWithError error: Error) {
             // XXX could here check domain and error code to return typed exception
-            callback(result: .Error(e: error))
+            callback(.error(e: error))
         }
         
     }

@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
 
         completeIAPTransactions()
         
@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             for completedTransaction in completedTransactions {
                 
-                if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+                if completedTransaction.transactionState == .purchased || completedTransaction.transactionState == .restored {
                     
                     print("purchased: \(completedTransaction.productId)")
                 }

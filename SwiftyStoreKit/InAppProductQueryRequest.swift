@@ -26,14 +26,14 @@ import StoreKit
 
 class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
-    typealias RequestCallback = (result: SwiftyStoreKit.RetrieveResults) -> ()
+    typealias RequestCallback = (SwiftyStoreKit.RetrieveResults) -> ()
     private let callback: RequestCallback
     private let request: SKProductsRequest
     // http://stackoverflow.com/questions/24011575/what-is-the-difference-between-a-weak-reference-and-an-unowned-reference
     deinit {
         request.delegate = nil
     }
-    private init(productIds: Set<String>, callback: RequestCallback) {
+    private init(productIds: Set<String>, callback: @escaping RequestCallback) {
         
         self.callback = callback
         request = SKProductsRequest(productIdentifiers: productIds)
@@ -41,58 +41,46 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         request.delegate = self
     }
     
-    class func startQuery(productIds: Set<String>, callback: RequestCallback) -> InAppProductQueryRequest {
+    class func startQuery(_ productIds: Set<String>, callback: @escaping RequestCallback) -> InAppProductQueryRequest {
         let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
         request.start()
         return request
     }
 
     func start() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(qos: .default).async {
             self.request.start()
         }
     }
     func cancel() {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+        DispatchQueue.global(qos: .default).async {
             self.request.cancel()
         }
     }
     
     // MARK: SKProductsRequestDelegate
-    func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
+    func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             
-            let retrievedProducts = Set<SKProduct>(response.products ?? [])
-            let invalidProductIDs = Set<String>(response.invalidProductIdentifiers ?? [])
-            self.callback(result: SwiftyStoreKit.RetrieveResults(retrievedProducts: retrievedProducts,
+            let retrievedProducts = Set<SKProduct>(response.products)
+            let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
+            self.callback(SwiftyStoreKit.RetrieveResults(retrievedProducts: retrievedProducts,
                 invalidProductIDs: invalidProductIDs, error: nil))
         }
     }
     
-    func requestDidFinish(request: SKRequest) {
+    func requestDidFinish(_ request: SKRequest) {
         
     }
-    // MARK: - missing SKPaymentTransactionState on OSX
-    #if os(iOS) || os(tvOS)
-    func request(request: SKRequest, didFailWithError error: NSError) {
+
+    func request(_ request: SKRequest, didFailWithError error: Error) {
         requestFailed(error)
     }
-    #elseif os(OSX)
-    func request(request: SKRequest, didFailWithError error: NSError?) {
-        if let notNilError = error {
-            requestFailed(notNilError)
-        }
-        else {
-            let message = "Query failed for request: \(request.debugDescription)"
-            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ]))
-        }
-    }
-    #endif
-    func requestFailed(error: NSError){
-        dispatch_async(dispatch_get_main_queue()) {
-            self.callback(result: SwiftyStoreKit.RetrieveResults(retrievedProducts: [],
-                invalidProductIDs: [], error: error))
+
+    func requestFailed(_ error: Error){
+        DispatchQueue.main.async {
+            self.callback(SwiftyStoreKit.RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
         }
     }
 }

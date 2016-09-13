@@ -179,8 +179,10 @@ extension ViewController {
     func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> UIAlertController {
         
         if let product = result.retrievedProducts.first {
-            
-            let priceString = NumberFormatter.localizedString(from: product.price, number: .currency)
+            let numberFormatter = NumberFormatter()
+            numberFormatter.locale = product.priceLocale
+            numberFormatter.numberStyle = .currency
+            let priceString = numberFormatter.string(from: product.price)
             return alertWithTitle(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
         }
         else if let invalidProductId = result.invalidProductIDs.first {

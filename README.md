@@ -12,6 +12,7 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
+#### NOTE: Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).
 
 ### Preview
 
@@ -38,6 +39,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 	        }
 	    }
 	}
+  return true
 }
 ```
 
@@ -47,7 +49,10 @@ If there are any pending transactions at this point, these will be reported by t
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
     if let product = result.retrievedProducts.first {
-        let priceString = NumberFormatter.localizedString(from: product.price, number: .currency)
+        let numberFormatter = NumberFormatter()
+        numberFormatter.locale = product.priceLocale
+        numberFormatter.numberStyle = .currency
+        let priceString = numberFormatter.string(from: product.price)
         print("Product: \(product.localizedDescription), price: \(priceString)")
     }
     else if let invalidProductId = result.invalidProductIDs.first {
@@ -200,6 +205,19 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
+## Swift 3.0
+
+Swift 3.0 support is currently available on the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0) and compiles correctly as of Xcode 8 beta 3.
+
+Swift 2.2 compatibility is preserved on the master branch. Once Xcode 8 is officially released:
+
+* the master branch will be renamed to `swift-2.2`
+* the `swift-3.0` branch will be renamed to `master`
+
+As for versioning:
+
+* Swift 3.0 work will be tagged as version `0.5.x`
+* Swift 2.2 work will be tagged as version `0.3.x`
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.

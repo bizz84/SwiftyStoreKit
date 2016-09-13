@@ -162,8 +162,8 @@ extension ViewController {
     func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> NSAlert {
         
         if let product = result.retrievedProducts.first {
-            let priceString = NumberFormatter.localizedString(from: product.price ?? 0, number: .currency)
-            return alertWithTitle(product.localizedTitle ?? "no title", message: "\(product.localizedDescription) - \(priceString)")
+            let priceString = NumberFormatter.localizedString(from: product.price, number: .currency)
+            return alertWithTitle(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
         }
         else if let invalidProductId = result.invalidProductIDs.first {
             return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
@@ -184,7 +184,7 @@ extension ViewController {
             print("Purchase Failed: \(error)")
             switch error {
             case .failed(let error):
-                if error.domain == SKErrorDomain {
+                if (error as NSError).domain == SKErrorDomain {
                     return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
                 }
                 return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")

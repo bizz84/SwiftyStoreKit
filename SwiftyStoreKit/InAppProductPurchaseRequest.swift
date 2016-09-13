@@ -47,7 +47,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         paymentQueue.remove(self)
     }
     // Initialiser for product purchase
-    private init(product: SKProduct?, callback: RequestCallback) {
+    private init(product: SKProduct?, callback: @escaping RequestCallback) {
 
         self.product = product
         self.callback = callback
@@ -55,12 +55,12 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         paymentQueue.add(self)
     }
     // MARK: Public methods
-    class func startPayment(_ product: SKProduct, applicationUsername: String = "", callback: RequestCallback) -> InAppProductPurchaseRequest {
+    class func startPayment(_ product: SKProduct, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
         let request = InAppProductPurchaseRequest(product: product, callback: callback)
         request.startPayment(product, applicationUsername: applicationUsername)
         return request
     }
-    class func restorePurchases(_ callback: RequestCallback) -> InAppProductPurchaseRequest {
+    class func restorePurchases(_ callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
         let request = InAppProductPurchaseRequest(product: nil, callback: callback)
         request.startRestorePurchases()
         return request

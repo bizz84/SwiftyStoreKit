@@ -201,7 +201,7 @@ extension ViewController {
             print("Purchase Failed: \(error)")
             switch error {
                 case .failed(let error):
-                    if error.domain == SKErrorDomain {
+                    if (error as NSError).domain == SKErrorDomain {
                         return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
                     }
                     return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")

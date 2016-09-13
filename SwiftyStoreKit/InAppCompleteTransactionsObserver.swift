@@ -54,7 +54,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
 
     let callback: TransactionsCallback
     
-    init(callback: TransactionsCallback) {
+    init(callback: @escaping TransactionsCallback) {
     
         self.callback = callback
         super.init()

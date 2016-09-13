@@ -33,7 +33,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     deinit {
         request.delegate = nil
     }
-    private init(productIds: Set<String>, callback: RequestCallback) {
+    private init(productIds: Set<String>, callback: @escaping RequestCallback) {
         
         self.callback = callback
         request = SKProductsRequest(productIdentifiers: productIds)
@@ -41,7 +41,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         request.delegate = self
     }
     
-    class func startQuery(_ productIds: Set<String>, callback: RequestCallback) -> InAppProductQueryRequest {
+    class func startQuery(_ productIds: Set<String>, callback: @escaping RequestCallback) -> InAppProductQueryRequest {
         let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
         request.start()
         return request

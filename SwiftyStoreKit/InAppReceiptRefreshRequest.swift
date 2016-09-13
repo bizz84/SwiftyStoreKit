@@ -31,10 +31,10 @@ import Foundation
 
         enum ResultType {
             case success
-            case error(e: NSError)
+            case error(e: Error)
         }
 
-        typealias RequestCallback = (result: ResultType) -> ()
+        typealias RequestCallback = (ResultType) -> ()
 
         class func refresh(_ receiptProperties: [String : AnyObject]? = nil, callback: RequestCallback) -> InAppReceiptRefreshRequest {
             let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
@@ -67,11 +67,11 @@ import Foundation
                     print("\(k): \(v)")
                 }
             }*/
-            callback(result: .success)
+            callback(.success)
         }
         func request(_ request: SKRequest, didFailWithError error: Error) {
             // XXX could here check domain and error code to return typed exception
-            callback(result: .error(e: error))
+            callback(.error(e: error))
         }
         
     }

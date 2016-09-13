@@ -12,7 +12,9 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-#### NOTE: Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).
+#### NOTE: Master branch now compiles with Swift 3.0 under Xcode 8.
+
+#### Swift 2.2 / Xcode 7 compatibility is supported in the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2).
 
 ### Preview
 
@@ -205,14 +207,12 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-## Swift 3.0
+## Swift 2.x / 3.x
 
-Swift 3.0 support is currently available on the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0) and compiles correctly as of Xcode 8 beta 3.
+Following the release of Xcode 8 GM: 
 
-Swift 2.2 compatibility is preserved on the master branch. Once Xcode 8 is officially released:
-
-* the master branch will be renamed to `swift-2.2`
-* the `swift-3.0` branch will be renamed to `master`
+* The old Swift 2.2 code has been moved to the `swift-2.2` branch
+* The `swift-3.0` branch has been merged into `master`
 
 As for versioning:
 
@@ -255,11 +255,11 @@ The user can background the hosting application and change the Apple ID used wit
 
 ## Changelog
 
-#### Version 0.5.0 (planned from swift-3.0 branch)
-* Port SwiftyStoreKit to Swift 3.0
+#### Version 0.5.0 (swift-3.0)
+* Port SwiftyStoreKit to Swift 3.0, compiles under Xcode 8 GM
 * Increased minimum deployment target for OS X to version 10.10
 
-#### Version 0.3.0
+#### Version 0.3.0 (swift-2.2)
 
 * Fixed the `verifyReceipt()` method to use production environment by default. This falls back to the test environment if the receipt is a sandbox receipt.
 

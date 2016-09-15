@@ -1,0 +1,3 @@
+language: objective-c
+osx_image: xcode8
+script: ./scripts/build.sh

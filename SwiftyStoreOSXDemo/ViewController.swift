@@ -144,7 +144,7 @@ extension ViewController {
         let alert: NSAlert = NSAlert()
         alert.messageText = title
         alert.informativeText = message
-        alert.alertStyle = NSAlertStyle.InformationalAlertStyle
+        alert.alertStyle = NSAlertStyle.Informational
         return alert
     }
     func showAlert(alert: NSAlert, handler: ((NSModalResponse) -> Void)? = nil) {

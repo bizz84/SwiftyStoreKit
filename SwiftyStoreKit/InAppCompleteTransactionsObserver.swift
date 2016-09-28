@@ -77,7 +77,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
             #if os(iOS) || os(tvOS)
                 let transactionState = transaction.transactionState
             #elseif os(OSX)
-                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState)!
+                let transactionState = PaymentTransactionState(rawValue: transaction.transactionState.rawValue)!
             #endif
 
             if transactionState != .Purchasing {

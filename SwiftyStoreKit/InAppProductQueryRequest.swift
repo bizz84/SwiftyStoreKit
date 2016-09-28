@@ -79,14 +79,8 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         requestFailed(error)
     }
     #elseif os(OSX)
-    func request(request: SKRequest, didFailWithError error: NSError?) {
-        if let notNilError = error {
-            requestFailed(notNilError)
-        }
-        else {
-            let message = "Query failed for request: \(request.debugDescription)"
-            requestFailed(NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ]))
-        }
+    func request(request: SKRequest, didFailWithError error: NSError) {
+        requestFailed(error)
     }
     #endif
     func requestFailed(error: NSError){

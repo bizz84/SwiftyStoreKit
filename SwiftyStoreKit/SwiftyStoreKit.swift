@@ -141,7 +141,35 @@ public class SwiftyStoreKit {
             }
         }
     }
+  
+    /**
+    *  Get product info
+    *  - Parameter productId: productId as specified in iTunes Connect
+    */
+    public class func product(for productIdentifier: String?) -> SKProduct? {
+      if let currentProductIdentifier = productIdentifier, let product = sharedInstance.store.products[currentProductIdentifier] {
+        return product
+      }
     
+      return nil
+    }
+  
+    /**
+    *  Get product localized price
+    *  - Parameter product: SKProduct
+    */
+    public class func localizedPrice(of product: SKProduct?) -> String? {
+    
+      guard let currentProduct = product else {
+        return nil
+      }
+    
+      let numberFormatter = NumberFormatter()
+      numberFormatter.locale = currentProduct.priceLocale
+      numberFormatter.numberStyle = .currency
+      return numberFormatter.string(from: currentProduct.price)
+    }
+  
     public class func restorePurchases(_ completion: @escaping (RestoreResults) -> ()) {
 
         sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { results in

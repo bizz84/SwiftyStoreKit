@@ -12,6 +12,7 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 #### NOTE: Master branch now compiles with Swift 3.0 under Xcode 8.
 
+#### Swift 2.3 is supported in the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3).
 #### Swift 2.2 / Xcode 7 compatibility is supported in the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2).
 
 ### Preview
@@ -205,17 +206,19 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-## Swift 2.x / 3.x
+## Swift 2.2/2.3/3.0
 
-Following the release of Xcode 8 GM: 
+Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly as of Xcode 7.3.x and Xcode 8 GM.
 
-* The old Swift 2.2 code has been moved to the `swift-2.2` branch
-* The `swift-3.0` branch has been merged into `master`
+Swift 2.3 support is available on the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and compiles correctly as of Xcode 8 GM.
+
+Swift 3.0 support is currently available on the [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) and compiles correctly as of Xcode 8 GM.
 
 As for versioning:
 
-* Swift 3.0 work will be tagged as version `0.5.x`
-* Swift 2.2 work will be tagged as version `0.3.x`
+* Swift 3.0 is tagged as version `0.5.x`
+* Swift 2.3 is tagged as version `0.4.x`
+* Swift 2.2 is tagged as version `0.3.x`
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.

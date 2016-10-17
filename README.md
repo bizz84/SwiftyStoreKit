@@ -12,7 +12,10 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-#### NOTE: Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).
+#### NOTES
+
+* **Swift 2.3 is currently supported in the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3).**
+* **Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).**
 
 ### Preview
 
@@ -205,19 +208,19 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-## Swift 3.0
+## Swift 2.2/2.3/3.0
 
-Swift 3.0 support is currently available on the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0) and compiles correctly as of Xcode 8 beta 3.
+Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly on Xcode 7.3.x and Xcode 8 GM.
 
-Swift 2.2 compatibility is preserved on the master branch. Once Xcode 8 is officially released:
+Swift 2.3 support is available on the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and compiles correctly as of Xcode 8 GM.
 
-* the master branch will be renamed to `swift-2.2`
-* the `swift-3.0` branch will be renamed to `master`
+Swift 3.0 support is currently available on the [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) and compiles correctly as of Xcode 8 GM.
 
 As for versioning:
 
-* Swift 3.0 work will be tagged as version `0.5.x`
-* Swift 2.2 work will be tagged as version `0.3.x`
+* Swift 3.0 is tagged as version `0.5.x`
+* Swift 2.3 is tagged as version `0.4.x`
+* Swift 2.2 is tagged as version `0.3.x`
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.
@@ -254,6 +257,10 @@ The user can background the hosting application and change the Apple ID used wit
 
 
 ## Changelog
+
+#### Version 0.4.0
+
+* Added Swift 2.3 support.
 
 #### Version 0.3.0
 

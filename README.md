@@ -156,8 +156,8 @@ SwiftyStoreKit.verifyReceipt() { result in
         let purchaseResult = SwiftyStoreKit.verifySubscription(
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
             inReceipt: receipt,
-            validUntil: NSDate()
-            validDuration: 3600 * 24 * 30, // Non Renewing Subscription only
+            validUntil: NSDate(),
+            validDuration: 3600 * 24 * 30 // Non Renewing Subscription only
         )
         switch purchaseResult {
         case .purchased(let expiresDate):

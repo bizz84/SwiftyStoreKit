@@ -14,8 +14,9 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 #### NOTES
 
+* **Swift 2.2 is currently supported in the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2).**
 * **Swift 2.3 is currently supported in the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3).**
-* **Swift 3.0 is currently supported in the [swift-3.0 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.0).**
+* **Swift 3.0 is currently supported in the [master branch](https://github.com/bizz84/SwiftyStoreKit/tree/master).**
 
 ### Preview
 
@@ -210,7 +211,7 @@ github "bizz84/SwiftyStoreKit"
 
 ## Swift 2.2/2.3/3.0
 
-Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly on Xcode 7.3.x and Xcode 8 GM.
+Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly as of Xcode 7.3.x and Xcode 8 GM.
 
 Swift 2.3 support is available on the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and compiles correctly as of Xcode 8 GM.
 

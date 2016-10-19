@@ -162,7 +162,7 @@ public class SwiftyStoreKit {
         password: String? = nil,
         session: URLSession = URLSession.shared,
         completion:@escaping (VerifyReceiptResult) -> ()) {
-        InAppReceipt.verify(receiptVerifyURL: .Production, password: password, session: session) { result in
+        InAppReceipt.verify(urlType: .production, password: password, session: session) { result in
          
             DispatchQueue.main.async {
                 completion(result)

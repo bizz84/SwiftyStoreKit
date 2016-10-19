@@ -238,10 +238,6 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 ## Known issues
 
-#### Verify subscription
-
-After a subscription has expired, the user can change the system date to the date prior expiration. This is a bug that needs to be fixed. [#68](https://github.com/bizz84/SwiftyStoreKit/issues/68)
-
 #### Requests lifecycle
 
 While SwiftyStoreKit tries handle concurrent purchase or restore purchases requests, it is not guaranteed that this will always work flawlessly.

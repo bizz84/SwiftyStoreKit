@@ -305,6 +305,8 @@ internal class InAppReceipt {
             return .notPurchased
         }
     
+        let receiptDate = getReceiptRequestDate(inReceipt: receipt) ?? date
+        
         // Return the expires dates sorted desc
         let expiryDateValues = receiptsInfo
             .flatMap { (receipt) -> String? in
@@ -328,7 +330,7 @@ internal class InAppReceipt {
         }
       
         // Check if at least 1 receipt is valid
-        if firstExpiryDate.compare(date) == .orderedDescending {
+        if firstExpiryDate.compare(receiptDate) == .orderedDescending {
             
             // The subscription is valid
             return .purchased(expiryDate: firstExpiryDate)
@@ -339,6 +341,16 @@ internal class InAppReceipt {
         }
     }
   
+    private class func getReceiptRequestDate(inReceipt receipt: ReceiptInfo) -> Date? {
+        
+        guard let receiptInfo = receipt["receipt"] as? ReceiptInfo,
+            let requestDateString = receiptInfo["request_date_ms"] as? String,
+            let requestDateMs = Double(requestDateString) else {
+            return nil
+        }
+        return Date(timeIntervalSince1970: requestDateMs / 1000)
+    }
+    
     /**
      *  Get all the receipts info for a specific product
      *  - Parameter productId: the product id

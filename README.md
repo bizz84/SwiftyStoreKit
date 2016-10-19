@@ -50,10 +50,7 @@ If there are any pending transactions at this point, these will be reported by t
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
     if let product = result.retrievedProducts.first {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.locale = product.priceLocale
-        numberFormatter.numberStyle = .currency
-        let priceString = numberFormatter.string(from: product.price)
+        let priceString = product.localizedPrice!
         print("Product: \(product.localizedDescription), price: \(priceString)")
     }
     else if let invalidProductId = result.invalidProductIDs.first {

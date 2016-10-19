@@ -234,6 +234,10 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 ## Known issues
 
+#### Verify subscription
+
+After a subscription has expired, the user can change the system date to the date prior expiration. This is a bug that needs to be fixed. [#68](https://github.com/bizz84/SwiftyStoreKit/issues/68)
+
 #### Requests lifecycle
 
 While SwiftyStoreKit tries handle concurrent purchase or restore purchases requests, it is not guaranteed that this will always work flawlessly.
@@ -301,6 +305,14 @@ The user can background the hosting application and change the Apple ID used wit
 
 * Receipt verification
 * OS X support
+
+## Essential Reading
+* [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)
+* [Apple - TN2387: In-App Purchase Best Practices](https://developer.apple.com/library/content/technotes/tn2387/_index.html)
+* [Apple - About Receipt Validation](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Introduction.html)
+* [Apple - Receipt Validation Programming Guide](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html#//apple_ref/doc/uid/TP40010573-CH106-SW1)
+* [Apple - Offering Subscriptions](https://developer.apple.com/app-store/subscriptions/)
+
 
 ## Implementation Details
 In order to make a purchase, two operations are needed:

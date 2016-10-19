@@ -93,7 +93,7 @@ SwiftyStoreKit.restorePurchases() { results in
 ### Verify Receipt
 
 ```swift
-SwiftyStoreKit.verifyReceipt() { result in
+SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
     if case .error(let error) = result {
         if case .noReceiptData = error {
             self.refreshReceipt()
@@ -122,7 +122,7 @@ SwiftyStoreKit.verifyReceipt(password: "your_shared_secret")
 ### Verify Purchase
 
 ```swift
-SwiftyStoreKit.verifyReceipt() { result in
+SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of Consumable or NonConsumable
@@ -147,7 +147,7 @@ Note that for consumable products, the receipt will only include the information
 ### Verify Subscription
 
 ```swift
-SwiftyStoreKit.verifyReceipt() { result in
+SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of a Subscription

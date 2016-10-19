@@ -206,7 +206,7 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-## Swift 2.2/2.3/3.0
+## Swift 2.2 / 2.3 / 3.0
 
 Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly as of Xcode 7.3.x and Xcode 8 GM.
 
@@ -219,6 +219,10 @@ As for versioning:
 * Swift 3.0 is tagged as version `0.5.x`
 * Swift 2.3 is tagged as version `0.4.x`
 * Swift 2.2 is tagged as version `0.3.x`
+
+## Change Log
+
+See the [Releases Page](https://github.com/bizz84/SwiftyStoreKit/releases)
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreDemo/ViewController.swift) [and OSX](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreOSXDemo/ViewController.swift) showing how to use SwiftyStoreKit.
@@ -256,55 +260,6 @@ To prevent situations like this from happening, a `completeTransactions()` metho
 #### Multiple accounts
 
 The user can background the hosting application and change the Apple ID used with the App Store, then foreground the app. This has been observed to cause problems with SwiftyStoreKit - other IAP implementations may suffer from this as well.
-
-
-## Changelog
-
-#### Version 0.5.0 (swift-3.0)
-* Port SwiftyStoreKit to Swift 3.0, compiles under Xcode 8 GM
-* Increased minimum deployment target for OS X to version 10.10
-
-#### Version 0.3.0 (swift-2.2)
-
-* Fixed the `verifyReceipt()` method to use production environment by default. This falls back to the test environment if the receipt is a sandbox receipt.
-
-#### Version 0.2.10
-
-* Added **tvOS** support
-* Faster compilation time for `verifySubscription()` implementation
-
-#### Version 0.2.9
-
-* Added support for verifying purchases and subscriptions. This includes consumable and non consumable purchases, auto-renewing, free and non-renewing subscriptions.
-* The `purchaseProduct()` now takes an optional `applicationUsername` string which can be used to help detect irregular activity on transactions. Read more about this on the [Apple docs](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/RequestPayment.html).
-* Updated `verifyReceipt()` so that the completion block is called on the main thread.
-
-
-#### Version 0.2.8
-
-* Added `completeTransactions()` method to clear payment queue and return information about payments that have completed / failed.
-
-#### Version 0.2.7
-
-* Fixed **critical issue** that was causing the callbacks for `purchaseProduct()` and `restorePurchases()` to get mixed up when multiple requests were running concurrently. Related issues: [#3](https://github.com/bizz84/SwiftyStoreKit/issues/3), [#22](https://github.com/bizz84/SwiftyStoreKit/issues/22), [#26](https://github.com/bizz84/SwiftyStoreKit/issues/26). _Note that while code analysis and various testing scenarios indicate that this is now resolved, this has not yet been confirmed by the reporters of the issues._
-
-#### Version 0.2.6
-
-* Retrieve multiple products info at once. Introduces the new `retrieveProductsInfo()` API call, which takes a set of product IDs and returns a struct with information about the corresponding SKProducts. [Related issue #21](https://github.com/bizz84/SwiftyStoreKit/issues/21)
-
-#### Version 0.2.5
-
-* The `restorePurchases()` completion closure has been changed to return all restored purchases in one call. [Related issue #18](https://github.com/bizz84/SwiftyStoreKit/issues/18)
-
-#### Version 0.2.4
-
-* Carthage compatible
-* Fixed Swift 2.2 warnings
-
-#### Previous versions
-
-* Receipt verification
-* OS X support
 
 ## Essential Reading
 * [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)

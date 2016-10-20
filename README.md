@@ -11,10 +11,12 @@
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and OS X 10.10+, written in Swift.
 
-#### NOTE: Master branch now compiles with Swift 3.0 under Xcode 8.
+| Language  | Branch | Pod version | Xcode version |
+| --------- | ------ | ----------- | ------------- |
+| Swift 3.0 | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8 or greater|
+| Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
+| Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |
 
-#### Swift 2.3 is supported in the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3).
-#### Swift 2.2 / Xcode 7 compatibility is supported in the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2).
 
 ### Preview
 
@@ -200,17 +202,11 @@ github "bizz84/SwiftyStoreKit"
 
 ## Swift 2.2 / 2.3 / 3.0
 
-Swift 2.2 support is available on the [swift-2.2 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-3.2) and compiles correctly as of Xcode 7.3.x and Xcode 8 GM.
-
-Swift 2.3 support is available on the [swift-2.3 branch](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and compiles correctly as of Xcode 8 GM.
-
-Swift 3.0 support is currently available on the [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) and compiles correctly as of Xcode 8 GM.
-
-As for versioning:
-
-* Swift 3.0 is tagged as version `0.5.x`
-* Swift 2.3 is tagged as version `0.4.x`
-* Swift 2.2 is tagged as version `0.3.x`
+| Language  | Branch | Pod version | Xcode version |
+| --------- | ------ | ----------- | ------------- |
+| Swift 3.0 | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8 or greater|
+| Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
+| Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |
 
 ## Change Log
 

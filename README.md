@@ -310,6 +310,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [KType](https://itunes.apple.com/app/id1037000234) - Space shooter game
 * [iPic](https://itunes.apple.com/app/id1101244278?ls=1&mt=12) - Automatically upload images and save Markdown links
 * [iHosts](https://itunes.apple.com/app/id1102004240?ls=1&mt=12) - Perfect for editing /etc/hosts
+* [Arise](http://www.abnehm-app.de/) - Calorie counter
 
 
 ## License

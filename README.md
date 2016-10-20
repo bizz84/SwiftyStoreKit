@@ -34,7 +34,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 	
 	    for completedTransaction in completedTransactions {
 	
-	        if completedTransaction.transactionState == .Purchased || completedTransaction.transactionState == .Restored {
+	        if completedTransaction.transactionState == .purchased || completedTransaction.transactionState == .restored {
 	
 	            print("purchased: \(completedTransaction.productId)")
 	        }

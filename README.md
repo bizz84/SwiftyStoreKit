@@ -113,12 +113,6 @@ func refreshReceipt() {
 }
 ```
 
-When using auto-renewable subscriptions, the shared secret can be specified like so:
-
-```
-SwiftyStoreKit.verifyReceipt(password: "your_shared_secret")
-```
-
 ### Verify Purchase
 
 ```swift

@@ -107,8 +107,8 @@ SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
 func refreshReceipt() {
     SwiftyStoreKit.refreshReceipt { result in
         switch result {
-        case .success:
-            print("Receipt refresh success")
+        case .success(let receiptData):
+            print("Receipt refresh success: \(receiptData.base64EncodedString)")
         case .error(let error):
             print("Receipt refresh failed: \(error)")
         }

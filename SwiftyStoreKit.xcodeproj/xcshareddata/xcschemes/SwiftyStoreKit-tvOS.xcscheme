@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "54C0D52B1CF7404500F90BCE"
-               BuildableName = "SwiftyStoreKit_tvOS.framework"
+               BuildableName = "SwiftyStoreKit.framework"
                BlueprintName = "SwiftyStoreKit_tvOS"
                ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "54C0D52B1CF7404500F90BCE"
-            BuildableName = "SwiftyStoreKit_tvOS.framework"
+            BuildableName = "SwiftyStoreKit.framework"
             BlueprintName = "SwiftyStoreKit_tvOS"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "54C0D52B1CF7404500F90BCE"
-            BuildableName = "SwiftyStoreKit_tvOS.framework"
+            BuildableName = "SwiftyStoreKit.framework"
             BlueprintName = "SwiftyStoreKit_tvOS"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>

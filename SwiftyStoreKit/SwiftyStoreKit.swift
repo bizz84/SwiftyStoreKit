@@ -77,7 +77,7 @@ public class SwiftyStoreKit {
         public let restoreFailedProducts: [(Swift.Error, String?)]
     }
     public enum RefreshReceiptResult {
-        case success
+        case success(receiptData: Data)
         case error(error: Error)
     }
     public struct CompletedTransaction {
@@ -153,6 +153,13 @@ public class SwiftyStoreKit {
     }
 
     /**
+     * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
+     */
+    public static var localReceiptData: Data? {
+        return InAppReceipt.appStoreReceiptData
+    }
+    
+    /**
      *  Verify application receipt
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      *  - Parameter session: the session used to make remote call.
@@ -209,10 +216,11 @@ public class SwiftyStoreKit {
 
             switch result {
             case .success:
-                if InAppReceipt.data == nil {
+                if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
+                    completion(.success(receiptData: appStoreReceiptData))
+                }
+                else {
                     completion(.error(error: ReceiptError.noReceiptData))
-                } else {
-                    completion(.success)
                 }
             case .error(let e):
                 completion(.error(error: e))

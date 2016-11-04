@@ -93,6 +93,14 @@ SwiftyStoreKit.restorePurchases() { results in
 }
 ```
 
+### Retrieve local receipt
+
+```swift
+let receiptData = SwiftyStoreKit.localReceiptData
+let receiptString = receiptData.base64EncodedString
+// do your receipt validation here
+```
+
 ### Verify Receipt
 
 ```swift
@@ -107,8 +115,8 @@ SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
 func refreshReceipt() {
     SwiftyStoreKit.refreshReceipt { result in
         switch result {
-        case .success:
-            print("Receipt refresh success")
+        case .success(let receiptData):
+            print("Receipt refresh success: \(receiptData.base64EncodedString)")
         case .error(let error):
             print("Receipt refresh failed: \(error)")
         }

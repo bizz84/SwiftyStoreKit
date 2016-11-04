@@ -148,7 +148,7 @@ class ViewController: UIViewController {
 
     func refreshReceipt() {
 
-        SwiftyStoreKit.refreshReceipt { (result) -> () in
+        SwiftyStoreKit.refreshReceipt { result in
 
             self.showAlert(self.alertForRefreshReceipt(result))
         }
@@ -277,12 +277,12 @@ extension ViewController {
 
     func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> UIAlertController {
         switch result {
-        case .success:
-            print("Receipt refresh Success")
-            return self.alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
+        case .success(let receiptData):
+            print("Receipt refresh Success: \(receiptData.base64EncodedString)")
+            return alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
         case .error(let error):
             print("Receipt refresh Failed: \(error)")
-            return self.alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
+            return alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
         }
     }
 

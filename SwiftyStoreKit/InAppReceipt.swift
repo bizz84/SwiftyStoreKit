@@ -154,30 +154,30 @@ internal class InAppReceipt {
         case sandbox = "https://sandbox.itunes.apple.com/verifyReceipt"
     }
 
-    static var URL: Foundation.URL? {
+    static var appStoreReceiptUrl: URL? {
         return Bundle.main.appStoreReceiptURL
     }
 
-    static var data: Data? {
-        if let receiptDataURL = URL, let data = try? Data(contentsOf: receiptDataURL) {
-            return data
+    static var appStoreReceiptData: Data? {
+        guard let receiptDataURL = appStoreReceiptUrl, let data = try? Data(contentsOf: receiptDataURL) else {
+            return nil
         }
-        return nil
+        return data
     }
 
     // The base64 encoded receipt data.
-    static var base64EncodedString: String? {
-        return data?.base64EncodedString(options: [])
+    static var appStoreReceiptBase64Encoded: String? {
+        return appStoreReceiptData?.base64EncodedString(options: [])
     }
 
     // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
-   /**
-    *  - Parameter receiptVerifyURL: receipt verify url (default: Production)
-    *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
-    *  - Parameter session: the session used to make remote call.
-    *  - Parameter completion: handler for result
-    */
+    /**
+     *  - Parameter receiptVerifyURL: receipt verify url (default: Production)
+     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
+     *  - Parameter session: the session used to make remote call.
+     *  - Parameter completion: handler for result
+     */
     class func verify(
         urlType: VerifyReceiptURLType = .production,
         password autoRenewPassword: String? = nil,
@@ -185,18 +185,18 @@ internal class InAppReceipt {
         completion: @escaping (SwiftyStoreKit.VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.
-            guard let base64EncodedString = self.base64EncodedString else {
+            guard let base64EncodedString = appStoreReceiptBase64Encoded else {
                 completion(.error(error: .noReceiptData))
                 return
             }
 
             // Create request
-            let storeURL = Foundation.URL(string: urlType.rawValue)! // safe (until no more)
+            let storeURL = URL(string: urlType.rawValue)! // safe (until no more)
             let storeRequest = NSMutableURLRequest(url: storeURL)
             storeRequest.httpMethod = "POST"
 
 
-            let requestContents :NSMutableDictionary = [ "receipt-data" : base64EncodedString]
+            let requestContents: NSMutableDictionary = [ "receipt-data" : base64EncodedString ]
             // password if defined
             if let password = autoRenewPassword {
                 requestContents.setValue(password, forKey: "password")

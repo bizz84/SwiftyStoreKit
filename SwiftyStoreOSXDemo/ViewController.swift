@@ -95,7 +95,7 @@ class ViewController: NSViewController {
 
             self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
-                SwiftyStoreKit.refreshReceipt()
+                self.refreshReceipt()
             }
         }
     }
@@ -131,8 +131,11 @@ class ViewController: NSViewController {
             }
         }
     }
-    
 
+    func refreshReceipt() {
+        
+        SwiftyStoreKit.refreshReceipt()
+    }
 
 }
 
@@ -253,5 +256,17 @@ extension ViewController {
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
+    
+    func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> NSAlert {
+        switch result {
+        case .success(let receiptData):
+            print("Receipt refresh Success: \(receiptData.base64EncodedString)")
+            return alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
+        case .error(let error):
+            print("Receipt refresh Failed: \(error)")
+            return alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
+        }
+    }
+
 }
 

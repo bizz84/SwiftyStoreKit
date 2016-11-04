@@ -32,9 +32,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
 
+        verifyReceipt()
+
         completeIAPTransactions()
-        
+
         return true
+    }
+    
+    func verifyReceipt() {
+        
+        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+            switch result {
+            case .success(let receipt):
+                print("\(receipt)")
+            case .error(let error):
+                if case .noReceiptData = error {
+                    SwiftyStoreKit.refreshReceipt { result in }
+                }
+            }
+        }
     }
     
     func completeIAPTransactions() {

@@ -148,7 +148,7 @@ class ViewController: UIViewController {
 
     func refreshReceipt() {
 
-        SwiftyStoreKit.refreshReceipt { (result) -> () in
+        SwiftyStoreKit.refreshReceipt { result in
 
             self.showAlert(self.alertForRefreshReceipt(result))
         }

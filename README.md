@@ -93,6 +93,14 @@ SwiftyStoreKit.restorePurchases() { results in
 }
 ```
 
+### Retrieve local receipt
+
+```swift
+let receiptData = SwiftyStoreKit.localReceiptData
+let receiptString = receiptData.base64EncodedString
+// do your receipt validation here
+```
+
 ### Verify Receipt
 
 ```swift

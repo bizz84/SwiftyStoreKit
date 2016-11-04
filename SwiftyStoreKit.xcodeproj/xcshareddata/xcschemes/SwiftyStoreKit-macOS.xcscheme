@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6502F62C1B985C40004E342D"
+               BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
                BuildableName = "SwiftyStoreKit.framework"
-               BlueprintName = "SwiftyStoreKit"
+               BlueprintName = "SwiftyStoreKit_macOS"
                ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6502F62C1B985C40004E342D"
+            BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
             BuildableName = "SwiftyStoreKit.framework"
-            BlueprintName = "SwiftyStoreKit"
+            BlueprintName = "SwiftyStoreKit_macOS"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -63,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "6502F62C1B985C40004E342D"
+            BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
             BuildableName = "SwiftyStoreKit.framework"
-            BlueprintName = "SwiftyStoreKit"
+            BlueprintName = "SwiftyStoreKit_macOS"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

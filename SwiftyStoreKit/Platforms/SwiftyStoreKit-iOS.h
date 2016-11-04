@@ -1,5 +1,5 @@
 //
-// SwiftyStoreKit.h
+// SwiftyStoreKit-iOS.h
 // SwiftyStoreKit
 //
 // Copyright (c) 2015 Andrea Bizzotto (bizz84@gmail.com)

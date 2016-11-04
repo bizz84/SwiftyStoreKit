@@ -1,6 +1,6 @@
 //
-//  SwiftyStoreKitTV.h
-//  SwiftyStoreKitTV
+//  SwiftyStoreKit-tvOS.h
+//  SwiftyStoreKit
 //
 //  Created by Florian Weich on 26.05.16.
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23,12 +23,12 @@
 
 #import <UIKit/UIKit.h>
 
-//! Project version number for SwiftyStoreKitTV.
-FOUNDATION_EXPORT double SwiftyStoreKitTVVersionNumber;
+//! Project version number for SwiftyStoreKit.
+FOUNDATION_EXPORT double SwiftyStoreKitVersionNumber;
 
-//! Project version string for SwiftyStoreKitTV.
-FOUNDATION_EXPORT const unsigned char SwiftyStoreKitTVVersionString[];
+//! Project version string for SwiftyStoreKit.
+FOUNDATION_EXPORT const unsigned char SwiftyStoreKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <SwiftyStoreKitTV/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <SwiftyStoreKit/PublicHeader.h>
 
 

@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
-               BuildableName = "SwiftyStoreKit.framework"
-               BlueprintName = "SwiftyStoreKitOSX"
+               BlueprintIdentifier = "C4FD3A001C2954C10035CFF3"
+               BuildableName = "SwiftyStoreKit_macOSDemo.app"
+               BlueprintName = "SwiftyStoreKit_macOSDemo"
                ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -29,6 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C4FD3A001C2954C10035CFF3"
+            BuildableName = "SwiftyStoreKit_macOSDemo.app"
+            BlueprintName = "SwiftyStoreKit_macOSDemo"
+            ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -42,15 +51,16 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
-            BuildableName = "SwiftyStoreKit.framework"
-            BlueprintName = "SwiftyStoreKitOSX"
+            BlueprintIdentifier = "C4FD3A001C2954C10035CFF3"
+            BuildableName = "SwiftyStoreKit_macOSDemo.app"
+            BlueprintName = "SwiftyStoreKit_macOSDemo"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
@@ -60,15 +70,16 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C4D74BBA1C24CEC90071AD3E"
-            BuildableName = "SwiftyStoreKit.framework"
-            BlueprintName = "SwiftyStoreKitOSX"
+            BlueprintIdentifier = "C4FD3A001C2954C10035CFF3"
+            BuildableName = "SwiftyStoreKit_macOSDemo.app"
+            BlueprintName = "SwiftyStoreKit_macOSDemo"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
-      </MacroExpansion>
+      </BuildableProductRunnable>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

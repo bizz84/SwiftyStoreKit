@@ -1,6 +1,6 @@
 //
-//  SwiftyStoreKitOSX.h
-//  SwiftyStoreKitOSX
+//  SwiftyStoreKit-macOS.h
+//  SwiftyStoreKit
 //
 //  Created by phimage on 19/12/15.
 //
@@ -24,12 +24,12 @@
 
 #import <Cocoa/Cocoa.h>
 
-//! Project version number for SwiftyStoreKitOSX.
-FOUNDATION_EXPORT double SwiftyStoreKitOSXVersionNumber;
+//! Project version number for SwiftyStoreKit.
+FOUNDATION_EXPORT double SwiftyStoreKitVersionNumber;
 
-//! Project version string for SwiftyStoreKitOSX.
-FOUNDATION_EXPORT const unsigned char SwiftyStoreKitOSXVersionString[];
+//! Project version string for SwiftyStoreKit.
+FOUNDATION_EXPORT const unsigned char SwiftyStoreKitVersionString[];
 
-// In this header, you should import all the public headers of your framework using statements like #import <SwiftyStoreKitOSX/PublicHeader.h>
+// In this header, you should import all the public headers of your framework using statements like #import <SwiftyStoreKit/PublicHeader.h>
 
 

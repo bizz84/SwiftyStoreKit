@@ -258,7 +258,9 @@ The user can background the hosting application and change the Apple ID used wit
 * [Apple - TN2387: In-App Purchase Best Practices](https://developer.apple.com/library/content/technotes/tn2387/_index.html)
 * [Apple - About Receipt Validation](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Introduction.html)
 * [Apple - Receipt Validation Programming Guide](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ReceiptFields.html#//apple_ref/doc/uid/TP40010573-CH106-SW1)
+* [Apple - Validating Receipts Locally](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateLocally.html)
 * [Apple - Offering Subscriptions](https://developer.apple.com/app-store/subscriptions/)
+* [objc.io - Receipt Validation](https://www.objc.io/issues/17-security/receipt-validation/)
 
 
 ## Implementation Details

@@ -221,7 +221,7 @@ github "bizz84/SwiftyStoreKit"
 See the [Releases Page](https://github.com/bizz84/SwiftyStoreKit/releases)
 
 ## Sample Code
-The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStore-iOS-Demo/ViewController.swift) [and macOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStore-macOS-Demo/ViewController.swift) showing how to use SwiftyStoreKit.
+The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit-iOS-Demo/ViewController.swift) [and macOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit-macOS-Demo/ViewController.swift) showing how to use SwiftyStoreKit.
 Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 #### Features

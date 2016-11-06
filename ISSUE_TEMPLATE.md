@@ -19,6 +19,9 @@
 ### Version
 ℹ Please replace this with the version of SwiftyStoreKit you're using.
 
+### Related issues
+ℹ Please replace this with references to similar issues (either open or already closed).
+
 ## Report
 
 ### Issue summary

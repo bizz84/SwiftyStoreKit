@@ -20,5 +20,16 @@
 ℹ Please replace this with the version of SwiftyStoreKit you're using.
 
 ## Report
-ℹ Please replace this with the reproduction steps for your issue.
+
+### Issue summary
+ℹ Please replace this with an explanation of the issue, including reproduction steps.
+
+### What did you expect to happen
+ℹ Please replace this with what you expected to happen.
+
+### What happened instead
+ℹ Please replace this with what happened instead.
+
+
+
 

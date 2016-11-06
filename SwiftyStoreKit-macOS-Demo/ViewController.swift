@@ -39,7 +39,7 @@ enum RegisteredPurchase : String {
 
 class ViewController: NSViewController {
 
-    let AppBundleId = "com.musevisions.OSX.SwiftyStoreKit"
+    let AppBundleId = "com.musevisions.MacOS.SwiftyStoreKitDemo"
     
     let Purchase1 = RegisteredPurchase.purchase1
     let Purchase2 = RegisteredPurchase.autoRenewablePurchase

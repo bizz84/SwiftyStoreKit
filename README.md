@@ -312,7 +312,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [iPic](https://itunes.apple.com/app/id1101244278?ls=1&mt=12) - Automatically upload images and save Markdown links
 * [iHosts](https://itunes.apple.com/app/id1102004240?ls=1&mt=12) - Perfect for editing /etc/hosts
 * [Arise](http://www.abnehm-app.de/) - Calorie counter
-* [Truth Truth Lie](https://itunes.apple.com/us/app/truth-truth-lie/id1130832864?ls=1&mt=8&app=messages) - iMessage game, featured by Apple
+* [Truth Truth Lie](https://itunes.apple.com/app/id1130832864?ls=1&mt=8&app=messages) - iMessage game, featured by Apple
 
 
 ## License

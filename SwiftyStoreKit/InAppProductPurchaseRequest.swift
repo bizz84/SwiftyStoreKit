@@ -27,12 +27,17 @@ import Foundation
 
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
+    enum TransactionType {
+        case purchase(product: SKProduct)
+        case restore
+    }
+
     enum TransactionResult {
         case purchased(productId: String)
         case restored(productId: String)
         case failed(error: Error)
     }
-    
+
     typealias RequestCallback = ([TransactionResult]) -> ()
     private let callback: RequestCallback
     private var purchases : [SKPaymentTransactionState: [String]] = [:]
@@ -40,32 +45,34 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
     }
-    
-    let product : SKProduct?
-    
+
+    let transactionType: TransactionType
+
+
     deinit {
         paymentQueue.remove(self)
     }
     // Initialiser for product purchase
-    private init(product: SKProduct?, callback: @escaping RequestCallback) {
-
-        self.product = product
+    private init(transactionType: TransactionType, callback: @escaping RequestCallback) {
+        self.transactionType = transactionType
         self.callback = callback
         super.init()
         paymentQueue.add(self)
     }
     // MARK: Public methods
     class func startPayment(_ product: SKProduct, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: product, callback: callback)
+        let transactionType = TransactionType.purchase(product: product)
+        let request = InAppProductPurchaseRequest(transactionType: transactionType, callback: callback)
         request.startPayment(product, applicationUsername: applicationUsername)
         return request
     }
     class func restorePurchases(_ callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: nil, callback: callback)
+        let transactionType = TransactionType.restore
+        let request = InAppProductPurchaseRequest(transactionType: transactionType, callback: callback)
         request.startRestorePurchases()
         return request
     }
-    
+
     // MARK: Private methods
     private func startPayment(_ product: SKProduct, applicationUsername: String = "") {
         guard let _ = product._productIdentifier else {
@@ -75,43 +82,42 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         }
         let payment = SKMutablePayment(product: product)
         payment.applicationUsername = applicationUsername
-        
+
         DispatchQueue.global(qos: .default).async {
             self.paymentQueue.add(payment)
         }
     }
     private func startRestorePurchases() {
-        
+
         DispatchQueue.global(qos: .default).async {
             self.paymentQueue.restoreCompletedTransactions()
         }
     }
-        
+
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
+
         var transactionResults: [TransactionResult] = []
-        
+
         for transaction in transactions {
-            
+
             let transactionProductIdentifier = transaction.payment.productIdentifier
-            
-            var isPurchaseRequest = false
-            if let productIdentifier = product?._productIdentifier {
-                if transactionProductIdentifier != productIdentifier {
+            switch transactionType {
+            case .purchase(let product):
+                guard transactionProductIdentifier == product._productIdentifier else {
                     continue
                 }
-                isPurchaseRequest = true
+
+            default:
+                break
             }
 
             let transactionState = transaction.transactionState
 
             switch transactionState {
             case .purchased:
-                if isPurchaseRequest {
-                    transactionResults.append(.purchased(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
-                }
+                transactionResults.append(.purchased(productId: transactionProductIdentifier))
+                paymentQueue.finishTransaction(transaction)
             case .failed:
                 // TODO: How to discriminate between purchase and restore?
                 // It appears that in some edge cases transaction.error is nil here. Since returning an associated error is
@@ -121,10 +127,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 transactionResults.append(.failed(error: transaction.error ?? altError))
                 paymentQueue.finishTransaction(transaction)
             case .restored:
-                if isPurchaseRequest {
-                    transactionResults.append(.restored(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
-                }
+                transactionResults.append(.restored(productId: transactionProductIdentifier))
+                paymentQueue.finishTransaction(transaction)
             case .purchasing:
                 // In progress: do nothing
                 break
@@ -145,13 +149,13 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             }
         }
     }
-    
+
     func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
-        
+
     }
-    
+
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        
+
         DispatchQueue.main.async {
             self.callback([.failed(error: error)])
         }
@@ -160,12 +164,12 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
         // This method will be called after all purchases have been restored (includes the case of no purchases)
         guard let restored = purchases[.restored], restored.count > 0 else {
-            
+
             self.callback([])
             return
         }
     }
-    
+
     func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
         
     }

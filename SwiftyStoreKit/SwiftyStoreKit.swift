@@ -263,7 +263,7 @@ public class SwiftyStoreKit {
         case .failed(let error):
             return .error(error: .failed(error: error))
         case .restored(let productId):
-            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(productId) from purchase path")))
+            return .success(productId: productId)
         }
     }
     

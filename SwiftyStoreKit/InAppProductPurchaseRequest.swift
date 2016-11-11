@@ -121,7 +121,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 transactionResults.append(.failed(error: transaction.error ?? altError))
                 paymentQueue.finishTransaction(transaction)
             case .restored:
-                if !isPurchaseRequest {
+                if isPurchaseRequest {
                     transactionResults.append(.restored(productId: transactionProductIdentifier))
                     paymentQueue.finishTransaction(transaction)
                 }

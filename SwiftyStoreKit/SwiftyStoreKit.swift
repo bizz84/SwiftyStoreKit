@@ -119,18 +119,19 @@ public class SwiftyStoreKit {
     /**
      *  Purchase a product
      *  - Parameter productId: productId as specified in iTunes Connect
+     *  - Parameter atomically: whether the product is purchased atomically (e.g. finishTransaction is called immediately)
      *  - Parameter applicationUsername: an opaque identifier for the user’s account on your system
      *  - Parameter completion: handler for result
      */
-    public class func purchaseProduct(_ productId: String, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
+    public class func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
         
         if let product = sharedInstance.store.products[productId] {
-            sharedInstance.purchase(product: product, applicationUsername: applicationUsername, completion: completion)
+            sharedInstance.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
         }
         else {
             retrieveProductsInfo(Set([productId])) { result -> () in
                 if let product = result.retrievedProducts.first {
-                    sharedInstance.purchase(product: product, applicationUsername: applicationUsername, completion: completion)
+                    sharedInstance.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
                 }
                 else if let error = result.error {
                     completion(.error(error: .failed(error: error)))
@@ -142,9 +143,9 @@ public class SwiftyStoreKit {
         }
     }
     
-    public class func restorePurchases(_ completion: @escaping (RestoreResults) -> ()) {
+    public class func restorePurchases(atomically: Bool = true, completion: @escaping (RestoreResults) -> ()) {
 
-        sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases() { results in
+        sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases(atomically: atomically) { results in
         
             sharedInstance.restoreRequest = nil
             let results = sharedInstance.processRestoreResults(results)
@@ -235,7 +236,7 @@ public class SwiftyStoreKit {
     #endif
 
     // MARK: private methods
-    private func purchase(product: SKProduct, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
+    private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
         guard SwiftyStoreKit.canMakePayments else {
             completion(.error(error: .paymentNotAllowed))
             return
@@ -245,7 +246,7 @@ public class SwiftyStoreKit {
             return
         }
 
-        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product, applicationUsername: applicationUsername) { results in
+        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
 
             self.inflightPurchases[productIdentifier] = nil
             

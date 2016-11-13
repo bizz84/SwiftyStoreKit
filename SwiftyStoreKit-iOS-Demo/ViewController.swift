@@ -77,7 +77,7 @@ class ViewController: UIViewController {
     func purchase(_ purchase: RegisteredPurchase) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForPurchaseResult(result))
@@ -86,7 +86,7 @@ class ViewController: UIViewController {
     @IBAction func restorePurchases() {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.restorePurchases() { results in
+        SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             self.showAlert(self.alertForRestorePurchases(results))

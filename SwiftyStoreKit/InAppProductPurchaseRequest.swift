@@ -42,26 +42,28 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     }
     
     let product : SKProduct?
+    let atomically: Bool
     
     deinit {
         paymentQueue.remove(self)
     }
     // Initialiser for product purchase
-    private init(product: SKProduct?, callback: @escaping RequestCallback) {
+    private init(product: SKProduct?, atomically: Bool, callback: @escaping RequestCallback) {
 
+        self.atomically = atomically
         self.product = product
         self.callback = callback
         super.init()
         paymentQueue.add(self)
     }
     // MARK: Public methods
-    class func startPayment(_ product: SKProduct, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: product, callback: callback)
+    class func startPayment(product: SKProduct, atomically: Bool, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
+        let request = InAppProductPurchaseRequest(product: product, atomically: atomically, callback: callback)
         request.startPayment(product, applicationUsername: applicationUsername)
         return request
     }
-    class func restorePurchases(_ callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: nil, callback: callback)
+    class func restorePurchases(atomically: Bool, callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
+        let request = InAppProductPurchaseRequest(product: nil, atomically: atomically, callback: callback)
         request.startRestorePurchases()
         return request
     }

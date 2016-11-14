@@ -80,15 +80,28 @@ class ViewController: UIViewController {
         SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
+            if case .success(_, let transaction) = result {
+                // Deliver content from server, then:
+                if let transaction = transaction {
+                    SwiftyStoreKit.finishTransaction(transaction)
+                }
+            }
             self.showAlert(self.alertForPurchaseResult(result))
         }
     }
+    
     @IBAction func restorePurchases() {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
+            for product in results.restoredProducts {
+                // Deliver content from server, then:
+                if let transaction = product.transaction {
+                    SwiftyStoreKit.finishTransaction(transaction)
+                }
+            }
             self.showAlert(self.alertForRestorePurchases(results))
         }
     }
@@ -193,7 +206,7 @@ extension ViewController {
 
     func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> UIAlertController {
         switch result {
-        case .success(let productId):
+        case .success(let productId, _):
             print("Purchase Success: \(productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
@@ -220,8 +233,8 @@ extension ViewController {
             print("Restore Failed: \(results.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
-        else if results.restoredProductIds.count > 0 {
-            print("Restore Success: \(results.restoredProductIds)")
+        else if results.restoredProducts.count > 0 {
+            print("Restore Success: \(results.restoredProducts)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         }
         else {

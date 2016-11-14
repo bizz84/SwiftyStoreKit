@@ -25,18 +25,22 @@
 import StoreKit
 import Foundation
 
+public protocol PaymentTransaction { }
+
+extension SKPaymentTransaction : PaymentTransaction { }
+
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
     enum TransactionResult {
-        case purchased(productId: String)
-        case restored(productId: String)
+        case purchased(productId: String, transaction: PaymentTransaction?)
+        case restored(productId: String, transaction: PaymentTransaction?)
         case failed(error: Error)
     }
     
     typealias RequestCallback = ([TransactionResult]) -> ()
     private let callback: RequestCallback
     private var purchases : [SKPaymentTransactionState: [String]] = [:]
-
+    
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
     }
@@ -66,6 +70,14 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
         let request = InAppProductPurchaseRequest(product: nil, atomically: atomically, callback: callback)
         request.startRestorePurchases()
         return request
+    }
+    
+    class func finishTransaction(_ transaction: PaymentTransaction) {
+        guard let skTransaction = transaction as? SKPaymentTransaction else {
+            print("Object is not a SKPaymentTransaction: \(transaction)")
+            return
+        }
+        SKPaymentQueue.default().finishTransaction(skTransaction)
     }
     
     // MARK: Private methods
@@ -111,8 +123,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             switch transactionState {
             case .purchased:
                 if isPurchaseRequest {
-                    transactionResults.append(.purchased(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
+                    let pendingTransaction = atomically ? nil : transaction
+                    transactionResults.append(.purchased(productId: transactionProductIdentifier, transaction: pendingTransaction))
+                    if atomically {
+                        paymentQueue.finishTransaction(transaction)
+                    }
                 }
             case .failed:
                 // TODO: How to discriminate between purchase and restore?
@@ -124,8 +139,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 paymentQueue.finishTransaction(transaction)
             case .restored:
                 if !isPurchaseRequest {
-                    transactionResults.append(.restored(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
+                    let pendingTransaction = atomically ? nil : transaction
+                    transactionResults.append(.restored(productId: transactionProductIdentifier, transaction: pendingTransaction))
+                    if atomically {
+                        paymentQueue.finishTransaction(transaction)
+                    }
                 }
             case .purchasing:
                 // In progress: do nothing

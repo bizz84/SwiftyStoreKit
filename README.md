@@ -66,10 +66,29 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 ```
 ### Purchase a product
 
+* **Atomic**: to be used when the content is delivered immediately.
+
 ```swift
-SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { result in
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: true) { result in
     switch result {
-    case .success(let productId):
+    case .success(let productId, _):
+        print("Purchase Success: \(productId)")
+    case .error(let error):
+        print("Purchase Failed: \(error)")
+    }
+}
+```
+
+* **Non-Atomic**: to be used when the content is delivered by the server.
+
+```swift
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: false) { result in
+    switch result {
+    case .success(let productId, let transaction):
+        // fetch content from your server, then:
+        if let transaction = transaction {
+            SwiftyStoreKit.finishTransaction(transaction)
+        }
         print("Purchase Success: \(productId)")
     case .error(let error):
         print("Purchase Failed: \(error)")
@@ -79,13 +98,37 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1") { res
 
 ### Restore previous purchases
 
+* **Atomic**: to be used when the content is delivered immediately.
+
 ```swift
-SwiftyStoreKit.restorePurchases() { results in
+SwiftyStoreKit.restorePurchases(atomically: true) { results in
     if results.restoreFailedProducts.count > 0 {
         print("Restore Failed: \(results.restoreFailedProducts)")
     }
-    else if results.restoredProductIds.count > 0 {
-        print("Restore Success: \(results.restoredProductIds)")
+    else if results.restoredProducts.count > 0 {
+        print("Restore Success: \(results.restoredProducts)")
+    }
+    else {
+        print("Nothing to Restore")
+    }
+}
+```
+
+* **Non-Atomic**: to be used when the content is delivered by the server.
+
+```swift
+SwiftyStoreKit.restorePurchases(atomically: false) { results in
+    if results.restoreFailedProducts.count > 0 {
+        print("Restore Failed: \(results.restoreFailedProducts)")
+    }
+    else if results.restoredProducts.count > 0 {
+        for product in results.restoredProducts {
+            // fetch content from your server, then:
+            if let transaction = product.transaction {
+                SwiftyStoreKit.finishTransaction(transaction)
+            }
+        }
+        print("Restore Success: \(results.restoredProducts)")
     }
     else {
         print("Nothing to Restore")

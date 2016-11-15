@@ -55,7 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func completeIAPTransactions() {
         
-        SwiftyStoreKit.completeTransactions() { products in
+        SwiftyStoreKit.completeTransactions(atomically: true) { products in
             
             for product in products {
                 

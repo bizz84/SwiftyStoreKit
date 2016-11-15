@@ -176,7 +176,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> NSAlert {
+    func alertForProductRetrievalInfo(_ result: RetrieveResults) -> NSAlert {
         
         if let product = result.retrievedProducts.first {
             let priceString = product.localizedPrice!
@@ -191,7 +191,7 @@ extension ViewController {
         }
     }
     
-    func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> NSAlert {
+    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert {
 
         switch result {
         case .success(let productId):
@@ -215,7 +215,7 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(_ results: SwiftyStoreKit.RestoreResults) -> NSAlert {
+    func alertForRestorePurchases(_ results: RestoreResults) -> NSAlert {
         
         if results.restoreFailedProducts.count > 0 {
             print("Restore Failed: \(results.restoreFailedProducts)")
@@ -231,7 +231,7 @@ extension ViewController {
         }
     }
     
-    func alertForVerifyReceipt(_ result: SwiftyStoreKit.VerifyReceiptResult) -> NSAlert {
+    func alertForVerifyReceipt(_ result: VerifyReceiptResult) -> NSAlert {
 
         switch result {
         case .success(let receipt):
@@ -243,7 +243,7 @@ extension ViewController {
         }
     }
     
-    func alertForVerifySubscription(_ result: SwiftyStoreKit.VerifySubscriptionResult) -> NSAlert {
+    func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> NSAlert {
         
         switch result {
         case .purchased(let expiresDate):
@@ -259,7 +259,7 @@ extension ViewController {
     }
 
 
-    func alertForVerifyPurchase(_ result: SwiftyStoreKit.VerifyPurchaseResult) -> NSAlert {
+    func alertForVerifyPurchase(_ result: VerifyPurchaseResult) -> NSAlert {
         
         switch result {
         case .purchased:
@@ -271,7 +271,7 @@ extension ViewController {
         }
     }
     
-    func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> NSAlert {
+    func alertForRefreshReceipt(_ result: RefreshReceiptResult) -> NSAlert {
         switch result {
         case .success(let receiptData):
             print("Receipt refresh Success: \(receiptData.base64EncodedString)")

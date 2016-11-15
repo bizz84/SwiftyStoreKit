@@ -25,18 +25,6 @@
 import StoreKit
 import Foundation
 
-public struct Product {
-    public let productId: String
-    public let transaction: PaymentTransaction
-    public let needsFinishTransaction: Bool
-}
-
-public protocol PaymentTransaction {
-    var transactionState: SKPaymentTransactionState { get }
-}
-
-extension SKPaymentTransaction : PaymentTransaction { }
-
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
     enum TransactionResult {

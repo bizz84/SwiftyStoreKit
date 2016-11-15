@@ -56,39 +56,6 @@ public class SwiftyStoreKit {
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
     
-    
-    
-    // MARK: Enums
-    public struct RetrieveResults {
-        public let retrievedProducts: Set<SKProduct>
-        public let invalidProductIDs: Set<String>
-        public let error: Error?
-    }
-
-    public enum PurchaseError {
-        case failed(error: Error)
-        case invalidProductId(productId: String)
-        case noProductIdentifier
-        case paymentNotAllowed
-    }
-    public enum PurchaseResult {
-        case success(product: Product)
-        case error(error: PurchaseError)
-    }
-    public struct RestoreResults {
-        public let restoredProducts: [Product]
-        public let restoreFailedProducts: [(Swift.Error, String?)]
-    }
-    public enum RefreshReceiptResult {
-        case success(receiptData: Data)
-        case error(error: Error)
-    }
-
-    public enum InternalErrorCode: Int {
-        case restoredPurchaseWhenPurchasing = 0
-        case purchasedWhenRestoringPurchase = 1
-    }
-
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
     

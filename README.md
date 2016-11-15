@@ -23,7 +23,9 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png" width="320">
 
-### Setup + Complete Transactions
+## App startup
+
+### Complete Transactions
 
 Apple recommends to register a transaction observer [as soon as the app starts](https://developer.apple.com/library/ios/technotes/tn2387/_index.html):
 > Adding your app's observer at launch ensures that it will persist during all launches of your app, thus allowing your app to receive all the payment queue notifications.
@@ -53,6 +55,8 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 
 If there are any pending transactions at this point, these will be reported by the completion block so that the app state and UI can be updated.
 
+## Purchases
+
 ### Retrieve products info
 ```swift
 SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]) { result in
@@ -68,6 +72,7 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
     }
 }
 ```
+
 ### Purchase a product
 
 * **Atomic**: to be used when the content is delivered immediately.
@@ -139,6 +144,31 @@ SwiftyStoreKit.restorePurchases(atomically: false) { results in
     }
 }
 ```
+
+#### What does atomic / non-atomic mean?
+
+When you purchase a product the following things happen:
+
+* A payment is added to the payment queue for your IAP.
+* When the payment has been processed with Apple, the payment queue is updated so that the appropriate transaction can be handled.
+* If the transaction state is **purchased** or **restored**, the app can unlock the functionality purchased by the user.
+* The app should call `finishTransaction()` to complete the purchase.
+
+This is what is [recommended by Apple](https://developer.apple.com/reference/storekit/skpaymentqueue/1506003-finishtransaction):
+
+> Your application should call finishTransaction(_:) only after it has successfully processed the transaction and unlocked the functionality purchased by the user.
+
+* A purchase is **atomic** when the app unlocks the functionality purchased by the user immediately and call `finishTransaction()` at the same time. This is desirable if you're unlocking functionality that is already inside the app.
+
+* In cases when you need to make a request to your own server in order to unlock the functionality, you can use a **non-atomic** purchase instead.
+
+There are three operations that can be performed **atomically** or **non-atomically**:
+
+* Making a purchase
+* Restoring purchases
+* Completing transactions on app launch
+
+## Receipt verification
 
 ### Retrieve local receipt
 

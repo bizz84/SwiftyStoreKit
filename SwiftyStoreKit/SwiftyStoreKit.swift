@@ -72,24 +72,16 @@ public class SwiftyStoreKit {
         case paymentNotAllowed
     }
     public enum PurchaseResult {
-        case success(productId: String, transaction: PaymentTransaction?)
+        case success(product: Product)
         case error(error: PurchaseError)
     }
-    public struct RestoredProduct {
-        public let productId: String
-        public let transaction: PaymentTransaction?
-    }
     public struct RestoreResults {
-        public let restoredProducts: [RestoredProduct]
+        public let restoredProducts: [Product]
         public let restoreFailedProducts: [(Swift.Error, String?)]
     }
     public enum RefreshReceiptResult {
         case success(receiptData: Data)
         case error(error: Error)
-    }
-    public struct CompletedTransaction {
-        public let productId: String
-        public let transactionState: SKPaymentTransactionState
     }
 
     public enum InternalErrorCode: Int {
@@ -108,8 +100,8 @@ public class SwiftyStoreKit {
         return sharedInstance.inflightPurchases.count > 0 || sharedInstance.restoreRequest != nil
     }
     
-    public class func completeTransactions(_ completion: @escaping ([CompletedTransaction]) -> ()) {
-        sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(callback: completion)
+    public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
+        sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(atomically: atomically, callback: completion)
     }
     
     // MARK: Public methods
@@ -271,26 +263,26 @@ public class SwiftyStoreKit {
 
     private func processPurchaseResult(_ result: InAppProductPurchaseRequest.TransactionResult) -> PurchaseResult {
         switch result {
-        case .purchased(let productId, let transaction):
-            return .success(productId: productId, transaction: transaction)
+        case .purchased(let product):
+            return .success(product: product)
         case .failed(let error):
             return .error(error: .failed(error: error))
-        case .restored(let productId, _):
-            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(productId) from purchase path")))
+        case .restored(let product):
+            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path")))
         }
     }
     
     private func processRestoreResults(_ results: [InAppProductPurchaseRequest.TransactionResult]) -> RestoreResults {
-        var restoredProducts: [RestoredProduct] = []
+        var restoredProducts: [Product] = []
         var restoreFailedProducts: [(Swift.Error, String?)] = []
         for result in results {
             switch result {
-            case .purchased(let productId, _):
-                restoreFailedProducts.append((storeInternalError(code: InternalErrorCode.purchasedWhenRestoringPurchase.rawValue, description: "Cannot purchase product \(productId) from restore purchases path"), productId))
+            case .purchased(let product):
+                restoreFailedProducts.append((storeInternalError(code: InternalErrorCode.purchasedWhenRestoringPurchase.rawValue, description: "Cannot purchase product \(product.productId) from restore purchases path"), product.productId))
             case .failed(let error):
                 restoreFailedProducts.append((error, nil))
-            case .restored(let productId, let transaction):
-                restoredProducts.append(RestoredProduct(productId: productId, transaction: transaction))
+            case .restored(let product):
+                restoredProducts.append(product)
             }
         }
         return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)

@@ -25,15 +25,23 @@
 import StoreKit
 import Foundation
 
-public protocol PaymentTransaction { }
+public struct Product {
+    public let productId: String
+    public let transaction: PaymentTransaction
+    public let needsFinishTransaction: Bool
+}
+
+public protocol PaymentTransaction {
+    var transactionState: SKPaymentTransactionState { get }
+}
 
 extension SKPaymentTransaction : PaymentTransaction { }
 
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
     enum TransactionResult {
-        case purchased(productId: String, transaction: PaymentTransaction?)
-        case restored(productId: String, transaction: PaymentTransaction?)
+        case purchased(product: Product)
+        case restored(product: Product)
         case failed(error: Error)
     }
     
@@ -123,8 +131,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             switch transactionState {
             case .purchased:
                 if isPurchaseRequest {
-                    let pendingTransaction = atomically ? nil : transaction
-                    transactionResults.append(.purchased(productId: transactionProductIdentifier, transaction: pendingTransaction))
+                    let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+                    transactionResults.append(.purchased(product: product))
                     if atomically {
                         paymentQueue.finishTransaction(transaction)
                     }
@@ -139,8 +147,8 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 paymentQueue.finishTransaction(transaction)
             case .restored:
                 if !isPurchaseRequest {
-                    let pendingTransaction = atomically ? nil : transaction
-                    transactionResults.append(.restored(productId: transactionProductIdentifier, transaction: pendingTransaction))
+                    let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+                    transactionResults.append(.restored(product: product))
                     if atomically {
                         paymentQueue.finishTransaction(transaction)
                     }

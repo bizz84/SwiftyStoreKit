@@ -77,10 +77,10 @@ class ViewController: NSViewController {
 
         SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
 
-            if case .success(_, let transaction) = result {
+            if case .success(let product) = result {
                 // Deliver content from server, then:
-                if let transaction = transaction {
-                    SwiftyStoreKit.finishTransaction(transaction)
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
                 }
             }
 
@@ -94,8 +94,8 @@ class ViewController: NSViewController {
             
             for product in results.restoredProducts {
                 // Deliver content from server, then:
-                if let transaction = product.transaction {
-                    SwiftyStoreKit.finishTransaction(transaction)
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
                 }
             }
 

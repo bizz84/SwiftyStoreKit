@@ -35,13 +35,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func completeIAPTransactions() {
         
-        SwiftyStoreKit.completeTransactions() { completedTransactions in
+        SwiftyStoreKit.completeTransactions() { products in
             
-            for completedTransaction in completedTransactions {
+            for product in products {
                 
-                if completedTransaction.transactionState == .purchased || completedTransaction.transactionState == .restored {
+                if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
                     
-                    print("purchased: \(completedTransaction.productId)")
+                    if product.needsFinishTransaction {
+                        // Deliver content from server, then:
+                        SwiftyStoreKit.finishTransaction(product.transaction)
+                    }
+                    print("purchased: \(product.productId)")
                 }
             }
         }

@@ -42,20 +42,23 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     
     private var callbackCalled: Bool = false
         
-    typealias TransactionsCallback = ([SwiftyStoreKit.CompletedTransaction]) -> ()
+    typealias TransactionsCallback = ([Product]) -> ()
     
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
     }
 
+    let atomically: Bool
+    
     deinit {
         paymentQueue.remove(self)
     }
 
     let callback: TransactionsCallback
     
-    init(callback: @escaping TransactionsCallback) {
+    init(atomically: Bool, callback: @escaping TransactionsCallback) {
     
+        self.atomically = atomically
         self.callback = callback
         super.init()
         paymentQueue.add(self)
@@ -70,7 +73,7 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
             return
         }
         
-        var completedTransactions: [SwiftyStoreKit.CompletedTransaction] = []
+        var completedTransactions: [Product] = []
         
         for transaction in transactions {
             
@@ -78,9 +81,9 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
 
             if transactionState != .purchasing {
                 
-                let completedTransaction = SwiftyStoreKit.CompletedTransaction(productId: transaction.payment.productIdentifier, transactionState: transactionState)
+                let product = Product(productId: transaction.payment.productIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
                 
-                completedTransactions.append(completedTransaction)
+                completedTransactions.append(product)
                 
                 print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
                 

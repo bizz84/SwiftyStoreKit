@@ -80,10 +80,10 @@ class ViewController: UIViewController {
         SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
-            if case .success(_, let transaction) = result {
+            if case .success(let product) = result {
                 // Deliver content from server, then:
-                if let transaction = transaction {
-                    SwiftyStoreKit.finishTransaction(transaction)
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
                 }
             }
             self.showAlert(self.alertForPurchaseResult(result))
@@ -98,8 +98,8 @@ class ViewController: UIViewController {
             
             for product in results.restoredProducts {
                 // Deliver content from server, then:
-                if let transaction = product.transaction {
-                    SwiftyStoreKit.finishTransaction(transaction)
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
                 }
             }
             self.showAlert(self.alertForRestorePurchases(results))
@@ -206,8 +206,8 @@ extension ViewController {
 
     func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> UIAlertController {
         switch result {
-        case .success(let productId, _):
-            print("Purchase Success: \(productId)")
+        case .success(let product):
+            print("Purchase Success: \(product.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")

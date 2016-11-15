@@ -33,13 +33,17 @@ SwiftyStoreKit supports this by calling `completeTransactions()` when the app st
 ```swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-	SwiftyStoreKit.completeTransactions() { completedTransactions in
+	SwiftyStoreKit.completeTransactions(atomically: true) { products in
 	
-	    for completedTransaction in completedTransactions {
+	    for product in products {
 	
-	        if completedTransaction.transactionState == .purchased || completedTransaction.transactionState == .restored {
+	        if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
 	
-	            print("purchased: \(completedTransaction.productId)")
+               if product.needsFinishTransaction {
+                   // Deliver content from server, then:
+                   SwiftyStoreKit.finishTransaction(product.transaction)
+               }
+               print("purchased: \(product)")
 	        }
 	    }
 	}
@@ -71,8 +75,8 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 ```swift
 SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: true) { result in
     switch result {
-    case .success(let productId, _):
-        print("Purchase Success: \(productId)")
+    case .success(let product):
+        print("Purchase Success: \(product.productId)")
     case .error(let error):
         print("Purchase Failed: \(error)")
     }
@@ -84,12 +88,12 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
 ```swift
 SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: false) { result in
     switch result {
-    case .success(let productId, let transaction):
+    case .success(let product):
         // fetch content from your server, then:
-        if let transaction = transaction {
-            SwiftyStoreKit.finishTransaction(transaction)
+        if product.needsFinishTransaction {
+            SwiftyStoreKit.finishTransaction(product.transaction)
         }
-        print("Purchase Success: \(productId)")
+        print("Purchase Success: \(product.productId)")
     case .error(let error):
         print("Purchase Failed: \(error)")
     }
@@ -124,8 +128,8 @@ SwiftyStoreKit.restorePurchases(atomically: false) { results in
     else if results.restoredProducts.count > 0 {
         for product in results.restoredProducts {
             // fetch content from your server, then:
-            if let transaction = product.transaction {
-                SwiftyStoreKit.finishTransaction(transaction)
+            if product.needsFinishTransaction {
+                SwiftyStoreKit.finishTransaction(product.transaction)
             }
         }
         print("Restore Success: \(results.restoredProducts)")

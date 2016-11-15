@@ -24,24 +24,31 @@
 
 import StoreKit
 
+// MARK: Purchases
+
+// Purchased or restored product
 public struct Product {
     public let productId: String
     public let transaction: PaymentTransaction
     public let needsFinishTransaction: Bool
 }
 
+// Payment transaction
 public protocol PaymentTransaction {
     var transactionState: SKPaymentTransactionState { get }
 }
 
+// Add PaymentTransaction conformance to SKPaymentTransaction
 extension SKPaymentTransaction : PaymentTransaction { }
 
+// Products information
 public struct RetrieveResults {
     public let retrievedProducts: Set<SKProduct>
     public let invalidProductIDs: Set<String>
     public let error: Error?
 }
 
+// Purchase error types
 public enum PurchaseError {
     case failed(error: Error)
     case invalidProductId(productId: String)
@@ -49,31 +56,30 @@ public enum PurchaseError {
     case paymentNotAllowed
 }
 
+// Purchase result
 public enum PurchaseResult {
     case success(product: Product)
     case error(error: PurchaseError)
 }
 
+// Restore purchase results
 public struct RestoreResults {
     public let restoredProducts: [Product]
     public let restoreFailedProducts: [(Swift.Error, String?)]
 }
 
+// MARK: Receipt verification
+
+// Info for receipt returned by server
+public typealias ReceiptInfo = [String: AnyObject]
+
+// Refresh receipt result
 public enum RefreshReceiptResult {
     case success(receiptData: Data)
     case error(error: Error)
 }
 
-public enum InternalErrorCode: Int {
-    case restoredPurchaseWhenPurchasing = 0
-    case purchasedWhenRestoringPurchase = 1
-}
-
-
-// Info for receipt returned by server
-public typealias ReceiptInfo = [String: AnyObject]
-
-// MARK: - Enumeration
+// Verify receipt result
 public enum VerifyReceiptResult {
     case success(receipt: ReceiptInfo)
     case error(error: ReceiptError)
@@ -85,7 +91,7 @@ public enum VerifyPurchaseResult {
     case notPurchased
 }
 
-//  Result for Subscription
+// Verify subscription result
 public enum VerifySubscriptionResult {
     case purchased(expiryDate: Date)
     case expired(expiryDate: Date)

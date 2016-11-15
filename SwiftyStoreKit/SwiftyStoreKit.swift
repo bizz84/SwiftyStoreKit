@@ -56,6 +56,11 @@ public class SwiftyStoreKit {
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     #endif
     
+    private enum InternalErrorCode: Int {
+        case restoredPurchaseWhenPurchasing = 0
+        case purchasedWhenRestoringPurchase = 1
+    }
+
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
     

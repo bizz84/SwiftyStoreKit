@@ -36,6 +36,7 @@ public struct Product {
 // Payment transaction
 public protocol PaymentTransaction {
     var transactionState: SKPaymentTransactionState { get }
+    var transactionIdentifier: String? { get }
 }
 
 // Add PaymentTransaction conformance to SKPaymentTransaction

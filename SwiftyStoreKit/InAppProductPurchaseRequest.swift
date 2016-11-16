@@ -28,42 +28,52 @@ import Foundation
 class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
 
     enum TransactionResult {
-        case purchased(productId: String)
-        case restored(productId: String)
+        case purchased(product: Product)
+        case restored(product: Product)
         case failed(error: Error)
     }
     
     typealias RequestCallback = ([TransactionResult]) -> ()
     private let callback: RequestCallback
     private var purchases : [SKPaymentTransactionState: [String]] = [:]
-
+    
     var paymentQueue: SKPaymentQueue {
         return SKPaymentQueue.default()
     }
     
     let product : SKProduct?
+    let atomically: Bool
     
     deinit {
         paymentQueue.remove(self)
     }
     // Initialiser for product purchase
-    private init(product: SKProduct?, callback: @escaping RequestCallback) {
+    private init(product: SKProduct?, atomically: Bool, callback: @escaping RequestCallback) {
 
+        self.atomically = atomically
         self.product = product
         self.callback = callback
         super.init()
         paymentQueue.add(self)
     }
     // MARK: Public methods
-    class func startPayment(_ product: SKProduct, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: product, callback: callback)
+    class func startPayment(product: SKProduct, atomically: Bool, applicationUsername: String = "", callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
+        let request = InAppProductPurchaseRequest(product: product, atomically: atomically, callback: callback)
         request.startPayment(product, applicationUsername: applicationUsername)
         return request
     }
-    class func restorePurchases(_ callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
-        let request = InAppProductPurchaseRequest(product: nil, callback: callback)
+    class func restorePurchases(atomically: Bool, callback: @escaping RequestCallback) -> InAppProductPurchaseRequest {
+        let request = InAppProductPurchaseRequest(product: nil, atomically: atomically, callback: callback)
         request.startRestorePurchases()
         return request
+    }
+    
+    class func finishTransaction(_ transaction: PaymentTransaction) {
+        guard let skTransaction = transaction as? SKPaymentTransaction else {
+            print("Object is not a SKPaymentTransaction: \(transaction)")
+            return
+        }
+        SKPaymentQueue.default().finishTransaction(skTransaction)
     }
     
     // MARK: Private methods
@@ -109,8 +119,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             switch transactionState {
             case .purchased:
                 if isPurchaseRequest {
-                    transactionResults.append(.purchased(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
+                    let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+                    transactionResults.append(.purchased(product: product))
+                    if atomically {
+                        paymentQueue.finishTransaction(transaction)
+                    }
                 }
             case .failed:
                 // TODO: How to discriminate between purchase and restore?
@@ -122,8 +135,11 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
                 paymentQueue.finishTransaction(transaction)
             case .restored:
                 if !isPurchaseRequest {
-                    transactionResults.append(.restored(productId: transactionProductIdentifier))
-                    paymentQueue.finishTransaction(transaction)
+                    let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+                    transactionResults.append(.restored(product: product))
+                    if atomically {
+                        paymentQueue.finishTransaction(transaction)
+                    }
                 }
             case .purchasing:
                 // In progress: do nothing

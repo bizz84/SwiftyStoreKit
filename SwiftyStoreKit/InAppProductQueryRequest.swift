@@ -26,7 +26,7 @@ import StoreKit
 
 class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
-    typealias RequestCallback = (SwiftyStoreKit.RetrieveResults) -> ()
+    typealias RequestCallback = (RetrieveResults) -> ()
     private let callback: RequestCallback
     private let request: SKProductsRequest
     // http://stackoverflow.com/questions/24011575/what-is-the-difference-between-a-weak-reference-and-an-unowned-reference
@@ -65,7 +65,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
             
             let retrievedProducts = Set<SKProduct>(response.products)
             let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
-            self.callback(SwiftyStoreKit.RetrieveResults(retrievedProducts: retrievedProducts,
+            self.callback(RetrieveResults(retrievedProducts: retrievedProducts,
                 invalidProductIDs: invalidProductIDs, error: nil))
         }
     }
@@ -80,7 +80,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
     func requestFailed(_ error: Error){
         DispatchQueue.main.async {
-            self.callback(SwiftyStoreKit.RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
+            self.callback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
         }
     }
 }

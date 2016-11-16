@@ -75,7 +75,14 @@ class ViewController: NSViewController {
 
     func purchase(_ purchase: RegisteredPurchase) {
 
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
+
+            if case .success(let product) = result {
+                // Deliver content from server, then:
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
+                }
+            }
 
             self.showAlert(self.alertForPurchaseResult(result))
         }
@@ -83,8 +90,15 @@ class ViewController: NSViewController {
 
     @IBAction func restorePurchases(_ sender: AnyObject?) {
 
-        SwiftyStoreKit.restorePurchases() { results in
+        SwiftyStoreKit.restorePurchases(atomically: true) { results in
             
+            for product in results.restoredProducts {
+                // Deliver content from server, then:
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
+                }
+            }
+
             self.showAlert(self.alertForRestorePurchases(results))
         }
     }
@@ -162,7 +176,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> NSAlert {
+    func alertForProductRetrievalInfo(_ result: RetrieveResults) -> NSAlert {
         
         if let product = result.retrievedProducts.first {
             let priceString = product.localizedPrice!
@@ -177,7 +191,7 @@ extension ViewController {
         }
     }
     
-    func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> NSAlert {
+    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert {
 
         switch result {
         case .success(let productId):
@@ -201,14 +215,14 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(_ results: SwiftyStoreKit.RestoreResults) -> NSAlert {
+    func alertForRestorePurchases(_ results: RestoreResults) -> NSAlert {
         
         if results.restoreFailedProducts.count > 0 {
             print("Restore Failed: \(results.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
-        else if results.restoredProductIds.count > 0 {
-            print("Restore Success: \(results.restoredProductIds)")
+        else if results.restoredProducts.count > 0 {
+            print("Restore Success: \(results.restoredProducts)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         }
         else {
@@ -217,7 +231,7 @@ extension ViewController {
         }
     }
     
-    func alertForVerifyReceipt(_ result: SwiftyStoreKit.VerifyReceiptResult) -> NSAlert {
+    func alertForVerifyReceipt(_ result: VerifyReceiptResult) -> NSAlert {
 
         switch result {
         case .success(let receipt):
@@ -229,7 +243,7 @@ extension ViewController {
         }
     }
     
-    func alertForVerifySubscription(_ result: SwiftyStoreKit.VerifySubscriptionResult) -> NSAlert {
+    func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> NSAlert {
         
         switch result {
         case .purchased(let expiresDate):
@@ -245,7 +259,7 @@ extension ViewController {
     }
 
 
-    func alertForVerifyPurchase(_ result: SwiftyStoreKit.VerifyPurchaseResult) -> NSAlert {
+    func alertForVerifyPurchase(_ result: VerifyPurchaseResult) -> NSAlert {
         
         switch result {
         case .purchased:
@@ -257,7 +271,7 @@ extension ViewController {
         }
     }
     
-    func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> NSAlert {
+    func alertForRefreshReceipt(_ result: RefreshReceiptResult) -> NSAlert {
         switch result {
         case .success(let receiptData):
             print("Receipt refresh Success: \(receiptData.base64EncodedString)")

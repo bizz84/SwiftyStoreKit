@@ -162,7 +162,7 @@ This is what is [recommended by Apple](https://developer.apple.com/reference/sto
 
 * In cases when you need to make a request to your own server in order to unlock the functionality, you can use a **non-atomic** purchase instead.
 
-There are three operations that can be performed **atomically** or **non-atomically**:
+SwiftyStoreKit provides three operations that can be performed **atomically** or **non-atomically**:
 
 * Making a purchase
 * Restoring purchases

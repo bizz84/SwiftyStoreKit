@@ -77,18 +77,31 @@ class ViewController: UIViewController {
     func purchase(_ purchase: RegisteredPurchase) {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue) { result in
+        SwiftyStoreKit.purchaseProduct(AppBundleId + "." + purchase.rawValue, atomically: true) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
+            if case .success(let product) = result {
+                // Deliver content from server, then:
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
+                }
+            }
             self.showAlert(self.alertForPurchaseResult(result))
         }
     }
+    
     @IBAction func restorePurchases() {
         
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.restorePurchases() { results in
+        SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
+            for product in results.restoredProducts {
+                // Deliver content from server, then:
+                if product.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(product.transaction)
+                }
+            }
             self.showAlert(self.alertForRestorePurchases(results))
         }
     }
@@ -176,7 +189,7 @@ extension ViewController {
         }
     }
 
-    func alertForProductRetrievalInfo(_ result: SwiftyStoreKit.RetrieveResults) -> UIAlertController {
+    func alertForProductRetrievalInfo(_ result: RetrieveResults) -> UIAlertController {
         
         if let product = result.retrievedProducts.first {
             let priceString = product.localizedPrice!
@@ -191,10 +204,10 @@ extension ViewController {
         }
     }
 
-    func alertForPurchaseResult(_ result: SwiftyStoreKit.PurchaseResult) -> UIAlertController {
+    func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController {
         switch result {
-        case .success(let productId):
-            print("Purchase Success: \(productId)")
+        case .success(let product):
+            print("Purchase Success: \(product.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
@@ -214,14 +227,14 @@ extension ViewController {
         }
     }
     
-    func alertForRestorePurchases(_ results: SwiftyStoreKit.RestoreResults) -> UIAlertController {
+    func alertForRestorePurchases(_ results: RestoreResults) -> UIAlertController {
 
         if results.restoreFailedProducts.count > 0 {
             print("Restore Failed: \(results.restoreFailedProducts)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
         }
-        else if results.restoredProductIds.count > 0 {
-            print("Restore Success: \(results.restoredProductIds)")
+        else if results.restoredProducts.count > 0 {
+            print("Restore Success: \(results.restoredProducts)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         }
         else {
@@ -231,7 +244,7 @@ extension ViewController {
     }
 
 
-    func alertForVerifyReceipt(_ result: SwiftyStoreKit.VerifyReceiptResult) -> UIAlertController {
+    func alertForVerifyReceipt(_ result: VerifyReceiptResult) -> UIAlertController {
 
         switch result {
         case .success(let receipt):
@@ -248,7 +261,7 @@ extension ViewController {
         }
     }
   
-    func alertForVerifySubscription(_ result: SwiftyStoreKit.VerifySubscriptionResult) -> UIAlertController {
+    func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> UIAlertController {
     
         switch result {
         case .purchased(let expiresDate):
@@ -263,7 +276,7 @@ extension ViewController {
         }
     }
 
-    func alertForVerifyPurchase(_ result: SwiftyStoreKit.VerifyPurchaseResult) -> UIAlertController {
+    func alertForVerifyPurchase(_ result: VerifyPurchaseResult) -> UIAlertController {
         
         switch result {
         case .purchased:
@@ -275,7 +288,7 @@ extension ViewController {
         }
     }
 
-    func alertForRefreshReceipt(_ result: SwiftyStoreKit.RefreshReceiptResult) -> UIAlertController {
+    func alertForRefreshReceipt(_ result: RefreshReceiptResult) -> UIAlertController {
         switch result {
         case .success(let receiptData):
             print("Receipt refresh Success: \(receiptData.base64EncodedString)")

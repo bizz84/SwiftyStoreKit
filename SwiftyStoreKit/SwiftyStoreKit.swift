@@ -222,7 +222,7 @@ public class SwiftyStoreKit {
             return
         }
 
-        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
+        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product, atomically: atomically, applicationUsername: applicationUsername) { results in
 
             self.inflightPurchases[productIdentifier] = nil
             
@@ -239,8 +239,8 @@ public class SwiftyStoreKit {
             return .success(product: product)
         case .failed(let error):
             return .error(error: .failed(error: error))
-        case .restored(let productId):
-            return .success(productId: productId)
+        case .restored(let product):
+            return .success(product: product)
 
         }
     }

@@ -125,7 +125,7 @@
 		65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-tvOS.h"; sourceTree = "<group>"; };
 		C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptRefreshRequest.swift; sourceTree = "<group>"; };
 		C40C680F1C29414C00B60B7E /* OS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OS.swift; sourceTree = "<group>"; };
-		C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; };
+		C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; tabWidth = 4; };
 		C4D74BBB1C24CEC90071AD3E /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4FD3A011C2954C10035CFF3 /* SwiftyStoreKit_macOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyStoreKit_macOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */

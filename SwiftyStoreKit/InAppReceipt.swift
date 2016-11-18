@@ -180,7 +180,7 @@ internal class InAppReceipt {
     ) -> VerifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
-        let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
+        let receiptsInfo = getReceiptsInfoForSubscriptions(forProductId: productId, inReceipt: receipt)
         if receiptsInfo.count == 0 {
             return .notPurchased
         }
@@ -252,6 +252,30 @@ internal class InAppReceipt {
                 return product_id == productId
             }
       
+        return receiptsMatchingProductId
+    }
+    
+    /**
+     *  Get all the receipts info for a specific product from latest receipt info
+     *  - Parameter productId: the product id
+     *  - Parameter inReceipt: the receipt to grab info from
+     */
+    private class func getReceiptsInfoForSubscriptions(
+        forProductId productId: String,
+        inReceipt receipt: ReceiptInfo
+        ) -> [ReceiptInfo] {
+        // Get all latest receipt info
+        guard let latestInfoReceipts = receipt["latest_receipt_info"] as? [ReceiptInfo] else {
+            return []
+        }
+        
+        // Filter receipt infos with matching product id
+        let receiptsMatchingProductId = latestInfoReceipts
+            .filter { (receipt) -> Bool in
+                let product_id = receipt["product_id"] as? String
+                return product_id == productId
+        }
+        
         return receiptsMatchingProductId
     }
 }

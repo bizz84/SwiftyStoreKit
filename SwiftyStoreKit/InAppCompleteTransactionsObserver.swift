@@ -87,7 +87,9 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
                 
                 print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
                 
-                paymentQueue.finishTransaction(transaction)
+                if atomically {
+                    paymentQueue.finishTransaction(transaction)
+                }
             }
         }
         callbackCalled = true

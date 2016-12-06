@@ -174,7 +174,7 @@ SwiftyStoreKit provides three operations that can be performed **atomically** or
 
 ```swift
 let receiptData = SwiftyStoreKit.localReceiptData
-let receiptString = receiptData.base64EncodedString
+let receiptString = receiptData.base64EncodedString(options: [])
 // do your receipt validation here
 ```
 

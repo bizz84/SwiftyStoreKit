@@ -77,7 +77,7 @@ public class SwiftyStoreKit {
         public let restoreFailedProducts: [(ErrorType, String?)]
     }
     public enum RefreshReceiptResult {
-        case Success
+        case Success(receiptData: NSData)
         case Error(error: ErrorType)
     }
     public struct CompletedTransaction {
@@ -151,6 +151,11 @@ public class SwiftyStoreKit {
             completion(results: results)
         }
     }
+    
+    
+    public static var localReceiptData: NSData? {
+        return InAppReceipt.appStoreReceiptData
+    }
 
     /**
      *  Verify application receipt
@@ -209,10 +214,10 @@ public class SwiftyStoreKit {
 
             switch result {
             case .Success:
-                if InAppReceipt.data == nil {
-                    completion(result: .Error(error: ReceiptError.NoReceiptData))
+                if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
+                    completion(result: .Success(receiptData: appStoreReceiptData))
                 } else {
-                    completion(result: .Success)
+                    completion(result: .Error(error: ReceiptError.NoReceiptData))
                 }
             case .Error(let e):
                 completion(result: .Error(error: e))

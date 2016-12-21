@@ -154,20 +154,20 @@ internal class InAppReceipt {
         case Test = "https://sandbox.itunes.apple.com/verifyReceipt"
     }
 
-    static var URL: NSURL? {
+    static var appStoreReceiptUrl: NSURL? {
         return NSBundle.mainBundle().appStoreReceiptURL
     }
 
-    static var data: NSData? {
-        if let receiptDataURL = URL, data = NSData(contentsOfURL: receiptDataURL) {
-            return data
+    static var appStoreReceiptData: NSData? {
+        guard let receiptDataURL = appStoreReceiptUrl, data = NSData(contentsOfURL: receiptDataURL) else {
+            return nil
         }
-        return nil
+        return data
     }
 
     // The base64 encoded receipt data.
-    static var base64EncodedString: String? {
-        return data?.base64EncodedStringWithOptions([])
+    static var appStoreReceiptBase64Encoded: String? {
+        return appStoreReceiptData?.base64EncodedStringWithOptions([])
     }
 
     // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
@@ -185,7 +185,7 @@ internal class InAppReceipt {
         completion:(result: SwiftyStoreKit.VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.
-            guard let base64EncodedString = self.base64EncodedString else {
+            guard let base64EncodedString = appStoreReceiptBase64Encoded else {
                 completion(result: .Error(error: .NoReceiptData))
                 return
             }

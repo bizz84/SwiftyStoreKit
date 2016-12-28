@@ -390,6 +390,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [iHosts](https://itunes.apple.com/app/id1102004240?ls=1&mt=12) - Perfect for editing /etc/hosts
 * [Arise](http://www.abnehm-app.de/) - Calorie counter
 * [Truth Truth Lie](https://itunes.apple.com/app/id1130832864?ls=1&mt=8&app=messages) - iMessage game, featured by Apple
+* [Tactus Music Player](https://itunes.apple.com/app/id557446352) - Alternative music player app
 
 
 ## License

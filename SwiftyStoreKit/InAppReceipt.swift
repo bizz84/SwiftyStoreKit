@@ -53,9 +53,8 @@ internal class InAppReceipt {
      *  - Parameter completion: handler for result
      */
     class func verify(
-        urlType: VerifyReceiptURLType = .production,
+		using validator: ReceiptValidator,
         password autoRenewPassword: String? = nil,
-        session: URLSession = URLSession.shared,
         completion: @escaping (VerifyReceiptResult) -> ()) {
 
             // If no receipt is present, validation fails.

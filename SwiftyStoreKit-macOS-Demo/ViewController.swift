@@ -207,8 +207,6 @@ extension ViewController {
                 return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
             case .invalidProductId(let productId):
                 return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-            case .noProductIdentifier:
-                return alertWithTitle("Purchase failed", message: "Product not found")
             case .paymentNotAllowed:
                 return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
             }

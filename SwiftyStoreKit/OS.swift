@@ -29,25 +29,7 @@ import StoreKit
     extension SKMutablePayment {
         convenience init(product: SKProduct) {
             self.init()
-            self.productIdentifier = product._productIdentifier! // unsafe
+            self.productIdentifier = product.productIdentifier
         }
     }
 #endif
-
-// MARK: - product identifier optional on OSX, not on iOS
-
-extension SKProduct {
-    var _productIdentifier: String? {
-        return self.productIdentifier
-    }
-}
-
-// MARK: - products is optional on OSX, not on iOS
-extension SKProductsResponse {
-    var _products: [SKProduct]? {
-        return self.products
-    }
-    var _invalidProductIdentifiers: [String]? {
-        return self.invalidProductIdentifiers
-    }
-}

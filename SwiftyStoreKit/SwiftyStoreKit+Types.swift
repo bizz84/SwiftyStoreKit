@@ -53,7 +53,6 @@ public struct RetrieveResults {
 public enum PurchaseError {
     case failed(error: Error)
     case invalidProductId(productId: String)
-    case noProductIdentifier
     case paymentNotAllowed
 }
 

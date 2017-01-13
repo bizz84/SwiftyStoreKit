@@ -78,11 +78,6 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
     
     // MARK: Private methods
     private func startPayment(_ product: SKProduct, applicationUsername: String = "") {
-        guard let _ = product._productIdentifier else {
-            let error = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: "Missing product identifier" ])
-            callback([TransactionResult.failed(error: error)])
-            return
-        }
         let payment = SKMutablePayment(product: product)
         payment.applicationUsername = applicationUsername
         
@@ -107,7 +102,7 @@ class InAppProductPurchaseRequest: NSObject, SKPaymentTransactionObserver {
             let transactionProductIdentifier = transaction.payment.productIdentifier
             
             var isPurchaseRequest = false
-            if let productIdentifier = product?._productIdentifier {
+            if let productIdentifier = product?.productIdentifier {
                 if transactionProductIdentifier != productIdentifier {
                     continue
                 }

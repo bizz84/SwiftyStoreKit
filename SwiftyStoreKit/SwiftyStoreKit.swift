@@ -30,9 +30,7 @@ public class SwiftyStoreKit {
     private class InAppPurchaseStore {
         var products: [String: SKProduct] = [:]
         func addProduct(_ product: SKProduct) {
-            if let productIdentifier = product._productIdentifier {
-                products[productIdentifier] = product
-            }
+            products[product.productIdentifier] = product
         }
         func allProductsMatching(_ productIds: Set<String>) -> Set<SKProduct>? {
             var requestedProducts = Set<SKProduct>()
@@ -52,9 +50,7 @@ public class SwiftyStoreKit {
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
     private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
-    #if os(iOS) || os(tvOS)
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
-    #endif
     
     private enum InternalErrorCode: Int {
         case restoredPurchaseWhenPurchasing = 0
@@ -184,7 +180,6 @@ public class SwiftyStoreKit {
         return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
     }
 
-    #if os(iOS) || os(tvOS)
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
     public class func refreshReceipt(_ receiptProperties: [String : AnyObject]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
         sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
@@ -204,12 +199,6 @@ public class SwiftyStoreKit {
             }
         }
     }
-    #elseif os(OSX)
-     // Call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
-    public class func refreshReceipt() {
-         exit(ReceiptExitCode.notValid.rawValue)
-    }
-    #endif
 
     // MARK: private methods
     private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
@@ -217,14 +206,10 @@ public class SwiftyStoreKit {
             completion(.error(error: .paymentNotAllowed))
             return
         }
-        guard let productIdentifier = product._productIdentifier else {
-            completion(.error(error: .noProductIdentifier))
-            return
-        }
 
-        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
+        inflightPurchases[product.productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
 
-            self.inflightPurchases[productIdentifier] = nil
+            self.inflightPurchases[product.productIdentifier] = nil
             
             if let purchasedProductTransaction = results.first {
                 let returnValue = self.processPurchaseResult(purchasedProductTransaction)

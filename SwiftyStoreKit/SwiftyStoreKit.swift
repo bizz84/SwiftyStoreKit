@@ -223,7 +223,7 @@ public class SwiftyStoreKit {
             return
         }
 
-        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
+        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product, atomically: atomically, applicationUsername: applicationUsername) { results in
 
             self.inflightPurchases[productIdentifier] = nil
             
@@ -241,7 +241,8 @@ public class SwiftyStoreKit {
         case .failed(let error):
             return .error(error: .failed(error: error))
         case .restored(let product):
-            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path")))
+            return .success(product: product)
+
         }
     }
     

@@ -105,7 +105,8 @@ class ViewController: NSViewController {
 
     @IBAction func verifyReceipt(_ sender: AnyObject?) {
 
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+        let appleValidator = AppleReceiptValidator(service: .production)
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
 
             self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
@@ -116,7 +117,8 @@ class ViewController: NSViewController {
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
         
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+        let appleValidator = AppleReceiptValidator(service: .production)
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
             
             switch result {
             case .success(let receipt):

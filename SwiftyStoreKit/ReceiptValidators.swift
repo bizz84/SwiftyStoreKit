@@ -32,7 +32,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
 		case sandbox = "https://sandbox.itunes.apple.com/verifyReceipt"
 	}
 
-	public init(service: VerifyReceiptURLType) {
+	public init(service: VerifyReceiptURLType = .production) {
 		self.service = service
 	}
 

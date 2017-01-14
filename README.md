@@ -181,7 +181,8 @@ let receiptString = receiptData.base64EncodedString(options: [])
 ### Verify Receipt
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     if case .error(let error) = result {
         if case .noReceiptData = error {
             self.refreshReceipt()
@@ -204,7 +205,8 @@ func refreshReceipt() {
 ### Verify Purchase
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of Consumable or NonConsumable
@@ -229,7 +231,8 @@ Note that for consumable products, the receipt will only include the information
 ### Verify Subscription
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of a Subscription

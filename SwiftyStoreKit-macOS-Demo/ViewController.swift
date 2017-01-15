@@ -110,7 +110,11 @@ class ViewController: NSViewController {
 
             self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
-                self.refreshReceipt()
+                if case .error(let error) = result {
+                    if case .noReceiptData = error {
+                        self.refreshReceipt()
+                    }
+                }
             }
         }
     }
@@ -150,7 +154,10 @@ class ViewController: NSViewController {
 
     func refreshReceipt() {
         
-        SwiftyStoreKit.refreshReceipt()
+        SwiftyStoreKit.refreshReceipt() { result in
+            
+            self.showAlert(self.alertForRefreshReceipt(result))
+        }
     }
 
 }

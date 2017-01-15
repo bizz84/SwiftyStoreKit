@@ -35,7 +35,7 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
     
     typealias RequestCallback = (ResultType) -> ()
     
-    class func refresh(_ receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
+    class func refresh(_ receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
         let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
         request.start()
         return request
@@ -48,7 +48,7 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
         refreshReceiptRequest.delegate = nil
     }
     
-    private init(receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) {
+    private init(receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) {
         self.callback = callback
         self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
         super.init()

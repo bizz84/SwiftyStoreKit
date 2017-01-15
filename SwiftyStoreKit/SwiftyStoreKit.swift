@@ -182,7 +182,7 @@ public class SwiftyStoreKit {
     }
 
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
-    public class func refreshReceipt(_ receiptProperties: [String : AnyObject]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
+    public class func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
         sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
 
             sharedInstance.receiptRefreshRequest = nil

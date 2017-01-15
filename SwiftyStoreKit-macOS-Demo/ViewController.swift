@@ -45,23 +45,23 @@ class ViewController: NSViewController {
     let Purchase2 = RegisteredPurchase.autoRenewablePurchase
 
     // MARK: actions
-    @IBAction func getInfo1(_ sender: AnyObject?) {
+    @IBAction func getInfo1(_ sender: Any?) {
         getInfo(Purchase1)
     }
-    @IBAction func purchase1(_ sender: AnyObject?) {
+    @IBAction func purchase1(_ sender: Any?) {
         purchase(Purchase1)
     }
-    @IBAction func verifyPurchase1(_ sender: AnyObject?) {
+    @IBAction func verifyPurchase1(_ sender: Any?) {
         verifyPurchase(Purchase1)
     }
 
-    @IBAction func getInfo2(_ sender: AnyObject?) {
+    @IBAction func getInfo2(_ sender: Any?) {
         getInfo(Purchase2)
     }
-    @IBAction func purchase2(_ sender: AnyObject?) {
+    @IBAction func purchase2(_ sender: Any?) {
         purchase(Purchase2)
     }
-    @IBAction func verifyPurchase2(_ sender: AnyObject?) {
+    @IBAction func verifyPurchase2(_ sender: Any?) {
         verifyPurchase(Purchase2)
     }
 
@@ -88,7 +88,7 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func restorePurchases(_ sender: AnyObject?) {
+    @IBAction func restorePurchases(_ sender: Any?) {
 
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             
@@ -103,7 +103,7 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func verifyReceipt(_ sender: AnyObject?) {
+    @IBAction func verifyReceipt(_ sender: Any?) {
 
         let appleValidator = AppleReceiptValidator(service: .production)
         SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in

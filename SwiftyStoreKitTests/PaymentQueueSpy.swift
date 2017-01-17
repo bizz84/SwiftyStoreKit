@@ -1,0 +1,41 @@
+//
+//  PaymentQueueSpy.swift
+//  SwiftyStoreKit
+//
+//  Created by Andrea Bizzotto on 17/01/2017.
+//  Copyright © 2017 musevisions. All rights reserved.
+//
+
+import SwiftyStoreKit
+import StoreKit
+
+class PaymentQueueSpy: PaymentQueue {
+    
+    weak var observer: SKPaymentTransactionObserver?
+    
+    var payments: [SKPayment] = []
+    
+    var restoreCompletedTransactionCalledCount = 0
+
+    func add(_ observer: SKPaymentTransactionObserver) {
+        
+        self.observer = observer
+    }
+    func remove(_ observer: SKPaymentTransactionObserver) {
+        
+        if self.observer === observer {
+            self.observer = nil
+        }
+    }
+    
+    func add(_ payment: SKPayment) {
+        
+        payments.append(payment)
+    }
+    
+    func restoreCompletedTransactions() {
+        
+        restoreCompletedTransactionCalledCount += 1
+    }
+
+}

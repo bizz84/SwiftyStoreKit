@@ -35,6 +35,9 @@
 		65BB6CE91DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CEA1DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65F70AC71E2ECBB300BF040D /* PaymentTransactionObserverFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */; };
+		65F70AC91E2EDC3700BF040D /* Payments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* Payments.swift */; };
+		65F70ACA1E2EDC3700BF040D /* Payments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* Payments.swift */; };
+		65F70ACB1E2EDC3700BF040D /* Payments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* Payments.swift */; };
 		65F7DF711DCD4DF000835D30 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F7DF681DCD4DF000835D30 /* AppDelegate.swift */; };
 		65F7DF721DCD4DF000835D30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65F7DF691DCD4DF000835D30 /* Assets.xcassets */; };
 		65F7DF731DCD4DF000835D30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 65F7DF6A1DCD4DF000835D30 /* LaunchScreen.storyboard */; };
@@ -136,6 +139,7 @@
 		658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueSpy.swift; sourceTree = "<group>"; };
 		65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStoreKit+Types.swift"; sourceTree = "<group>"; };
 		65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionObserverFake.swift; sourceTree = "<group>"; };
+		65F70AC81E2EDC3700BF040D /* Payments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Payments.swift; sourceTree = "<group>"; };
 		65F7DF681DCD4DF000835D30 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		65F7DF691DCD4DF000835D30 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		65F7DF6B1DCD4DF000835D30 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -249,6 +253,7 @@
 				C40C680F1C29414C00B60B7E /* OS.swift */,
 				65F7DF931DCD536100835D30 /* Platforms */,
 				658A08361E2EC24E0074A98F /* PaymentQueueController.swift */,
+				65F70AC81E2EDC3700BF040D /* Payments.swift */,
 			);
 			path = SwiftyStoreKit;
 			sourceTree = "<group>";
@@ -564,6 +569,7 @@
 				54C0D5681CF7428400F90BCE /* SwiftyStoreKit.swift in Sources */,
 				54B069961CF744DC00BAFE38 /* OS.swift in Sources */,
 				54B069931CF742D300BAFE38 /* InAppReceiptRefreshRequest.swift in Sources */,
+				65F70ACB1E2EDC3700BF040D /* Payments.swift in Sources */,
 				658A08391E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722831DB8290B00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				54B069921CF742D100BAFE38 /* InAppReceipt.swift in Sources */,
@@ -592,6 +598,7 @@
 				6502F63A1B985C9E004E342D /* InAppProductPurchaseRequest.swift in Sources */,
 				6502F63B1B985CA1004E342D /* InAppProductQueryRequest.swift in Sources */,
 				C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */,
+				65F70AC91E2EDC3700BF040D /* Payments.swift in Sources */,
 				658A08371E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722811DB8282600C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */,
@@ -620,6 +627,7 @@
 				C4D74BC31C24CEDC0071AD3E /* InAppProductPurchaseRequest.swift in Sources */,
 				C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */,
 				C4F69A8A1C2E0D21009DD8BD /* InAppReceiptRefreshRequest.swift in Sources */,
+				65F70ACA1E2EDC3700BF040D /* Payments.swift in Sources */,
 				658A08381E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722821DB8290A00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */,

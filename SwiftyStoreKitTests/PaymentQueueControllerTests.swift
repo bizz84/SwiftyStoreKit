@@ -26,8 +26,8 @@ import XCTest
 import SwiftyStoreKit
 import StoreKit
 
-extension PaymentQueueController.Payment {
-    public init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (PaymentQueueController.TransactionResult) -> ()) {
+extension Payment {
+    public init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (TransactionResult) -> ()) {
         self.product = product
         self.atomically = atomically
         self.applicationUsername = applicationUsername
@@ -79,7 +79,7 @@ class PaymentQueueControllerTests: XCTestCase {
         let paymentQueueController = PaymentQueueController(paymentQueue: spy)
 
         let product = TestProduct(productIdentifier: "com.SwiftyStoreKit.product1")
-        let payment = PaymentQueueController.Payment(product: product, atomically: true, applicationUsername: "", callback: { result in })
+        let payment = Payment(product: product, atomically: true, applicationUsername: "", callback: { result in })
 
         paymentQueueController.startPayment(payment)
         

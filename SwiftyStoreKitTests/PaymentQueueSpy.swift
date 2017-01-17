@@ -38,4 +38,7 @@ class PaymentQueueSpy: PaymentQueue {
         restoreCompletedTransactionCalledCount += 1
     }
 
+    func finishTransaction(_ transaction: SKPaymentTransaction) {
+        
+    }
 }

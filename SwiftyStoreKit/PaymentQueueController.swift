@@ -33,39 +33,31 @@ public protocol PaymentQueue: class {
     func add(_ payment: SKPayment)
     
     func restoreCompletedTransactions()
+    
+    func finishTransaction(_ transaction: SKPaymentTransaction)
 }
 
 extension SKPaymentQueue: PaymentQueue { }
 
 public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
-    public enum TransactionResult {
-        case purchased(product: Product)
-        case restored(product: Product)
-        case failed(error: Error)
-    }
-    
-    public struct Payment {
-        public let product: SKProduct
-        public let atomically: Bool
-        public let applicationUsername: String
-        public let callback: (TransactionResult) -> ()
-    }
-    
     public struct RestorePurchases {
         let atomically: Bool
         let callback: ([TransactionResult]) -> ()
     }
-
+    
+    private let paymentsController: PaymentsController
+    
     unowned let paymentQueue: PaymentQueue
 
     deinit {
         paymentQueue.remove(self)
     }
 
-    public init(paymentQueue: PaymentQueue = SKPaymentQueue.default()) {
+    public init(paymentQueue: PaymentQueue = SKPaymentQueue.default(), paymentsController: PaymentsController = PaymentsController()) {
      
         self.paymentQueue = paymentQueue
+        self.paymentsController = paymentsController
         super.init()
         paymentQueue.add(self)
     }
@@ -75,12 +67,39 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         let skPayment = SKMutablePayment(product: payment.product)
         skPayment.applicationUsername = payment.applicationUsername
         paymentQueue.add(skPayment)
+        
+        paymentsController.insert(payment)
     }
     
     
     // MARK: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
 
+        for transaction in transactions {
+            
+            let transactionState = transaction.transactionState
+
+            switch transactionState {
+            case .purchased:
+                
+                let _ = paymentsController.processTransaction(transaction, paymentQueue: paymentQueue)
+                
+                break
+            case .failed:
+                break
+
+            case .restored:
+                break
+
+            case .purchasing:
+                // In progress: do nothing
+                break
+            case .deferred:
+                break
+            }
+
+        }
+        
     }
     
     public func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
@@ -100,3 +119,10 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
 
 }
+
+/*
+ If more than one payment is queued for a given product Id,
+ only the first callback should be called to ensure the content is delivered only once
+ 
+ 
+ */

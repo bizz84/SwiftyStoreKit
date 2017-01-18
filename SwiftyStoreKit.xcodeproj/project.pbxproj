@@ -53,6 +53,9 @@
 		65F7DF9A1DCD536700835D30 /* SwiftyStoreKit-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF971DCD536100835D30 /* SwiftyStoreKit-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F7DF9B1DCD537800835D30 /* SwiftyStoreKit-macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F7DF9C1DCD537F00835D30 /* SwiftyStoreKit-tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */; };
+		C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C081E2FCE3A00392A54 /* TestProduct.swift */; };
+		C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */; };
 		C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */; };
 		C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */; };
 		C40C68101C29414C00B60B7E /* OS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40C680F1C29414C00B60B7E /* OS.swift */; };
@@ -158,6 +161,9 @@
 		65F7DF971DCD536100835D30 /* SwiftyStoreKit-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-iOS.h"; sourceTree = "<group>"; };
 		65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-macOS.h"; sourceTree = "<group>"; };
 		65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-tvOS.h"; sourceTree = "<group>"; };
+		C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsControllerTests.swift; sourceTree = "<group>"; };
+		C3099C081E2FCE3A00392A54 /* TestProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestProduct.swift; sourceTree = "<group>"; };
+		C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPaymentTransaction.swift; sourceTree = "<group>"; };
 		C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptRefreshRequest.swift; sourceTree = "<group>"; };
 		C40C680F1C29414C00B60B7E /* OS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OS.swift; sourceTree = "<group>"; };
 		C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceipt.swift; sourceTree = "<group>"; };
@@ -263,8 +269,11 @@
 			children = (
 				658A08421E2EC5120074A98F /* Info.plist */,
 				658A08491E2EC5350074A98F /* PaymentQueueControllerTests.swift */,
+				C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */,
 				658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */,
 				65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */,
+				C3099C081E2FCE3A00392A54 /* TestProduct.swift */,
+				C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */,
 			);
 			path = SwiftyStoreKitTests;
 			sourceTree = "<group>";
@@ -611,9 +620,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */,
+				C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */,
 				65F70AC71E2ECBB300BF040D /* PaymentTransactionObserverFake.swift in Sources */,
 				658A084A1E2EC5350074A98F /* PaymentQueueControllerTests.swift in Sources */,
 				658A084C1E2EC5960074A98F /* PaymentQueueSpy.swift in Sources */,
+				C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

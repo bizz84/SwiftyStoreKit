@@ -37,20 +37,6 @@ extension Payment {
 
 class PaymentQueueControllerTests: XCTestCase {
 
-    class TestProduct: SKProduct {
-        
-        var _productIdentifier: String = ""
-        
-        override var productIdentifier: String {
-            return _productIdentifier
-        }
-        
-        init(productIdentifier: String) {
-            _productIdentifier = productIdentifier
-            super.init()
-        }
-    }
-    
     // MARK: init/deinit
     func testInit_registersAsObserver() {
         

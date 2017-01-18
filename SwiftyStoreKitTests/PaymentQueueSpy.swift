@@ -16,6 +16,8 @@ class PaymentQueueSpy: PaymentQueue {
     var payments: [SKPayment] = []
     
     var restoreCompletedTransactionCalledCount = 0
+    
+    var finishTransactionCalledCount = 0
 
     func add(_ observer: SKPaymentTransactionObserver) {
         
@@ -40,5 +42,6 @@ class PaymentQueueSpy: PaymentQueue {
 
     func finishTransaction(_ transaction: SKPaymentTransaction) {
         
+        finishTransactionCalledCount += 1
     }
 }

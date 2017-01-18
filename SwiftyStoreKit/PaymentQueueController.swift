@@ -40,13 +40,10 @@ public protocol PaymentQueue: class {
 extension SKPaymentQueue: PaymentQueue { }
 
 public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
-
-    public struct RestorePurchases {
-        let atomically: Bool
-        let callback: ([TransactionResult]) -> ()
-    }
     
     private let paymentsController: PaymentsController
+    
+    private let restorePurchasesController: RestorePurchasesController
     
     unowned let paymentQueue: PaymentQueue
 
@@ -54,15 +51,23 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.remove(self)
     }
 
-    public init(paymentQueue: PaymentQueue = SKPaymentQueue.default(), paymentsController: PaymentsController = PaymentsController()) {
+    public init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
+                paymentsController: PaymentsController = PaymentsController(),
+                restorePurchasesController: RestorePurchasesController = RestorePurchasesController()) {
      
         self.paymentQueue = paymentQueue
         self.paymentsController = paymentsController
+        self.restorePurchasesController = restorePurchasesController
         super.init()
         paymentQueue.add(self)
     }
     
     public func startPayment(_ payment: Payment) {
+        
+        if paymentsController.hasPayment(payment) {
+            // return .inProgress
+            return
+        }
         
         let skPayment = SKMutablePayment(product: payment.product)
         skPayment.applicationUsername = payment.applicationUsername
@@ -71,34 +76,50 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentsController.insert(payment)
     }
     
+    public func startRestorePurchases(_ restorePurchases: RestorePurchases) {
+        
+        if restorePurchasesController.restorePurchases != nil {
+            // return .inProgress
+            return
+        }
+        
+        paymentQueue.restoreCompletedTransactions()
+        
+        restorePurchasesController.restorePurchases = restorePurchases
+    }
+    
     
     // MARK: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+        
+        var unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
+        
+        unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
 
-        for transaction in transactions {
-            
-            let transactionState = transaction.transactionState
-
-            switch transactionState {
-            case .purchased:
-                
-                let _ = paymentsController.processTransaction(transaction, paymentQueue: paymentQueue)
-                
-                break
-            case .failed:
-                break
-
-            case .restored:
-                break
-
-            case .purchasing:
-                // In progress: do nothing
-                break
-            case .deferred:
-                break
-            }
-
-        }
+        // TODO: Complete transactions
+        
+//        for transaction in transactionsExcludingPayments {
+//            
+//            let transactionState = transaction.transactionState
+//
+//            switch transactionState {
+//            case .purchased:
+//                
+//                break
+//            case .failed:
+//                break
+//
+//            case .restored:
+//                break
+//
+//            case .purchasing:
+//                // In progress: do nothing
+//                break
+//            case .deferred:
+//                break
+//            }
+//
+//        }
         
     }
     

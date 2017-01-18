@@ -92,6 +92,21 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     // MARK: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
+        /*
+        
+         The payment queue seems to process payments in-order, however any calls to restorePurchases can easily jump
+         ahead of the queue as the user flows for restorePurchases are simpler.
+         
+         SKPaymentQueue rejects multiple restorePurchases calls
+         
+         Having one payment queue observer for each request causes extra processing
+         
+         Can a failed translation ever belong to a restore purchases request?
+         No. restoreCompletedTransactionsFailedWithError is called instead.
+         
+         
+         
+        */
         var unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
         
         unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
@@ -129,6 +144,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         
+        restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
     }
     
     public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {

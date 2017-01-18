@@ -117,6 +117,19 @@ public class RestorePurchasesController: TransactionController {
     public var restorePurchases: RestorePurchases?
     
     public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
+        
+        guard let restorePurchases = restorePurchases else {
+            return transactions
+        }
+        // TODO: process
         return []
+    }
+    
+    public func restoreCompletedTransactionsFailed(withError error: Error) {
+
+        guard let restorePurchases = restorePurchases else {
+            return
+        }
+        restorePurchases.callback([.failed(error: error)])
     }
 }

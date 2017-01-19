@@ -109,6 +109,11 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         restorePurchasesController.restorePurchases = restorePurchases
     }
     
+    public func completeTransactions(_ completeTransactions: CompleteTransactions) {
+        
+        completeTransactionsController.completeTransactions = completeTransactions
+    }
+    
     
     // MARK: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {

@@ -25,32 +25,51 @@
 import Foundation
 import StoreKit
 
+public struct CompleteTransactions {
+    public let atomically: Bool
+    public let callback: ([Product]) -> ()
+    
+    public init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
+        self.atomically = atomically
+        self.callback = callback
+    }
+}
+
 public class CompleteTransactionsController: TransactionController {
 
+    public var completeTransactions: CompleteTransactions?
+
     public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
-     
-        for transaction in transactions {
-
-            let transactionState = transaction.transactionState
-
-            switch transactionState {
-            case .purchased:
-
-                break
-            case .failed:
-                break
-
-            case .restored:
-                break
-
-            case .purchasing:
-                // In progress: do nothing
-                break
-            case .deferred:
-                break
-            }
+        
+        guard let completeTransactions = completeTransactions else {
+            return transactions
         }
 
-        return transactions
+        var unhandledTransactions: [SKPaymentTransaction] = []
+        var products: [Product] = []
+        
+        for transaction in transactions {
+            
+            let transactionState = transaction.transactionState
+            
+            if transactionState != .purchasing {
+                
+                let product = Product(productId: transaction.payment.productIdentifier, transaction: transaction, needsFinishTransaction: !completeTransactions.atomically)
+                
+                products.append(product)
+                
+                print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
+                
+                if completeTransactions.atomically {
+                    paymentQueue.finishTransaction(transaction)
+                }
+            }
+            else {
+                unhandledTransactions.append(transaction)
+            }
+        }
+        completeTransactions.callback(products)
+
+        return unhandledTransactions
     }
 }

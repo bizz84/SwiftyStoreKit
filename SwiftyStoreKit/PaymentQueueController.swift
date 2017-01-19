@@ -25,6 +25,23 @@
 import Foundation
 import StoreKit
 
+
+public protocol TransactionController {
+    
+    /**
+     * - param transactions: transactions to process
+     * - param paymentQueue: payment queue for finishing transactions
+     * - return: array of unhandled transactions
+     */
+    func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction]
+}
+
+public enum TransactionResult {
+    case purchased(product: Product)
+    case restored(product: Product)
+    case failed(error: Error)
+}
+
 public protocol PaymentQueue: class {
 
     func add(_ observer: SKPaymentTransactionObserver)
@@ -156,10 +173,3 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
 
 }
-
-/*
- If more than one payment is queued for a given product Id,
- only the first callback should be called to ensure the content is delivered only once
- 
- 
- */

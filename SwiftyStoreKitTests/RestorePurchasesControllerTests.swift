@@ -29,7 +29,6 @@ import StoreKit
 
 class RestorePurchasesControllerTests: XCTestCase {
     
-    
     func testProcessTransactions_when_oneRestoredTransaction_then_finishesTransaction_callsCallback_noRemainingTransactions() {
         
         let productIdentifier = "com.SwiftyStoreKit.product1"
@@ -88,9 +87,15 @@ class RestorePurchasesControllerTests: XCTestCase {
             callbackCalled = true
             XCTAssertEqual(results.count, 2)
             let first = results.first!
-            let last = results.last!
-            if case .restored(let restoredProduct) = restored {
+            if case .restored(let restoredProduct) = first {
                 XCTAssertEqual(restoredProduct.productId, productIdentifier1)
+            }
+            else {
+                XCTFail("expected restored callback with product")
+            }
+            let last = results.last!
+            if case .restored(let restoredProduct) = last {
+                XCTAssertEqual(restoredProduct.productId, productIdentifier2)
             }
             else {
                 XCTFail("expected restored callback with product")
@@ -107,7 +112,7 @@ class RestorePurchasesControllerTests: XCTestCase {
         
         XCTAssertTrue(callbackCalled)
         
-        XCTAssertEqual(spy.finishTransactionCalledCount, 1)
+        XCTAssertEqual(spy.finishTransactionCalledCount, 2)
     }
 
     

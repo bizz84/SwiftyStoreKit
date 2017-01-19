@@ -73,6 +73,36 @@ class PaymentsControllerTests: XCTestCase {
     
     func testProcessTransaction_when_transactionStateFailed_then_removesPayment_finishesTransaction_callsCallback() {
         
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let product = TestProduct(productIdentifier: productIdentifier)
+        
+        var callbackCalled = false
+        let payment = makeTestPayment(product: product) { result in
+            
+            callbackCalled = true
+            if case .failed(_) = result {
+                
+            }
+            else {
+                XCTFail("expected failed callback with error")
+            }
+        }
+        
+        let paymentsController = makePaymentsController(insertPayment: payment)
+        
+        let transaction = TestPaymentTransaction(payment: SKPayment(product: product), transactionState: .failed)
+        
+        let spy = PaymentQueueSpy()
+        
+        let remainingTransactions = paymentsController.processTransactions([transaction], on: spy)
+        
+        XCTAssertEqual(remainingTransactions.count, 0)
+        
+        XCTAssertFalse(paymentsController.hasPayment(payment))
+        
+        XCTAssertTrue(callbackCalled)
+        
+        XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
     
     func makePaymentsController(insertPayment payment: Payment) -> PaymentsController {

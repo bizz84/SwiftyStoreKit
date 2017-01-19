@@ -140,6 +140,20 @@ class RestorePurchasesControllerTests: XCTestCase {
         XCTAssertTrue(callbackCalled)
     }
 
+    func testRestoreCompletedTransactionsFinished_callsCallbackWithNoTransactions() {
+        
+        var callbackCalled = false
+        let restorePurchases = RestorePurchases(atomically: true) { results in
+            callbackCalled = true
+
+            XCTAssertEqual(results.count, 0)
+        }
+        let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
+        
+        restorePurchasesController.restoreCompletedTransactionsFinished()
+        
+        XCTAssertTrue(callbackCalled)
+    }
     
     func makeRestorePurchasesController(restorePurchases: RestorePurchases?) -> RestorePurchasesController {
         

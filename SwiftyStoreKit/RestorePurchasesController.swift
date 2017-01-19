@@ -78,6 +78,9 @@ public class RestorePurchasesController: TransactionController {
         if restoredProducts.count > 0 {
             restorePurchases.callback(restoredProducts)
         }
+        // Reset to nil after purchases complete
+        self.restorePurchases = nil
+
         return unhandledTransactions
     }
     
@@ -87,5 +90,20 @@ public class RestorePurchasesController: TransactionController {
             return
         }
         restorePurchases.callback([.failed(error: error)])
+        
+        // Reset to nil after error received
+        self.restorePurchases = nil
+
+    }
+    
+    public func restoreCompletedTransactionsFinished() {
+        
+        guard let restorePurchases = restorePurchases else {
+            return
+        }
+        restorePurchases.callback([])
+        
+        // Reset to nil after error transactions finished
+        self.restorePurchases = nil
     }
 }

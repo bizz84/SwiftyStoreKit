@@ -166,6 +166,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
 
+        restorePurchasesController.restoreCompletedTransactionsFinished()
     }
     
     public func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {

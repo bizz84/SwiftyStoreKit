@@ -114,6 +114,14 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         completeTransactionsController.completeTransactions = completeTransactions
     }
     
+    public func finishTransaction(_ transaction: PaymentTransaction) {
+        guard let skTransaction = transaction as? SKPaymentTransaction else {
+            print("Object is not a SKPaymentTransaction: \(transaction)")
+            return
+        }
+        paymentQueue.finishTransaction(skTransaction)
+    }
+
     
     // MARK: SKPaymentTransactionObserver
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {

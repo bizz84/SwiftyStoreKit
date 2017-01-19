@@ -47,6 +47,8 @@ public class SwiftyStoreKit {
 
     // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
     private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
+    private var paymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())
+    
     private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
     private var restoreRequest: InAppProductPurchaseRequest?
     private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
@@ -111,6 +113,8 @@ public class SwiftyStoreKit {
     }
     
     public class func restorePurchases(atomically: Bool = true, completion: @escaping (RestoreResults) -> ()) {
+
+        // TODO: paymentQueueController.restorePurchases
 
         sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases(atomically: atomically) { results in
         
@@ -207,6 +211,8 @@ public class SwiftyStoreKit {
             completion(.error(error: .paymentNotAllowed))
             return
         }
+        
+        // TODO: paymentQueueController.startPayment
 
         inflightPurchases[product.productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
 

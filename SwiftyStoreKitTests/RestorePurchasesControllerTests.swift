@@ -114,6 +114,31 @@ class RestorePurchasesControllerTests: XCTestCase {
         
         XCTAssertEqual(spy.finishTransactionCalledCount, 2)
     }
+    
+    func testRestoreCompletedTransactionsFailed_callsCallbackWithError() {
+
+        var callbackCalled = false
+        let restorePurchases = RestorePurchases(atomically: true) { results in
+            callbackCalled = true
+
+            XCTAssertEqual(results.count, 1)
+            let first = results.first!
+            if case .failed(_) = first {
+                
+            }
+            else {
+                XCTFail("expected failed callback with error")
+            }
+        }
+        
+        let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
+
+        let error = NSError(domain: "SwiftyStoreKit", code: 0, userInfo: nil)
+        
+        restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
+
+        XCTAssertTrue(callbackCalled)
+    }
 
     
     func makeRestorePurchasesController(restorePurchases: RestorePurchases?) -> RestorePurchasesController {

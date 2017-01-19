@@ -62,6 +62,8 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let restorePurchasesController: RestorePurchasesController
     
+    private let completeTransactionsController: CompleteTransactionsController
+    
     unowned let paymentQueue: PaymentQueue
 
     deinit {
@@ -70,11 +72,13 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
     public init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
                 paymentsController: PaymentsController = PaymentsController(),
-                restorePurchasesController: RestorePurchasesController = RestorePurchasesController()) {
+                restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),
+                completeTransactionsController: CompleteTransactionsController = CompleteTransactionsController()) {
      
         self.paymentQueue = paymentQueue
         self.paymentsController = paymentsController
         self.restorePurchasesController = restorePurchasesController
+        self.completeTransactionsController = completeTransactionsController
         super.init()
         paymentQueue.add(self)
     }
@@ -121,38 +125,16 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
          Can a failed translation ever belong to a restore purchases request?
          No. restoreCompletedTransactionsFailedWithError is called instead.
          
-         
-         
         */
         var unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
         
         unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
-
-        // TODO: Complete transactions
         
-//        for transaction in transactionsExcludingPayments {
-//            
-//            let transactionState = transaction.transactionState
-//
-//            switch transactionState {
-//            case .purchased:
-//                
-//                break
-//            case .failed:
-//                break
-//
-//            case .restored:
-//                break
-//
-//            case .purchasing:
-//                // In progress: do nothing
-//                break
-//            case .deferred:
-//                break
-//            }
-//
-//        }
+        unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
         
+        if unhandledTransactions.count > 0 {
+            print("unhandledTransactions: \(unhandledTransactions)")
+        }
     }
     
     public func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {

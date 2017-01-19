@@ -40,10 +40,10 @@ class PaymentsControllerTests: XCTestCase {
     func testProcessTransaction_when_transactionStatePurchased_then_removesPayment_finishesTransaction_callsCallback() {
         
         let productIdentifier = "com.SwiftyStoreKit.product1"
-        let product = TestProduct(productIdentifier: productIdentifier)
+        let testProduct = TestProduct(productIdentifier: productIdentifier)
         
         var callbackCalled = false
-        let payment = makeTestPayment(product: product) { result in
+        let payment = makeTestPayment(product: testProduct) { result in
             
             callbackCalled = true
             if case .purchased(let product) = result {
@@ -56,7 +56,7 @@ class PaymentsControllerTests: XCTestCase {
         
         let paymentsController = makePaymentsController(insertPayment: payment)
         
-        let transaction = TestPaymentTransaction(payment: SKPayment(product: product), transactionState: .purchased)
+        let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .purchased)
         
         let spy = PaymentQueueSpy()
         
@@ -74,10 +74,10 @@ class PaymentsControllerTests: XCTestCase {
     func testProcessTransaction_when_transactionStateFailed_then_removesPayment_finishesTransaction_callsCallback() {
         
         let productIdentifier = "com.SwiftyStoreKit.product1"
-        let product = TestProduct(productIdentifier: productIdentifier)
+        let testProduct = TestProduct(productIdentifier: productIdentifier)
         
         var callbackCalled = false
-        let payment = makeTestPayment(product: product) { result in
+        let payment = makeTestPayment(product: testProduct) { result in
             
             callbackCalled = true
             if case .failed(_) = result {
@@ -90,7 +90,7 @@ class PaymentsControllerTests: XCTestCase {
         
         let paymentsController = makePaymentsController(insertPayment: payment)
         
-        let transaction = TestPaymentTransaction(payment: SKPayment(product: product), transactionState: .failed)
+        let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .failed)
         
         let spy = PaymentQueueSpy()
         

@@ -27,8 +27,13 @@ public enum TransactionResult {
 }
 
 public struct RestorePurchases {
-    let atomically: Bool
-    let callback: ([TransactionResult]) -> ()
+    public let atomically: Bool
+    public let callback: ([TransactionResult]) -> ()
+    
+    public init(atomically: Bool, callback: @escaping ([TransactionResult]) -> ()) {
+        self.atomically = atomically
+        self.callback = callback
+    }
 }
 
 public struct Payment: Hashable {
@@ -72,36 +77,37 @@ public class PaymentsController: TransactionController {
         
         let transactionProductIdentifier = transaction.payment.productIdentifier
         
-        if let payment = findPayment(withProductIdentifier: transactionProductIdentifier) {
+        guard let payment = findPayment(withProductIdentifier: transactionProductIdentifier) else {
 
-            let transactionState = transaction.transactionState
+            return false
+        }
+        let transactionState = transaction.transactionState
+        
+        if transactionState == .purchased {
+
+            let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !payment.atomically)
             
-            if transactionState == .purchased {
-
-                let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !payment.atomically)
-                
-                payment.callback(.purchased(product: product))
-                
-                if payment.atomically {
-                    paymentQueue.finishTransaction(transaction)
-                }
-                payments.remove(payment)
-                return true
-            }
-            if transactionState == .failed {
-
-                let message = "Transaction failed for product ID: \(transactionProductIdentifier)"
-                let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ])
-                payment.callback(.failed(error: transaction.error ?? altError))
-                
+            payment.callback(.purchased(product: product))
+            
+            if payment.atomically {
                 paymentQueue.finishTransaction(transaction)
-                payments.remove(payment)
-                return true
             }
+            payments.remove(payment)
+            return true
+        }
+        if transactionState == .failed {
+
+            let message = "Transaction failed for product ID: \(transactionProductIdentifier)"
+            let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ])
+            payment.callback(.failed(error: transaction.error ?? altError))
             
-            if transactionState == .restored {
-                print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
-            }
+            paymentQueue.finishTransaction(transaction)
+            payments.remove(payment)
+            return true
+        }
+        
+        if transactionState == .restored {
+            print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
         }
         return false
     }
@@ -116,13 +122,45 @@ public class RestorePurchasesController: TransactionController {
 
     public var restorePurchases: RestorePurchases?
     
+    public init() { }
+    
+    public func processTransaction(_ transaction: SKPaymentTransaction, atomically: Bool, on paymentQueue: PaymentQueue) -> Product? {
+        
+        let transactionState = transaction.transactionState
+
+        if transactionState == .restored {
+
+            let transactionProductIdentifier = transaction.payment.productIdentifier
+
+            let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+            if atomically {
+                paymentQueue.finishTransaction(transaction)
+            }
+            return product
+        }
+        return nil
+    }
+    
     public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
         guard let restorePurchases = restorePurchases else {
             return transactions
         }
-        // TODO: process
-        return []
+        
+        var unhandledTransactions: [SKPaymentTransaction] = []
+        var restoredProducts: [TransactionResult] = []
+        for transaction in transactions {
+            if let restoredProduct = processTransaction(transaction, atomically: restorePurchases.atomically, on: paymentQueue) {
+                restoredProducts.append(.restored(product: restoredProduct))
+            }
+            else {
+                unhandledTransactions.append(transaction)
+            }
+        }
+        if restoredProducts.count > 0 {
+            restorePurchases.callback(restoredProducts)
+        }
+        return unhandledTransactions
     }
     
     public func restoreCompletedTransactionsFailed(withError error: Error) {

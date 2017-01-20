@@ -32,12 +32,12 @@ class PaymentsControllerTests: XCTestCase {
      
         let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { result in }
 
-        let paymentsController = makePaymentsController(insertPayment: payment)
+        let paymentsController = makePaymentsController(appendPayments: [payment])
         
         XCTAssertTrue(paymentsController.hasPayment(payment))
     }
     
-    func testProcessTransaction_when_transactionStatePurchased_then_removesPayment_finishesTransaction_callsCallback() {
+    func testProcessTransaction_when_onePayment_transactionStatePurchased_then_removesPayment_finishesTransaction_callsCallback() {
         
         let productIdentifier = "com.SwiftyStoreKit.product1"
         let testProduct = TestProduct(productIdentifier: productIdentifier)
@@ -54,7 +54,7 @@ class PaymentsControllerTests: XCTestCase {
             }
         }
         
-        let paymentsController = makePaymentsController(insertPayment: payment)
+        let paymentsController = makePaymentsController(appendPayments: [payment])
         
         let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .purchased)
         
@@ -71,7 +71,7 @@ class PaymentsControllerTests: XCTestCase {
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
     
-    func testProcessTransaction_when_transactionStateFailed_then_removesPayment_finishesTransaction_callsCallback() {
+    func testProcessTransaction_when_onePayment_transactionStateFailed_then_removesPayment_finishesTransaction_callsCallback() {
         
         let productIdentifier = "com.SwiftyStoreKit.product1"
         let testProduct = TestProduct(productIdentifier: productIdentifier)
@@ -88,7 +88,7 @@ class PaymentsControllerTests: XCTestCase {
             }
         }
         
-        let paymentsController = makePaymentsController(insertPayment: payment)
+        let paymentsController = makePaymentsController(appendPayments: [payment])
         
         let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .failed)
         
@@ -105,11 +105,103 @@ class PaymentsControllerTests: XCTestCase {
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
     
-    func makePaymentsController(insertPayment payment: Payment) -> PaymentsController {
+    func testProcessTransaction_when_twoPaymentsSameId_firstTransactionStatePurchased_secondTransactionStateFailed_then_removesPayments_finishesTransactions_callsCallbacks() {
+
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let testProduct1 = TestProduct(productIdentifier: productIdentifier)
+        
+        var callback1Called = false
+        let payment1 = makeTestPayment(product: testProduct1) { result in
+            
+            callback1Called = true
+            if case .purchased(let product) = result {
+                XCTAssertEqual(product.productId, productIdentifier)
+            }
+            else {
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+
+        let testProduct2 = TestProduct(productIdentifier: productIdentifier)
+
+        var callback2Called = false
+        let payment2 = makeTestPayment(product: testProduct2) { result in
+            callback2Called = true
+            if case .failed(_) = result {
+                
+            }
+            else {
+                XCTFail("expected failed callback with error")
+            }
+        }
+
+        let paymentsController = makePaymentsController(appendPayments: [payment1, payment2])
+        
+        let transaction1 = TestPaymentTransaction(payment: SKPayment(product: testProduct1), transactionState: .purchased)
+        let transaction2 = TestPaymentTransaction(payment: SKPayment(product: testProduct2), transactionState: .failed)
+        
+        let spy = PaymentQueueSpy()
+        
+        let remainingTransactions = paymentsController.processTransactions([transaction1, transaction2], on: spy)
+        
+        XCTAssertEqual(remainingTransactions.count, 0)
+        
+        XCTAssertFalse(paymentsController.hasPayment(payment1))
+        XCTAssertFalse(paymentsController.hasPayment(payment2))
+        
+        XCTAssertTrue(callback1Called)
+        XCTAssertTrue(callback2Called)
+        
+        XCTAssertEqual(spy.finishTransactionCalledCount, 2)
+    }
+
+    func testProcessTransaction_when_twoPaymentsSameId_firstPayment_transactionStatePurchased_then_removesFirstPayment_finishesTransaction_callsCallback() {
+        
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let testProduct1 = TestProduct(productIdentifier: productIdentifier)
+        
+        var callback1Called = false
+        let payment1 = makeTestPayment(product: testProduct1) { result in
+            
+            callback1Called = true
+            if case .purchased(let product) = result {
+                XCTAssertEqual(product.productId, productIdentifier)
+            }
+            else {
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+        
+        let testProduct2 = TestProduct(productIdentifier: productIdentifier)
+        let payment2 = makeTestPayment(product: testProduct2) { result in
+            
+            XCTFail("unexpected callback for second payment")
+        }
+        
+        let paymentsController = makePaymentsController(appendPayments: [payment1, payment2])
+        
+        let transaction1 = TestPaymentTransaction(payment: SKPayment(product: testProduct1), transactionState: .purchased)
+        
+        let spy = PaymentQueueSpy()
+        
+        let remainingTransactions = paymentsController.processTransactions([transaction1], on: spy)
+        
+        XCTAssertEqual(remainingTransactions.count, 0)
+        
+        // First one removed, but second one with same identifier still there
+        XCTAssertTrue(paymentsController.hasPayment(payment2))
+        
+        XCTAssertTrue(callback1Called)
+        
+        XCTAssertEqual(spy.finishTransactionCalledCount, 1)
+    }
+
+    
+    func makePaymentsController(appendPayments payments: [Payment]) -> PaymentsController {
         
         let paymentsController = PaymentsController()
         
-        paymentsController.insert(payment)
+        payments.forEach { paymentsController.append($0) }
         
         return paymentsController
     }

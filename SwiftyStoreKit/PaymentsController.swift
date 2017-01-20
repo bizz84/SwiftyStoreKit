@@ -42,35 +42,37 @@ public struct Payment: Hashable {
 
 public class PaymentsController: TransactionController {
     
-    private var payments: Set<Payment> = []
+    private var payments: [Payment] = []
     
     public init() { }
     
-    private func findPayment(withProductIdentifier identifier: String) -> Payment? {
+    private func findPaymentIndex(withProductIdentifier identifier: String) -> Int? {
         for payment in payments {
             if payment.product.productIdentifier == identifier {
-                return payment
+                return payments.index(of: payment)
             }
         }
         return nil
     }
     
     public func hasPayment(_ payment: Payment) -> Bool {
-        return findPayment(withProductIdentifier: payment.product.productIdentifier) != nil
+        return findPaymentIndex(withProductIdentifier: payment.product.productIdentifier) != nil
     }
     
-    public func insert(_ payment: Payment) {
-        payments.insert(payment)
+    public func append(_ payment: Payment) {
+        payments.append(payment)
     }
     
     public func processTransaction(_ transaction: SKPaymentTransaction, on paymentQueue: PaymentQueue) -> Bool {
         
         let transactionProductIdentifier = transaction.payment.productIdentifier
         
-        guard let payment = findPayment(withProductIdentifier: transactionProductIdentifier) else {
+        guard let paymentIndex = findPaymentIndex(withProductIdentifier: transactionProductIdentifier) else {
 
             return false
         }
+        let payment = payments[paymentIndex]
+        
         let transactionState = transaction.transactionState
         
         if transactionState == .purchased {
@@ -82,7 +84,7 @@ public class PaymentsController: TransactionController {
             if payment.atomically {
                 paymentQueue.finishTransaction(transaction)
             }
-            payments.remove(payment)
+            payments.remove(at: paymentIndex)
             return true
         }
         if transactionState == .failed {
@@ -92,7 +94,7 @@ public class PaymentsController: TransactionController {
             payment.callback(.failed(error: transaction.error ?? altError))
             
             paymentQueue.finishTransaction(transaction)
-            payments.remove(payment)
+            payments.remove(at: paymentIndex)
             return true
         }
         

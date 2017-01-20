@@ -85,16 +85,11 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     public func startPayment(_ payment: Payment) {
         
-        if paymentsController.hasPayment(payment) {
-            // return .inProgress
-            return
-        }
-        
         let skPayment = SKMutablePayment(product: payment.product)
         skPayment.applicationUsername = payment.applicationUsername
         paymentQueue.add(skPayment)
         
-        paymentsController.insert(payment)
+        paymentsController.append(payment)
     }
     
     public func restorePurchases(_ restorePurchases: RestorePurchases) {

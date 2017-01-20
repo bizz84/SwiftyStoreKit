@@ -49,9 +49,6 @@ public class SwiftyStoreKit {
     private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
     private var paymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())
     
-    private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
-    private var restoreRequest: InAppProductPurchaseRequest?
-    private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     
     private enum InternalErrorCode: Int {
@@ -65,13 +62,11 @@ public class SwiftyStoreKit {
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
-    
-    class var hasInFlightPayments: Bool {
-        return sharedInstance.inflightPurchases.count > 0 || sharedInstance.restoreRequest != nil
-    }
+
     
     public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
-        sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(atomically: atomically, callback: completion)
+        
+        sharedInstance.paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
     }
     
     // MARK: Public methods
@@ -114,19 +109,16 @@ public class SwiftyStoreKit {
     
     public class func restorePurchases(atomically: Bool = true, completion: @escaping (RestoreResults) -> ()) {
 
-        // TODO: paymentQueueController.restorePurchases
-
-        sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases(atomically: atomically) { results in
+        sharedInstance.paymentQueueController.restorePurchases(RestorePurchases(atomically: atomically) { results in
         
-            sharedInstance.restoreRequest = nil
             let results = sharedInstance.processRestoreResults(results)
             completion(results)
-        }
+        })
     }
     
     public class func finishTransaction(_ transaction: PaymentTransaction) {
      
-        InAppProductPurchaseRequest.finishTransaction(transaction)
+        sharedInstance.paymentQueueController.finishTransaction(transaction)
     }
 
     /**
@@ -212,20 +204,13 @@ public class SwiftyStoreKit {
             return
         }
         
-        // TODO: paymentQueueController.startPayment
-
-        inflightPurchases[product.productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
-
-            self.inflightPurchases[product.productIdentifier] = nil
+        paymentQueueController.startPayment(Payment(product: product, atomically: atomically, applicationUsername: applicationUsername) { result in
             
-            if let purchasedProductTransaction = results.first {
-                let returnValue = self.processPurchaseResult(purchasedProductTransaction)
-                completion(returnValue)
-            }
-        }
+            completion(self.processPurchaseResult(result))
+        })
     }
 
-    private func processPurchaseResult(_ result: InAppProductPurchaseRequest.TransactionResult) -> PurchaseResult {
+    private func processPurchaseResult(_ result: TransactionResult) -> PurchaseResult {
         switch result {
         case .purchased(let product):
             return .success(product: product)
@@ -236,7 +221,7 @@ public class SwiftyStoreKit {
         }
     }
     
-    private func processRestoreResults(_ results: [InAppProductPurchaseRequest.TransactionResult]) -> RestoreResults {
+    private func processRestoreResults(_ results: [TransactionResult]) -> RestoreResults {
         var restoredProducts: [Product] = []
         var restoreFailedProducts: [(Swift.Error, String?)] = []
         for result in results {

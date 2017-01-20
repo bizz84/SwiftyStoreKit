@@ -25,19 +25,6 @@
 
 import StoreKit
 
-extension SKPaymentTransactionState {
-    
-    var stringValue: String {
-        switch self {
-        case .purchasing: return "Purchasing"
-        case .purchased: return "Purchased"
-        case .failed: return "Failed"
-        case .restored: return "Restored"
-        case .deferred: return "Deferred"
-        }
-    }
-}
-
 class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver {
     
     private var callbackCalled: Bool = false
@@ -67,9 +54,6 @@ class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver 
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         if callbackCalled {
-            return
-        }
-        if SwiftyStoreKit.hasInFlightPayments {
             return
         }
         

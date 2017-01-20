@@ -97,7 +97,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentsController.insert(payment)
     }
     
-    public func startRestorePurchases(_ restorePurchases: RestorePurchases) {
+    public func restorePurchases(_ restorePurchases: RestorePurchases) {
         
         if restorePurchasesController.restorePurchases != nil {
             // return .inProgress

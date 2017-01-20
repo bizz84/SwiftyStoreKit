@@ -35,9 +35,25 @@ public struct CompleteTransactions {
     }
 }
 
+extension SKPaymentTransactionState {
+    
+    var stringValue: String {
+        switch self {
+        case .purchasing: return "purchasing"
+        case .purchased: return "purchased"
+        case .failed: return "failed"
+        case .restored: return "restored"
+        case .deferred: return "deferred"
+        }
+    }
+}
+
+
 public class CompleteTransactionsController: TransactionController {
 
     public var completeTransactions: CompleteTransactions?
+    
+    public init() {}
 
     public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         

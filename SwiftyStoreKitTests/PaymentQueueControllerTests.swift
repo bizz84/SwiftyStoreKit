@@ -72,7 +72,7 @@ class PaymentQueueControllerTests: XCTestCase {
     }
     
     // MARK: SKPaymentTransactionObserver callbacks
-    func testPaymentQueue_when_oneTransactionForEachState_then_correctCallbacksCalled() {
+    func testPaymentQueue_when_oneTransactionForEachState_onePayment_oneRestorePurchases_oneCompleteTransactions_then_correctCallbacksCalled() {
 
         // setup
         let spy = PaymentQueueSpy()
@@ -142,6 +142,116 @@ class PaymentQueueControllerTests: XCTestCase {
         XCTAssertTrue(completeTransactionsCallbackCalled)
     }
     
+    func testPaymentQueue_when_oneTransactionForEachState_onePayment_noRestorePurchases_oneCompleteTransactions_then_correctCallbacksCalled() {
+        
+        // setup
+        let spy = PaymentQueueSpy()
+        
+        let paymentQueueController = PaymentQueueController(paymentQueue: spy)
+        
+        let purchasedProductIdentifier = "com.SwiftyStoreKit.product1"
+        let failedProductIdentifier = "com.SwiftyStoreKit.product2"
+        let restoredProductIdentifier = "com.SwiftyStoreKit.product3"
+        let deferredProductIdentifier = "com.SwiftyStoreKit.product4"
+        let purchasingProductIdentifier = "com.SwiftyStoreKit.product5"
+        
+        let transactions = [
+            makeTestPaymentTransaction(productIdentifier: purchasedProductIdentifier, transactionState: .purchased),
+            makeTestPaymentTransaction(productIdentifier: failedProductIdentifier, transactionState: .failed),
+            makeTestPaymentTransaction(productIdentifier: restoredProductIdentifier, transactionState: .restored),
+            makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
+            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
+            ]
+        
+        
+        var paymentCallbackCalled = false
+        let testPayment = makeTestPayment(productIdentifier: purchasedProductIdentifier) { result in
+            paymentCallbackCalled = true
+            if case .purchased(let product) = result {
+                XCTAssertEqual(product.productId, purchasedProductIdentifier)
+            }
+            else {
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+        
+        var completeTransactionsCallbackCalled = false
+        let completeTransactions = CompleteTransactions(atomically: true) { products in
+            completeTransactionsCallbackCalled = true
+            XCTAssertEqual(products.count, 3)
+            XCTAssertEqual(products[0].productId, failedProductIdentifier)
+            XCTAssertEqual(products[1].productId, restoredProductIdentifier)
+            XCTAssertEqual(products[2].productId, deferredProductIdentifier)
+        }
+        
+        // run
+        paymentQueueController.startPayment(testPayment)
+        
+        paymentQueueController.completeTransactions(completeTransactions)
+        
+        paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
+        paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())
+        
+        // verify
+        XCTAssertTrue(paymentCallbackCalled)
+        XCTAssertTrue(completeTransactionsCallbackCalled)
+    }
+
+    func testPaymentQueue_when_oneTransactionForEachState_noPayments_oneRestorePurchases_oneCompleteTransactions_then_correctCallbacksCalled() {
+        
+        // setup
+        let spy = PaymentQueueSpy()
+        
+        let paymentQueueController = PaymentQueueController(paymentQueue: spy)
+        
+        let purchasedProductIdentifier = "com.SwiftyStoreKit.product1"
+        let failedProductIdentifier = "com.SwiftyStoreKit.product2"
+        let restoredProductIdentifier = "com.SwiftyStoreKit.product3"
+        let deferredProductIdentifier = "com.SwiftyStoreKit.product4"
+        let purchasingProductIdentifier = "com.SwiftyStoreKit.product5"
+        
+        let transactions = [
+            makeTestPaymentTransaction(productIdentifier: purchasedProductIdentifier, transactionState: .purchased),
+            makeTestPaymentTransaction(productIdentifier: failedProductIdentifier, transactionState: .failed),
+            makeTestPaymentTransaction(productIdentifier: restoredProductIdentifier, transactionState: .restored),
+            makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
+            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
+            ]
+        
+        var restorePurchasesCallbackCalled = false
+        let restorePurchases = RestorePurchases(atomically: true) { results in
+            restorePurchasesCallbackCalled = true
+            XCTAssertEqual(results.count, 1)
+            let first = results.first!
+            if case .restored(let restoredProduct) = first {
+                XCTAssertEqual(restoredProduct.productId, restoredProductIdentifier)
+            }
+            else {
+                XCTFail("expected restored callback with product")
+            }
+        }
+        
+        var completeTransactionsCallbackCalled = false
+        let completeTransactions = CompleteTransactions(atomically: true) { products in
+            completeTransactionsCallbackCalled = true
+            XCTAssertEqual(products.count, 3)
+            XCTAssertEqual(products[0].productId, purchasedProductIdentifier)
+            XCTAssertEqual(products[1].productId, failedProductIdentifier)
+            XCTAssertEqual(products[2].productId, deferredProductIdentifier)
+        }
+        
+        // run
+        paymentQueueController.restorePurchases(restorePurchases)
+        
+        paymentQueueController.completeTransactions(completeTransactions)
+        
+        paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
+        paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())
+        
+        // verify
+        XCTAssertTrue(restorePurchasesCallbackCalled)
+        XCTAssertTrue(completeTransactionsCallbackCalled)
+    }
     
     // MARK: Helpers
     func makeTestPaymentTransaction(productIdentifier: String, transactionState: SKPaymentTransactionState) -> TestPaymentTransaction {

@@ -401,6 +401,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Arise](http://www.abnehm-app.de/) - Calorie counter
 * [Truth Truth Lie](https://itunes.apple.com/app/id1130832864) - iMessage game, featured by Apple
 * [Tactus Music Player](https://itunes.apple.com/app/id557446352) - Alternative music player app
+* [Drops: Learn Spanish, English & French words fast!](https://itunes.apple.com/app/id939540371) Language learning app
 
 
 ## License

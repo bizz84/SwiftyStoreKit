@@ -11,12 +11,15 @@
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
 
-| Language  | Branch | Pod version | Xcode version |
-| --------- | ------ | ----------- | ------------- |
-| Swift 3.0 | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8 or greater|
-| Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
-| Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |
+### Update 2017-01-21:
 
+* The purchase flows in SwiftyStoreKit are undergoing a major refactor which should improve reliability. All details on [this Pull Request](https://github.com/bizz84/SwiftyStoreKit/pull/131).
+* While the new code is extensively unit tested, some manual testing would be appreciated so that the new implementation can be tested in sandbox/production.
+* Until this is merged into master, the test branch can be installed like this:
+
+```
+pod 'SwiftyStoreKit', :git => 'https://github.com/bizz84/SwiftyStoreKit', :branch => 'feature/payment-queue-controller'
+```
 
 ### Preview
 
@@ -378,6 +381,10 @@ enum TransactionResult {
 }
 ```
 Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.
+
+## Contributing
+
+[Read here](CONTRIBUTING.md)
 
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.

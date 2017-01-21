@@ -24,6 +24,9 @@
 		650307F81E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */; };
 		650307F91E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */; };
 		650307FA1E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */; };
+		650307FC1E33154F001332A4 /* ProductsInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307FB1E33154F001332A4 /* ProductsInfoController.swift */; };
+		650307FD1E33154F001332A4 /* ProductsInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307FB1E33154F001332A4 /* ProductsInfoController.swift */; };
+		650307FE1E33154F001332A4 /* ProductsInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307FB1E33154F001332A4 /* ProductsInfoController.swift */; };
 		653722811DB8282600C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
 		653722821DB8290A00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
 		653722831DB8290B00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
@@ -137,6 +140,7 @@
 		650307F11E3163AA001332A4 /* RestorePurchasesControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesControllerTests.swift; sourceTree = "<group>"; };
 		650307F31E3177EF001332A4 /* RestorePurchasesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RestorePurchasesController.swift; sourceTree = "<group>"; };
 		650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteTransactionsController.swift; sourceTree = "<group>"; };
+		650307FB1E33154F001332A4 /* ProductsInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsInfoController.swift; sourceTree = "<group>"; };
 		653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKProduct+LocalizedPrice.swift"; sourceTree = "<group>"; };
 		658A08361E2EC24E0074A98F /* PaymentQueueController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueController.swift; sourceTree = "<group>"; };
 		658A083E1E2EC5120074A98F /* SwiftyStoreKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftyStoreKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,6 +257,7 @@
 			children = (
 				6502F6241B98586A004E342D /* SwiftyStoreKit.swift */,
 				65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */,
+				650307FB1E33154F001332A4 /* ProductsInfoController.swift */,
 				6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */,
 				658A08361E2EC24E0074A98F /* PaymentQueueController.swift */,
 				65F70AC81E2EDC3700BF040D /* PaymentsController.swift */,
@@ -584,6 +589,7 @@
 				54B069961CF744DC00BAFE38 /* OS.swift in Sources */,
 				54B069931CF742D300BAFE38 /* InAppReceiptRefreshRequest.swift in Sources */,
 				65F70ACB1E2EDC3700BF040D /* PaymentsController.swift in Sources */,
+				650307FE1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F61E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08391E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722831DB8290B00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
@@ -613,6 +619,7 @@
 				6502F63B1B985CA1004E342D /* InAppProductQueryRequest.swift in Sources */,
 				C4083C571C2AB0A900295248 /* InAppReceiptRefreshRequest.swift in Sources */,
 				65F70AC91E2EDC3700BF040D /* PaymentsController.swift in Sources */,
+				650307FC1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F41E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08371E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722811DB8282600C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
@@ -647,6 +654,7 @@
 				C4D74BC41C24CEDC0071AD3E /* InAppProductQueryRequest.swift in Sources */,
 				C4F69A8A1C2E0D21009DD8BD /* InAppReceiptRefreshRequest.swift in Sources */,
 				65F70ACA1E2EDC3700BF040D /* PaymentsController.swift in Sources */,
+				650307FD1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F51E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08381E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
 				653722821DB8290A00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,

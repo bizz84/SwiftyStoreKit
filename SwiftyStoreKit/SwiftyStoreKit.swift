@@ -26,28 +26,9 @@ import StoreKit
 
 public class SwiftyStoreKit {
 
-    // MARK: Private declarations
-    private class InAppPurchaseStore {
-        var products: [String: SKProduct] = [:]
-        func addProduct(_ product: SKProduct) {
-            products[product.productIdentifier] = product
-        }
-        func allProductsMatching(_ productIds: Set<String>) -> Set<SKProduct>? {
-            var requestedProducts = Set<SKProduct>()
-            for productId in productIds {
-                guard let product = products[productId] else {
-                    return nil
-                }
-                requestedProducts.insert(product)
-            }
-            return requestedProducts
-        }
-    }
-    private var store: InAppPurchaseStore = InAppPurchaseStore()
+    private let productsInfoController = ProductsInfoController()
 
-    // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
-    private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
-    private var paymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())
+    private let paymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())
     
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     
@@ -63,21 +44,10 @@ public class SwiftyStoreKit {
         return SKPaymentQueue.canMakePayments()
     }
 
-    
-    public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
-        
-        sharedInstance.paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
-    }
-    
-    // MARK: Public methods
+    // MARK: Public methods - Purchases
     public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
         
-        guard let products = sharedInstance.store.allProductsMatching(productIds) else {
-            
-            sharedInstance.requestProducts(productIds, completion: completion)
-            return
-        }
-        completion(RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
+        return sharedInstance.productsInfoController.retrieveProductsInfo(productIds, completion: completion)
     }
     
     /**
@@ -89,7 +59,7 @@ public class SwiftyStoreKit {
      */
     public class func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
         
-        if let product = sharedInstance.store.products[productId] {
+        if let product = sharedInstance.productsInfoController.products[productId] {
             sharedInstance.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
         }
         else {
@@ -116,10 +86,18 @@ public class SwiftyStoreKit {
         })
     }
     
+    public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
+        
+        sharedInstance.paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
+    }
+    
+
     public class func finishTransaction(_ transaction: PaymentTransaction) {
      
         sharedInstance.paymentQueueController.finishTransaction(transaction)
     }
+
+    // MARK: Public methods - Receipt verification
 
     /**
      * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
@@ -235,18 +213,6 @@ public class SwiftyStoreKit {
             }
         }
         return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)
-    }
-    
-    private func requestProducts(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
-        
-        inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
-        
-            self.inflightQueries[productIds] = nil
-            for product in result.retrievedProducts {
-                self.store.addProduct(product)
-            }
-            completion(result)
-        }
     }
     
     private func storeInternalError(code: Int = 0, description: String = "") -> NSError {

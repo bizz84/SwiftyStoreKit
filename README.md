@@ -308,33 +308,12 @@ The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKi
 Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 #### Features
+
 - Super easy to use block based API
 - Support for consumable, non-consumable in-app purchases
 - Support for free, auto renewable and non renewing subscriptions
 - Receipt verification
 - iOS, tvOS and macOS compatible
-- enum-based error handling
-
-## Known issues
-
-#### Requests lifecycle
-
-While SwiftyStoreKit tries handle concurrent purchase or restore purchases requests, it is not guaranteed that this will always work flawlessly.
-This is in part because using a closure-based API does not map perfectly well with the lifecycle of payments in `SKPaymentQueue`.
-
-In real applications the following could happen:
-
-1. User starts a purchase
-2. User kills the app
-3. OS continues processing this, resulting in a failed or successful purchase
-4. App is restarted (payment queue is not updated yet)
-5. User starts another purchase (the old transaction may interfere with the new purchase)
-
-To prevent situations like this from happening, a `completeTransactions()` method has been added in version 0.2.8. This should be called when the app starts as it can take care of clearing the payment queue and notifying the app of the transactions that have finished.
-
-#### Multiple accounts
-
-The user can background the hosting application and change the Apple ID used with the App Store, then foreground the app. This has been observed to cause problems with SwiftyStoreKit - other IAP implementations may suffer from this as well.
 
 ## Essential Reading
 * [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)
@@ -346,45 +325,41 @@ The user can background the hosting application and change the Apple ID used wit
 * [objc.io - Receipt Validation](https://www.objc.io/issues/17-security/receipt-validation/)
 
 
-## Implementation Details
+## Payment flows - implementation Details
 In order to make a purchase, two operations are needed:
 
-- Obtain the ```SKProduct``` corresponding to the productId that identifies the app purchase, via ```SKProductRequest```.
+- Perform a `SKProductRequest` to obtain the `SKProduct` corresponding to the product identifier.
 
-- Submit the payment for that product via ```SKPaymentQueue```.
+- Submit the payment and listen for updated transactions on the `SKPaymentQueue`.
 
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
 
-### Requesting products information
+### Payment queue
 
-SwiftyStoreKit wraps the delegate-based ```SKProductRequest``` API with a block based class named ```InAppProductQueryRequest```, which returns a `RetrieveResults` value with information about the obtained products:
+The following list outlines how requests are processed by SwiftyStoreKit.
 
-```swift
-public struct RetrieveResults {
-    public let retrievedProducts: Set<SKProduct>
-    public let invalidProductIDs: Set<String>
-    public let error: NSError?
-}
-```
-This value is then surfaced back to the caller of the `retrieveProductsInfo()` method the completion closure so that the client can update accordingly.
+* `SKPaymentQueue` is used to queue payments or restore purchases requests.
+* Payments are processed serially and in-order and require user interaction.
+* Restore purchases requests don't require user interaction and can jump ahead of the queue.
+* `SKPaymentQueue` rejects multiple restore purchases calls.
+* Failed translations only ever belong to queued payment request.
+* `restoreCompletedTransactionsFailedWithError` is always called when a restore purchases request fails.
+* `paymentQueueRestoreCompletedTransactionsFinished` is always called following 0 or more update transactions when a restore purchases request succeeds.
+* A complete transactions handler is require to catch any transactions that are updated when the app is not running.
+* Registering a complete transactions handler when the app launches ensures that any pending transactions can be cleared.
+* If a complete transactions handler is missing, pending transactions can be mis-attributed to any new incoming payments or restore purchases.
 
-### Purchasing a product / Restoring purchases
-`InAppProductPurchaseRequest` is a wrapper class for `SKPaymentQueue` that can be used to purchase a product or restore purchases.
+The order in which transaction updates are processed is:
 
-The class conforms to the `SKPaymentTransactionObserver` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
+1. payments (transactionState: `.purchased` and `.failed` for matching product identifiers)
+2. restore purchases (transactionState: `.restored`, or `restoreCompletedTransactionsFailedWithError`, or `paymentQueueRestoreCompletedTransactionsFinished`)
+3. complete transactions (transactionState: `.purchased`, `.failed`, `.restored`, `.deferred`)
 
-```swift
-enum TransactionResult {
-    case purchased(productId: String)
-    case restored(productId: String)
-    case failed(error: NSError)
-}
-```
-Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.
+Any transactions where state == `.purchasing` are ignored.
 
 ## Contributing
 
-[Read here](CONTRIBUTING.md)
+[Read here](CONTRIBUTING.md).
 
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.

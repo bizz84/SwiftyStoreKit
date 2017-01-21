@@ -122,18 +122,25 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         /*
-        
-         The payment queue seems to process payments in-order, however any calls to restorePurchases can easily jump
-         ahead of the queue as the user flows for restorePurchases are simpler.
-         
-         SKPaymentQueue rejects multiple restorePurchases calls
-         
-         Having one payment queue observer for each request causes extra processing
-         
-         Can a failed translation ever belong to a restore purchases request?
-         No. restoreCompletedTransactionsFailedWithError is called instead.
-         
-        */
+         * Some notes about how requests are processed by SKPaymentQueue:
+         *
+         * SKPaymentQueue is used to queue payments or restore purchases requests.
+         * Payments are processed serially and in-order and require user interaction.
+         * Restore purchases requests don't require user interaction and can jump ahead of the queue.
+         * SKPaymentQueue rejects multiple restore purchases calls.
+         * Having one payment queue observer for each request causes extra processing
+         * Failed translations only ever belong to queued payment request.
+         * restoreCompletedTransactionsFailedWithError is called when a restore payments request fails.
+         * A complete transactions handler is require to catch any transactions that are updated when the app is not running.
+         * Registering a complete transactions handler when the app launches ensures that any pending transactions can be cleared.
+         * If a complete transactions handler is missing, pending transactions can be mis-attributed to any new incoming payments or restore purchases.
+         * 
+         * The order in which transaction updates are processed is:
+         * 1. payments (transactionState: .purchased and .failed for matching product identifiers)
+         * 2. restore purchases (transactionState: .restored, or restoreCompletedTransactionsFailedWithError, or paymentQueueRestoreCompletedTransactionsFinished)
+         * 3. complete transactions (transactionState: .purchased, .failed, .restored, .deferred)
+         * Any transactions where state == .purchasing are ignored.
+         */
         var unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
         
         unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)

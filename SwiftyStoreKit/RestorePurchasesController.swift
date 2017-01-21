@@ -27,10 +27,12 @@ import StoreKit
 
 public struct RestorePurchases {
     public let atomically: Bool
+    public let applicationUsername: String?
     public let callback: ([TransactionResult]) -> ()
     
-    public init(atomically: Bool, callback: @escaping ([TransactionResult]) -> ()) {
+    public init(atomically: Bool, applicationUsername: String? = nil, callback: @escaping ([TransactionResult]) -> ()) {
         self.atomically = atomically
+        self.applicationUsername = applicationUsername
         self.callback = callback
     }
 }

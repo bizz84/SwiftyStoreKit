@@ -49,7 +49,7 @@ public protocol PaymentQueue: class {
 
     func add(_ payment: SKPayment)
     
-    func restoreCompletedTransactions()
+    func restoreCompletedTransactions(withApplicationUsername username: String?)
     
     func finishTransaction(_ transaction: SKPaymentTransaction)
 }
@@ -99,7 +99,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
             return
         }
         
-        paymentQueue.restoreCompletedTransactions()
+        paymentQueue.restoreCompletedTransactions(withApplicationUsername: restorePurchases.applicationUsername)
         
         restorePurchasesController.restorePurchases = restorePurchases
     }

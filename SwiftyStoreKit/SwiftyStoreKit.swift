@@ -107,9 +107,9 @@ public class SwiftyStoreKit {
         }
     }
     
-    public class func restorePurchases(atomically: Bool = true, completion: @escaping (RestoreResults) -> ()) {
+    public class func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> ()) {
 
-        sharedInstance.paymentQueueController.restorePurchases(RestorePurchases(atomically: atomically) { results in
+        sharedInstance.paymentQueueController.restorePurchases(RestorePurchases(atomically: atomically, applicationUsername: applicationUsername) { results in
         
             let results = sharedInstance.processRestoreResults(results)
             completion(results)

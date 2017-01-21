@@ -35,7 +35,7 @@ class PaymentQueueSpy: PaymentQueue {
         payments.append(payment)
     }
     
-    func restoreCompletedTransactions() {
+    func restoreCompletedTransactions(withApplicationUsername username: String?) {
         
         restoreCompletedTransactionCalledCount += 1
     }

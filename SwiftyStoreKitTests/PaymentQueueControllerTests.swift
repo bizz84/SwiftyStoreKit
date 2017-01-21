@@ -130,10 +130,11 @@ class PaymentQueueControllerTests: XCTestCase {
         paymentQueueController.startPayment(testPayment)
         
         paymentQueueController.restorePurchases(restorePurchases)
-        
+
         paymentQueueController.completeTransactions(completeTransactions)
         
         paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
+        paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())
         
         // verify
         XCTAssertTrue(paymentCallbackCalled)

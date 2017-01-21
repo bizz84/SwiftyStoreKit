@@ -54,6 +54,7 @@ class RestorePurchasesControllerTests: XCTestCase {
         let spy = PaymentQueueSpy()
 
         let remainingTransactions = restorePurchasesController.processTransactions([transaction], on: spy)
+        restorePurchasesController.restoreCompletedTransactionsFinished()
         
         XCTAssertEqual(remainingTransactions.count, 0)
 
@@ -107,7 +108,8 @@ class RestorePurchasesControllerTests: XCTestCase {
         let spy = PaymentQueueSpy()
         
         let remainingTransactions = restorePurchasesController.processTransactions(transactions, on: spy)
-        
+        restorePurchasesController.restoreCompletedTransactionsFinished()
+
         XCTAssertEqual(remainingTransactions.count, 2)
         
         XCTAssertTrue(callbackCalled)

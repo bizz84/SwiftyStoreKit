@@ -42,6 +42,8 @@ public class RestorePurchasesController: TransactionController {
     
     public var restorePurchases: RestorePurchases?
     
+    private var restoredProducts: [TransactionResult] = []
+    
     public init() { }
     
     public func processTransaction(_ transaction: SKPaymentTransaction, atomically: Bool, on paymentQueue: PaymentQueue) -> Product? {
@@ -68,7 +70,6 @@ public class RestorePurchasesController: TransactionController {
         }
         
         var unhandledTransactions: [SKPaymentTransaction] = []
-        var restoredProducts: [TransactionResult] = []
         for transaction in transactions {
             if let restoredProduct = processTransaction(transaction, atomically: restorePurchases.atomically, on: paymentQueue) {
                 restoredProducts.append(.restored(product: restoredProduct))
@@ -77,11 +78,6 @@ public class RestorePurchasesController: TransactionController {
                 unhandledTransactions.append(transaction)
             }
         }
-        if restoredProducts.count > 0 {
-            restorePurchases.callback(restoredProducts)
-        }
-        // Reset to nil after purchases complete
-        self.restorePurchases = nil
 
         return unhandledTransactions
     }
@@ -91,9 +87,11 @@ public class RestorePurchasesController: TransactionController {
         guard let restorePurchases = restorePurchases else {
             return
         }
-        restorePurchases.callback([.failed(error: error)])
+        restoredProducts.append(.failed(error: error))
+        restorePurchases.callback(restoredProducts)
         
-        // Reset to nil after error received
+        // Reset state after error received
+        restoredProducts = []
         self.restorePurchases = nil
 
     }
@@ -103,9 +101,10 @@ public class RestorePurchasesController: TransactionController {
         guard let restorePurchases = restorePurchases else {
             return
         }
-        restorePurchases.callback([])
+        restorePurchases.callback(restoredProducts)
         
-        // Reset to nil after error transactions finished
+        // Reset state after error transactions finished
+        restoredProducts = []
         self.restorePurchases = nil
     }
 }

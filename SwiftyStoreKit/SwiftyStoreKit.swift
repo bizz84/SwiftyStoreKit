@@ -108,7 +108,6 @@ public class SwiftyStoreKit {
         }
     }
 
-    
     // MARK: private methods
     private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
         guard SwiftyStoreKit.canMakePayments else {
@@ -238,7 +237,7 @@ extension SwiftyStoreKit {
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the purchase
-     *  - return: either NotPurchased or Purchased
+     *  - return: either notPurchased or purchased
      */
     public class func verifyPurchase(
         productId: String,

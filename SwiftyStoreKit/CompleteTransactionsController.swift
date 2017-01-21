@@ -25,11 +25,11 @@
 import Foundation
 import StoreKit
 
-public struct CompleteTransactions {
-    public let atomically: Bool
-    public let callback: ([Product]) -> ()
+struct CompleteTransactions {
+    let atomically: Bool
+    let callback: ([Product]) -> ()
     
-    public init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
+    init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
         self.atomically = atomically
         self.callback = callback
     }
@@ -49,13 +49,11 @@ extension SKPaymentTransactionState {
 }
 
 
-public class CompleteTransactionsController: TransactionController {
+class CompleteTransactionsController: TransactionController {
 
-    public var completeTransactions: CompleteTransactions?
+    var completeTransactions: CompleteTransactions?
     
-    public init() {}
-
-    public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
+    func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
         guard let completeTransactions = completeTransactions else {
             return transactions

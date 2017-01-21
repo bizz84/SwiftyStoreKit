@@ -25,8 +25,7 @@
 import Foundation
 import StoreKit
 
-
-public protocol TransactionController {
+protocol TransactionController {
     
     /**
      * - param transactions: transactions to process
@@ -56,7 +55,7 @@ public protocol PaymentQueue: class {
 
 extension SKPaymentQueue: PaymentQueue { }
 
-public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
+class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let paymentsController: PaymentsController
     
@@ -70,7 +69,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.remove(self)
     }
 
-    public init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
+    init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
                 paymentsController: PaymentsController = PaymentsController(),
                 restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),
                 completeTransactionsController: CompleteTransactionsController = CompleteTransactionsController()) {
@@ -83,7 +82,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.add(self)
     }
     
-    public func startPayment(_ payment: Payment) {
+    func startPayment(_ payment: Payment) {
         
         let skPayment = SKMutablePayment(product: payment.product)
         skPayment.applicationUsername = payment.applicationUsername
@@ -92,7 +91,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentsController.append(payment)
     }
     
-    public func restorePurchases(_ restorePurchases: RestorePurchases) {
+    func restorePurchases(_ restorePurchases: RestorePurchases) {
         
         if restorePurchasesController.restorePurchases != nil {
             // return .inProgress
@@ -104,12 +103,12 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         restorePurchasesController.restorePurchases = restorePurchases
     }
     
-    public func completeTransactions(_ completeTransactions: CompleteTransactions) {
+    func completeTransactions(_ completeTransactions: CompleteTransactions) {
         
         completeTransactionsController.completeTransactions = completeTransactions
     }
     
-    public func finishTransaction(_ transaction: PaymentTransaction) {
+    func finishTransaction(_ transaction: PaymentTransaction) {
         guard let skTransaction = transaction as? SKPaymentTransaction else {
             print("Object is not a SKPaymentTransaction: \(transaction)")
             return
@@ -119,7 +118,7 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
     
     // MARK: SKPaymentTransactionObserver
-    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         
         /*
          * Some notes about how requests are processed by SKPaymentQueue:
@@ -153,21 +152,21 @@ public class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         }
     }
     
-    public func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
+    func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {
         
     }
     
-    public func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
+    func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
         
         restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
     }
     
-    public func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
+    func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
 
         restorePurchasesController.restoreCompletedTransactionsFinished()
     }
     
-    public func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
+    func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
         
     }
 

@@ -23,8 +23,8 @@
 // THE SOFTWARE.
 
 import XCTest
-import SwiftyStoreKit
 import StoreKit
+@testable import SwiftyStoreKit
 
 class PaymentsControllerTests: XCTestCase {
 

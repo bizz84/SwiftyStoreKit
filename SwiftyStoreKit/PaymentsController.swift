@@ -26,25 +26,23 @@
 import Foundation
 import StoreKit
 
-public struct Payment: Hashable {
-    public let product: SKProduct
-    public let atomically: Bool
-    public let applicationUsername: String
-    public let callback: (TransactionResult) -> ()
+struct Payment: Hashable {
+    let product: SKProduct
+    let atomically: Bool
+    let applicationUsername: String
+    let callback: (TransactionResult) -> ()
     
-    public var hashValue: Int {
+    var hashValue: Int {
         return product.productIdentifier.hashValue
     }
-    public static func ==(lhs: Payment, rhs: Payment) -> Bool {
+    static func ==(lhs: Payment, rhs: Payment) -> Bool {
         return lhs.product.productIdentifier == rhs.product.productIdentifier
     }
 }
 
-public class PaymentsController: TransactionController {
+class PaymentsController: TransactionController {
     
     private var payments: [Payment] = []
-    
-    public init() { }
     
     private func findPaymentIndex(withProductIdentifier identifier: String) -> Int? {
         for payment in payments {
@@ -55,15 +53,15 @@ public class PaymentsController: TransactionController {
         return nil
     }
     
-    public func hasPayment(_ payment: Payment) -> Bool {
+    func hasPayment(_ payment: Payment) -> Bool {
         return findPaymentIndex(withProductIdentifier: payment.product.productIdentifier) != nil
     }
     
-    public func append(_ payment: Payment) {
+    func append(_ payment: Payment) {
         payments.append(payment)
     }
     
-    public func processTransaction(_ transaction: SKPaymentTransaction, on paymentQueue: PaymentQueue) -> Bool {
+    func processTransaction(_ transaction: SKPaymentTransaction, on paymentQueue: PaymentQueue) -> Bool {
         
         let transactionProductIdentifier = transaction.payment.productIdentifier
         
@@ -104,7 +102,7 @@ public class PaymentsController: TransactionController {
         return false
     }
     
-    public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
+    func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
         return transactions.filter { !processTransaction($0, on: paymentQueue) }
     }

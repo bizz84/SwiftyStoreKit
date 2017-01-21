@@ -23,11 +23,11 @@
 // THE SOFTWARE.
 
 import XCTest
-import SwiftyStoreKit
 import StoreKit
+@testable import SwiftyStoreKit
 
 extension Payment {
-    public init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (TransactionResult) -> ()) {
+    init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (TransactionResult) -> ()) {
         self.product = product
         self.atomically = atomically
         self.applicationUsername = applicationUsername

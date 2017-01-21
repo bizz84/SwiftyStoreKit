@@ -25,28 +25,25 @@
 import Foundation
 import StoreKit
 
-public struct RestorePurchases {
-    public let atomically: Bool
-    public let applicationUsername: String?
-    public let callback: ([TransactionResult]) -> ()
+struct RestorePurchases {
+    let atomically: Bool
+    let applicationUsername: String?
+    let callback: ([TransactionResult]) -> ()
     
-    public init(atomically: Bool, applicationUsername: String? = nil, callback: @escaping ([TransactionResult]) -> ()) {
+    init(atomically: Bool, applicationUsername: String? = nil, callback: @escaping ([TransactionResult]) -> ()) {
         self.atomically = atomically
         self.applicationUsername = applicationUsername
         self.callback = callback
     }
 }
 
-
-public class RestorePurchasesController: TransactionController {
+class RestorePurchasesController: TransactionController {
     
     public var restorePurchases: RestorePurchases?
     
     private var restoredProducts: [TransactionResult] = []
     
-    public init() { }
-    
-    public func processTransaction(_ transaction: SKPaymentTransaction, atomically: Bool, on paymentQueue: PaymentQueue) -> Product? {
+    func processTransaction(_ transaction: SKPaymentTransaction, atomically: Bool, on paymentQueue: PaymentQueue) -> Product? {
         
         let transactionState = transaction.transactionState
         
@@ -63,7 +60,7 @@ public class RestorePurchasesController: TransactionController {
         return nil
     }
     
-    public func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
+    func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
         guard let restorePurchases = restorePurchases else {
             return transactions
@@ -82,7 +79,7 @@ public class RestorePurchasesController: TransactionController {
         return unhandledTransactions
     }
     
-    public func restoreCompletedTransactionsFailed(withError error: Error) {
+    func restoreCompletedTransactionsFailed(withError error: Error) {
         
         guard let restorePurchases = restorePurchases else {
             return
@@ -96,7 +93,7 @@ public class RestorePurchasesController: TransactionController {
 
     }
     
-    public func restoreCompletedTransactionsFinished() {
+    func restoreCompletedTransactionsFinished() {
         
         guard let restorePurchases = restorePurchases else {
             return

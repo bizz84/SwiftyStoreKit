@@ -24,8 +24,8 @@
 
 
 import XCTest
-import SwiftyStoreKit
 import StoreKit
+@testable import SwiftyStoreKit
 
 class RestorePurchasesControllerTests: XCTestCase {
     

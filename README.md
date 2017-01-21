@@ -382,6 +382,10 @@ enum TransactionResult {
 ```
 Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.
 
+## Contributing
+
+[Read here](CONTRIBUTING.md)
+
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.
 

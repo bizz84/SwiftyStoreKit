@@ -1,8 +1,8 @@
 //
-// InAppCompleteTransactionsObserver.swift
+// CompleteTransactionsController.swift
 // SwiftyStoreKit
 //
-// Copyright (c) 2016 Andrea Bizzotto (bizz84@gmail.com)
+// Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,78 +22,68 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
+import Foundation
 import StoreKit
+
+struct CompleteTransactions {
+    let atomically: Bool
+    let callback: ([Product]) -> ()
+    
+    init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
+        self.atomically = atomically
+        self.callback = callback
+    }
+}
 
 extension SKPaymentTransactionState {
     
     var stringValue: String {
         switch self {
-        case .purchasing: return "Purchasing"
-        case .purchased: return "Purchased"
-        case .failed: return "Failed"
-        case .restored: return "Restored"
-        case .deferred: return "Deferred"
+        case .purchasing: return "purchasing"
+        case .purchased: return "purchased"
+        case .failed: return "failed"
+        case .restored: return "restored"
+        case .deferred: return "deferred"
         }
     }
 }
 
-class InAppCompleteTransactionsObserver: NSObject, SKPaymentTransactionObserver {
+
+class CompleteTransactionsController: TransactionController {
+
+    var completeTransactions: CompleteTransactions?
     
-    private var callbackCalled: Bool = false
+    func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
-    typealias TransactionsCallback = ([Product]) -> ()
-    
-    var paymentQueue: SKPaymentQueue {
-        return SKPaymentQueue.default()
-    }
-
-    let atomically: Bool
-    
-    deinit {
-        paymentQueue.remove(self)
-    }
-
-    let callback: TransactionsCallback
-    
-    init(atomically: Bool, callback: @escaping TransactionsCallback) {
-    
-        self.atomically = atomically
-        self.callback = callback
-        super.init()
-        paymentQueue.add(self)
-    }
-
-    func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
-        if callbackCalled {
-            return
+        guard let completeTransactions = completeTransactions else {
+            return transactions
         }
-        if SwiftyStoreKit.hasInFlightPayments {
-            return
-        }
-        
-        var completedTransactions: [Product] = []
+
+        var unhandledTransactions: [SKPaymentTransaction] = []
+        var products: [Product] = []
         
         for transaction in transactions {
             
             let transactionState = transaction.transactionState
-
+            
             if transactionState != .purchasing {
                 
-                let product = Product(productId: transaction.payment.productIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
+                let product = Product(productId: transaction.payment.productIdentifier, transaction: transaction, needsFinishTransaction: !completeTransactions.atomically)
                 
-                completedTransactions.append(product)
+                products.append(product)
                 
                 print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
                 
-                if atomically {
+                if completeTransactions.atomically {
                     paymentQueue.finishTransaction(transaction)
                 }
             }
+            else {
+                unhandledTransactions.append(transaction)
+            }
         }
-        callbackCalled = true
+        completeTransactions.callback(products)
 
-        callback(completedTransactions)
+        return unhandledTransactions
     }
 }

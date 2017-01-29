@@ -1,8 +1,8 @@
 //
-//  AppDelegate.swift
-//  SwiftyStoreKit
+// TestPaymentTransaction.swift
+// SwiftyStoreKit
 //
-//  Created by Andrea Bizzotto on 03/09/2015.
+// Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,23 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-import UIKit
-import SwiftyStoreKit
+import StoreKit
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class TestPaymentTransaction: SKPaymentTransaction {
 
-    var window: UIWindow?
+    let _transactionState: SKPaymentTransactionState
+    let _payment: SKPayment
+    
+    init(payment: SKPayment, transactionState: SKPaymentTransactionState) {
+        _transactionState = transactionState
+        _payment = payment
+    }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
-
-        completeIAPTransactions()
-
-        return true
+    override var payment: SKPayment {
+        return _payment
     }
     
-    func completeIAPTransactions() {
-        
-        SwiftyStoreKit.completeTransactions(atomically: true) { products in
-            
-            for product in products {
-                
-                if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
-                    
-                    if product.needsFinishTransaction {
-                        // Deliver content from server, then:
-                        SwiftyStoreKit.finishTransaction(product.transaction)
-                    }
-                    print("purchased: \(product.productId)")
-                }
-            }
-        }
+    override var transactionState: SKPaymentTransactionState {
+        return _transactionState
     }
 }
-

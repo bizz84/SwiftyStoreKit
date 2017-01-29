@@ -11,16 +11,6 @@
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
 
-### Update 2017-01-21:
-
-* The purchase flows in SwiftyStoreKit are undergoing a major refactor which should improve reliability. All details on [this Pull Request](https://github.com/bizz84/SwiftyStoreKit/pull/131).
-* While the new code is extensively unit tested, some manual testing would be appreciated so that the new implementation can be tested in sandbox/production.
-* Until this is merged into master, the test branch can be installed like this:
-
-```
-pod 'SwiftyStoreKit', :git => 'https://github.com/bizz84/SwiftyStoreKit', :branch => 'feature/payment-queue-controller'
-```
-
 ### Preview
 
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
@@ -356,6 +346,9 @@ The order in which transaction updates are processed is:
 3. complete transactions (transactionState: `.purchased`, `.failed`, `.restored`, `.deferred`)
 
 Any transactions where state == `.purchasing` are ignored.
+
+See [this pull request](https://github.com/bizz84/SwiftyStoreKit/pull/131) for full details about how the payment flows have been implemented.
+
 
 ## Contributing
 

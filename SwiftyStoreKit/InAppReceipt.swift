@@ -162,12 +162,12 @@ internal class InAppReceipt {
      */
     private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withProductId productId: String) -> [ReceiptInfo] {
 
-        guard let allReceipts = receipts else {
+        guard let receipts = receipts else {
             return []
         }
       
         // Filter receipts with matching product id
-        let receiptsMatchingProductId = allReceipts
+        let receiptsMatchingProductId = receipts
             .filter { (receipt) -> Bool in
                 let product_id = receipt["product_id"] as? String
                 return product_id == productId

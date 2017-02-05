@@ -70,7 +70,7 @@ internal class InAppReceipt {
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the purchase
-     *  - return: either NotPurchased or Purchased
+     *  - return: either notPurchased or purchased
      */
     class func verifyPurchase(
         productId: String,
@@ -78,7 +78,8 @@ internal class InAppReceipt {
     ) -> VerifyPurchaseResult {
       
         // Get receipts info for the product
-        let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
+        let receipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
+        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
       
         // Verify that at least one receipt has the right product id
         return receiptsInfo.count >= 1 ? .purchased : .notPurchased
@@ -100,7 +101,10 @@ internal class InAppReceipt {
     ) -> VerifySubscriptionResult {
       
         // Verify that at least one receipt has the right product id
-        let receiptsInfo = getReceiptsInfo(forProductId: productId, inReceipt: receipt)
+
+        // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
+        let receipts = receipt["latest_receipt_info"] as? [ReceiptInfo]
+        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
         if receiptsInfo.count == 0 {
             return .notPurchased
         }
@@ -128,7 +132,7 @@ internal class InAppReceipt {
         guard let firstExpiryDate = expiryDateValues.first else {
             return .notPurchased
         }
-      
+        
         // Check if at least 1 receipt is valid
         if firstExpiryDate.compare(receiptDate) == .orderedDescending {
             
@@ -153,15 +157,12 @@ internal class InAppReceipt {
     
     /**
      *  Get all the receipts info for a specific product
+     *  - Parameter receipts: the receipts array to grab info from
      *  - Parameter productId: the product id
-     *  - Parameter inReceipt: the receipt to grab info from
      */
-    private class func getReceiptsInfo(
-        forProductId productId: String,
-        inReceipt receipt: ReceiptInfo
-    ) -> [ReceiptInfo] {
-        // Get all receipts
-        guard let allReceipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo] else {
+    private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withProductId productId: String) -> [ReceiptInfo] {
+
+        guard let allReceipts = receipts else {
             return []
         }
       

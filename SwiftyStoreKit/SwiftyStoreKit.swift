@@ -32,11 +32,6 @@ public class SwiftyStoreKit {
     
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     
-    private enum InternalErrorCode: Int {
-        case restoredPurchaseWhenPurchasing = 0
-        case purchasedWhenRestoringPurchase = 1
-    }
-    
     init(productsInfoController: ProductsInfoController = ProductsInfoController(),
          paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())) {
         
@@ -61,10 +56,12 @@ public class SwiftyStoreKit {
                     self.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
                 }
                 else if let error = result.error {
-                    completion(.error(error: .failed(error: SKError(_nsError: error as NSError))))
+                    completion(.error(error: SKError(_nsError: error as NSError)))
                 }
                 else if let invalidProductId = result.invalidProductIDs.first {
-                    completion(.error(error: .invalidProductId(productId: invalidProductId)))
+                    let userInfo = [ NSLocalizedDescriptionKey: "Invalid product id: \(invalidProductId)" ]
+                    let error = NSError(domain: SKErrorDomain, code: SKError.storeProductNotAvailable.rawValue, userInfo: userInfo)
+                    completion(.error(error: SKError(_nsError: error)))
                 }
             }
         }
@@ -111,7 +108,8 @@ public class SwiftyStoreKit {
     // MARK: private methods
     private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
         guard SwiftyStoreKit.canMakePayments else {
-            completion(.error(error: .paymentNotAllowed))
+            let error = NSError(domain: SKErrorDomain, code: SKError.paymentNotAllowed.rawValue, userInfo: nil)
+            completion(.error(error: SKError(_nsError: error)))
             return
         }
         
@@ -126,19 +124,20 @@ public class SwiftyStoreKit {
         case .purchased(let product):
             return .success(product: product)
         case .failed(let error):
-            return .error(error: .failed(error: error))
+            return .error(error: error)
         case .restored(let product):
-            return .error(error: .failed(error: SKError(_nsError:  storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path"))))
+            return .error(error: storeInternalError(description: "Cannot restore product \(product.productId) from purchase path"))
         }
     }
     
     private func processRestoreResults(_ results: [TransactionResult]) -> RestoreResults {
         var restoredProducts: [Product] = []
-        var restoreFailedProducts: [(Swift.Error, String?)] = []
+        var restoreFailedProducts: [(SKError, String?)] = []
         for result in results {
             switch result {
             case .purchased(let product):
-                restoreFailedProducts.append((storeInternalError(code: InternalErrorCode.purchasedWhenRestoringPurchase.rawValue, description: "Cannot purchase product \(product.productId) from restore purchases path"), product.productId))
+                let error = storeInternalError(description: "Cannot purchase product \(product.productId) from restore purchases path")
+                restoreFailedProducts.append((error, product.productId))
             case .failed(let error):
                 restoreFailedProducts.append((error, nil))
             case .restored(let product):
@@ -148,8 +147,9 @@ public class SwiftyStoreKit {
         return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)
     }
     
-    private func storeInternalError(code: Int = 0, description: String = "") -> NSError {
-        return NSError(domain: "SwiftyStoreKit", code: code, userInfo: [ NSLocalizedDescriptionKey: description ])
+    private func storeInternalError(code: SKError.Code = SKError.unknown, description: String = "") -> SKError {
+        let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
+        return SKError(_nsError: error)
     }
 }
 

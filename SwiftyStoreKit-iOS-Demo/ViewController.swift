@@ -215,29 +215,22 @@ extension ViewController {
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
-            switch error {
-                case .failed(let error):
-                    switch error.code {
-                    case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
-                    case .clientInvalid: // client is not allowed to issue the request, etc.
-                        return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
-                    case .paymentCancelled: // user cancelled the request, etc.
-                        return nil
-                    case .paymentInvalid: // purchase identifier was invalid, etc.
-                        return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
-                    case .paymentNotAllowed: // this device is not allowed to make the payment
-                        return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
-                    case .storeProductNotAvailable: // Product is not available in the current storefront
-                        return alertWithTitle("Purchase failed", message: "The product is not available in the current storefront")
-                    case .cloudServicePermissionDenied: // user has not allowed access to cloud service information
-                        return alertWithTitle("Purchase failed", message: "Access to cloud service information is not allowed")
-                    case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
-                        return alertWithTitle("Purchase failed", message: "Could not connect to the network")
-                    }
-                case .invalidProductId(let productId):
-                    return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-                case .paymentNotAllowed:
-                    return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
+            switch error.code {
+            case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .clientInvalid: // client is not allowed to issue the request, etc.
+                return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
+            case .paymentCancelled: // user cancelled the request, etc.
+                return nil
+            case .paymentInvalid: // purchase identifier was invalid, etc.
+                return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
+            case .paymentNotAllowed: // this device is not allowed to make the payment
+                return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
+            case .storeProductNotAvailable: // Product is not available in the current storefront
+                return alertWithTitle("Purchase failed", message: "The product is not available in the current storefront")
+            case .cloudServicePermissionDenied: // user has not allowed access to cloud service information
+                return alertWithTitle("Purchase failed", message: "Access to cloud service information is not allowed")
+            case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
+                return alertWithTitle("Purchase failed", message: "Could not connect to the network")
             }
         }
     }

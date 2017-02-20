@@ -54,23 +54,16 @@ public struct RetrieveResults {
     public let error: Error?
 }
 
-// Purchase error types
-public enum PurchaseError {
-    case failed(error: SKError)
-    case invalidProductId(productId: String)
-    case paymentNotAllowed
-}
-
 // Purchase result
 public enum PurchaseResult {
     case success(product: Product)
-    case error(error: PurchaseError)
+    case error(error: SKError)
 }
 
 // Restore purchase results
 public struct RestoreResults {
     public let restoredProducts: [Product]
-    public let restoreFailedProducts: [(Swift.Error, String?)]
+    public let restoreFailedProducts: [(SKError, String?)]
 }
 
 // MARK: Receipt verification

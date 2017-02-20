@@ -60,7 +60,7 @@ public class SwiftyStoreKit {
                 }
                 else if let invalidProductId = result.invalidProductIDs.first {
                     let userInfo = [ NSLocalizedDescriptionKey: "Invalid product id: \(invalidProductId)" ]
-                    let error = NSError(domain: SKErrorDomain, code: SKError.storeProductNotAvailable.rawValue, userInfo: userInfo)
+                    let error = NSError(domain: SKErrorDomain, code: SKError.paymentInvalid.rawValue, userInfo: userInfo)
                     completion(.error(error: SKError(_nsError: error)))
                 }
             }

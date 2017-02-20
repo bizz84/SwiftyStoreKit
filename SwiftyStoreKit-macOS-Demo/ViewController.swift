@@ -84,7 +84,9 @@ class ViewController: NSViewController {
                 }
             }
 
-            self.showAlert(self.alertForPurchaseResult(result))
+            if let errorAlert = self.alertForPurchaseResult(result) {
+                self.showAlert(errorAlert)
+            }
         }
     }
 
@@ -200,24 +202,23 @@ extension ViewController {
         }
     }
     
-    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert {
-
+    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert? {
         switch result {
-        case .success(let productId):
-            print("Purchase Success: \(productId)")
+        case .success(let product):
+            print("Purchase Success: \(product.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
-            switch error {
-            case .failed(let error):
-                if (error as NSError).domain == SKErrorDomain {
-                    return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-                }
-                return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
-            case .invalidProductId(let productId):
-                return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-            case .paymentNotAllowed:
-                return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
+            switch error.code {
+            case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .clientInvalid: // client is not allowed to issue the request, etc.
+                return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
+            case .paymentCancelled: // user cancelled the request, etc.
+                return nil
+            case .paymentInvalid: // purchase identifier was invalid, etc.
+                return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
+            case .paymentNotAllowed: // this device is not allowed to make the payment
+                return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
             }
         }
     }

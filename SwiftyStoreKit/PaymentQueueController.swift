@@ -38,7 +38,7 @@ protocol TransactionController {
 public enum TransactionResult {
     case purchased(product: Product)
     case restored(product: Product)
-    case failed(error: Error)
+    case failed(error: SKError)
 }
 
 public protocol PaymentQueue: class {

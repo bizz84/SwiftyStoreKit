@@ -56,7 +56,7 @@ public struct RetrieveResults {
 
 // Purchase error types
 public enum PurchaseError {
-    case failed(error: Error)
+    case failed(error: SKError)
     case invalidProductId(productId: String)
     case paymentNotAllowed
 }

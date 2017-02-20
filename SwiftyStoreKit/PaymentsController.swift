@@ -87,9 +87,7 @@ class PaymentsController: TransactionController {
         }
         if transactionState == .failed {
 
-            let message = "Transaction failed for product ID: \(transactionProductIdentifier)"
-            let altError = NSError(domain: SKErrorDomain, code: 0, userInfo: [ NSLocalizedDescriptionKey: message ])
-            payment.callback(.failed(error: transaction.error ?? altError))
+            payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
             
             paymentQueue.finishTransaction(transaction)
             payments.remove(at: paymentIndex)
@@ -102,6 +100,13 @@ class PaymentsController: TransactionController {
         return false
     }
     
+    func transactionError(for error: NSError?) -> SKError {
+        let message = "Unknown error"
+        let altError = NSError(domain: SKErrorDomain, code: SKError.Code.unknown.rawValue, userInfo: [ NSLocalizedDescriptionKey: message ])
+        let nsError = error ?? altError
+        return SKError(_nsError: nsError)
+    }
+        
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
         
         return transactions.filter { !processTransaction($0, on: paymentQueue) }

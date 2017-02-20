@@ -84,7 +84,7 @@ class RestorePurchasesController: TransactionController {
         guard let restorePurchases = restorePurchases else {
             return
         }
-        restoredProducts.append(.failed(error: error))
+        restoredProducts.append(.failed(error: SKError(_nsError: error as NSError)))
         restorePurchases.callback(restoredProducts)
         
         // Reset state after error received

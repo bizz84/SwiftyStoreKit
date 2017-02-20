@@ -61,7 +61,7 @@ public class SwiftyStoreKit {
                     self.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
                 }
                 else if let error = result.error {
-                    completion(.error(error: .failed(error: error)))
+                    completion(.error(error: .failed(error: SKError(_nsError: error as NSError))))
                 }
                 else if let invalidProductId = result.invalidProductIDs.first {
                     completion(.error(error: .invalidProductId(productId: invalidProductId)))
@@ -128,7 +128,7 @@ public class SwiftyStoreKit {
         case .failed(let error):
             return .error(error: .failed(error: error))
         case .restored(let product):
-            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path")))
+            return .error(error: .failed(error: SKError(_nsError:  storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path"))))
         }
     }
     

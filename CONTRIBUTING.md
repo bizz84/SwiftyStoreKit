@@ -10,6 +10,10 @@ SwiftyStoreKit aims to be a lightweight wrapper on top of [StoreKit](https://dev
 
 While SwiftyStoreKit offers access to the [local receipt data](https://developer.apple.com/reference/foundation/bundle/1407276-appstorereceipturl), it is a non-goal to add support for persisting IAP data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
+**Swift Version**: SwiftyStoreKit includes [Swift 2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and [Swift 2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) branches. These legacy versions of the library are no longer maintained and all active development happens on Swift 3.0+.
+
+**Objective-C**: Currently, SwiftyStoreKit cannot be used in Objective-C projects. The main limitation is that most classes and types in the library are Swift-only. See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/123).
+
 ## Pull requests
 
 The project uses [gitflow](http://nvie.com/posts/a-successful-git-branching-model/) as a branching model.
@@ -23,17 +27,17 @@ In short:
 
 ## Open Features / Enhancement Requests
 
-#### Local Receipt validation
+### Local Receipt validation
 
 SwiftyStoreKit offers a reference implementation for [receipt validation with Apple](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit/AppleReceiptValidator.swift).
 
 This could be extended by implementing local receipt validation as recommended by Apple. See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/101).
 
-#### Support for content hosted by Apple for non-consumable products
+### Support for content hosted by Apple for non-consumable products
 
 See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/128).
 
-#### Increase unit test coverage
+### Increase unit test coverage
 
 The payment flows are unit tested fairly extensively. Additional unit test coverage is welcome:
 
@@ -42,6 +46,10 @@ The payment flows are unit tested fairly extensively. Additional unit test cover
 - [ ] Unit tests for receipt verification code.
 
 See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/38).
+
+### Add code linting
+
+See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/139).
 
 
 ## Issues

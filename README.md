@@ -42,7 +42,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 	        }
 	    }
 	}
-  return true
+ 	return true
 }
 ```
 
@@ -172,6 +172,8 @@ This is what is [recommended by Apple](https://developer.apple.com/reference/sto
 * A purchase is **atomic** when the app unlocks the functionality purchased by the user immediately and call `finishTransaction()` at the same time. This is desirable if you're unlocking functionality that is already inside the app.
 
 * In cases when you need to make a request to your own server in order to unlock the functionality, you can use a **non-atomic** purchase instead.
+
+* **Note**: SwiftyStoreKit doesn't yet support downloading content hosted by Apple for non-consumable products. See [this feature request](https://github.com/bizz84/SwiftyStoreKit/issues/128).
 
 SwiftyStoreKit provides three operations that can be performed **atomically** or **non-atomically**:
 
@@ -387,7 +389,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Arise](http://www.abnehm-app.de/) - Calorie counter
 * [Truth Truth Lie](https://itunes.apple.com/app/id1130832864) - iMessage game, featured by Apple
 * [Tactus Music Player](https://itunes.apple.com/app/id557446352) - Alternative music player app
-* [Drops: Learn Spanish, English & French words fast!](https://itunes.apple.com/app/id939540371) Language learning app
+* [Drops](https://itunes.apple.com/app/id939540371) - Language learning app
 * [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
 
 

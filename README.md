@@ -76,7 +76,16 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
     case .success(let product):
         print("Purchase Success: \(product.productId)")
     case .error(let error):
-        print("Purchase Failed: \(error)")
+        switch error.code {
+        case .unknown: print("Unknown error. Please contact support")
+        case .clientInvalid: print("Not allowed to make the payment")
+        case .paymentCancelled: break
+        case .paymentInvalid: print("The purchase identifier was invalid")
+        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        }
     }
 }
 ```
@@ -93,7 +102,16 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
         }
         print("Purchase Success: \(product.productId)")
     case .error(let error):
-        print("Purchase Failed: \(error)")
+        switch error.code {
+        case .unknown: print("Unknown error. Please contact support")
+        case .clientInvalid: print("Not allowed to make the payment")
+        case .paymentCancelled: break
+        case .paymentInvalid: print("The purchase identifier was invalid")
+        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        }
     }
 }
 ```
@@ -213,7 +231,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
         case .notPurchased:
             print("The user has never purchased this product")
         }
-    case .Error(let error):
+    case .error(let error):
         print("Receipt verification failed: \(error)")
     }
 }

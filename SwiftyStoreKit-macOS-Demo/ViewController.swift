@@ -110,7 +110,7 @@ class ViewController: NSViewController {
         let appleValidator = AppleReceiptValidator(service: .production)
         SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
 
-            self.showAlert(self.alertForVerifyReceipt(result)) { response in
+            self.showAlert(self.alertForVerifyReceipt(result)) { _ in
 
                 if case .error(let error) = result {
                     if case .noReceiptData = error {
@@ -155,7 +155,7 @@ class ViewController: NSViewController {
 
     func refreshReceipt() {
 
-        SwiftyStoreKit.refreshReceipt() { result in
+        SwiftyStoreKit.refreshReceipt { result in
 
             self.showAlert(self.alertForRefreshReceipt(result))
         }
@@ -260,7 +260,6 @@ extension ViewController {
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
-
 
     func alertForVerifyPurchase(_ result: VerifyPurchaseResult) -> NSAlert {
 

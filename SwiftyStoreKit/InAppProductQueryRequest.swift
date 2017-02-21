@@ -26,7 +26,7 @@ import StoreKit
 
 class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
-    typealias RequestCallback = (RetrieveResults) -> ()
+    typealias RequestCallback = (RetrieveResults) -> Void
     private let callback: RequestCallback
     private let request: SKProductsRequest
     // http://stackoverflow.com/questions/24011575/what-is-the-difference-between-a-weak-reference-and-an-unowned-reference

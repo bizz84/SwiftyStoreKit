@@ -33,7 +33,7 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
         case error(e: Error)
     }
 
-    typealias RequestCallback = (ResultType) -> ()
+    typealias RequestCallback = (ResultType) -> Void
 
     class func refresh(_ receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
         let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)

@@ -27,7 +27,7 @@ import StoreKit
 @testable import SwiftyStoreKit
 
 extension Payment {
-    init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (TransactionResult) -> ()) {
+    init(product: SKProduct, atomically: Bool, applicationUsername: String, callback: @escaping (TransactionResult) -> Void) {
         self.product = product
         self.atomically = atomically
         self.applicationUsername = applicationUsername
@@ -64,7 +64,7 @@ class PaymentQueueControllerTests: XCTestCase {
 
         let paymentQueueController = PaymentQueueController(paymentQueue: spy)
 
-        let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { result in }
+        let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { _ in }
 
         paymentQueueController.startPayment(payment)
 
@@ -92,7 +92,6 @@ class PaymentQueueControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
             makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
             ]
-
 
         var paymentCallbackCalled = false
         let testPayment = makeTestPayment(productIdentifier: purchasedProductIdentifier) { result in
@@ -160,7 +159,6 @@ class PaymentQueueControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
             makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
             ]
-
 
         var paymentCallbackCalled = false
         let testPayment = makeTestPayment(productIdentifier: purchasedProductIdentifier) { result in
@@ -256,7 +254,7 @@ class PaymentQueueControllerTests: XCTestCase {
         return TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: transactionState)
     }
 
-    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> ()) -> Payment {
+    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         let testProduct = TestProduct(productIdentifier: productIdentifier)
         return Payment(product: testProduct, atomically: atomically, applicationUsername: "", callback: callback)

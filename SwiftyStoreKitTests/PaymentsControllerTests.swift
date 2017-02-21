@@ -30,7 +30,7 @@ class PaymentsControllerTests: XCTestCase {
 
     func testInsertPayment_hasPayment() {
 
-        let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { result in }
+        let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { _ in }
 
         let paymentsController = makePaymentsController(appendPayments: [payment])
 
@@ -168,7 +168,7 @@ class PaymentsControllerTests: XCTestCase {
         }
 
         let testProduct2 = TestProduct(productIdentifier: productIdentifier)
-        let payment2 = makeTestPayment(product: testProduct2) { result in
+        let payment2 = makeTestPayment(product: testProduct2) { _ in
 
             XCTFail("unexpected callback for second payment")
         }
@@ -191,7 +191,6 @@ class PaymentsControllerTests: XCTestCase {
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
 
-
     func makePaymentsController(appendPayments payments: [Payment]) -> PaymentsController {
 
         let paymentsController = PaymentsController()
@@ -201,12 +200,12 @@ class PaymentsControllerTests: XCTestCase {
         return paymentsController
     }
 
-    func makeTestPayment(product: SKProduct, atomically: Bool = true, callback: @escaping (TransactionResult) -> ()) -> Payment {
+    func makeTestPayment(product: SKProduct, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         return Payment(product: product, atomically: atomically, applicationUsername: "", callback: callback)
     }
 
-    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> ()) -> Payment {
+    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         let product = TestProduct(productIdentifier: productIdentifier)
         return makeTestPayment(product: product, atomically: atomically, callback: callback)

@@ -116,7 +116,6 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.finishTransaction(skTransaction)
     }
 
-
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
 

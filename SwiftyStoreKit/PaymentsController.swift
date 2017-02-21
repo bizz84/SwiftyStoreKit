@@ -22,7 +22,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import Foundation
 import StoreKit
 
@@ -30,7 +29,7 @@ struct Payment: Hashable {
     let product: SKProduct
     let atomically: Bool
     let applicationUsername: String
-    let callback: (TransactionResult) -> ()
+    let callback: (TransactionResult) -> Void
 
     var hashValue: Int {
         return product.productIdentifier.hashValue

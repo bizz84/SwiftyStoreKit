@@ -27,9 +27,9 @@ import StoreKit
 
 struct CompleteTransactions {
     let atomically: Bool
-    let callback: ([Product]) -> ()
+    let callback: ([Product]) -> Void
 
-    init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
+    init(atomically: Bool, callback: @escaping ([Product]) -> Void) {
         self.atomically = atomically
         self.callback = callback
     }
@@ -47,7 +47,6 @@ extension SKPaymentTransactionState {
         }
     }
 }
-
 
 class CompleteTransactionsController: TransactionController {
 

@@ -55,7 +55,7 @@ internal class InAppReceipt {
     class func verify(
 		using validator: ReceiptValidator,
         password autoRenewPassword: String? = nil,
-        completion: @escaping (VerifyReceiptResult) -> ()) {
+        completion: @escaping (VerifyReceiptResult) -> Void) {
 
             // If no receipt is present, validation fails.
             guard let base64EncodedString = appStoreReceiptBase64Encoded else {

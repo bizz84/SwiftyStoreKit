@@ -36,7 +36,6 @@ enum RegisteredPurchase: String {
     case nonRenewingPurchase = "nonRenewingPurchase"
 }
 
-
 class ViewController: UIViewController {
 
     let appBundleId = "com.musevisions.iOS.SwiftyStoreKit"
@@ -245,7 +244,6 @@ extension ViewController {
             return alertWithTitle("Nothing to restore", message: "No previous purchases were found")
         }
     }
-
 
     func alertForVerifyReceipt(_ result: VerifyReceiptResult) -> UIAlertController {
 

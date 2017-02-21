@@ -34,13 +34,13 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
         request.delegate = nil
     }
     private init(productIds: Set<String>, callback: @escaping RequestCallback) {
-        
+
         self.callback = callback
         request = SKProductsRequest(productIdentifiers: productIds)
         super.init()
         request.delegate = self
     }
-    
+
     class func startQuery(_ productIds: Set<String>, callback: @escaping RequestCallback) -> InAppProductQueryRequest {
         let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
         request.start()
@@ -53,28 +53,28 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     func cancel() {
         self.request.cancel()
     }
-    
+
     // MARK: SKProductsRequestDelegate
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        
+
         DispatchQueue.main.async {
-            
+
             let retrievedProducts = Set<SKProduct>(response.products)
             let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
             self.callback(RetrieveResults(retrievedProducts: retrievedProducts,
                 invalidProductIDs: invalidProductIDs, error: nil))
         }
     }
-    
+
     func requestDidFinish(_ request: SKRequest) {
-        
+
     }
 
     func request(_ request: SKRequest, didFailWithError error: Error) {
         requestFailed(error)
     }
 
-    func requestFailed(_ error: Error){
+    func requestFailed(_ error: Error) {
         DispatchQueue.main.async {
             self.callback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
         }

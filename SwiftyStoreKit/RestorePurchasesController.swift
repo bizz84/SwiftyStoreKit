@@ -29,7 +29,7 @@ struct RestorePurchases {
     let atomically: Bool
     let applicationUsername: String?
     let callback: ([TransactionResult]) -> ()
-    
+
     init(atomically: Bool, applicationUsername: String? = nil, callback: @escaping ([TransactionResult]) -> ()) {
         self.atomically = atomically
         self.applicationUsername = applicationUsername
@@ -38,19 +38,19 @@ struct RestorePurchases {
 }
 
 class RestorePurchasesController: TransactionController {
-    
+
     public var restorePurchases: RestorePurchases?
-    
+
     private var restoredProducts: [TransactionResult] = []
-    
+
     func processTransaction(_ transaction: SKPaymentTransaction, atomically: Bool, on paymentQueue: PaymentQueue) -> Product? {
-        
+
         let transactionState = transaction.transactionState
-        
+
         if transactionState == .restored {
-            
+
             let transactionProductIdentifier = transaction.payment.productIdentifier
-            
+
             let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !atomically)
             if atomically {
                 paymentQueue.finishTransaction(transaction)
@@ -59,47 +59,46 @@ class RestorePurchasesController: TransactionController {
         }
         return nil
     }
-    
+
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
-        
+
         guard let restorePurchases = restorePurchases else {
             return transactions
         }
-        
+
         var unhandledTransactions: [SKPaymentTransaction] = []
         for transaction in transactions {
             if let restoredProduct = processTransaction(transaction, atomically: restorePurchases.atomically, on: paymentQueue) {
                 restoredProducts.append(.restored(product: restoredProduct))
-            }
-            else {
+            } else {
                 unhandledTransactions.append(transaction)
             }
         }
 
         return unhandledTransactions
     }
-    
+
     func restoreCompletedTransactionsFailed(withError error: Error) {
-        
+
         guard let restorePurchases = restorePurchases else {
             return
         }
         restoredProducts.append(.failed(error: SKError(_nsError: error as NSError)))
         restorePurchases.callback(restoredProducts)
-        
+
         // Reset state after error received
         restoredProducts = []
         self.restorePurchases = nil
 
     }
-    
+
     func restoreCompletedTransactionsFinished() {
-        
+
         guard let restorePurchases = restorePurchases else {
             return
         }
         restorePurchases.callback(restoredProducts)
-        
+
         // Reset state after error transactions finished
         restoredProducts = []
         self.restorePurchases = nil

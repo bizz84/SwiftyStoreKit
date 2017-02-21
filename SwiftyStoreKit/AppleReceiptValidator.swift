@@ -101,17 +101,14 @@ public struct AppleReceiptValidator: ReceiptValidator {
 				if case .testReceipt = receiptStatus {
 					let sandboxValidator = AppleReceiptValidator(service: .sandbox)
 					sandboxValidator.validate(receipt: receipt, password: autoRenewPassword, completion: completion)
-				}
-				else {
+				} else {
 					if receiptStatus.isValid {
 						completion(.success(receipt: receiptInfo))
-					}
-					else {
+					} else {
 						completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
 					}
 				}
-			}
-			else {
+			} else {
 				completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: ReceiptStatus.none)))
 			}
 		}

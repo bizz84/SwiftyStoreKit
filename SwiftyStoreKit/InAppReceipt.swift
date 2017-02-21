@@ -65,7 +65,7 @@ internal class InAppReceipt {
 
 			validator.validate(receipt: base64EncodedString, password: autoRenewPassword, completion: completion)
     }
-  
+
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
@@ -76,15 +76,15 @@ internal class InAppReceipt {
         productId: String,
         inReceipt receipt: ReceiptInfo
     ) -> VerifyPurchaseResult {
-      
+
         // Get receipts info for the product
         let receipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
-      
+
         // Verify that at least one receipt has the right product id
         return receiptsInfo.count >= 1 ? .purchased : .notPurchased
     }
-  
+
     /**
      *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter productId: the product id of the purchase to verify
@@ -99,7 +99,7 @@ internal class InAppReceipt {
         validUntil date: Date = Date(),
         validDuration duration: TimeInterval? = nil
     ) -> VerifySubscriptionResult {
-      
+
         // Verify that at least one receipt has the right product id
 
         // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
@@ -108,9 +108,9 @@ internal class InAppReceipt {
         if receiptsInfo.count == 0 {
             return .notPurchased
         }
-    
+
         let receiptDate = getReceiptRequestDate(inReceipt: receipt) ?? date
-        
+
         // Return the expires dates sorted desc
         let expiryDateValues = receiptsInfo
             .flatMap { (receipt) -> String? in
@@ -128,25 +128,24 @@ internal class InAppReceipt {
                 // Sort by descending date order
                 return a.compare(b) == .orderedDescending
             }
-      
+
         guard let firstExpiryDate = expiryDateValues.first else {
             return .notPurchased
         }
-        
+
         // Check if at least 1 receipt is valid
         if firstExpiryDate.compare(receiptDate) == .orderedDescending {
-            
+
             // The subscription is valid
             return .purchased(expiryDate: firstExpiryDate)
-        }
-        else {
+        } else {
             // The subscription is expired
             return .expired(expiryDate: firstExpiryDate)
         }
     }
-  
+
     private class func getReceiptRequestDate(inReceipt receipt: ReceiptInfo) -> Date? {
-        
+
         guard let receiptInfo = receipt["receipt"] as? ReceiptInfo,
             let requestDateString = receiptInfo["request_date_ms"] as? String,
             let requestDateMs = Double(requestDateString) else {
@@ -154,7 +153,7 @@ internal class InAppReceipt {
         }
         return Date(timeIntervalSince1970: requestDateMs / 1000)
     }
-    
+
     /**
      *  Get all the receipts info for a specific product
      *  - Parameter receipts: the receipts array to grab info from
@@ -165,14 +164,14 @@ internal class InAppReceipt {
         guard let receipts = receipts else {
             return []
         }
-      
+
         // Filter receipts with matching product id
         let receiptsMatchingProductId = receipts
             .filter { (receipt) -> Bool in
                 let product_id = receipt["product_id"] as? String
                 return product_id == productId
             }
-      
+
         return receiptsMatchingProductId
     }
 }

@@ -24,14 +24,16 @@
 
 import StoreKit
 
+// swiftlint:disable variable_name
+
 class TestProduct: SKProduct {
-    
+
     var _productIdentifier: String = ""
-    
+
     override var productIdentifier: String {
         return _productIdentifier
     }
-    
+
     init(productIdentifier: String) {
         _productIdentifier = productIdentifier
         super.init()

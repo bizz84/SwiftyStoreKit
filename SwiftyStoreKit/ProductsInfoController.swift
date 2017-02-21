@@ -37,16 +37,16 @@ class ProductsInfoController: NSObject {
     private func addProduct(_ product: SKProduct) {
         products[product.productIdentifier] = product
     }
-    
+
     private func allProductsMatching(_ productIds: Set<String>) -> Set<SKProduct> {
-        
+
         return Set(productIds.flatMap { self.products[$0] })
     }
-    
+
     private func requestProducts(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
-        
+
         inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
-            
+
             self.inflightQueries[productIds] = nil
             for product in result.retrievedProducts {
                 self.addProduct(product)
@@ -54,12 +54,12 @@ class ProductsInfoController: NSObject {
             completion(result)
         }
     }
-    
+
     func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
-        
+
         let products = allProductsMatching(productIds)
         guard products.count == productIds.count else {
-            
+
             requestProducts(productIds, completion: completion)
             return
         }

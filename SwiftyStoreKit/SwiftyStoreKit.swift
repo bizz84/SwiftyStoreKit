@@ -29,36 +29,33 @@ public class SwiftyStoreKit {
     private let productsInfoController: ProductsInfoController
 
     private let paymentQueueController: PaymentQueueController
-    
+
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
-    
+
     init(productsInfoController: ProductsInfoController = ProductsInfoController(),
          paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())) {
-        
+
         self.productsInfoController = productsInfoController
         self.paymentQueueController = paymentQueueController
     }
 
     // MARK: Internal methods
-    
+
     func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
         return productsInfoController.retrieveProductsInfo(productIds, completion: completion)
     }
-    
+
     func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
-        
+
         if let product = productsInfoController.products[productId] {
             purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
-        }
-        else {
+        } else {
             retrieveProductsInfo(Set([productId])) { result -> () in
                 if let product = result.retrievedProducts.first {
                     self.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
-                }
-                else if let error = result.error {
+                } else if let error = result.error {
                     completion(.error(error: SKError(_nsError: error as NSError)))
-                }
-                else if let invalidProductId = result.invalidProductIDs.first {
+                } else if let invalidProductId = result.invalidProductIDs.first {
                     let userInfo = [ NSLocalizedDescriptionKey: "Invalid product id: \(invalidProductId)" ]
                     let error = NSError(domain: SKErrorDomain, code: SKError.paymentInvalid.rawValue, userInfo: userInfo)
                     completion(.error(error: SKError(_nsError: error)))
@@ -66,37 +63,36 @@ public class SwiftyStoreKit {
             }
         }
     }
-    
+
     func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> ()) {
-        
+
         paymentQueueController.restorePurchases(RestorePurchases(atomically: atomically, applicationUsername: applicationUsername) { results in
-            
+
             let results = self.processRestoreResults(results)
             completion(results)
         })
     }
-    
+
     func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
-        
+
         paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
     }
-    
+
     func finishTransaction(_ transaction: PaymentTransaction) {
-        
+
         paymentQueueController.finishTransaction(transaction)
     }
 
     func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
         receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
-            
+
             self.receiptRefreshRequest = nil
-            
+
             switch result {
             case .success:
                 if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
                     completion(.success(receiptData: appStoreReceiptData))
-                }
-                else {
+                } else {
                     completion(.error(error: ReceiptError.noReceiptData))
                 }
             case .error(let e):
@@ -112,9 +108,9 @@ public class SwiftyStoreKit {
             completion(.error(error: SKError(_nsError: error)))
             return
         }
-        
+
         paymentQueueController.startPayment(Payment(product: product, atomically: atomically, applicationUsername: applicationUsername) { result in
-            
+
             completion(self.processPurchaseResult(result))
         })
     }
@@ -129,7 +125,7 @@ public class SwiftyStoreKit {
             return .error(error: storeInternalError(description: "Cannot restore product \(product.productId) from purchase path"))
         }
     }
-    
+
     private func processRestoreResults(_ results: [TransactionResult]) -> RestoreResults {
         var restoredProducts: [Product] = []
         var restoreFailedProducts: [(SKError, String?)] = []
@@ -146,7 +142,7 @@ public class SwiftyStoreKit {
         }
         return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)
     }
-    
+
     private func storeInternalError(code: SKError.Code = SKError.unknown, description: String = "") -> SKError {
         let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
         return SKError(_nsError: error)
@@ -157,17 +153,17 @@ extension SwiftyStoreKit {
 
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
-    
+
     // MARK: Public methods - Purchases
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
 
     public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
-        
+
         return sharedInstance.retrieveProductsInfo(productIds, completion: completion)
     }
-    
+
     /**
      *  Purchase a product
      *  - Parameter productId: productId as specified in iTunes Connect
@@ -176,44 +172,44 @@ extension SwiftyStoreKit {
      *  - Parameter completion: handler for result
      */
     public class func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
-        
+
         sharedInstance.purchaseProduct(productId, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
-    
+
     public class func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> ()) {
-        
+
         sharedInstance.restorePurchases(atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
-    
+
     public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
-        
+
         sharedInstance.completeTransactions(atomically: atomically, completion: completion)
     }
-    
-    
+
+
     public class func finishTransaction(_ transaction: PaymentTransaction) {
-        
+
         sharedInstance.finishTransaction(transaction)
     }
 
     // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
     public class func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
-        
+
         sharedInstance.refreshReceipt(receiptProperties, completion: completion)
     }
 }
 
 extension SwiftyStoreKit {
- 
+
     // MARK: Public methods - Receipt verification
-    
+
     /**
      * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
      */
     public static var localReceiptData: Data? {
         return InAppReceipt.appStoreReceiptData
     }
-    
+
     /**
      *  Verify application receipt
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
@@ -224,15 +220,15 @@ extension SwiftyStoreKit {
         using validator: ReceiptValidator,
         password: String? = nil,
         completion:@escaping (VerifyReceiptResult) -> ()) {
-        
+
         InAppReceipt.verify(using: validator, password: password) { result in
-            
+
             DispatchQueue.main.async {
                 completion(result)
             }
         }
     }
-    
+
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
@@ -245,7 +241,7 @@ extension SwiftyStoreKit {
         ) -> VerifyPurchaseResult {
         return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt)
     }
-    
+
     /**
      *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter productId: the product id of the purchase to verify

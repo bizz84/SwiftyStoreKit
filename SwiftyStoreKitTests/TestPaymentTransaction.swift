@@ -24,11 +24,13 @@
 
 import StoreKit
 
+// swiftlint:disable variable_name
+
 class TestPaymentTransaction: SKPaymentTransaction {
 
     let _transactionState: SKPaymentTransactionState
     let _payment: SKPayment
-    
+
     init(payment: SKPayment, transactionState: SKPaymentTransactionState) {
         _transactionState = transactionState
         _payment = payment
@@ -37,7 +39,7 @@ class TestPaymentTransaction: SKPaymentTransaction {
     override var payment: SKPayment {
         return _payment
     }
-    
+
     override var transactionState: SKPaymentTransactionState {
         return _transactionState
     }

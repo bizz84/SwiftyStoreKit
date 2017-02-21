@@ -1,3 +1,9 @@
 language: objective-c
 osx_image: xcode8
-script: ./scripts/build.sh
+
+install:
+  - ./scripts/install_swiftlint.sh
+
+script:
+  - swiftlint
+  - ./scripts/build.sh

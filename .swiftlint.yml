@@ -3,7 +3,6 @@
 
 # rule identifiers to exclude from running
 disabled_rules:
-- type_name
 - line_length
 
 

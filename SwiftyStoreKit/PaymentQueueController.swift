@@ -55,6 +55,28 @@ public protocol PaymentQueue: class {
 
 extension SKPaymentQueue: PaymentQueue { }
 
+extension SKPaymentTransaction {
+
+    open override var debugDescription: String {
+        let transactionId = transactionIdentifier ?? "null"
+        return "productId: \(payment.productIdentifier), transactionId: \(transactionId), state: \(transactionState), date: \(transactionDate)"
+    }
+}
+
+extension SKPaymentTransactionState: CustomDebugStringConvertible {
+
+    public var debugDescription: String {
+
+        switch self {
+        case .purchasing: return "purchasing"
+        case .purchased: return "purchased"
+        case .failed: return "failed"
+        case .restored: return "restored"
+        case .deferred: return "deferred"
+        }
+    }
+}
+
 class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
     private let paymentsController: PaymentsController
@@ -94,7 +116,6 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     func restorePurchases(_ restorePurchases: RestorePurchases) {
 
         if restorePurchasesController.restorePurchases != nil {
-            // return .inProgress
             return
         }
 
@@ -147,7 +168,8 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
 
         if unhandledTransactions.count > 0 {
-            print("unhandledTransactions: \(unhandledTransactions)")
+            let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
+            print("unhandledTransactions:\n\(strings)")
         }
     }
 

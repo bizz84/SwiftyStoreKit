@@ -35,19 +35,6 @@ struct CompleteTransactions {
     }
 }
 
-extension SKPaymentTransactionState {
-
-    var stringValue: String {
-        switch self {
-        case .purchasing: return "purchasing"
-        case .purchased: return "purchased"
-        case .failed: return "failed"
-        case .restored: return "restored"
-        case .deferred: return "deferred"
-        }
-    }
-}
-
 class CompleteTransactionsController: TransactionController {
 
     var completeTransactions: CompleteTransactions?
@@ -71,7 +58,7 @@ class CompleteTransactionsController: TransactionController {
 
                 products.append(product)
 
-                print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
+                print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.debugDescription)")
 
                 if completeTransactions.atomically {
                     paymentQueue.finishTransaction(transaction)

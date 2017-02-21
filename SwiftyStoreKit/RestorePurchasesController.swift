@@ -81,6 +81,7 @@ class RestorePurchasesController: TransactionController {
     func restoreCompletedTransactionsFailed(withError error: Error) {
 
         guard let restorePurchases = restorePurchases else {
+            print("Callback already called. Returning")
             return
         }
         restoredProducts.append(.failed(error: SKError(_nsError: error as NSError)))
@@ -95,6 +96,7 @@ class RestorePurchasesController: TransactionController {
     func restoreCompletedTransactionsFinished() {
 
         guard let restorePurchases = restorePurchases else {
+            print("Callback already called. Returning")
             return
         }
         restorePurchases.callback(restoredProducts)

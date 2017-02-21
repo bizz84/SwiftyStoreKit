@@ -41,28 +41,28 @@ class ViewController: NSViewController {
 
     let appBundleId = "com.musevisions.MacOS.SwiftyStoreKitDemo"
 
-    let purchase1 = RegisteredPurchase.purchase1
-    let purchase2 = RegisteredPurchase.autoRenewablePurchase
+    let purchase1Suffix = RegisteredPurchase.purchase1
+    let purchase2Suffix = RegisteredPurchase.autoRenewablePurchase
 
     // MARK: actions
     @IBAction func getInfo1(_ sender: Any?) {
-        getInfo(purchase1)
+        getInfo(purchase1Suffix)
     }
     @IBAction func purchase1(_ sender: Any?) {
-        purchase(purchase1)
+        purchase(purchase1Suffix)
     }
     @IBAction func verifyPurchase1(_ sender: Any?) {
-        verifyPurchase(purchase1)
+        verifyPurchase(purchase1Suffix)
     }
 
     @IBAction func getInfo2(_ sender: Any?) {
-        getInfo(purchase2)
+        getInfo(purchase2Suffix)
     }
     @IBAction func purchase2(_ sender: Any?) {
-        purchase(purchase2)
+        purchase(purchase2Suffix)
     }
     @IBAction func verifyPurchase2(_ sender: Any?) {
-        verifyPurchase(purchase2)
+        verifyPurchase(purchase2Suffix)
     }
 
     func getInfo(_ purchase: RegisteredPurchase) {
@@ -129,7 +129,7 @@ class ViewController: NSViewController {
             switch result {
             case .success(let receipt):
 
-                let productId = self.AppBundleId + "." + purchase.rawValue
+                let productId = self.appBundleId + "." + purchase.rawValue
 
                 // Specific behaviour for AutoRenewablePurchase
                 if purchase == .autoRenewablePurchase {

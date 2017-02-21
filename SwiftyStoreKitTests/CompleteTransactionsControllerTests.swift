@@ -63,7 +63,7 @@ class CompleteTransactionsControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: "com.SwiftyStoreKit.product2", transactionState: .failed),
             makeTestPaymentTransaction(productIdentifier: "com.SwiftyStoreKit.product3", transactionState: .restored),
             makeTestPaymentTransaction(productIdentifier: "com.SwiftyStoreKit.product4", transactionState: .deferred),
-            makeTestPaymentTransaction(productIdentifier: "com.SwiftyStoreKit.product5", transactionState: .purchasing),
+            makeTestPaymentTransaction(productIdentifier: "com.SwiftyStoreKit.product5", transactionState: .purchasing)
         ]
 
         var callbackCalled = false

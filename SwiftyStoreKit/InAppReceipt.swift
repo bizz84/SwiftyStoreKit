@@ -52,18 +52,17 @@ internal class InAppReceipt {
      *  - Parameter session: the session used to make remote call.
      *  - Parameter completion: handler for result
      */
-    class func verify(
-		using validator: ReceiptValidator,
-        password autoRenewPassword: String? = nil,
-        completion: @escaping (VerifyReceiptResult) -> Void) {
+    class func verify(using validator: ReceiptValidator,
+                      password autoRenewPassword: String? = nil,
+                      completion: @escaping (VerifyReceiptResult) -> Void) {
 
-            // If no receipt is present, validation fails.
-            guard let base64EncodedString = appStoreReceiptBase64Encoded else {
-                completion(.error(error: .noReceiptData))
-                return
-            }
+        // If no receipt is present, validation fails.
+        guard let base64EncodedString = appStoreReceiptBase64Encoded else {
+            completion(.error(error: .noReceiptData))
+            return
+        }
 
-			validator.validate(receipt: base64EncodedString, password: autoRenewPassword, completion: completion)
+        validator.validate(receipt: base64EncodedString, password: autoRenewPassword, completion: completion)
     }
 
     /**

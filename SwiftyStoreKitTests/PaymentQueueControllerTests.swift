@@ -90,7 +90,7 @@ class PaymentQueueControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: failedProductIdentifier, transactionState: .failed),
             makeTestPaymentTransaction(productIdentifier: restoredProductIdentifier, transactionState: .restored),
             makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
-            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
+            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing)
             ]
 
         var paymentCallbackCalled = false
@@ -157,7 +157,7 @@ class PaymentQueueControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: failedProductIdentifier, transactionState: .failed),
             makeTestPaymentTransaction(productIdentifier: restoredProductIdentifier, transactionState: .restored),
             makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
-            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
+            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing)
             ]
 
         var paymentCallbackCalled = false
@@ -210,7 +210,7 @@ class PaymentQueueControllerTests: XCTestCase {
             makeTestPaymentTransaction(productIdentifier: failedProductIdentifier, transactionState: .failed),
             makeTestPaymentTransaction(productIdentifier: restoredProductIdentifier, transactionState: .restored),
             makeTestPaymentTransaction(productIdentifier: deferredProductIdentifier, transactionState: .deferred),
-            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing),
+            makeTestPaymentTransaction(productIdentifier: purchasingProductIdentifier, transactionState: .purchasing)
             ]
 
         var restorePurchasesCallbackCalled = false

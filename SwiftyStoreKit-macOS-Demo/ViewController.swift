@@ -28,12 +28,12 @@ import SwiftyStoreKit
 
 enum RegisteredPurchase: String {
 
-    case purchase1 = "purchase1"
-    case purchase2 = "purchase2"
-    case nonConsumablePurchase = "nonConsumablePurchase"
-    case consumablePurchase = "consumablePurchase"
-    case autoRenewablePurchase = "autoRenewablePurchase"
-    case nonRenewingPurchase = "nonRenewingPurchase"
+    case purchase1
+    case purchase2
+    case nonConsumablePurchase
+    case consumablePurchase
+    case autoRenewablePurchase
+    case nonRenewingPurchase
 
 }
 

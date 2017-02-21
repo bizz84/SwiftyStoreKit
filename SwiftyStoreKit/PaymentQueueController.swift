@@ -70,9 +70,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
 
     init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
-                paymentsController: PaymentsController = PaymentsController(),
-                restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),
-                completeTransactionsController: CompleteTransactionsController = CompleteTransactionsController()) {
+         paymentsController: PaymentsController = PaymentsController(),
+         restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),
+         completeTransactionsController: CompleteTransactionsController = CompleteTransactionsController()) {
 
         self.paymentQueue = paymentQueue
         self.paymentsController = paymentsController

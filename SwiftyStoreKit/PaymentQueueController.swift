@@ -43,6 +43,8 @@ public enum TransactionResult {
 
 public protocol PaymentQueue: class {
 
+    static func canMakePayments() -> Bool
+    
     func add(_ observer: SKPaymentTransactionObserver)
     func remove(_ observer: SKPaymentTransactionObserver)
 

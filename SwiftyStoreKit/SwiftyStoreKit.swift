@@ -107,7 +107,7 @@ public class SwiftyStoreKit {
 
     // MARK: private methods
     private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
-        guard SwiftyStoreKit.canMakePayments else {
+        guard type(of: paymentQueueController.paymentQueue).canMakePayments() else {
             let error = NSError(domain: SKErrorDomain, code: SKError.paymentNotAllowed.rawValue, userInfo: nil)
             completion(.error(error: SKError(_nsError: error)))
             return

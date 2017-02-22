@@ -11,13 +11,6 @@
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
 
-| Language  | Branch | Pod version | Xcode version |
-| --------- | ------ | ----------- | ------------- |
-| Swift 3.0 | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8 or greater|
-| Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
-| Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |
-
-
 ### Preview
 
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
@@ -49,7 +42,7 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 	        }
 	    }
 	}
-  return true
+ 	return true
 }
 ```
 
@@ -83,7 +76,16 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
     case .success(let product):
         print("Purchase Success: \(product.productId)")
     case .error(let error):
-        print("Purchase Failed: \(error)")
+        switch error.code {
+        case .unknown: print("Unknown error. Please contact support")
+        case .clientInvalid: print("Not allowed to make the payment")
+        case .paymentCancelled: break
+        case .paymentInvalid: print("The purchase identifier was invalid")
+        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        }
     }
 }
 ```
@@ -100,7 +102,16 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
         }
         print("Purchase Success: \(product.productId)")
     case .error(let error):
-        print("Purchase Failed: \(error)")
+        switch error.code {
+        case .unknown: print("Unknown error. Please contact support")
+        case .clientInvalid: print("Not allowed to make the payment")
+        case .paymentCancelled: break
+        case .paymentInvalid: print("The purchase identifier was invalid")
+        case .paymentNotAllowed: print("The device is not allowed to make the payment")
+        case .storeProductNotAvailable: print("The product is not available in the current storefront")
+        case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
+        case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        }
     }
 }
 ```
@@ -162,6 +173,8 @@ This is what is [recommended by Apple](https://developer.apple.com/reference/sto
 
 * In cases when you need to make a request to your own server in order to unlock the functionality, you can use a **non-atomic** purchase instead.
 
+* **Note**: SwiftyStoreKit doesn't yet support downloading content hosted by Apple for non-consumable products. See [this feature request](https://github.com/bizz84/SwiftyStoreKit/issues/128).
+
 SwiftyStoreKit provides three operations that can be performed **atomically** or **non-atomically**:
 
 * Making a purchase
@@ -181,7 +194,8 @@ let receiptString = receiptData.base64EncodedString(options: [])
 ### Verify Receipt
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     if case .error(let error) = result {
         if case .noReceiptData = error {
             self.refreshReceipt()
@@ -204,7 +218,8 @@ func refreshReceipt() {
 ### Verify Purchase
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of Consumable or NonConsumable
@@ -218,7 +233,7 @@ SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
         case .notPurchased:
             print("The user has never purchased this product")
         }
-    case .Error(let error):
+    case .error(let error):
         print("Receipt verification failed: \(error)")
     }
 }
@@ -229,7 +244,8 @@ Note that for consumable products, the receipt will only include the information
 ### Verify Subscription
 
 ```swift
-SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production)
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of a Subscription
@@ -302,33 +318,12 @@ The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKi
 Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 #### Features
+
 - Super easy to use block based API
 - Support for consumable, non-consumable in-app purchases
 - Support for free, auto renewable and non renewing subscriptions
 - Receipt verification
 - iOS, tvOS and macOS compatible
-- enum-based error handling
-
-## Known issues
-
-#### Requests lifecycle
-
-While SwiftyStoreKit tries handle concurrent purchase or restore purchases requests, it is not guaranteed that this will always work flawlessly.
-This is in part because using a closure-based API does not map perfectly well with the lifecycle of payments in `SKPaymentQueue`.
-
-In real applications the following could happen:
-
-1. User starts a purchase
-2. User kills the app
-3. OS continues processing this, resulting in a failed or successful purchase
-4. App is restarted (payment queue is not updated yet)
-5. User starts another purchase (the old transaction may interfere with the new purchase)
-
-To prevent situations like this from happening, a `completeTransactions()` method has been added in version 0.2.8. This should be called when the app starts as it can take care of clearing the payment queue and notifying the app of the transactions that have finished.
-
-#### Multiple accounts
-
-The user can background the hosting application and change the Apple ID used with the App Store, then foreground the app. This has been observed to cause problems with SwiftyStoreKit - other IAP implementations may suffer from this as well.
 
 ## Essential Reading
 * [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)
@@ -340,41 +335,44 @@ The user can background the hosting application and change the Apple ID used wit
 * [objc.io - Receipt Validation](https://www.objc.io/issues/17-security/receipt-validation/)
 
 
-## Implementation Details
+## Payment flows - implementation Details
 In order to make a purchase, two operations are needed:
 
-- Obtain the ```SKProduct``` corresponding to the productId that identifies the app purchase, via ```SKProductRequest```.
+- Perform a `SKProductRequest` to obtain the `SKProduct` corresponding to the product identifier.
 
-- Submit the payment for that product via ```SKPaymentQueue```.
+- Submit the payment and listen for updated transactions on the `SKPaymentQueue`.
 
 The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
 
-### Requesting products information
+### Payment queue
 
-SwiftyStoreKit wraps the delegate-based ```SKProductRequest``` API with a block based class named ```InAppProductQueryRequest```, which returns a `RetrieveResults` value with information about the obtained products:
+The following list outlines how requests are processed by SwiftyStoreKit.
 
-```swift
-public struct RetrieveResults {
-    public let retrievedProducts: Set<SKProduct>
-    public let invalidProductIDs: Set<String>
-    public let error: NSError?
-}
-```
-This value is then surfaced back to the caller of the `retrieveProductsInfo()` method the completion closure so that the client can update accordingly.
+* `SKPaymentQueue` is used to queue payments or restore purchases requests.
+* Payments are processed serially and in-order and require user interaction.
+* Restore purchases requests don't require user interaction and can jump ahead of the queue.
+* `SKPaymentQueue` rejects multiple restore purchases calls.
+* Failed translations only ever belong to queued payment request.
+* `restoreCompletedTransactionsFailedWithError` is always called when a restore purchases request fails.
+* `paymentQueueRestoreCompletedTransactionsFinished` is always called following 0 or more update transactions when a restore purchases request succeeds.
+* A complete transactions handler is require to catch any transactions that are updated when the app is not running.
+* Registering a complete transactions handler when the app launches ensures that any pending transactions can be cleared.
+* If a complete transactions handler is missing, pending transactions can be mis-attributed to any new incoming payments or restore purchases.
 
-### Purchasing a product / Restoring purchases
-`InAppProductPurchaseRequest` is a wrapper class for `SKPaymentQueue` that can be used to purchase a product or restore purchases.
+The order in which transaction updates are processed is:
 
-The class conforms to the `SKPaymentTransactionObserver` protocol in order to receive transactions notifications from the payment queue. The following outcomes are defined for a purchase/restore action:
+1. payments (transactionState: `.purchased` and `.failed` for matching product identifiers)
+2. restore purchases (transactionState: `.restored`, or `restoreCompletedTransactionsFailedWithError`, or `paymentQueueRestoreCompletedTransactionsFinished`)
+3. complete transactions (transactionState: `.purchased`, `.failed`, `.restored`, `.deferred`)
 
-```swift
-enum TransactionResult {
-    case purchased(productId: String)
-    case restored(productId: String)
-    case failed(error: NSError)
-}
-```
-Depending on the operation, the completion closure for `InAppProductPurchaseRequest` is then mapped to either a `PurchaseResult` or a `RestoreResults` value and returned to the caller.
+Any transactions where state == `.purchasing` are ignored.
+
+See [this pull request](https://github.com/bizz84/SwiftyStoreKit/pull/131) for full details about how the payment flows have been implemented.
+
+
+## Contributing
+
+[Read here](CONTRIBUTING.md).
 
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.
@@ -386,15 +384,18 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [MDacne](https://itunes.apple.com/app/id1044050208) - Acne analysis and treatment
 * [Pixel Picker](https://itunes.apple.com/app/id930804327) - Image Color Picker
 * [KType](https://itunes.apple.com/app/id1037000234) - Space shooter game
-* [iPic](https://itunes.apple.com/app/id1101244278?ls=1&mt=12) - Automatically upload images and save Markdown links
-* [iHosts](https://itunes.apple.com/app/id1102004240?ls=1&mt=12) - Perfect for editing /etc/hosts
+* [iPic](https://itunes.apple.com/app/id1101244278) - Automatically upload images and save Markdown links
+* [iHosts](https://itunes.apple.com/app/id1102004240) - Perfect for editing /etc/hosts
 * [Arise](http://www.abnehm-app.de/) - Calorie counter
-* [Truth Truth Lie](https://itunes.apple.com/app/id1130832864?ls=1&mt=8&app=messages) - iMessage game, featured by Apple
+* [Truth Truth Lie](https://itunes.apple.com/app/id1130832864) - iMessage game, featured by Apple
+* [Tactus Music Player](https://itunes.apple.com/app/id557446352) - Alternative music player app
+* [Drops](https://itunes.apple.com/app/id939540371) - Language learning app
+* [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
 
 
 ## License
 
-Copyright (c) 2015-2016 Andrea Bizzotto bizz84@gmail.com
+Copyright (c) 2015-2017 Andrea Bizzotto bizz84@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

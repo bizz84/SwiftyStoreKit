@@ -45,23 +45,23 @@ class ViewController: NSViewController {
     let Purchase2 = RegisteredPurchase.autoRenewablePurchase
 
     // MARK: actions
-    @IBAction func getInfo1(_ sender: AnyObject?) {
+    @IBAction func getInfo1(_ sender: Any?) {
         getInfo(Purchase1)
     }
-    @IBAction func purchase1(_ sender: AnyObject?) {
+    @IBAction func purchase1(_ sender: Any?) {
         purchase(Purchase1)
     }
-    @IBAction func verifyPurchase1(_ sender: AnyObject?) {
+    @IBAction func verifyPurchase1(_ sender: Any?) {
         verifyPurchase(Purchase1)
     }
 
-    @IBAction func getInfo2(_ sender: AnyObject?) {
+    @IBAction func getInfo2(_ sender: Any?) {
         getInfo(Purchase2)
     }
-    @IBAction func purchase2(_ sender: AnyObject?) {
+    @IBAction func purchase2(_ sender: Any?) {
         purchase(Purchase2)
     }
-    @IBAction func verifyPurchase2(_ sender: AnyObject?) {
+    @IBAction func verifyPurchase2(_ sender: Any?) {
         verifyPurchase(Purchase2)
     }
 
@@ -84,11 +84,13 @@ class ViewController: NSViewController {
                 }
             }
 
-            self.showAlert(self.alertForPurchaseResult(result))
+            if let errorAlert = self.alertForPurchaseResult(result) {
+                self.showAlert(errorAlert)
+            }
         }
     }
 
-    @IBAction func restorePurchases(_ sender: AnyObject?) {
+    @IBAction func restorePurchases(_ sender: Any?) {
 
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             
@@ -103,20 +105,26 @@ class ViewController: NSViewController {
         }
     }
 
-    @IBAction func verifyReceipt(_ sender: AnyObject?) {
+    @IBAction func verifyReceipt(_ sender: Any?) {
 
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+        let appleValidator = AppleReceiptValidator(service: .production)
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
 
             self.showAlert(self.alertForVerifyReceipt(result)) { response in
 
-                self.refreshReceipt()
+                if case .error(let error) = result {
+                    if case .noReceiptData = error {
+                        self.refreshReceipt()
+                    }
+                }
             }
         }
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
         
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+        let appleValidator = AppleReceiptValidator(service: .production)
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
             
             switch result {
             case .success(let receipt):
@@ -148,7 +156,10 @@ class ViewController: NSViewController {
 
     func refreshReceipt() {
         
-        SwiftyStoreKit.refreshReceipt()
+        SwiftyStoreKit.refreshReceipt() { result in
+            
+            self.showAlert(self.alertForRefreshReceipt(result))
+        }
     }
 
 }
@@ -191,26 +202,23 @@ extension ViewController {
         }
     }
     
-    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert {
-
+    func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert? {
         switch result {
-        case .success(let productId):
-            print("Purchase Success: \(productId)")
+        case .success(let product):
+            print("Purchase Success: \(product.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
-            switch error {
-            case .failed(let error):
-                if (error as NSError).domain == SKErrorDomain {
-                    return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-                }
-                return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
-            case .invalidProductId(let productId):
-                return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-            case .noProductIdentifier:
-                return alertWithTitle("Purchase failed", message: "Product not found")
-            case .paymentNotAllowed:
-                return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
+            switch error.code {
+            case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .clientInvalid: // client is not allowed to issue the request, etc.
+                return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
+            case .paymentCancelled: // user cancelled the request, etc.
+                return nil
+            case .paymentInvalid: // purchase identifier was invalid, etc.
+                return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
+            case .paymentNotAllowed: // this device is not allowed to make the payment
+                return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
             }
         }
     }

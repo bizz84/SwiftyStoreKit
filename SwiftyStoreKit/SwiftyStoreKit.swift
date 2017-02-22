@@ -26,65 +26,146 @@ import StoreKit
 
 public class SwiftyStoreKit {
 
-    // MARK: Private declarations
-    private class InAppPurchaseStore {
-        var products: [String: SKProduct] = [:]
-        func addProduct(_ product: SKProduct) {
-            if let productIdentifier = product._productIdentifier {
-                products[productIdentifier] = product
-            }
-        }
-        func allProductsMatching(_ productIds: Set<String>) -> Set<SKProduct>? {
-            var requestedProducts = Set<SKProduct>()
-            for productId in productIds {
-                guard let product = products[productId] else {
-                    return nil
-                }
-                requestedProducts.insert(product)
-            }
-            return requestedProducts
-        }
-    }
-    private var store: InAppPurchaseStore = InAppPurchaseStore()
+    private let productsInfoController: ProductsInfoController
 
-    // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
-    private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
-    private var inflightPurchases: [String: InAppProductPurchaseRequest] = [:]
-    private var restoreRequest: InAppProductPurchaseRequest?
-    private var completeTransactionsObserver: InAppCompleteTransactionsObserver?
-    #if os(iOS) || os(tvOS)
-    private var receiptRefreshRequest: InAppReceiptRefreshRequest?
-    #endif
+    private let paymentQueueController: PaymentQueueController
     
-    private enum InternalErrorCode: Int {
-        case restoredPurchaseWhenPurchasing = 0
-        case purchasedWhenRestoringPurchase = 1
+    private var receiptRefreshRequest: InAppReceiptRefreshRequest?
+    
+    init(productsInfoController: ProductsInfoController = ProductsInfoController(),
+         paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())) {
+        
+        self.productsInfoController = productsInfoController
+        self.paymentQueueController = paymentQueueController
     }
+
+    // MARK: Internal methods
+    
+    func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
+        return productsInfoController.retrieveProductsInfo(productIds, completion: completion)
+    }
+    
+    func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
+        
+        if let product = productsInfoController.products[productId] {
+            purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
+        }
+        else {
+            retrieveProductsInfo(Set([productId])) { result -> () in
+                if let product = result.retrievedProducts.first {
+                    self.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
+                }
+                else if let error = result.error {
+                    completion(.error(error: SKError(_nsError: error as NSError)))
+                }
+                else if let invalidProductId = result.invalidProductIDs.first {
+                    let userInfo = [ NSLocalizedDescriptionKey: "Invalid product id: \(invalidProductId)" ]
+                    let error = NSError(domain: SKErrorDomain, code: SKError.paymentInvalid.rawValue, userInfo: userInfo)
+                    completion(.error(error: SKError(_nsError: error)))
+                }
+            }
+        }
+    }
+    
+    func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> ()) {
+        
+        paymentQueueController.restorePurchases(RestorePurchases(atomically: atomically, applicationUsername: applicationUsername) { results in
+            
+            let results = self.processRestoreResults(results)
+            completion(results)
+        })
+    }
+    
+    func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
+        
+        paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
+    }
+    
+    func finishTransaction(_ transaction: PaymentTransaction) {
+        
+        paymentQueueController.finishTransaction(transaction)
+    }
+
+    func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
+        receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
+            
+            self.receiptRefreshRequest = nil
+            
+            switch result {
+            case .success:
+                if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
+                    completion(.success(receiptData: appStoreReceiptData))
+                }
+                else {
+                    completion(.error(error: ReceiptError.noReceiptData))
+                }
+            case .error(let e):
+                completion(.error(error: e))
+            }
+        }
+    }
+
+    // MARK: private methods
+    private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
+        guard SwiftyStoreKit.canMakePayments else {
+            let error = NSError(domain: SKErrorDomain, code: SKError.paymentNotAllowed.rawValue, userInfo: nil)
+            completion(.error(error: SKError(_nsError: error)))
+            return
+        }
+        
+        paymentQueueController.startPayment(Payment(product: product, atomically: atomically, applicationUsername: applicationUsername) { result in
+            
+            completion(self.processPurchaseResult(result))
+        })
+    }
+
+    private func processPurchaseResult(_ result: TransactionResult) -> PurchaseResult {
+        switch result {
+        case .purchased(let product):
+            return .success(product: product)
+        case .failed(let error):
+            return .error(error: error)
+        case .restored(let product):
+            return .error(error: storeInternalError(description: "Cannot restore product \(product.productId) from purchase path"))
+        }
+    }
+    
+    private func processRestoreResults(_ results: [TransactionResult]) -> RestoreResults {
+        var restoredProducts: [Product] = []
+        var restoreFailedProducts: [(SKError, String?)] = []
+        for result in results {
+            switch result {
+            case .purchased(let product):
+                let error = storeInternalError(description: "Cannot purchase product \(product.productId) from restore purchases path")
+                restoreFailedProducts.append((error, product.productId))
+            case .failed(let error):
+                restoreFailedProducts.append((error, nil))
+            case .restored(let product):
+                restoredProducts.append(product)
+            }
+        }
+        return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)
+    }
+    
+    private func storeInternalError(code: SKError.Code = SKError.unknown, description: String = "") -> SKError {
+        let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
+        return SKError(_nsError: error)
+    }
+}
+
+extension SwiftyStoreKit {
 
     // MARK: Singleton
     private static let sharedInstance = SwiftyStoreKit()
     
+    // MARK: Public methods - Purchases
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
-    
-    class var hasInFlightPayments: Bool {
-        return sharedInstance.inflightPurchases.count > 0 || sharedInstance.restoreRequest != nil
-    }
-    
-    public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
-        sharedInstance.completeTransactionsObserver = InAppCompleteTransactionsObserver(atomically: atomically, callback: completion)
-    }
-    
-    // MARK: Public methods
+
     public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
         
-        guard let products = sharedInstance.store.allProductsMatching(productIds) else {
-            
-            sharedInstance.requestProducts(productIds, completion: completion)
-            return
-        }
-        completion(RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
+        return sharedInstance.retrieveProductsInfo(productIds, completion: completion)
     }
     
     /**
@@ -96,39 +177,36 @@ public class SwiftyStoreKit {
      */
     public class func purchaseProduct(_ productId: String, atomically: Bool = true, applicationUsername: String = "", completion: @escaping ( PurchaseResult) -> ()) {
         
-        if let product = sharedInstance.store.products[productId] {
-            sharedInstance.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
-        }
-        else {
-            retrieveProductsInfo(Set([productId])) { result -> () in
-                if let product = result.retrievedProducts.first {
-                    sharedInstance.purchase(product: product, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
-                }
-                else if let error = result.error {
-                    completion(.error(error: .failed(error: error)))
-                }
-                else if let invalidProductId = result.invalidProductIDs.first {
-                    completion(.error(error: .invalidProductId(productId: invalidProductId)))
-                }
-            }
-        }
+        sharedInstance.purchaseProduct(productId, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
     
-    public class func restorePurchases(atomically: Bool = true, completion: @escaping (RestoreResults) -> ()) {
-
-        sharedInstance.restoreRequest = InAppProductPurchaseRequest.restorePurchases(atomically: atomically) { results in
+    public class func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> ()) {
         
-            sharedInstance.restoreRequest = nil
-            let results = sharedInstance.processRestoreResults(results)
-            completion(results)
-        }
+        sharedInstance.restorePurchases(atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
+    
+    public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Product]) -> ()) {
+        
+        sharedInstance.completeTransactions(atomically: atomically, completion: completion)
+    }
+    
     
     public class func finishTransaction(_ transaction: PaymentTransaction) {
-     
-        InAppProductPurchaseRequest.finishTransaction(transaction)
+        
+        sharedInstance.finishTransaction(transaction)
     }
 
+    // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
+    public class func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
+        
+        sharedInstance.refreshReceipt(receiptProperties, completion: completion)
+    }
+}
+
+extension SwiftyStoreKit {
+ 
+    // MARK: Public methods - Receipt verification
+    
     /**
      * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
      */
@@ -143,30 +221,31 @@ public class SwiftyStoreKit {
      *  - Parameter completion: handler for result
      */
     public class func verifyReceipt(
+        using validator: ReceiptValidator,
         password: String? = nil,
-        session: URLSession = URLSession.shared,
         completion:@escaping (VerifyReceiptResult) -> ()) {
-        InAppReceipt.verify(urlType: .production, password: password, session: session) { result in
-         
+        
+        InAppReceipt.verify(using: validator, password: password) { result in
+            
             DispatchQueue.main.async {
                 completion(result)
             }
         }
     }
-  
+    
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the purchase
-     *  - return: either NotPurchased or Purchased
+     *  - return: either notPurchased or purchased
      */
     public class func verifyPurchase(
         productId: String,
         inReceipt receipt: ReceiptInfo
-    ) -> VerifyPurchaseResult {
+        ) -> VerifyPurchaseResult {
         return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt)
     }
-  
+    
     /**
      *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter productId: the product id of the purchase to verify
@@ -180,99 +259,7 @@ public class SwiftyStoreKit {
         inReceipt receipt: ReceiptInfo,
         validUntil date: Date = Date(),
         validDuration duration: TimeInterval? = nil
-    ) -> VerifySubscriptionResult {
+        ) -> VerifySubscriptionResult {
         return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
-    }
-
-    #if os(iOS) || os(tvOS)
-    // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
-    public class func refreshReceipt(_ receiptProperties: [String : AnyObject]? = nil, completion: @escaping (RefreshReceiptResult) -> ()) {
-        sharedInstance.receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
-
-            sharedInstance.receiptRefreshRequest = nil
-
-            switch result {
-            case .success:
-                if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
-                    completion(.success(receiptData: appStoreReceiptData))
-                }
-                else {
-                    completion(.error(error: ReceiptError.noReceiptData))
-                }
-            case .error(let e):
-                completion(.error(error: e))
-            }
-        }
-    }
-    #elseif os(OSX)
-     // Call exit with a status of 173. This exit status notifies the system that your application has determined that its receipt is invalid. At this point, the system attempts to obtain a valid receipt and may prompt for the user’s iTunes credentials
-    public class func refreshReceipt() {
-         exit(ReceiptExitCode.notValid.rawValue)
-    }
-    #endif
-
-    // MARK: private methods
-    private func purchase(product: SKProduct, atomically: Bool, applicationUsername: String = "", completion: @escaping (PurchaseResult) -> ()) {
-        guard SwiftyStoreKit.canMakePayments else {
-            completion(.error(error: .paymentNotAllowed))
-            return
-        }
-        guard let productIdentifier = product._productIdentifier else {
-            completion(.error(error: .noProductIdentifier))
-            return
-        }
-
-        inflightPurchases[productIdentifier] = InAppProductPurchaseRequest.startPayment(product: product, atomically: atomically, applicationUsername: applicationUsername) { results in
-
-            self.inflightPurchases[productIdentifier] = nil
-            
-            if let purchasedProductTransaction = results.first {
-                let returnValue = self.processPurchaseResult(purchasedProductTransaction)
-                completion(returnValue)
-            }
-        }
-    }
-
-    private func processPurchaseResult(_ result: InAppProductPurchaseRequest.TransactionResult) -> PurchaseResult {
-        switch result {
-        case .purchased(let product):
-            return .success(product: product)
-        case .failed(let error):
-            return .error(error: .failed(error: error))
-        case .restored(let product):
-            return .error(error: .failed(error: storeInternalError(code: InternalErrorCode.restoredPurchaseWhenPurchasing.rawValue, description: "Cannot restore product \(product.productId) from purchase path")))
-        }
-    }
-    
-    private func processRestoreResults(_ results: [InAppProductPurchaseRequest.TransactionResult]) -> RestoreResults {
-        var restoredProducts: [Product] = []
-        var restoreFailedProducts: [(Swift.Error, String?)] = []
-        for result in results {
-            switch result {
-            case .purchased(let product):
-                restoreFailedProducts.append((storeInternalError(code: InternalErrorCode.purchasedWhenRestoringPurchase.rawValue, description: "Cannot purchase product \(product.productId) from restore purchases path"), product.productId))
-            case .failed(let error):
-                restoreFailedProducts.append((error, nil))
-            case .restored(let product):
-                restoredProducts.append(product)
-            }
-        }
-        return RestoreResults(restoredProducts: restoredProducts, restoreFailedProducts: restoreFailedProducts)
-    }
-    
-    private func requestProducts(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {
-        
-        inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
-        
-            self.inflightQueries[productIds] = nil
-            for product in result.retrievedProducts {
-                self.store.addProduct(product)
-            }
-            completion(result)
-        }
-    }
-    
-    private func storeInternalError(code: Int = 0, description: String = "") -> NSError {
-        return NSError(domain: "SwiftyStoreKit", code: code, userInfo: [ NSLocalizedDescriptionKey: description ])
     }
 }

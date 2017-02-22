@@ -1,8 +1,8 @@
 //
-//  OS.swift
-//  SwiftyStoreKit
+// TestProduct.swift
+// SwiftyStoreKit
 //
-// Copyright (c) 2015 Andrea Bizzotto (bizz84@gmail.com)
+// Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,16 @@
 
 import StoreKit
 
-// MARK: - missing SKMutablePayment init with product on OSX
-#if os(OSX)
-    extension SKMutablePayment {
-        convenience init(product: SKProduct) {
-            self.init()
-            self.productIdentifier = product.productIdentifier
-        }
+class TestProduct: SKProduct {
+    
+    var _productIdentifier: String = ""
+    
+    override var productIdentifier: String {
+        return _productIdentifier
     }
-#endif
+    
+    init(productIdentifier: String) {
+        _productIdentifier = productIdentifier
+        super.init()
+    }
+}

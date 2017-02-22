@@ -48,14 +48,10 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func start() {
-        DispatchQueue.global(qos: .default).async {
-            self.request.start()
-        }
+        self.request.start()
     }
     func cancel() {
-        DispatchQueue.global(qos: .default).async {
-            self.request.cancel()
-        }
+        self.request.cancel()
     }
     
     // MARK: SKProductsRequestDelegate

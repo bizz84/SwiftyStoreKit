@@ -1,8 +1,8 @@
 //
-//  OS.swift
-//  SwiftyStoreKit
+// TestPaymentTransaction.swift
+// SwiftyStoreKit
 //
-// Copyright (c) 2015 Andrea Bizzotto (bizz84@gmail.com)
+// Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,21 @@
 
 import StoreKit
 
-// MARK: - missing SKMutablePayment init with product on OSX
-#if os(OSX)
-    extension SKMutablePayment {
-        convenience init(product: SKProduct) {
-            self.init()
-            self.productIdentifier = product.productIdentifier
-        }
+class TestPaymentTransaction: SKPaymentTransaction {
+
+    let _transactionState: SKPaymentTransactionState
+    let _payment: SKPayment
+    
+    init(payment: SKPayment, transactionState: SKPaymentTransactionState) {
+        _transactionState = transactionState
+        _payment = payment
     }
-#endif
+
+    override var payment: SKPayment {
+        return _payment
+    }
+    
+    override var transactionState: SKPaymentTransactionState {
+        return _transactionState
+    }
+}

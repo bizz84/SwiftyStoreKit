@@ -26,53 +26,51 @@
 import StoreKit
 import Foundation
 
-#if os(iOS) || os(tvOS)
-    class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
-
-        enum ResultType {
-            case success
-            case error(e: Error)
-        }
-
-        typealias RequestCallback = (ResultType) -> ()
-
-        class func refresh(_ receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
-            let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
-            request.start()
-            return request
-        }
-
-        let refreshReceiptRequest: SKReceiptRefreshRequest
-        let callback: RequestCallback
-
-        deinit {
-            refreshReceiptRequest.delegate = nil
-        }
-
-        private init(receiptProperties: [String : AnyObject]? = nil, callback: @escaping RequestCallback) {
-            self.callback = callback
-            self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
-            super.init()
-            self.refreshReceiptRequest.delegate = self
-        }
-
-        func start() {
-            self.refreshReceiptRequest.start()
-        }
-
-        func requestDidFinish(_ request: SKRequest) {
-            /*if let resoreRequest = request as? SKReceiptRefreshRequest {
-                let receiptProperties = resoreRequest.receiptProperties ?? [:]
-                for (k, v) in receiptProperties {
-                    print("\(k): \(v)")
-                }
-            }*/
-            callback(.success)
-        }
-        func request(_ request: SKRequest, didFailWithError error: Error) {
-            // XXX could here check domain and error code to return typed exception
-            callback(.error(e: error))
-        }
-        
+class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
+    
+    enum ResultType {
+        case success
+        case error(e: Error)
     }
-#endif
+    
+    typealias RequestCallback = (ResultType) -> ()
+    
+    class func refresh(_ receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
+        let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
+        request.start()
+        return request
+    }
+    
+    let refreshReceiptRequest: SKReceiptRefreshRequest
+    let callback: RequestCallback
+    
+    deinit {
+        refreshReceiptRequest.delegate = nil
+    }
+    
+    private init(receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) {
+        self.callback = callback
+        self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
+        super.init()
+        self.refreshReceiptRequest.delegate = self
+    }
+    
+    func start() {
+        self.refreshReceiptRequest.start()
+    }
+    
+    func requestDidFinish(_ request: SKRequest) {
+        /*if let resoreRequest = request as? SKReceiptRefreshRequest {
+         let receiptProperties = resoreRequest.receiptProperties ?? [:]
+         for (k, v) in receiptProperties {
+         print("\(k): \(v)")
+         }
+         }*/
+        callback(.success)
+    }
+    func request(_ request: SKRequest, didFailWithError error: Error) {
+        // XXX could here check domain and error code to return typed exception
+        callback(.error(e: error))
+    }
+    
+}

@@ -86,7 +86,9 @@ class ViewController: UIViewController {
                     SwiftyStoreKit.finishTransaction(product.transaction)
                 }
             }
-            self.showAlert(self.alertForPurchaseResult(result))
+            if let alert = self.alertForPurchaseResult(result) {
+                self.showAlert(alert)
+            }
         }
     }
     
@@ -109,7 +111,8 @@ class ViewController: UIViewController {
     @IBAction func verifyReceipt() {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+		let appleValidator = AppleReceiptValidator(service: .production)
+		SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
             self.showAlert(self.alertForVerifyReceipt(result))
@@ -123,9 +126,10 @@ class ViewController: UIViewController {
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
-     
+
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.verifyReceipt(password: "your-shared-secret") { result in
+		let appleValidator = AppleReceiptValidator(service: .production)
+		SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
             
             switch result {
@@ -204,25 +208,29 @@ extension ViewController {
         }
     }
 
-    func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController {
+    func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController? {
         switch result {
         case .success(let product):
             print("Purchase Success: \(product.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
-            switch error {
-                case .failed(let error):
-                    if (error as NSError).domain == SKErrorDomain {
-                        return alertWithTitle("Purchase failed", message: "Please check your Internet connection or try again later")
-                    }
-                    return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
-                case .invalidProductId(let productId):
-                    return alertWithTitle("Purchase failed", message: "\(productId) is not a valid product identifier")
-                case .noProductIdentifier:
-                    return alertWithTitle("Purchase failed", message: "Product not found")
-                case .paymentNotAllowed:
-                    return alertWithTitle("Payments not enabled", message: "You are not allowed to make payments")
+            switch error.code {
+            case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
+            case .clientInvalid: // client is not allowed to issue the request, etc.
+                return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")
+            case .paymentCancelled: // user cancelled the request, etc.
+                return nil
+            case .paymentInvalid: // purchase identifier was invalid, etc.
+                return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
+            case .paymentNotAllowed: // this device is not allowed to make the payment
+                return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
+            case .storeProductNotAvailable: // Product is not available in the current storefront
+                return alertWithTitle("Purchase failed", message: "The product is not available in the current storefront")
+            case .cloudServicePermissionDenied: // user has not allowed access to cloud service information
+                return alertWithTitle("Purchase failed", message: "Access to cloud service information is not allowed")
+            case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
+                return alertWithTitle("Purchase failed", message: "Could not connect to the network")
             }
         }
     }

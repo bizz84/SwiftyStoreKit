@@ -48,22 +48,19 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func start() {
-        self.request.start()
+        request.start()
     }
     func cancel() {
-        self.request.cancel()
+        request.cancel()
     }
 
     // MARK: SKProductsRequestDelegate
     func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
 
-        DispatchQueue.main.async {
-
-            let retrievedProducts = Set<SKProduct>(response.products)
-            let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
-            self.callback(RetrieveResults(retrievedProducts: retrievedProducts,
-                invalidProductIDs: invalidProductIDs, error: nil))
-        }
+        let retrievedProducts = Set<SKProduct>(response.products)
+        let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
+        callback(RetrieveResults(retrievedProducts: retrievedProducts,
+            invalidProductIDs: invalidProductIDs, error: nil))
     }
 
     func requestDidFinish(_ request: SKRequest) {
@@ -71,12 +68,6 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func request(_ request: SKRequest, didFailWithError error: Error) {
-        requestFailed(error)
-    }
-
-    func requestFailed(_ error: Error) {
-        DispatchQueue.main.async {
-            self.callback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
-        }
+        callback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
     }
 }

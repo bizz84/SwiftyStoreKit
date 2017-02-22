@@ -36,15 +36,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
-    
+
     func completeIAPTransactions() {
-        
+
         SwiftyStoreKit.completeTransactions(atomically: true) { products in
-            
+
             for product in products {
-                
+
                 if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
-                    
+
                     if product.needsFinishTransaction {
                         // Deliver content from server, then:
                         SwiftyStoreKit.finishTransaction(product.transaction)
@@ -55,4 +55,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 }
-

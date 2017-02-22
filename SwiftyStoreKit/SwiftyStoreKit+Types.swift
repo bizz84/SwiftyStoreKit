@@ -137,7 +137,7 @@ public enum ReceiptStatus: Int {
     case testReceipt = 21007
     // This receipt is from the production environment, but it was sent to the test environment for verification. Send it to the production environment instead.
     case productionEnvironment = 21008
-    
+
     var isValid: Bool { return self == .valid}
 }
 
@@ -153,10 +153,10 @@ public enum ReceiptInfoField: String {
     case creation_date
     // The date that the app receipt expires. This key is present only for apps purchased through the Volume Purchase Program.
     case expiration_date
-    
+
     // The receipt for an in-app purchase.
     case in_app
-    
+
     public enum InApp: String {
         // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.
         case quantity

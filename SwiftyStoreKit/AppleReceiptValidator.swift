@@ -47,7 +47,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
 		let storeRequest = NSMutableURLRequest(url: storeURL)
 		storeRequest.httpMethod = "POST"
 
-		let requestContents: NSMutableDictionary = [ "receipt-data" : receipt ]
+		let requestContents: NSMutableDictionary = [ "receipt-data": receipt ]
 		// password if defined
 		if let password = autoRenewPassword {
 			requestContents.setValue(password, forKey: "password")
@@ -62,7 +62,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
 		}
 
 		// Remote task
-		let task = URLSession.shared.dataTask(with: storeRequest as URLRequest) { data, response, error -> Void in
+		let task = URLSession.shared.dataTask(with: storeRequest as URLRequest) { data, _, error -> Void in
 
 			// there is an error
 			if let networkError = error {
@@ -101,17 +101,14 @@ public struct AppleReceiptValidator: ReceiptValidator {
 				if case .testReceipt = receiptStatus {
 					let sandboxValidator = AppleReceiptValidator(service: .sandbox)
 					sandboxValidator.validate(receipt: receipt, password: autoRenewPassword, completion: completion)
-				}
-				else {
+				} else {
 					if receiptStatus.isValid {
 						completion(.success(receipt: receiptInfo))
-					}
-					else {
+					} else {
 						completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
 					}
 				}
-			}
-			else {
+			} else {
 				completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: ReceiptStatus.none)))
 			}
 		}

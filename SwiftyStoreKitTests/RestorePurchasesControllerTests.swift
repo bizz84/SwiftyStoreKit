@@ -22,18 +22,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-
 import XCTest
 import StoreKit
 @testable import SwiftyStoreKit
 
 class RestorePurchasesControllerTests: XCTestCase {
-    
+
     func testProcessTransactions_when_oneRestoredTransaction_then_finishesTransaction_callsCallback_noRemainingTransactions() {
-        
+
         let productIdentifier = "com.SwiftyStoreKit.product1"
         let testProduct = TestProduct(productIdentifier: productIdentifier)
-        
+
         let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .restored)
 
         var callbackCalled = false
@@ -43,19 +42,18 @@ class RestorePurchasesControllerTests: XCTestCase {
             let restored = results.first!
             if case .restored(let restoredProduct) = restored {
                 XCTAssertEqual(restoredProduct.productId, productIdentifier)
-            }
-            else {
+            } else {
                 XCTFail("expected restored callback with product")
             }
         }
-        
+
         let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
-        
+
         let spy = PaymentQueueSpy()
 
         let remainingTransactions = restorePurchasesController.processTransactions([transaction], on: spy)
         restorePurchasesController.restoreCompletedTransactionsFinished()
-        
+
         XCTAssertEqual(remainingTransactions.count, 0)
 
         XCTAssertTrue(callbackCalled)
@@ -64,7 +62,7 @@ class RestorePurchasesControllerTests: XCTestCase {
     }
 
     func testProcessTransactions_when_twoRestoredTransactions_oneFailedTransaction_onePurchasedTransaction_then_finishesTwoTransactions_callsCallback_twoRemainingTransaction() {
-        
+
         let productIdentifier1 = "com.SwiftyStoreKit.product1"
         let testProduct1 = TestProduct(productIdentifier: productIdentifier1)
         let transaction1 = TestPaymentTransaction(payment: SKPayment(product: testProduct1), transactionState: .restored)
@@ -90,33 +88,31 @@ class RestorePurchasesControllerTests: XCTestCase {
             let first = results.first!
             if case .restored(let restoredProduct) = first {
                 XCTAssertEqual(restoredProduct.productId, productIdentifier1)
-            }
-            else {
+            } else {
                 XCTFail("expected restored callback with product")
             }
             let last = results.last!
             if case .restored(let restoredProduct) = last {
                 XCTAssertEqual(restoredProduct.productId, productIdentifier2)
-            }
-            else {
+            } else {
                 XCTFail("expected restored callback with product")
             }
         }
-        
+
         let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
-        
+
         let spy = PaymentQueueSpy()
-        
+
         let remainingTransactions = restorePurchasesController.processTransactions(transactions, on: spy)
         restorePurchasesController.restoreCompletedTransactionsFinished()
 
         XCTAssertEqual(remainingTransactions.count, 2)
-        
+
         XCTAssertTrue(callbackCalled)
-        
+
         XCTAssertEqual(spy.finishTransactionCalledCount, 2)
     }
-    
+
     func testRestoreCompletedTransactionsFailed_callsCallbackWithError() {
 
         var callbackCalled = false
@@ -126,24 +122,23 @@ class RestorePurchasesControllerTests: XCTestCase {
             XCTAssertEqual(results.count, 1)
             let first = results.first!
             if case .failed(_) = first {
-                
-            }
-            else {
+
+            } else {
                 XCTFail("expected failed callback with error")
             }
         }
-        
+
         let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
 
         let error = NSError(domain: "SwiftyStoreKit", code: 0, userInfo: nil)
-        
+
         restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
 
         XCTAssertTrue(callbackCalled)
     }
 
     func testRestoreCompletedTransactionsFinished_callsCallbackWithNoTransactions() {
-        
+
         var callbackCalled = false
         let restorePurchases = RestorePurchases(atomically: true) { results in
             callbackCalled = true
@@ -151,18 +146,18 @@ class RestorePurchasesControllerTests: XCTestCase {
             XCTAssertEqual(results.count, 0)
         }
         let restorePurchasesController = makeRestorePurchasesController(restorePurchases: restorePurchases)
-        
+
         restorePurchasesController.restoreCompletedTransactionsFinished()
-        
+
         XCTAssertTrue(callbackCalled)
     }
-    
+
     func makeRestorePurchasesController(restorePurchases: RestorePurchases?) -> RestorePurchasesController {
-        
+
         let restorePurchasesController = RestorePurchasesController()
-        
+
         restorePurchasesController.restorePurchases = restorePurchases
-        
+
         return restorePurchasesController
     }
 }

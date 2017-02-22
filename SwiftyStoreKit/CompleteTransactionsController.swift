@@ -27,16 +27,16 @@ import StoreKit
 
 struct CompleteTransactions {
     let atomically: Bool
-    let callback: ([Product]) -> ()
-    
-    init(atomically: Bool, callback: @escaping ([Product]) -> ()) {
+    let callback: ([Product]) -> Void
+
+    init(atomically: Bool, callback: @escaping ([Product]) -> Void) {
         self.atomically = atomically
         self.callback = callback
     }
 }
 
 extension SKPaymentTransactionState {
-    
+
     var stringValue: String {
         switch self {
         case .purchasing: return "purchasing"
@@ -48,37 +48,35 @@ extension SKPaymentTransactionState {
     }
 }
 
-
 class CompleteTransactionsController: TransactionController {
 
     var completeTransactions: CompleteTransactions?
-    
+
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
-        
+
         guard let completeTransactions = completeTransactions else {
             return transactions
         }
 
         var unhandledTransactions: [SKPaymentTransaction] = []
         var products: [Product] = []
-        
+
         for transaction in transactions {
-            
+
             let transactionState = transaction.transactionState
-            
+
             if transactionState != .purchasing {
-                
+
                 let product = Product(productId: transaction.payment.productIdentifier, transaction: transaction, needsFinishTransaction: !completeTransactions.atomically)
-                
+
                 products.append(product)
-                
+
                 print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.stringValue)")
-                
+
                 if completeTransactions.atomically {
                     paymentQueue.finishTransaction(transaction)
                 }
-            }
-            else {
+            } else {
                 unhandledTransactions.append(transaction)
             }
         }

@@ -27,38 +27,38 @@ import StoreKit
 import Foundation
 
 class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
-    
+
     enum ResultType {
         case success
         case error(e: Error)
     }
-    
-    typealias RequestCallback = (ResultType) -> ()
-    
+
+    typealias RequestCallback = (ResultType) -> Void
+
     class func refresh(_ receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) -> InAppReceiptRefreshRequest {
         let request = InAppReceiptRefreshRequest(receiptProperties: receiptProperties, callback: callback)
         request.start()
         return request
     }
-    
+
     let refreshReceiptRequest: SKReceiptRefreshRequest
     let callback: RequestCallback
-    
+
     deinit {
         refreshReceiptRequest.delegate = nil
     }
-    
+
     private init(receiptProperties: [String : Any]? = nil, callback: @escaping RequestCallback) {
         self.callback = callback
         self.refreshReceiptRequest = SKReceiptRefreshRequest(receiptProperties: receiptProperties)
         super.init()
         self.refreshReceiptRequest.delegate = self
     }
-    
+
     func start() {
         self.refreshReceiptRequest.start()
     }
-    
+
     func requestDidFinish(_ request: SKRequest) {
         /*if let resoreRequest = request as? SKReceiptRefreshRequest {
          let receiptProperties = resoreRequest.receiptProperties ?? [:]
@@ -72,5 +72,5 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
         // XXX could here check domain and error code to return typed exception
         callback(.error(e: error))
     }
-    
+
 }

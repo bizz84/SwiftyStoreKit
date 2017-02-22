@@ -28,7 +28,7 @@ public class SwiftyStoreKit {
 
     private let productsInfoController: ProductsInfoController
 
-    private let paymentQueueController: PaymentQueueController
+    fileprivate let paymentQueueController: PaymentQueueController
     
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
     
@@ -160,7 +160,7 @@ extension SwiftyStoreKit {
     
     // MARK: Public methods - Purchases
     public class var canMakePayments: Bool {
-        return SKPaymentQueue.canMakePayments()
+        return type(of: sharedInstance.paymentQueueController.paymentQueue).canMakePayments()
     }
 
     public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> ()) {

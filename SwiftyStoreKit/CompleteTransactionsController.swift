@@ -67,7 +67,9 @@ class CompleteTransactionsController: TransactionController {
                 unhandledTransactions.append(transaction)
             }
         }
-        completeTransactions.callback(products)
+        if products.count > 0 {
+            completeTransactions.callback(products)
+        }
 
         return unhandledTransactions
     }

@@ -334,6 +334,10 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 * [Apple - Offering Subscriptions](https://developer.apple.com/app-store/subscriptions/)
 * [objc.io - Receipt Validation](https://www.objc.io/issues/17-security/receipt-validation/)
 
+I have also written about building SwiftyStoreKit on Medium:
+
+* [How I got 1000 ⭐️ on my GitHub Project](https://medium.com/ios-os-x-development/how-i-got-1000-%EF%B8%8F-on-my-github-project-654d3d394ca6#.1idp27olf)
+* [Maintaining a Growing Open Source Project](https://medium.com/@biz84/maintaining-a-growing-open-source-project-1d385ca84c5#.4cv2g7tdc)
 
 ## Payment flows - implementation Details
 In order to make a purchase, two operations are needed:

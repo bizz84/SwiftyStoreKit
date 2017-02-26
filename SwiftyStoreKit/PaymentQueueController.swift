@@ -125,7 +125,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
 
     func completeTransactions(_ completeTransactions: CompleteTransactions) {
-        
+
         guard completeTransactionsController.completeTransactions == nil else {
             print("SwiftyStoreKit.completeTransactions() should only be called once when the app launches. Ignoring this call")
             return

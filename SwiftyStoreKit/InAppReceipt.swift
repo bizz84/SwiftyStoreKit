@@ -102,7 +102,7 @@ internal class InAppReceipt {
         // Verify that at least one receipt has the right product id
 
         // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
-        let receipts = receipt["latest_receipt_info"] as? [ReceiptInfo]
+        let receipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
         if receiptsInfo.count == 0 {
             return .notPurchased

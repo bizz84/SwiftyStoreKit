@@ -131,15 +131,22 @@ class ViewController: NSViewController {
 
                 let productId = self.appBundleId + "." + purchase.rawValue
 
-                // Specific behaviour for AutoRenewablePurchase
-                if purchase == .autoRenewablePurchase {
+                switch purchase {
+                case .autoRenewablePurchase:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
+                        type: .autoRenewable,
                         productId: productId,
-                        inReceipt: receipt,
-                        validUntil: Date()
+                        inReceipt: receipt
                     )
                     self.showAlert(self.alertForVerifySubscription(purchaseResult))
-                } else {
+                case .nonRenewingPurchase:
+                    let purchaseResult = SwiftyStoreKit.verifySubscription(
+                        type: .nonRenewing(validDuration: 60),
+                        productId: productId,
+                        inReceipt: receipt
+                    )
+                    self.showAlert(self.alertForVerifySubscription(purchaseResult))
+                default:
                     let purchaseResult = SwiftyStoreKit.verifyPurchase(
                         productId: productId,
                         inReceipt: receipt

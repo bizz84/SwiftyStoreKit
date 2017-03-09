@@ -344,6 +344,7 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 * [Apple - Validating Receipts Locally](https://developer.apple.com/library/content/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateLocally.html)
 * [Apple - Offering Subscriptions](https://developer.apple.com/app-store/subscriptions/)
 * [objc.io - Receipt Validation](https://www.objc.io/issues/17-security/receipt-validation/)
+* [Invalid Product IDs](http://troybrant.net/blog/2010/01/invalid-product-ids/): Checklist of common mistakes
 
 I have also written about building SwiftyStoreKit on Medium:
 

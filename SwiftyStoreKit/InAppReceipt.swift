@@ -86,6 +86,7 @@ internal class InAppReceipt {
 
     /**
      *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  - parameter type: .autoRenewable or .nonRenewing(duration)
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the subscription
      *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
@@ -93,16 +94,16 @@ internal class InAppReceipt {
      *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
     class func verifySubscription(
+        type: SubscriptionType,
         productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil date: Date = Date(),
-        validDuration duration: TimeInterval? = nil
+        validUntil date: Date = Date()
     ) -> VerifySubscriptionResult {
 
         // Verify that at least one receipt has the right product id
 
         // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
-        let receipts = receipt["latest_receipt_info"] as? [ReceiptInfo]
+        let (receipts, duration) = getReceiptsAndDuration(for: type, inReceipt: receipt)
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
         if receiptsInfo.count == 0 {
             return .notPurchased
@@ -140,6 +141,15 @@ internal class InAppReceipt {
         } else {
             // The subscription is expired
             return .expired(expiryDate: firstExpiryDate)
+        }
+    }
+
+    private class func getReceiptsAndDuration(for subscriptionType: SubscriptionType, inReceipt receipt: ReceiptInfo) -> ([ReceiptInfo]?, TimeInterval?) {
+        switch subscriptionType {
+        case .autoRenewable:
+            return (receipt["latest_receipt_info"] as? [ReceiptInfo], nil)
+        case .nonRenewing(let duration):
+            return (receipt["receipt"]?["in_app"] as? [ReceiptInfo], duration)
         }
     }
 

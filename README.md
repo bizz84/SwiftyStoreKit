@@ -225,8 +225,8 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
         // Verify the purchase of Consumable or NonConsumable
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
             productId: "com.musevisions.SwiftyStoreKit.Purchase1",
-            inReceipt: receipt
-        )
+            inReceipt: receipt)
+            
         switch purchaseResult {
         case .purchased(let expiresDate):
             print("Product is purchased.")
@@ -250,11 +250,10 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
     case .success(let receipt):
         // Verify the purchase of a Subscription
         let purchaseResult = SwiftyStoreKit.verifySubscription(
+            type: .autoRenewable, // or .nonRenewing (see below)
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
-            inReceipt: receipt,
-            validUntil: NSDate(),
-            validDuration: 3600 * 24 * 30 // Non Renewing Subscription only
-        )
+            inReceipt: receipt)
+            
         switch purchaseResult {
         case .purchased(let expiresDate):
             print("Product is valid until \(expiresDate)")
@@ -270,9 +269,21 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 }
 ```
 
+#### Auto-Renewable
+```
+let purchaseResult = SwiftyStoreKit.verifySubscription(
+            type: .autoRenewable,
+            productId: "com.musevisions.SwiftyStoreKit.Subscription",
+            inReceipt: receipt)
+```
 
-To test the expiration of a Non Renewing Subscription, you must indicate the `validDuration` time interval in seconds.
-
+#### Non-Renewing
+```
+let purchaseResult = SwiftyStoreKit.verifySubscription(
+            type: .nonRenewing(validDuration: 3600 * 24 * 30),
+            productId: "com.musevisions.SwiftyStoreKit.Subscription",
+            inReceipt: receipt)
+```
 
 
 **NOTE**:

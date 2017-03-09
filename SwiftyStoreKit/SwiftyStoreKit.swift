@@ -250,11 +250,11 @@ extension SwiftyStoreKit {
      *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
     public class func verifySubscription(
+        type: SubscriptionType,
         productId: String,
         inReceipt receipt: ReceiptInfo,
-        validUntil date: Date = Date(),
-        validDuration duration: TimeInterval? = nil
+        validUntil date: Date = Date()
         ) -> VerifySubscriptionResult {
-        return InAppReceipt.verifySubscription(productId: productId, inReceipt: receipt, validUntil: date, validDuration: duration)
+        return InAppReceipt.verifySubscription(type: type, productId: productId, inReceipt: receipt, validUntil: date)
     }
 }

@@ -96,6 +96,11 @@ public enum VerifySubscriptionResult {
     case notPurchased
 }
 
+public enum SubscriptionType {
+    case autoRenewable
+    case nonRenewing(validDuration: TimeInterval)
+}
+
 // Error when managing receipt
 public enum ReceiptError: Swift.Error {
     // No receipt data

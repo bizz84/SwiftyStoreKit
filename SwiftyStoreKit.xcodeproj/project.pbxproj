@@ -34,6 +34,8 @@
 		654287F31E79F5A000F61800 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654287F21E79F5A000F61800 /* ViewController.swift */; };
 		654287F61E79F5A000F61800 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 654287F41E79F5A000F61800 /* Main.storyboard */; };
 		654287F81E79F5A000F61800 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 654287F71E79F5A000F61800 /* Assets.xcassets */; };
+		654287FD1E79F75000F61800 /* SwiftyStoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */; };
+		654287FE1E79F75000F61800 /* SwiftyStoreKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		658A08371E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
 		658A08381E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
 		658A08391E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
@@ -79,6 +81,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		654287FF1E79F75000F61800 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6502F5F61B985833004E342D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 54C0D52B1CF7404500F90BCE;
+			remoteInfo = SwiftyStoreKit_tvOS;
+		};
 		658A08441E2EC5120074A98F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 6502F5F61B985833004E342D /* Project object */;
@@ -110,6 +119,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		654288011E79F75100F61800 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				654287FE1E79F75000F61800 /* SwiftyStoreKit.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		65F7DF921DCD524300835D30 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -146,7 +166,7 @@
 		650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompleteTransactionsController.swift; sourceTree = "<group>"; };
 		650307FB1E33154F001332A4 /* ProductsInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsInfoController.swift; sourceTree = "<group>"; };
 		653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKProduct+LocalizedPrice.swift"; sourceTree = "<group>"; };
-		654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftyStoreKit-tvOS-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SwiftyStoreKit-tvOSDemo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		654287F01E79F5A000F61800 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		654287F21E79F5A000F61800 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		654287F51E79F5A000F61800 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -216,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				654287FD1E79F75000F61800 /* SwiftyStoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,7 +287,7 @@
 				C4FD3A011C2954C10035CFF3 /* SwiftyStoreKit_macOSDemo.app */,
 				54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */,
 				658A083E1E2EC5120074A98F /* SwiftyStoreKitTests.xctest */,
-				654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo.app */,
+				654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOSDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -445,21 +466,23 @@
 			productReference = 6502F62D1B985C40004E342D /* SwiftyStoreKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		654287ED1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo */ = {
+		654287ED1E79F5A000F61800 /* SwiftyStoreKit-tvOSDemo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 654287FC1E79F5A000F61800 /* Build configuration list for PBXNativeTarget "SwiftyStoreKit-tvOS-Demo" */;
+			buildConfigurationList = 654287FC1E79F5A000F61800 /* Build configuration list for PBXNativeTarget "SwiftyStoreKit-tvOSDemo" */;
 			buildPhases = (
 				654287EA1E79F5A000F61800 /* Sources */,
 				654287EB1E79F5A000F61800 /* Frameworks */,
 				654287EC1E79F5A000F61800 /* Resources */,
+				654288011E79F75100F61800 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				654288001E79F75000F61800 /* PBXTargetDependency */,
 			);
-			name = "SwiftyStoreKit-tvOS-Demo";
+			name = "SwiftyStoreKit-tvOSDemo";
 			productName = "SwiftyStoreKit-tvOS-Demo";
-			productReference = 654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo.app */;
+			productReference = 654287EE1E79F5A000F61800 /* SwiftyStoreKit-tvOSDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		658A083D1E2EC5120074A98F /* SwiftyStoreKitTests */ = {
@@ -531,6 +554,7 @@
 				TargetAttributes = {
 					54C0D52B1CF7404500F90BCE = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = M54ZVB688G;
 					};
 					6502F5FD1B985833004E342D = {
 						CreatedOnToolsVersion = 7.0;
@@ -579,7 +603,7 @@
 				54C0D52B1CF7404500F90BCE /* SwiftyStoreKit_tvOS */,
 				6502F5FD1B985833004E342D /* SwiftyStoreKit_iOSDemo */,
 				C4FD3A001C2954C10035CFF3 /* SwiftyStoreKit_macOSDemo */,
-				654287ED1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo */,
+				654287ED1E79F5A000F61800 /* SwiftyStoreKit-tvOSDemo */,
 				658A083D1E2EC5120074A98F /* SwiftyStoreKitTests */,
 			);
 		};
@@ -782,6 +806,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		654288001E79F75000F61800 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 54C0D52B1CF7404500F90BCE /* SwiftyStoreKit_tvOS */;
+			targetProxy = 654287FF1E79F75000F61800 /* PBXContainerItemProxy */;
+		};
 		658A08451E2EC5120074A98F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 6502F62C1B985C40004E342D /* SwiftyStoreKit_iOS */;
@@ -847,6 +876,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = M54ZVB688G;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -871,6 +901,7 @@
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = M54ZVB688G;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -1063,6 +1094,7 @@
 		654287FA1E79F5A000F61800 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1083,6 +1115,7 @@
 		654287FB1E79F5A000F61800 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1253,7 +1286,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		654287FC1E79F5A000F61800 /* Build configuration list for PBXNativeTarget "SwiftyStoreKit-tvOS-Demo" */ = {
+		654287FC1E79F5A000F61800 /* Build configuration list for PBXNativeTarget "SwiftyStoreKit-tvOSDemo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				654287FA1E79F5A000F61800 /* Debug */,

@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "654287ED1E79F5A000F61800"
-               BuildableName = "SwiftyStoreKit-tvOS-Demo.app"
-               BlueprintName = "SwiftyStoreKit-tvOS-Demo"
+               BuildableName = "SwiftyStoreKit-tvOSDemo.app"
+               BlueprintName = "SwiftyStoreKit-tvOSDemo"
                ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "654287ED1E79F5A000F61800"
-            BuildableName = "SwiftyStoreKit-tvOS-Demo.app"
-            BlueprintName = "SwiftyStoreKit-tvOS-Demo"
+            BuildableName = "SwiftyStoreKit-tvOSDemo.app"
+            BlueprintName = "SwiftyStoreKit-tvOSDemo"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -56,8 +56,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "654287ED1E79F5A000F61800"
-            BuildableName = "SwiftyStoreKit-tvOS-Demo.app"
-            BlueprintName = "SwiftyStoreKit-tvOS-Demo"
+            BuildableName = "SwiftyStoreKit-tvOSDemo.app"
+            BlueprintName = "SwiftyStoreKit-tvOSDemo"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -75,8 +75,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "654287ED1E79F5A000F61800"
-            BuildableName = "SwiftyStoreKit-tvOS-Demo.app"
-            BlueprintName = "SwiftyStoreKit-tvOS-Demo"
+            BuildableName = "SwiftyStoreKit-tvOSDemo.app"
+            BlueprintName = "SwiftyStoreKit-tvOSDemo"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

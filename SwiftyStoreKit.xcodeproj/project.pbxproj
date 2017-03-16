@@ -30,13 +30,13 @@
 		653722811DB8282600C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
 		653722821DB8290A00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
 		653722831DB8290B00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
-		654287F11E79F5A000F61800 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 654287F01E79F5A000F61800 /* AppDelegate.swift */; };
 		654287F61E79F5A000F61800 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 654287F41E79F5A000F61800 /* Main.storyboard */; };
 		654287F81E79F5A000F61800 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 654287F71E79F5A000F61800 /* Assets.xcassets */; };
 		654287FD1E79F75000F61800 /* SwiftyStoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */; };
 		654287FE1E79F75000F61800 /* SwiftyStoreKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		654288021E7B34E500F61800 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F7DF701DCD4DF000835D30 /* ViewController.swift */; };
 		654288061E7B3A8800F61800 /* NetworkActivityIndicatorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F7DF6F1DCD4DF000835D30 /* NetworkActivityIndicatorManager.swift */; };
+		654288071E7B3E1500F61800 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F7DF681DCD4DF000835D30 /* AppDelegate.swift */; };
 		658A08371E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
 		658A08381E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
 		658A08391E2EC24E0074A98F /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
@@ -168,7 +168,6 @@
 		650307FB1E33154F001332A4 /* ProductsInfoController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProductsInfoController.swift; sourceTree = "<group>"; };
 		653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SKProduct+LocalizedPrice.swift"; sourceTree = "<group>"; };
 		654287EE1E79F5A000F61800 /* SwiftyStoreKit_tvOSDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyStoreKit_tvOSDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		654287F01E79F5A000F61800 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		654287F51E79F5A000F61800 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		654287F71E79F5A000F61800 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		654287F91E79F5A000F61800 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -316,7 +315,6 @@
 		654287EF1E79F5A000F61800 /* SwiftyStoreKit-tvOS-Demo */ = {
 			isa = PBXGroup;
 			children = (
-				654287F01E79F5A000F61800 /* AppDelegate.swift */,
 				654287F41E79F5A000F61800 /* Main.storyboard */,
 				654287F71E79F5A000F61800 /* Assets.xcassets */,
 				654287F91E79F5A000F61800 /* Info.plist */,
@@ -751,8 +749,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				654288071E7B3E1500F61800 /* AppDelegate.swift in Sources */,
 				654288021E7B34E500F61800 /* ViewController.swift in Sources */,
-				654287F11E79F5A000F61800 /* AppDelegate.swift in Sources */,
 				654288061E7B3A8800F61800 /* NetworkActivityIndicatorManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

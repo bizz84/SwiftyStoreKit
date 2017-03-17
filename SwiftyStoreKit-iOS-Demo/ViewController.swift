@@ -178,9 +178,11 @@ class ViewController: UIViewController {
         }
     }
 
+#if os(iOS)
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+#endif
 }
 
 // MARK: User facing alerts

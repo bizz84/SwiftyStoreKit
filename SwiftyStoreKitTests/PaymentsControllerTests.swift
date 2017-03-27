@@ -79,7 +79,7 @@ class PaymentsControllerTests: XCTestCase {
         let payment = makeTestPayment(product: testProduct) { result in
 
             callbackCalled = true
-            if case .failed(_) = result {
+            if case .failed = result {
 
             } else {
                 XCTFail("expected failed callback with error")
@@ -124,7 +124,7 @@ class PaymentsControllerTests: XCTestCase {
         var callback2Called = false
         let payment2 = makeTestPayment(product: testProduct2) { result in
             callback2Called = true
-            if case .failed(_) = result {
+            if case .failed = result {
 
             } else {
                 XCTFail("expected failed callback with error")

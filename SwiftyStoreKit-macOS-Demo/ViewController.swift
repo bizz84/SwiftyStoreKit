@@ -94,11 +94,9 @@ class ViewController: NSViewController {
 
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
 
-            for product in results.restoredProducts {
+            for product in results.restoredProducts where product.needsFinishTransaction {
                 // Deliver content from server, then:
-                if product.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(product.transaction)
-                }
+                SwiftyStoreKit.finishTransaction(product.transaction)
             }
 
             self.showAlert(self.alertForRestorePurchases(results))

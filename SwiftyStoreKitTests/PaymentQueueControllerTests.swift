@@ -53,7 +53,7 @@ class PaymentQueueControllerTests: XCTestCase {
 
         let spy = PaymentQueueSpy()
 
-        let _ = PaymentQueueController(paymentQueue: spy)
+        _ = PaymentQueueController(paymentQueue: spy)
 
         XCTAssertNil(spy.observer)
     }

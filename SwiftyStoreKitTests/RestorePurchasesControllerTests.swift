@@ -121,7 +121,7 @@ class RestorePurchasesControllerTests: XCTestCase {
 
             XCTAssertEqual(results.count, 1)
             let first = results.first!
-            if case .failed(_) = first {
+            if case .failed = first {
 
             } else {
                 XCTFail("expected failed callback with error")

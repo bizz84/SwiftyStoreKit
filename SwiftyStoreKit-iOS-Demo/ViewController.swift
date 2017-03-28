@@ -213,6 +213,7 @@ extension ViewController {
         }
     }
 
+    // swiftlint:disable cyclomatic_complexity
     func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController? {
         switch result {
         case .success(let product):
@@ -236,6 +237,8 @@ extension ViewController {
                 return alertWithTitle("Purchase failed", message: "Access to cloud service information is not allowed")
             case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
                 return alertWithTitle("Purchase failed", message: "Could not connect to the network")
+            case .cloudServiceRevoked: // user has revoked permission to use this cloud service
+                return alertWithTitle("Purchase failed", message: "Could service was revoked")
             }
         }
     }

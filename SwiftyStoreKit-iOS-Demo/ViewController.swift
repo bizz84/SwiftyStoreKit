@@ -97,11 +97,9 @@ class ViewController: UIViewController {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            for product in results.restoredProducts {
+            for product in results.restoredProducts where product.needsFinishTransaction {
                 // Deliver content from server, then:
-                if product.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(product.transaction)
-                }
+                SwiftyStoreKit.finishTransaction(product.transaction)
             }
             self.showAlert(self.alertForRestorePurchases(results))
         }
@@ -196,7 +194,7 @@ extension ViewController {
     }
 
     func showAlert(_ alert: UIAlertController) {
-        guard let _ = self.presentedViewController else {
+        guard self.presentedViewController != nil else {
             self.present(alert, animated: true, completion: nil)
             return
         }

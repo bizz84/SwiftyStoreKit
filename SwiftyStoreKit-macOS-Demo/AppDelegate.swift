@@ -38,7 +38,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         SwiftyStoreKit.completeTransactions(atomically: true) { products in
 
             for product in products {
-
+                // swiftlint:disable:next for_where
                 if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
 
                     if product.needsFinishTransaction {

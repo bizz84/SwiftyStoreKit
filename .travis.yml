@@ -1,7 +1,7 @@
 language: objective-c
 osx_image: xcode8.3
-before_install:
-  - rvm get stable
+#before_install:
+#  - rvm get stable
 
 install:
   - ./scripts/install_swiftlint.sh

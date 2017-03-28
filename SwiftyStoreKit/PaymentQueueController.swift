@@ -59,7 +59,7 @@ extension SKPaymentTransaction {
 
     open override var debugDescription: String {
         let transactionId = transactionIdentifier ?? "null"
-        return "productId: \(payment.productIdentifier), transactionId: \(transactionId), state: \(transactionState), date: \(transactionDate)"
+        return "productId: \(payment.productIdentifier), transactionId: \(transactionId), state: \(transactionState), date: \(String(describing: transactionDate))"
     }
 }
 

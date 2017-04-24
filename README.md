@@ -245,6 +245,10 @@ Note that for consumable products, the receipt will only include the information
 
 ### Verify Subscription
 
+This can be used to check if a subscription was previously purchased, and whether it is still active or if it's expired.
+
+If a subscription has been purchased multiple times, this method will return `.purchased` or `.expired` for the most recent one.
+
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
 SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
@@ -281,14 +285,60 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
 
 #### Non-Renewing
 ```
+// validDuration: time interval in seconds
 let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .nonRenewing(validDuration: 3600 * 24 * 30),
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
             inReceipt: receipt)
 ```
 
+**Note**: When purchasing subscriptions in sandbox mode, the expiry dates are set just minutes after the purchase date for testing purposes.
 
-**NOTE**:
+#### Purchasing and verifying a subscription 
+
+The `verifySubscription` method can be used together with the `purchaseProduct` method to purchase a subscription and check its expiration date, like so:
+
+```swift
+let productId = "your-product-id"
+SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
+    
+    if case .success(let product) = result {
+        // Deliver content from server, then:
+        if product.needsFinishTransaction {
+            SwiftyStoreKit.finishTransaction(product.transaction)
+        }
+        
+        let appleValidator = AppleReceiptValidator(service: .production)
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+            
+            if case .success(let receipt) = result {
+                let purchaseResult = SwiftyStoreKit.verifySubscription(
+                    type: .autoRenewable,
+                    productId: productId,
+                    inReceipt: receipt)
+                
+                switch purchaseResult {
+                case .purchased(let expiryDate):
+                    print("Product is valid until \(expiryDate)")
+                case .expired(let expiryDate):
+                    print("Product is expired since \(expiryDate)")
+                case .notPurchased:
+                    print("This product has never been purchased")
+                }
+
+            } else {
+                // receipt verification error
+            }
+        }
+        
+    } else {
+        // purchase error
+    }
+}
+```
+
+
+## Notes
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
 ## Installation

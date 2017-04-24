@@ -48,6 +48,8 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 
 If there are any pending transactions at this point, these will be reported by the completion block so that the app state and UI can be updated.
 
+If there are no pending transactions, the completion block will **not** be called.
+
 ## Purchases
 
 ### Retrieve products info

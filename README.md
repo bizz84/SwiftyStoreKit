@@ -16,6 +16,10 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png" width="320">
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png" width="320">
 
+## Contributing
+
+#### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
+
 ## App startup
 
 ### Complete Transactions
@@ -456,11 +460,6 @@ The order in which transaction updates are processed is:
 Any transactions where state == `.purchasing` are ignored.
 
 See [this pull request](https://github.com/bizz84/SwiftyStoreKit/pull/131) for full details about how the payment flows have been implemented.
-
-
-## Contributing
-
-[Read here](CONTRIBUTING.md).
 
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.

@@ -6,7 +6,7 @@ This project is becoming widely adopted and its growth is now limited by the tim
 
 Going forward, the aim is to **transfer some of the maintainance and development effort to the community**.
 
-If you want to help developing SwiftyStoreKit, please look for issues marked with a blue **contributions welcome** label. See #192 for an example.
+If you want to help developing SwiftyStoreKit, please look for issues marked with a blue **contributions welcome** label. See [this issue](https://github.com/bizz84/SwiftyStoreKit/issues/192) for an example.
 
 The maintainer will use this label initially for simple tasks that are appropriate for beginners and first time contributors.
 

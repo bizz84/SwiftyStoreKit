@@ -50,6 +50,8 @@ If there are any pending transactions at this point, these will be reported by t
 
 If there are no pending transactions, the completion block will **not** be called.
 
+Note that `completeTransactions()` **should only be called once** in your code, in `application(:didFinishLaunchingWithOptions:)`.
+
 ## Purchases
 
 ### Retrieve products info

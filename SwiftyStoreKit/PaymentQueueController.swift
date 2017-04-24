@@ -172,6 +172,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
         unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
 
+        unhandledTransactions = unhandledTransactions.filter { $0.transactionState != .purchasing }
         if unhandledTransactions.count > 0 {
             let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
             print("unhandledTransactions:\n\(strings)")

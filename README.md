@@ -228,6 +228,13 @@ func refreshReceipt() {
 }
 ```
 
+#### Notes
+
+* If the user is not logged to iTunes when `refreshReceipt` is called, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
+* If the user enters valid credentials, the receipt will be refreshed.
+* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+
+
 ### Verify Purchase
 
 ```swift

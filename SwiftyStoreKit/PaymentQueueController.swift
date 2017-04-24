@@ -153,7 +153,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
          * Restore purchases requests don't require user interaction and can jump ahead of the queue.
          * SKPaymentQueue rejects multiple restore purchases calls.
          * Having one payment queue observer for each request causes extra processing
-         * Failed translations only ever belong to queued payment request.
+         * Failed transactions only ever belong to queued payment requests.
          * restoreCompletedTransactionsFailedWithError is always called when a restore purchases request fails.
          * paymentQueueRestoreCompletedTransactionsFinished is always called following 0 or more update transactions when a restore purchases request succeeds.
          * A complete transactions handler is require to catch any transactions that are updated when the app is not running.

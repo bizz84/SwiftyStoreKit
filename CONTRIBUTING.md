@@ -1,8 +1,21 @@
 # Contributing to SwiftyStoreKit
 
-All contributions to SwiftyStoreKit are welcome. 😎
+### All contributions to SwiftyStoreKit are welcome. 😎
 
-While the maintainer(s) try to regularly keep the project alive and healthy, issues and pull requests are not always reviewed in a timely manner. 🕰
+This project is becoming widely adopted and its growth is now limited by the time the main maintainer can allocate.
+
+Going forward, the aim is to **transfer some of the maintainance and development effort to the community**.
+
+If you want to help developing SwiftyStoreKit, please look for issues marked with a blue **contributions welcome** label. See #192 for an example.
+
+The maintainer will use this label initially for simple tasks that are appropriate for beginners and first time contributors.
+
+As the project and its community grows:
+
+* intermediate and advanced tasks will be opened up to contributors
+* most experienced contributors will be able to gain **admin** rights to review and merge pull requests
+
+**Note**: While the maintainer(s) try to regularly keep the project alive and healthy, issues and pull requests are not always reviewed in a timely manner. 🕰
 
 ## Scope
 
@@ -27,6 +40,8 @@ In short:
 
 ## Open Features / Enhancement Requests
 
+These are intermediate / advanced tasks that will hopefully be implemented in the future:
+
 ### Local Receipt validation
 
 SwiftyStoreKit offers a reference implementation for [receipt validation with Apple](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit/AppleReceiptValidator.swift).
@@ -46,10 +61,6 @@ The payment flows are unit tested fairly extensively. Additional unit test cover
 - [ ] Unit tests for receipt verification code.
 
 See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/38).
-
-### Add code linting
-
-See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/139).
 
 
 ## Issues

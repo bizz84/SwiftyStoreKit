@@ -332,9 +332,9 @@
 				C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */,
 				650307F11E3163AA001332A4 /* RestorePurchasesControllerTests.swift */,
 				C3099C181E3206C700392A54 /* CompleteTransactionsControllerTests.swift */,
+				65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */,
 				658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */,
 				65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */,
-				65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */,
 				C3099C081E2FCE3A00392A54 /* TestProduct.swift */,
 				C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */,
 			);

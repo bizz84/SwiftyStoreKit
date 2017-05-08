@@ -43,6 +43,7 @@
 		658A08431E2EC5120074A98F /* SwiftyStoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6502F62D1B985C40004E342D /* SwiftyStoreKit.framework */; };
 		658A084A1E2EC5350074A98F /* PaymentQueueControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08491E2EC5350074A98F /* PaymentQueueControllerTests.swift */; };
 		658A084C1E2EC5960074A98F /* PaymentQueueSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */; };
+		65B8C9291EC0BE62009439D9 /* InAppReceiptTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */; };
 		65BB6CE81DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CE91DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CEA1DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
@@ -176,6 +177,7 @@
 		658A08421E2EC5120074A98F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		658A08491E2EC5350074A98F /* PaymentQueueControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueControllerTests.swift; sourceTree = "<group>"; };
 		658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueSpy.swift; sourceTree = "<group>"; };
+		65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptTests.swift; sourceTree = "<group>"; };
 		65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStoreKit+Types.swift"; sourceTree = "<group>"; };
 		65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionObserverFake.swift; sourceTree = "<group>"; };
 		65F70AC81E2EDC3700BF040D /* PaymentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsController.swift; sourceTree = "<group>"; };
@@ -332,6 +334,7 @@
 				C3099C181E3206C700392A54 /* CompleteTransactionsControllerTests.swift */,
 				658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */,
 				65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */,
+				65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */,
 				C3099C081E2FCE3A00392A54 /* TestProduct.swift */,
 				C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */,
 			);
@@ -767,6 +770,7 @@
 				C3099C191E3206C700392A54 /* CompleteTransactionsControllerTests.swift in Sources */,
 				658A084C1E2EC5960074A98F /* PaymentQueueSpy.swift in Sources */,
 				C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */,
+				65B8C9291EC0BE62009439D9 /* InAppReceiptTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

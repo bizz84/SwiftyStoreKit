@@ -79,9 +79,10 @@ internal class InAppReceipt {
         // Get receipts info for the product
         let receipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
+        let nonCancelledReceiptsInfo = receiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
 
         // Verify that at least one receipt has the right product id
-        return receiptsInfo.count >= 1 ? .purchased : .notPurchased
+        return nonCancelledReceiptsInfo.count >= 1 ? .purchased : .notPurchased
     }
 
     /**
@@ -115,6 +116,7 @@ internal class InAppReceipt {
         // Return the expires dates sorted desc
         let expiryDateValues = nonCancelledReceiptsInfo
             .flatMap { (receipt) -> String? in
+
                 let key: String = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
                 return receipt[key] as? String
             }

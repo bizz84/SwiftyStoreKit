@@ -252,8 +252,8 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
             inReceipt: receipt)
             
         switch purchaseResult {
-        case .purchased(let expiresDate):
-            print("Product is purchased.")
+        case .purchased(let receiptItem):
+            print("Product is purchased: \(receiptItem)")
         case .notPurchased:
             print("The user has never purchased this product")
         }
@@ -263,13 +263,17 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 }
 ```
 
-Note that for consumable products, the receipt will only include the information for a couples of minutes after the purchase.
+Note that for consumable products, the receipt will only include the information for a couple of minutes after the purchase.
 
 ### Verify Subscription
 
 This can be used to check if a subscription was previously purchased, and whether it is still active or if it's expired.
 
-If a subscription has been purchased multiple times, this method will return `.purchased` or `.expired` for the most recent one.
+From [Apple - Working with Subscriptions](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/Subscriptions.html#//apple_ref/doc/uid/TP40008267-CH7-SW6):
+
+> keep a record of the date that each piece of content is published. Read the Original Purchase Date and Subscription Expiration Date field from each receipt entry to determine the start and end dates of the subscription.
+
+When one or more subscriptions are found for a given product id, they are returned as a `ReceiptItem` array ordered by `expiryDate`, with the first one being the newest.
 
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
@@ -283,10 +287,10 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
             inReceipt: receipt)
             
         switch purchaseResult {
-        case .purchased(let expiresDate):
-            print("Product is valid until \(expiresDate)")
-        case .expired(let expiresDate):
-            print("Product is expired since \(expiresDate)")
+        case .purchased(let expiryDate, let receiptItems):
+            print("Product is valid until \(expiryDate)")
+        case .expired(let expiryDate, let receiptItems):
+            print("Product is expired since \(expiryDate)")
         case .notPurchased:
             print("The user has never purchased this product")
         }
@@ -340,9 +344,9 @@ SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
                     inReceipt: receipt)
                 
                 switch purchaseResult {
-                case .purchased(let expiryDate):
+                case .purchased(let expiryDate, let receiptItems):
                     print("Product is valid until \(expiryDate)")
-                case .expired(let expiryDate):
+                case .expired(let expiryDate, let receiptItems):
                     print("Product is expired since \(expiryDate)")
                 case .notPurchased:
                     print("This product has never been purchased")

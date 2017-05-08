@@ -182,10 +182,11 @@ internal class InAppReceipt {
             return .notPurchased
         }
 
+        let sortedReceiptItems = sortedExpiryDatesAndItems.map { $0.1 }
         if firstExpiryDateItemPair.0 > receiptDate {
-            return .purchased(expiryDate: firstExpiryDateItemPair.0, item: firstExpiryDateItemPair.1)
+            return .purchased(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
         } else {
-            return .expired(expiryDate: firstExpiryDateItemPair.0, item: firstExpiryDateItemPair.1)
+            return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
         }
     }
 

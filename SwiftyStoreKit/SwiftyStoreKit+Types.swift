@@ -91,8 +91,8 @@ public enum VerifyPurchaseResult {
 
 // Verify subscription result
 public enum VerifySubscriptionResult {
-    case purchased(expiryDate: Date, item: ReceiptItem)
-    case expired(expiryDate: Date, item: ReceiptItem)
+    case purchased(expiryDate: Date, items: [ReceiptItem])
+    case expired(expiryDate: Date, items: [ReceiptItem])
     case notPurchased
 }
 

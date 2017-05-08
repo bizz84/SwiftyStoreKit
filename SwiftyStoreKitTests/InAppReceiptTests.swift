@@ -32,66 +32,9 @@ private extension TimeInterval {
     }
 }
 
-public struct ReceiptItem {
-    // The product identifier of the item that was purchased. This value corresponds to the productIdentifier property of the SKPayment object stored in the transaction’s payment property.
-    public let productId: String
-    // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.
-    public let quantity: Int
-    // The transaction identifier of the item that was purchased. This value corresponds to the transaction’s transactionIdentifier property.
-    public let transactionId: String
-    // For a transaction that restores a previous transaction, the transaction identifier of the original transaction. Otherwise, identical to the transaction identifier. This value corresponds to the original transaction’s transactionIdentifier property. All receipts in a chain of renewals for an auto-renewable subscription have the same value for this field.
-    public let originalTransactionId: String
-    // The date and time that the item was purchased. This value corresponds to the transaction’s transactionDate property.
-    public let purchaseDate: Date
-    // For a transaction that restores a previous transaction, the date of the original transaction. This value corresponds to the original transaction’s transactionDate property. In an auto-renewable subscription receipt, this indicates the beginning of the subscription period, even if the subscription has been renewed.
-    public let originalPurchaseDate: Date
-    // The primary key for identifying subscription purchases.
-    public let webOrderLineItemId: String
-    // The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is only present for auto-renewable subscription receipts.
-    public let subscriptionExpirationDate: Date?
-    // For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.
-    public let cancellationDate: Date?
-    
-    public let isTrialPeriod: Bool?
-    
-    public init?(receiptInfo: ReceiptInfo) {
-        guard
-            let productId = receiptInfo["product_id"] as? String,
-            let quantity = receiptInfo["quantity"] as? Int,
-            let transactionId = receiptInfo["transaction_id"] as? String,
-            let originalTransactionId = receiptInfo["original_transaction_id"] as? String,
-            let purchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "purchase_date_ms"),
-            let originalPurchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "original_purchase_date_ms"),
-            let webOrderLineItemId = receiptInfo["web_order_line_item_id"] as? String
-            else {
-                return nil
-        }
-        self.productId = productId
-        self.quantity = quantity
-        self.transactionId = transactionId
-        self.originalTransactionId = originalTransactionId
-        self.purchaseDate = purchaseDate
-        self.originalPurchaseDate = originalPurchaseDate
-        self.webOrderLineItemId = webOrderLineItemId
-        self.subscriptionExpirationDate = ReceiptItem.parseDate(from: receiptInfo, key: "expires_date_ms")
-        self.cancellationDate = ReceiptItem.parseDate(from: receiptInfo, key: "cancellation_date_ms")
-        self.isTrialPeriod = receiptInfo["is_trial_period"] as? Bool
-    }
-    
-    private static func parseDate(from receiptInfo: ReceiptInfo, key: String) -> Date? {
-        
-        guard
-            let requestDateString = receiptInfo[key] as? String,
-            let requestDateMs = Double(requestDateString) else {
-                return nil
-        }
-        return Date(timeIntervalSince1970: requestDateMs / 1000)
-    }
-}
+extension ReceiptItem: Equatable {
 
-extension ReceiptItem {
-
-    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool? = nil) {
+    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false) {
         self.productId = productId
         self.quantity = 1
         self.purchaseDate = purchaseDate
@@ -109,7 +52,11 @@ extension ReceiptItem {
             "product_id": productId as NSString,
             "quantity": String(quantity) as NSString,
             "purchase_date_ms": purchaseDate.timeIntervalSince1970.millisecondsNSString,
-            "original_purchase_date_ms": originalPurchaseDate.timeIntervalSince1970.millisecondsNSString
+            "original_purchase_date_ms": originalPurchaseDate.timeIntervalSince1970.millisecondsNSString,
+            "is_trial_period": (isTrialPeriod ? "1" : "0") as NSString,
+            "transaction_id": transactionId as NSString,
+            "original_transaction_id": originalTransactionId as NSString,
+            "web_order_line_item_id": webOrderLineItemId as NSString
         ]
         if let subscriptionExpirationDate = subscriptionExpirationDate {
             result["expires_date_ms"] = subscriptionExpirationDate.timeIntervalSince1970.millisecondsNSString
@@ -118,10 +65,18 @@ extension ReceiptItem {
             result["cancellation_date_ms"] = cancellationDate.timeIntervalSince1970.millisecondsNSString
             result["cancellation_date"] = cancellationDate as NSDate
         }
-        if let isTrialPeriod = isTrialPeriod {
-            result["is_trial_period"] = NSNumber(value: isTrialPeriod)
-        }
         return NSDictionary(dictionary: result)
+    }
+    
+    public static func == (lhs: ReceiptItem, rhs: ReceiptItem) -> Bool {
+        return
+            lhs.productId == rhs.productId &&
+            lhs.quantity == rhs.quantity &&
+            lhs.purchaseDate == rhs.purchaseDate &&
+            lhs.originalPurchaseDate == rhs.originalPurchaseDate &&
+            lhs.subscriptionExpirationDate == rhs.subscriptionExpirationDate &&
+            lhs.cancellationDate == rhs.cancellationDate &&
+            lhs.isTrialPeriod == rhs.isTrialPeriod
     }
 }
 
@@ -130,8 +85,22 @@ extension VerifySubscriptionResult: Equatable {
     public static func == (lhs: VerifySubscriptionResult, rhs: VerifySubscriptionResult) -> Bool {
         switch (lhs, rhs) {
         case (.notPurchased, .notPurchased): return true
-        case (.purchased(let lhsExpiryDate), .purchased(let rhsExpiryDate)): return lhsExpiryDate == rhsExpiryDate
-        case (.expired(let lhsExpiryDate), .expired(let rhsExpiryDate)): return lhsExpiryDate == rhsExpiryDate
+        case (.purchased(let lhsExpiryDate, let lhsReceiptItem), .purchased(let rhsExpiryDate, let rhsReceiptItem)):
+            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
+        case (.expired(let lhsExpiryDate, let lhsReceiptItem), .expired(let rhsExpiryDate, let rhsReceiptItem)):
+            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
+        default: return false
+        }
+    }
+}
+
+extension VerifyPurchaseResult: Equatable {
+    
+    public static func == (lhs: VerifyPurchaseResult, rhs: VerifyPurchaseResult) -> Bool {
+        switch (lhs, rhs) {
+        case (.notPurchased, .notPurchased): return true
+        case (.purchased(let lhsReceiptItem), .purchased(let rhsReceiptItem)):
+            return lhsReceiptItem == rhsReceiptItem
         default: return false
         }
     }
@@ -141,55 +110,55 @@ class InAppReceiptTests: XCTestCase {
 
     // MARK: Verify Purchase
     func testVerifyPurchase_when_noPurchases_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
-        
+
         let verifyPurchaseResult = SwiftyStoreKit.verifyPurchase(productId: productId, inReceipt: receipt)
-        
+
         XCTAssertEqual(verifyPurchaseResult, .notPurchased)
     }
     func testVerifyPurchase_when_onePurchase_then_resultIsPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let item = ReceiptItem(productId: productId, purchaseDate: receiptRequestDate, subscriptionExpirationDate: nil, cancellationDate: nil, isTrialPeriod: false)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifyPurchaseResult = SwiftyStoreKit.verifyPurchase(productId: productId, inReceipt: receipt)
-        
-        XCTAssertEqual(verifyPurchaseResult, .purchased)
+
+        XCTAssertEqual(verifyPurchaseResult, .purchased(item: item))
     }
     func testVerifyPurchase_when_oneCancelledPurchase_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let item = ReceiptItem(productId: productId, purchaseDate: receiptRequestDate, subscriptionExpirationDate: nil, cancellationDate: receiptRequestDate, isTrialPeriod: false)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifyPurchaseResult = SwiftyStoreKit.verifyPurchase(productId: productId, inReceipt: receipt)
-        
+
         XCTAssertEqual(verifyPurchaseResult, .notPurchased)
     }
-    
+
     // MARK: Verify Subscription, single receipt item tests
     // auto-renewable, not purchased
     func testVerifyAutoRenewableSubscription_when_noSubscriptions_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .autoRenewable, productId: productId, inReceipt: receipt)
-        
+
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
     // auto-renewable, expired
     func testVerifyAutoRenewableSubscription_when_oneExpiredSubscription_then_resultIsExpired() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
         let productId = "product1"
         let isTrialPeriod = false
@@ -197,10 +166,10 @@ class InAppReceiptTests: XCTestCase {
         let expirationDate = purchaseDate.addingTimeInterval(60 * 60)
         let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: nil, isTrialPeriod: isTrialPeriod)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .autoRenewable, productId: productId, inReceipt: receipt)
-        
-        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate)
+
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, item: item)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -217,13 +186,13 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .autoRenewable, productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate)
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, item: item)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
     // auto-renewable, cancelled
     func testVerifyAutoRenewableSubscription_when_oneCancelledSubscription_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -232,29 +201,29 @@ class InAppReceiptTests: XCTestCase {
         let cancelledDate = purchaseDate.addingTimeInterval(30 * 60)
         let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: cancelledDate, isTrialPeriod: isTrialPeriod)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .autoRenewable, productId: productId, inReceipt: receipt)
-        
+
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
-    
+
     // non-renewing, non purchased
     func testVerifyNonRenewingSubscription_when_noSubscriptions_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .nonRenewing(validDuration: 60 * 60), productId: productId, inReceipt: receipt)
-        
+
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
-    
+
     // non-renewing, expired
     func testVerifyNonRenewingSubscription_when_oneExpiredSubscription_then_resultIsExpired() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
         let productId = "product1"
         let isTrialPeriod = false
@@ -264,16 +233,16 @@ class InAppReceiptTests: XCTestCase {
 
         let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: nil, cancellationDate: nil, isTrialPeriod: isTrialPeriod)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .nonRenewing(validDuration: duration), productId: productId, inReceipt: receipt)
-        
-        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate)
+
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, item: item)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
     // non-renewing, purchased
     func testVerifyNonRenewingSubscription_when_oneNonExpiredSubscription_then_resultIsPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -283,16 +252,16 @@ class InAppReceiptTests: XCTestCase {
 
         let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: nil, cancellationDate: nil, isTrialPeriod: isTrialPeriod)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .nonRenewing(validDuration: duration), productId: productId, inReceipt: receipt)
-        
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate)
+
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, item: item)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
     // non-renewing, cancelled
     func testVerifyNonRenewingSubscription_when_oneCancelledSubscription_then_resultIsNotPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -301,21 +270,21 @@ class InAppReceiptTests: XCTestCase {
         let cancelledDate = purchaseDate.addingTimeInterval(30 * 60)
         let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: nil, cancellationDate: cancelledDate, isTrialPeriod: isTrialPeriod)
         let receipt = makeReceipt(items: [item], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .nonRenewing(validDuration: duration), productId: productId, inReceipt: receipt)
-        
+
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
     // MARK: Verify Subscription, multiple receipt item tests
     func verifyAutoRenewableSubscription_when_twoSubscriptions_sameProductId_mostRecentNonExpired_then_resultIsPurchased() {
-        
+
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
 
         let productId = "product1"
         let isTrialPeriod = false
-        
+
         let olderPurchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 12)
         let olderExpirationDate = olderPurchaseDate.addingTimeInterval(60 * 60)
         let olderItem = ReceiptItem(productId: productId,
@@ -323,7 +292,7 @@ class InAppReceiptTests: XCTestCase {
                                subscriptionExpirationDate: olderExpirationDate,
                                cancellationDate: nil,
                                isTrialPeriod: isTrialPeriod)
-        
+
         let newerPurchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let newerExpirationDate = olderPurchaseDate.addingTimeInterval(60 * 60)
         let newerItem = ReceiptItem(productId: productId,
@@ -331,12 +300,12 @@ class InAppReceiptTests: XCTestCase {
                                     subscriptionExpirationDate: newerExpirationDate,
                                     cancellationDate: nil,
                                     isTrialPeriod: isTrialPeriod)
-        
+
         let receipt = makeReceipt(items: [olderItem, newerItem], requestDate: receiptRequestDate)
-        
+
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(type: .autoRenewable, productId: productId, inReceipt: receipt)
-        
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate)
+
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, item: newerItem)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -344,11 +313,11 @@ class InAppReceiptTests: XCTestCase {
     func makeReceipt(items: [ReceiptItem], requestDate: Date) -> [String: AnyObject] {
 
         let receiptInfos = items.map { $0.receiptInfo }
-        
+
         // Creating this with NSArray results in __NSSingleObjectArrayI which fails the cast to [String: AnyObject]
         let array = NSMutableArray()
         array.addObjects(from: receiptInfos)
-        
+
         return [
             //"latest_receipt": [:],
             "status": "200" as NSString,

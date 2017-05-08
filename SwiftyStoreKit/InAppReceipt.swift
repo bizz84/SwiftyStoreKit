@@ -25,6 +25,59 @@
 
 import Foundation
 
+extension Date {
+
+    init?(millisecondsSince1970: String) {
+        guard let millisecondsNumber = Double(millisecondsSince1970) else {
+            return nil
+        }
+        self = Date(timeIntervalSince1970: millisecondsNumber / 1000)
+    }
+}
+
+extension ReceiptItem {
+
+    public init?(receiptInfo: ReceiptInfo) {
+        guard
+            let productId = receiptInfo["product_id"] as? String,
+            let quantityString = receiptInfo["quantity"] as? String,
+            let quantity = Int(quantityString),
+            let transactionId = receiptInfo["transaction_id"] as? String,
+            let originalTransactionId = receiptInfo["original_transaction_id"] as? String,
+            let purchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "purchase_date_ms"),
+            let originalPurchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "original_purchase_date_ms"),
+            let webOrderLineItemId = receiptInfo["web_order_line_item_id"] as? String
+            else {
+                print("could not parse receipt item: \(receiptInfo). Skipping...")
+                return nil
+        }
+        self.productId = productId
+        self.quantity = quantity
+        self.transactionId = transactionId
+        self.originalTransactionId = originalTransactionId
+        self.purchaseDate = purchaseDate
+        self.originalPurchaseDate = originalPurchaseDate
+        self.webOrderLineItemId = webOrderLineItemId
+        self.subscriptionExpirationDate = ReceiptItem.parseDate(from: receiptInfo, key: "expires_date_ms")
+        self.cancellationDate = ReceiptItem.parseDate(from: receiptInfo, key: "cancellation_date_ms")
+        if let isTrialPeriod = receiptInfo["is_trial_period"] as? String {
+            self.isTrialPeriod = Bool(isTrialPeriod) ?? false
+        } else {
+            self.isTrialPeriod = false
+        }
+    }
+
+    private static func parseDate(from receiptInfo: ReceiptInfo, key: String) -> Date? {
+
+        guard
+            let requestDateString = receiptInfo[key] as? String,
+            let requestDateMs = Double(requestDateString) else {
+                return nil
+        }
+        return Date(timeIntervalSince1970: requestDateMs / 1000)
+    }
+}
+
 // MARK - receipt mangement
 internal class InAppReceipt {
 
@@ -81,8 +134,12 @@ internal class InAppReceipt {
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
         let nonCancelledReceiptsInfo = receiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
 
+        let receiptItems = nonCancelledReceiptsInfo.flatMap { ReceiptItem(receiptInfo: $0) }
         // Verify that at least one receipt has the right product id
-        return nonCancelledReceiptsInfo.count >= 1 ? .purchased : .notPurchased
+        if let firstItem = receiptItems.first {
+            return .purchased(item: firstItem)
+        }
+        return .notPurchased
     }
 
     /**
@@ -101,8 +158,6 @@ internal class InAppReceipt {
         validUntil date: Date = Date()
     ) -> VerifySubscriptionResult {
 
-        // Verify that at least one receipt has the right product id
-
         // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
         let (receipts, duration) = getReceiptsAndDuration(for: type, inReceipt: receipt)
         let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
@@ -113,37 +168,41 @@ internal class InAppReceipt {
 
         let receiptDate = getReceiptRequestDate(inReceipt: receipt) ?? date
 
-        // Return the expires dates sorted desc
-        let expiryDateValues = nonCancelledReceiptsInfo
-            .flatMap { (receipt) -> String? in
+        let receiptItems = nonCancelledReceiptsInfo.flatMap { ReceiptItem(receiptInfo: $0) }
 
-                let key: String = duration != nil ? "original_purchase_date_ms" : "expires_date_ms"
-                return receipt[key] as? String
-            }
-            .flatMap { (dateString) -> Date? in
-                guard let doubleValue = Double(dateString) else { return nil }
-                // If duration is set, create an "expires date" value calculated from the original purchase date
-                let addedDuration = duration ?? 0
-                let expiryDateDouble = (doubleValue / 1000 + addedDuration)
-                return Date(timeIntervalSince1970: expiryDateDouble)
-            }
-            .sorted { (a, b) -> Bool in
-                // Sort by descending date order
-                return a.compare(b) == .orderedDescending
-            }
+        if nonCancelledReceiptsInfo.count > receiptItems.count {
+            print("receipt has \(nonCancelledReceiptsInfo.count) items, but only \(receiptItems.count) were parsed")
+        }
 
-        guard let firstExpiryDate = expiryDateValues.first else {
+        let sortedExpiryDatesAndItems = expiryDatesAndItems(receiptItems: receiptItems, duration: duration).sorted { a, b in
+            return a.0 > b.0
+        }
+
+        guard let firstExpiryDateItemPair = sortedExpiryDatesAndItems.first else {
             return .notPurchased
         }
 
-        // Check if at least 1 receipt is valid
-        if firstExpiryDate.compare(receiptDate) == .orderedDescending {
-
-            // The subscription is valid
-            return .purchased(expiryDate: firstExpiryDate)
+        if firstExpiryDateItemPair.0 > receiptDate {
+            return .purchased(expiryDate: firstExpiryDateItemPair.0, item: firstExpiryDateItemPair.1)
         } else {
-            // The subscription is expired
-            return .expired(expiryDate: firstExpiryDate)
+            return .expired(expiryDate: firstExpiryDateItemPair.0, item: firstExpiryDateItemPair.1)
+        }
+    }
+
+    private class func expiryDatesAndItems(receiptItems: [ReceiptItem], duration: TimeInterval?) -> [(Date, ReceiptItem)] {
+
+        if let duration = duration {
+            return receiptItems.map {
+                let expirationDate = Date(timeIntervalSince1970: $0.originalPurchaseDate.timeIntervalSince1970 + duration)
+                return (expirationDate, $0)
+            }
+        } else {
+            return receiptItems.flatMap {
+                if let expirationDate = $0.subscriptionExpirationDate {
+                    return (expirationDate, $0)
+                }
+                return nil
+            }
         }
     }
 
@@ -159,11 +218,10 @@ internal class InAppReceipt {
     private class func getReceiptRequestDate(inReceipt receipt: ReceiptInfo) -> Date? {
 
         guard let receiptInfo = receipt["receipt"] as? ReceiptInfo,
-            let requestDateString = receiptInfo["request_date_ms"] as? String,
-            let requestDateMs = Double(requestDateString) else {
+            let requestDateString = receiptInfo["request_date_ms"] as? String else {
             return nil
         }
-        return Date(timeIntervalSince1970: requestDateMs / 1000)
+        return Date(millisecondsSince1970: requestDateString)
     }
 
     /**

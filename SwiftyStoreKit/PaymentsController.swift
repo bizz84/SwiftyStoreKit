@@ -73,7 +73,7 @@ class PaymentsController: TransactionController {
 
         if transactionState == .purchased {
 
-            let purchase = Purchase(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, transaction: transaction, needsFinishTransaction: !payment.atomically)
+            let purchase = Purchase(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !payment.atomically)
 
             payment.callback(.purchased(purchase: purchase))
 

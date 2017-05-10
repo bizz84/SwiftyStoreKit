@@ -238,7 +238,7 @@ extension ViewController {
             case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
                 return alertWithTitle("Purchase failed", message: "Could not connect to the network")
             case .cloudServiceRevoked: // user has revoked permission to use this cloud service
-                return alertWithTitle("Purchase failed", message: "Could service was revoked")
+                return alertWithTitle("Purchase failed", message: "Cloud service was revoked")
             }
         }
     }

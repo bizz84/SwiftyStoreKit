@@ -55,7 +55,7 @@ class CompleteTransactionsController: TransactionController {
 
             if transactionState != .purchasing {
 
-                let purchase = Purchase(productId: transaction.payment.productIdentifier, quantity: transaction.payment.quantity, transaction: transaction, needsFinishTransaction: !completeTransactions.atomically)
+                let purchase = Purchase(productId: transaction.payment.productIdentifier, quantity: transaction.payment.quantity, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !completeTransactions.atomically)
 
                 purchases.append(purchase)
 

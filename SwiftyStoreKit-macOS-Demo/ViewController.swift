@@ -77,10 +77,10 @@ class ViewController: NSViewController {
 
         SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: true) { result in
 
-            if case .success(let product) = result {
+            if case .success(let purchase) = result {
                 // Deliver content from server, then:
-                if product.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(product.transaction)
+                if purchase.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(purchase.transaction)
                 }
             }
 
@@ -94,7 +94,7 @@ class ViewController: NSViewController {
 
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
 
-            for product in results.restoredProducts where product.needsFinishTransaction {
+            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
                 // Deliver content from server, then:
                 SwiftyStoreKit.finishTransaction(product.transaction)
             }
@@ -206,8 +206,8 @@ extension ViewController {
 
     func alertForPurchaseResult(_ result: PurchaseResult) -> NSAlert? {
         switch result {
-        case .success(let product):
-            print("Purchase Success: \(product.productId)")
+        case .success(let purchase):
+            print("Purchase Success: \(purchase.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
@@ -227,11 +227,11 @@ extension ViewController {
 
     func alertForRestorePurchases(_ results: RestoreResults) -> NSAlert {
 
-        if results.restoreFailedProducts.count > 0 {
-            print("Restore Failed: \(results.restoreFailedProducts)")
+        if results.restoreFailedPurchases.count > 0 {
+            print("Restore Failed: \(results.restoreFailedPurchases)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
-        } else if results.restoredProducts.count > 0 {
-            print("Restore Success: \(results.restoredProducts)")
+        } else if results.restoredPurchases.count > 0 {
+            print("Restore Success: \(results.restoredPurchases)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         } else {
             print("Nothing to Restore")

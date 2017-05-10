@@ -27,6 +27,7 @@ import StoreKit
 
 struct Payment: Hashable {
     let product: SKProduct
+    let quantity: Int
     let atomically: Bool
     let applicationUsername: String
     let callback: (TransactionResult) -> Void
@@ -72,9 +73,9 @@ class PaymentsController: TransactionController {
 
         if transactionState == .purchased {
 
-            let product = Product(productId: transactionProductIdentifier, transaction: transaction, needsFinishTransaction: !payment.atomically)
+            let purchase = Purchase(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, transaction: transaction, needsFinishTransaction: !payment.atomically)
 
-            payment.callback(.purchased(product: product))
+            payment.callback(.purchased(purchase: purchase))
 
             if payment.atomically {
                 paymentQueue.finishTransaction(transaction)

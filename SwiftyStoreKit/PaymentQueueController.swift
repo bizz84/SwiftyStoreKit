@@ -36,8 +36,8 @@ protocol TransactionController {
 }
 
 public enum TransactionResult {
-    case purchased(product: Product)
-    case restored(product: Product)
+    case purchased(purchase: Purchase)
+    case restored(purchase: Purchase)
     case failed(error: SKError)
 }
 
@@ -108,6 +108,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
         let skPayment = SKMutablePayment(product: payment.product)
         skPayment.applicationUsername = payment.applicationUsername
+        skPayment.quantity = payment.quantity
         paymentQueue.add(skPayment)
 
         paymentsController.append(payment)

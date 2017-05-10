@@ -32,17 +32,17 @@ SwiftyStoreKit supports this by calling `completeTransactions()` when the app st
 ```swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
-	SwiftyStoreKit.completeTransactions(atomically: true) { products in
+	SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
 	
-	    for product in products {
+	    for purchase in purchases {
 	
-	        if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
+	        if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
 	
-               if product.needsFinishTransaction {
+               if purchase.needsFinishTransaction {
                    // Deliver content from server, then:
-                   SwiftyStoreKit.finishTransaction(product.transaction)
+                   SwiftyStoreKit.finishTransaction(purchase.transaction)
                }
-               print("purchased: \(product)")
+               print("purchased: \(purchase)")
 	        }
 	    }
 	}
@@ -79,10 +79,10 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 * **Atomic**: to be used when the content is delivered immediately.
 
 ```swift
-SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: true) { result in
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quantity: 1, atomically: true) { result in
     switch result {
-    case .success(let product):
-        print("Purchase Success: \(product.productId)")
+    case .success(let purchase):
+        print("Purchase Success: \(purchase.productId)")
     case .error(let error):
         switch error.code {
         case .unknown: print("Unknown error. Please contact support")
@@ -93,6 +93,7 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
         case .storeProductNotAvailable: print("The product is not available in the current storefront")
         case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
         case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
         }
     }
 }
@@ -101,7 +102,7 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
 * **Non-Atomic**: to be used when the content is delivered by the server.
 
 ```swift
-SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomically: false) { result in
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quantity: 1, atomically: false) { result in
     switch result {
     case .success(let product):
         // fetch content from your server, then:
@@ -119,6 +120,7 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
         case .storeProductNotAvailable: print("The product is not available in the current storefront")
         case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
         case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
+        case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
         }
     }
 }
@@ -130,11 +132,11 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", atomi
 
 ```swift
 SwiftyStoreKit.restorePurchases(atomically: true) { results in
-    if results.restoreFailedProducts.count > 0 {
-        print("Restore Failed: \(results.restoreFailedProducts)")
+    if results.restoreFailedPurchases.count > 0 {
+        print("Restore Failed: \(results.restoreFailedPurchases)")
     }
-    else if results.restoredProducts.count > 0 {
-        print("Restore Success: \(results.restoredProducts)")
+    else if results.restoredPurchases.count > 0 {
+        print("Restore Success: \(results.restoredPurchases")
     }
     else {
         print("Nothing to Restore")
@@ -146,17 +148,17 @@ SwiftyStoreKit.restorePurchases(atomically: true) { results in
 
 ```swift
 SwiftyStoreKit.restorePurchases(atomically: false) { results in
-    if results.restoreFailedProducts.count > 0 {
-        print("Restore Failed: \(results.restoreFailedProducts)")
+    if results.restoreFailedPurchases.count > 0 {
+        print("Restore Failed: \(results.restoreFailedPurchases)")
     }
-    else if results.restoredProducts.count > 0 {
-        for product in results.restoredProducts {
+    else if results.restoredPurchases.count > 0 {
+        for purchase in results.restoredPurchases {
             // fetch content from your server, then:
-            if product.needsFinishTransaction {
-                SwiftyStoreKit.finishTransaction(product.transaction)
+            if purchase.needsFinishTransaction {
+                SwiftyStoreKit.finishTransaction(purchase.transaction)
             }
         }
-        print("Restore Success: \(results.restoredProducts)")
+        print("Restore Success: \(results.restoredPurchases)")
     }
     else {
         print("Nothing to Restore")
@@ -171,13 +173,13 @@ When you purchase a product the following things happen:
 * A payment is added to the payment queue for your IAP.
 * When the payment has been processed with Apple, the payment queue is updated so that the appropriate transaction can be handled.
 * If the transaction state is **purchased** or **restored**, the app can unlock the functionality purchased by the user.
-* The app should call `finishTransaction()` to complete the purchase.
+* The app should call `finishTransaction(_:)` to complete the purchase.
 
 This is what is [recommended by Apple](https://developer.apple.com/reference/storekit/skpaymentqueue/1506003-finishtransaction):
 
-> Your application should call finishTransaction(_:) only after it has successfully processed the transaction and unlocked the functionality purchased by the user.
+> Your application should call `finishTransaction(_:)` only after it has successfully processed the transaction and unlocked the functionality purchased by the user.
 
-* A purchase is **atomic** when the app unlocks the functionality purchased by the user immediately and call `finishTransaction()` at the same time. This is desirable if you're unlocking functionality that is already inside the app.
+* A purchase is **atomic** when the app unlocks the functionality purchased by the user immediately and call `finishTransaction(_:)` at the same time. This is desirable if you're unlocking functionality that is already inside the app.
 
 * In cases when you need to make a request to your own server in order to unlock the functionality, you can use a **non-atomic** purchase instead.
 
@@ -328,10 +330,10 @@ The `verifySubscription` method can be used together with the `purchaseProduct` 
 let productId = "your-product-id"
 SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
     
-    if case .success(let product) = result {
+    if case .success(let purchase) = result {
         // Deliver content from server, then:
-        if product.needsFinishTransaction {
-            SwiftyStoreKit.finishTransaction(product.transaction)
+        if purchase.needsFinishTransaction {
+            SwiftyStoreKit.finishTransaction(purchase.transaction)
         }
         
         let appleValidator = AppleReceiptValidator(service: .production)
@@ -356,7 +358,6 @@ SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
                 // receipt verification error
             }
         }
-        
     } else {
         // purchase error
     }
@@ -438,7 +439,7 @@ In order to make a purchase, two operations are needed:
 
 - Submit the payment and listen for updated transactions on the `SKPaymentQueue`.
 
-The framework takes care of caching SKProducts so that future requests for the same ```SKProduct``` don't need to perform a new ```SKProductRequest```.
+The framework takes care of caching SKProducts so that future requests for the same `SKProduct` don't need to perform a new `SKProductRequest`.
 
 ### Payment queue
 
@@ -461,7 +462,7 @@ The order in which transaction updates are processed is:
 2. restore purchases (transactionState: `.restored`, or `restoreCompletedTransactionsFailedWithError`, or `paymentQueueRestoreCompletedTransactionsFinished`)
 3. complete transactions (transactionState: `.purchased`, `.failed`, `.restored`, `.deferred`)
 
-Any transactions where state == `.purchasing` are ignored.
+Any transactions where state is `.purchasing` are ignored.
 
 See [this pull request](https://github.com/bizz84/SwiftyStoreKit/pull/131) for full details about how the payment flows have been implemented.
 

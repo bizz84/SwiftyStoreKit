@@ -46,8 +46,8 @@ class PaymentsControllerTests: XCTestCase {
         let payment = makeTestPayment(product: testProduct) { result in
 
             callbackCalled = true
-            if case .purchased(let product) = result {
-                XCTAssertEqual(product.productId, productIdentifier)
+            if case .purchased(let payment) = result {
+                XCTAssertEqual(payment.productId, productIdentifier)
             } else {
                 XCTFail("expected purchased callback with product id")
             }
@@ -112,8 +112,8 @@ class PaymentsControllerTests: XCTestCase {
         let payment1 = makeTestPayment(product: testProduct1) { result in
 
             callback1Called = true
-            if case .purchased(let product) = result {
-                XCTAssertEqual(product.productId, productIdentifier)
+            if case .purchased(let payment) = result {
+                XCTAssertEqual(payment.productId, productIdentifier)
             } else {
                 XCTFail("expected purchased callback with product id")
             }
@@ -160,8 +160,8 @@ class PaymentsControllerTests: XCTestCase {
         let payment1 = makeTestPayment(product: testProduct1) { result in
 
             callback1Called = true
-            if case .purchased(let product) = result {
-                XCTAssertEqual(product.productId, productIdentifier)
+            if case .purchased(let payment) = result {
+                XCTAssertEqual(payment.productId, productIdentifier)
             } else {
                 XCTFail("expected purchased callback with product id")
             }
@@ -190,6 +190,8 @@ class PaymentsControllerTests: XCTestCase {
 
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
+    
+    // TODO: Test quantity > 1
 
     func makePaymentsController(appendPayments payments: [Payment]) -> PaymentsController {
 
@@ -200,15 +202,15 @@ class PaymentsControllerTests: XCTestCase {
         return paymentsController
     }
 
-    func makeTestPayment(product: SKProduct, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
+    func makeTestPayment(product: SKProduct, quantity: Int = 1, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
-        return Payment(product: product, atomically: atomically, applicationUsername: "", callback: callback)
+        return Payment(product: product, quantity: quantity, atomically: atomically, applicationUsername: "", callback: callback)
     }
 
-    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
+    func makeTestPayment(productIdentifier: String, quantity: Int = 1, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         let product = TestProduct(productIdentifier: productIdentifier)
-        return makeTestPayment(product: product, atomically: atomically, callback: callback)
+        return makeTestPayment(product: product, quantity: quantity, atomically: atomically, callback: callback)
 
     }
 }

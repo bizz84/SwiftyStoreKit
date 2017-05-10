@@ -40,8 +40,8 @@ class RestorePurchasesControllerTests: XCTestCase {
             callbackCalled = true
             XCTAssertEqual(results.count, 1)
             let restored = results.first!
-            if case .restored(let restoredProduct) = restored {
-                XCTAssertEqual(restoredProduct.productId, productIdentifier)
+            if case .restored(let restoredPurchase) = restored {
+                XCTAssertEqual(restoredPurchase.productId, productIdentifier)
             } else {
                 XCTFail("expected restored callback with product")
             }
@@ -86,14 +86,14 @@ class RestorePurchasesControllerTests: XCTestCase {
             callbackCalled = true
             XCTAssertEqual(results.count, 2)
             let first = results.first!
-            if case .restored(let restoredProduct) = first {
-                XCTAssertEqual(restoredProduct.productId, productIdentifier1)
+            if case .restored(let restoredPurchase) = first {
+                XCTAssertEqual(restoredPurchase.productId, productIdentifier1)
             } else {
                 XCTFail("expected restored callback with product")
             }
             let last = results.last!
-            if case .restored(let restoredProduct) = last {
-                XCTAssertEqual(restoredProduct.productId, productIdentifier2)
+            if case .restored(let restoredPurchase) = last {
+                XCTAssertEqual(restoredPurchase.productId, productIdentifier2)
             } else {
                 XCTFail("expected restored callback with product")
             }

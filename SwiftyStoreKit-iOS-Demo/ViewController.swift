@@ -79,10 +79,10 @@ class ViewController: UIViewController {
         SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: true) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            if case .success(let product) = result {
+            if case .success(let purchase) = result {
                 // Deliver content from server, then:
-                if product.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(product.transaction)
+                if purchase.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(purchase.transaction)
                 }
             }
             if let alert = self.alertForPurchaseResult(result) {
@@ -97,9 +97,9 @@ class ViewController: UIViewController {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            for product in results.restoredProducts where product.needsFinishTransaction {
+            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
                 // Deliver content from server, then:
-                SwiftyStoreKit.finishTransaction(product.transaction)
+                SwiftyStoreKit.finishTransaction(purchase.transaction)
             }
             self.showAlert(self.alertForRestorePurchases(results))
         }
@@ -216,8 +216,8 @@ extension ViewController {
     // swiftlint:disable cyclomatic_complexity
     func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController? {
         switch result {
-        case .success(let product):
-            print("Purchase Success: \(product.productId)")
+        case .success(let purchase):
+            print("Purchase Success: \(purchase.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
@@ -238,18 +238,18 @@ extension ViewController {
             case .cloudServiceNetworkConnectionFailed: // the device could not connect to the nework
                 return alertWithTitle("Purchase failed", message: "Could not connect to the network")
             case .cloudServiceRevoked: // user has revoked permission to use this cloud service
-                return alertWithTitle("Purchase failed", message: "Could service was revoked")
+                return alertWithTitle("Purchase failed", message: "Cloud service was revoked")
             }
         }
     }
 
     func alertForRestorePurchases(_ results: RestoreResults) -> UIAlertController {
 
-        if results.restoreFailedProducts.count > 0 {
-            print("Restore Failed: \(results.restoreFailedProducts)")
+        if results.restoreFailedPurchases.count > 0 {
+            print("Restore Failed: \(results.restoreFailedPurchases)")
             return alertWithTitle("Restore failed", message: "Unknown error. Please contact support")
-        } else if results.restoredProducts.count > 0 {
-            print("Restore Success: \(results.restoredProducts)")
+        } else if results.restoredPurchases.count > 0 {
+            print("Restore Success: \(results.restoredPurchases)")
             return alertWithTitle("Purchases Restored", message: "All purchases have been restored")
         } else {
             print("Nothing to Restore")

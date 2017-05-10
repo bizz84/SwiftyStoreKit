@@ -35,17 +35,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func completeIAPTransactions() {
 
-        SwiftyStoreKit.completeTransactions(atomically: true) { products in
+        SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
 
-            for product in products {
+            for purchase in purchases {
                 // swiftlint:disable:next for_where
-                if product.transaction.transactionState == .purchased || product.transaction.transactionState == .restored {
+                if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
 
-                    if product.needsFinishTransaction {
+                    if purchase.needsFinishTransaction {
                         // Deliver content from server, then:
-                        SwiftyStoreKit.finishTransaction(product.transaction)
+                        SwiftyStoreKit.finishTransaction(purchase.transaction)
                     }
-                    print("purchased: \(product.productId)")
+                    print("purchased: \(purchase.productId)")
                 }
             }
         }

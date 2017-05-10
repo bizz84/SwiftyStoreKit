@@ -27,8 +27,9 @@ import StoreKit
 // MARK: Purchases
 
 // Purchased or restored product
-public struct Product {
+public struct Purchase {
     public let productId: String
+    public let quantity: Int
     public let transaction: PaymentTransaction
     public let needsFinishTransaction: Bool
 }
@@ -56,14 +57,14 @@ public struct RetrieveResults {
 
 // Purchase result
 public enum PurchaseResult {
-    case success(product: Product)
+    case success(purchase: Purchase)
     case error(error: SKError)
 }
 
 // Restore purchase results
 public struct RestoreResults {
-    public let restoredProducts: [Product]
-    public let restoreFailedProducts: [(SKError, String?)]
+    public let restoredPurchases: [Purchase]
+    public let restoreFailedPurchases: [(SKError, String?)]
 }
 
 // MARK: Receipt verification

@@ -36,11 +36,11 @@ class CompleteTransactionsControllerTests: XCTestCase {
         let transaction = TestPaymentTransaction(payment: SKPayment(product: testProduct), transactionState: .restored)
 
         var callbackCalled = false
-        let completeTransactions = CompleteTransactions(atomically: true) { products in
+        let completeTransactions = CompleteTransactions(atomically: true) { purchases in
             callbackCalled = true
-            XCTAssertEqual(products.count, 1)
-            let product = products.first!
-            XCTAssertEqual(product.productId, productIdentifier)
+            XCTAssertEqual(purchases.count, 1)
+            let purchase = purchases.first!
+            XCTAssertEqual(purchase.productId, productIdentifier)
         }
 
         let completeTransactionsController = makeCompleteTransactionsController(completeTransactions: completeTransactions)
@@ -67,12 +67,12 @@ class CompleteTransactionsControllerTests: XCTestCase {
         ]
 
         var callbackCalled = false
-        let completeTransactions = CompleteTransactions(atomically: true) { products in
+        let completeTransactions = CompleteTransactions(atomically: true) { purchases in
             callbackCalled = true
-            XCTAssertEqual(products.count, 4)
+            XCTAssertEqual(purchases.count, 4)
 
             for i in 0..<4 {
-                XCTAssertEqual(products[i].productId, transactions[i].payment.productIdentifier)
+                XCTAssertEqual(purchases[i].productId, transactions[i].payment.productIdentifier)
             }
         }
 

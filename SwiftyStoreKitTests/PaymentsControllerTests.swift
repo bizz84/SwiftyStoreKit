@@ -48,6 +48,7 @@ class PaymentsControllerTests: XCTestCase {
             callbackCalled = true
             if case .purchased(let payment) = result {
                 XCTAssertEqual(payment.productId, productIdentifier)
+                XCTAssertEqual(payment.quantity, 1)
             } else {
                 XCTFail("expected purchased callback with product id")
             }
@@ -191,7 +192,42 @@ class PaymentsControllerTests: XCTestCase {
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
     
-    // TODO: Test quantity > 1
+    func testProcessTransaction_when_onePayment_transactionStatePurchased_quantityIs2_then_removesPayment_finishesTransaction_callsCallback_correctQuantity() {
+        
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let quantity = 2
+        let testProduct = TestProduct(productIdentifier: productIdentifier)
+        
+        var callbackCalled = false
+        let payment = makeTestPayment(product: testProduct) { result in
+            
+            callbackCalled = true
+            if case .purchased(let payment) = result {
+                XCTAssertEqual(payment.productId, productIdentifier)
+                XCTAssertEqual(payment.quantity, quantity)
+            } else {
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+        
+        let paymentsController = makePaymentsController(appendPayments: [payment])
+        
+        let skPayment = SKMutablePayment(product: testProduct)
+        skPayment.quantity = quantity
+        let transaction = TestPaymentTransaction(payment: skPayment, transactionState: .purchased)
+        
+        let spy = PaymentQueueSpy()
+        
+        let remainingTransactions = paymentsController.processTransactions([transaction], on: spy)
+        
+        XCTAssertEqual(remainingTransactions.count, 0)
+        
+        XCTAssertFalse(paymentsController.hasPayment(payment))
+        
+        XCTAssertTrue(callbackCalled)
+        
+        XCTAssertEqual(spy.finishTransactionCalledCount, 1)
+    }
 
     func makePaymentsController(appendPayments payments: [Payment]) -> PaymentsController {
 
@@ -202,15 +238,15 @@ class PaymentsControllerTests: XCTestCase {
         return paymentsController
     }
 
-    func makeTestPayment(product: SKProduct, quantity: Int = 1, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
+    func makeTestPayment(product: SKProduct, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
-        return Payment(product: product, quantity: quantity, atomically: atomically, applicationUsername: "", callback: callback)
+        return Payment(product: product, quantity: 1, atomically: atomically, applicationUsername: "", callback: callback)
     }
 
-    func makeTestPayment(productIdentifier: String, quantity: Int = 1, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
+    func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         let product = TestProduct(productIdentifier: productIdentifier)
-        return makeTestPayment(product: product, quantity: quantity, atomically: atomically, callback: callback)
+        return makeTestPayment(product: product, atomically: atomically, callback: callback)
 
     }
 }

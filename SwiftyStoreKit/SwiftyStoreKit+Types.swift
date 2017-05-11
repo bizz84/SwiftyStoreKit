@@ -36,8 +36,12 @@ public struct Purchase {
 }
 
 public struct PurchaseDetails {
-    public let purchase: Purchase
+    public let productId: String
+    public let quantity: Int
     public let product: SKProduct
+    public let transaction: PaymentTransaction
+    public let originalTransaction: PaymentTransaction?
+    public let needsFinishTransaction: Bool
 }
 
 //Conform to this protocol to provide custom receipt validator

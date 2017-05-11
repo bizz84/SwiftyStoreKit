@@ -96,7 +96,7 @@ class ViewController: NSViewController {
 
             for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
                 // Deliver content from server, then:
-                SwiftyStoreKit.finishTransaction(product.transaction)
+                SwiftyStoreKit.finishTransaction(purchase.transaction)
             }
 
             self.showAlert(self.alertForRestorePurchases(results))

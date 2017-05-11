@@ -51,7 +51,12 @@ class RestorePurchasesController: TransactionController {
 
             let transactionProductIdentifier = transaction.payment.productIdentifier
             
-            let purchase = Purchase(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !atomically)
+            let purchase = Purchase(productId: transactionProductIdentifier,
+                                    quantity: transaction.payment.quantity,
+                                    product: nil,
+                                    transaction: transaction,
+                                    originalTransaction: transaction.original,
+                                    needsFinishTransaction: !atomically)
             if atomically {
                 paymentQueue.finishTransaction(transaction)
             }

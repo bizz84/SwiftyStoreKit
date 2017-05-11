@@ -35,6 +35,11 @@ public struct Purchase {
     public let needsFinishTransaction: Bool
 }
 
+public struct PurchaseDetails {
+    public let purchase: Purchase
+    public let product: SKProduct
+}
+
 //Conform to this protocol to provide custom receipt validator
 public protocol ReceiptValidator {
 	func validate(receipt: String, password autoRenewPassword: String?, completion: @escaping (VerifyReceiptResult) -> Void)
@@ -58,7 +63,7 @@ public struct RetrieveResults {
 
 // Purchase result
 public enum PurchaseResult {
-    case success(purchase: Purchase)
+    case success(purchase: PurchaseDetails)
     case error(error: SKError)
 }
 

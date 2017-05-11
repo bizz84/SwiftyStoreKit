@@ -81,8 +81,8 @@ class ViewController: UIViewController {
 
             if case .success(let purchase) = result {
                 // Deliver content from server, then:
-                if purchase.needsFinishTransaction {
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
+                if purchase.purchase.needsFinishTransaction {
+                    SwiftyStoreKit.finishTransaction(purchase.purchase.transaction)
                 }
             }
             if let alert = self.alertForPurchaseResult(result) {
@@ -217,7 +217,7 @@ extension ViewController {
     func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController? {
         switch result {
         case .success(let purchase):
-            print("Purchase Success: \(purchase.productId)")
+            print("Purchase Success: \(purchase.purchase.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")

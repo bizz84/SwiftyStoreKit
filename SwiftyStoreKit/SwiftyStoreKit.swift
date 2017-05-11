@@ -132,8 +132,8 @@ public class SwiftyStoreKit {
         for result in results {
             switch result {
             case .purchased(let purchase):
-                let error = storeInternalError(description: "Cannot purchase product \(purchase.productId) from restore purchases path")
-                restoreFailedPurchases.append((error, purchase.productId))
+                let error = storeInternalError(description: "Cannot purchase product \(purchase.purchase.productId) from restore purchases path")
+                restoreFailedPurchases.append((error, purchase.purchase.productId))
             case .failed(let error):
                 restoreFailedPurchases.append((error, nil))
             case .restored(let purchase):

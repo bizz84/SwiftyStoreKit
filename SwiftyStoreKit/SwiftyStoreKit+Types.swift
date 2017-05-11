@@ -40,7 +40,6 @@ public struct PurchaseDetails {
     public let quantity: Int
     public let product: SKProduct
     public let transaction: PaymentTransaction
-    public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
 }
 

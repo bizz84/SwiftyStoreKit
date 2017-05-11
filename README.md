@@ -483,6 +483,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Tactus Music Player](https://itunes.apple.com/app/id557446352) - Alternative music player app
 * [Drops](https://itunes.apple.com/app/id939540371) - Language learning app
 * [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
+* [Zmeu Grand Canyon](http://grandcanyon.zmeu.guide/) - Interactive hiking map & planner
 
 
 ## License

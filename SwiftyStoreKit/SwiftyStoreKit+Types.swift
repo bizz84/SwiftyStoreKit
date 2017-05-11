@@ -30,6 +30,7 @@ import StoreKit
 public struct Purchase {
     public let productId: String
     public let quantity: Int
+    public let product: SKProduct? // only available when making a purchase
     public let transaction: PaymentTransaction
     public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool

@@ -62,7 +62,7 @@ class ViewController: UIViewController {
     @IBAction func verifyPurchase2() {
         verifyPurchase(purchase2Suffix)
     }
-
+    
     func getInfo(_ purchase: RegisteredPurchase) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
@@ -108,25 +108,23 @@ class ViewController: UIViewController {
     @IBAction func verifyReceipt() {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
-		let appleValidator = AppleReceiptValidator(service: .production)
-		SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+        verifyReceipt { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
-
             self.showAlert(self.alertForVerifyReceipt(result))
-
-            if case .error(let error) = result {
-                if case .noReceiptData = error {
-                    self.refreshReceipt()
-                }
-            }
         }
+    }
+    
+    func verifyReceipt(completion: @escaping (VerifyReceiptResult) -> Void) {
+        
+        let appleValidator = AppleReceiptValidator(service: .production)
+        let password = "your-shared-secret"
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: password, completion: completion)
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
-		let appleValidator = AppleReceiptValidator(service: .production)
-		SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+        verifyReceipt { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
             switch result {
@@ -159,20 +157,9 @@ class ViewController: UIViewController {
                     self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 }
 
-            case .error(let error):
+            case .error:
                 self.showAlert(self.alertForVerifyReceipt(result))
-                if case .noReceiptData = error {
-                    self.refreshReceipt()
-                }
             }
-        }
-    }
-
-    func refreshReceipt() {
-
-        SwiftyStoreKit.refreshReceipt { result in
-
-            self.showAlert(self.alertForRefreshReceipt(result))
         }
     }
 
@@ -262,14 +249,16 @@ extension ViewController {
         switch result {
         case .success(let receipt):
             print("Verify receipt Success: \(receipt)")
-            return alertWithTitle("Receipt verified", message: "Receipt verified remotly")
+            return alertWithTitle("Receipt verified", message: "Receipt verified remotely")
         case .error(let error):
             print("Verify receipt Failed: \(error)")
             switch error {
-            case .noReceiptData :
+            case .noReceiptData:
                 return alertWithTitle("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
+            case .networkError(let error):
+                return alertWithTitle("Receipt verification", message: "Network error while verifying receipt: \(error)")
             default:
-                return alertWithTitle("Receipt verification", message: "Receipt verification failed")
+                return alertWithTitle("Receipt verification", message: "Receipt verification failed: \(error)")
             }
         }
     }
@@ -300,16 +289,4 @@ extension ViewController {
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
-
-    func alertForRefreshReceipt(_ result: RefreshReceiptResult) -> UIAlertController {
-        switch result {
-        case .success(let receiptData):
-            print("Receipt refresh Success: \(receiptData.base64EncodedString)")
-            return alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
-        case .error(let error):
-            print("Receipt refresh Failed: \(error)")
-            return alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
-        }
-    }
-
 }

@@ -105,24 +105,22 @@ class ViewController: NSViewController {
 
     @IBAction func verifyReceipt(_ sender: Any?) {
 
-        let appleValidator = AppleReceiptValidator(service: .production)
-        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
-
-            self.showAlert(self.alertForVerifyReceipt(result)) { _ in
-
-                if case .error(let error) = result {
-                    if case .noReceiptData = error {
-                        self.refreshReceipt()
-                    }
-                }
-            }
+        verifyReceipt { result in
+            self.showAlert(self.alertForVerifyReceipt(result))
         }
+    }
+    
+    func verifyReceipt(completion: @escaping (VerifyReceiptResult) -> Void) {
+        
+        let appleValidator = AppleReceiptValidator(service: .production)
+        let password = "your-shared-secret"
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: password, completion: completion)
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
 
         let appleValidator = AppleReceiptValidator(service: .production)
-        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+        verifyReceipt { result in
 
             switch result {
             case .success(let receipt):
@@ -157,15 +155,6 @@ class ViewController: NSViewController {
             }
         }
     }
-
-    func refreshReceipt() {
-
-        SwiftyStoreKit.refreshReceipt { result in
-
-            self.showAlert(self.alertForRefreshReceipt(result))
-        }
-    }
-
 }
 
 // MARK: User facing alerts
@@ -244,10 +233,17 @@ extension ViewController {
         switch result {
         case .success(let receipt):
             print("Verify receipt Success: \(receipt)")
-            return self.alertWithTitle("Receipt verified", message: "Receipt verified remotly")
+            return self.alertWithTitle("Receipt verified", message: "Receipt verified remotely")
         case .error(let error):
             print("Verify receipt Failed: \(error)")
-            return self.alertWithTitle("Receipt verification failed", message: "The application will exit to create receipt data. You must have signed the application with your developer id to test and be outside of XCode")
+            switch error {
+            case .noReceiptData:
+                return alertWithTitle("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
+            case .networkError(let error):
+                return alertWithTitle("Receipt verification", message: "Network error while verifying receipt: \(error)")
+            default:
+                return alertWithTitle("Receipt verification", message: "Receipt verification failed: \(error)")
+            }
         }
     }
 
@@ -277,16 +273,4 @@ extension ViewController {
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
-
-    func alertForRefreshReceipt(_ result: RefreshReceiptResult) -> NSAlert {
-        switch result {
-        case .success(let receiptData):
-            print("Receipt refresh Success: \(receiptData.base64EncodedString)")
-            return alertWithTitle("Receipt refreshed", message: "Receipt refreshed successfully")
-        case .error(let error):
-            print("Receipt refresh Failed: \(error)")
-            return alertWithTitle("Receipt refresh failed", message: "Receipt refresh failed")
-        }
-    }
-
 }

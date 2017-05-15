@@ -214,31 +214,23 @@ let receiptString = receiptData.base64EncodedString(options: [])
 
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
-    if case .error(let error) = result {
-        if case .noReceiptData = error {
-            self.refreshReceipt()
-        }
-    }
-}
-
-func refreshReceipt() {
-    SwiftyStoreKit.refreshReceipt { result in
-        switch result {
-        case .success(let receiptData):
-            print("Receipt refresh success: \(receiptData.base64EncodedString)")
-        case .error(let error):
-            print("Receipt refresh failed: \(error)")
-        }
-    }
+let password = "your-shared-secret"
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: password) { result in
+    switch result {
+    case .success(let receipt):
+        print("Verify receipt Success: \(receipt)")
+    case .error(let error):
+        print("Verify receipt Failed: \(error)")
+	}
 }
 ```
 
 #### Notes
 
-* If the user is not logged to iTunes when `refreshReceipt` is called, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
-* If the user enters valid credentials, the receipt will be refreshed.
+* If the user is not logged to iTunes when `verifyReceipt` is called, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
+* If the user enters valid credentials, the receipt will be refreshed and verified.
 * If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+* The receipt is only refreshed if it's not already stored in `Bundle.main.appStoreReceiptURL`.
 
 
 ### Verify Purchase

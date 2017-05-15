@@ -30,13 +30,14 @@ public class SwiftyStoreKit {
 
     private let paymentQueueController: PaymentQueueController
 
-    private var receiptRefreshRequest: InAppReceiptRefreshRequest?
+    fileprivate let receiptVerificator: InAppReceiptVerificator
 
     init(productsInfoController: ProductsInfoController = ProductsInfoController(),
          paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())) {
 
         self.productsInfoController = productsInfoController
         self.paymentQueueController = paymentQueueController
+        self.receiptVerificator = InAppReceiptVerificator()
     }
 
     // MARK: Internal methods
@@ -81,24 +82,6 @@ public class SwiftyStoreKit {
     func finishTransaction(_ transaction: PaymentTransaction) {
 
         paymentQueueController.finishTransaction(transaction)
-    }
-
-    func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> Void) {
-        receiptRefreshRequest = InAppReceiptRefreshRequest.refresh(receiptProperties) { result in
-
-            self.receiptRefreshRequest = nil
-
-            switch result {
-            case .success:
-                if let appStoreReceiptData = InAppReceipt.appStoreReceiptData {
-                    completion(.success(receiptData: appStoreReceiptData))
-                } else {
-                    completion(.error(error: ReceiptError.noReceiptData))
-                }
-            case .error(let e):
-                completion(.error(error: e))
-            }
-        }
     }
 
     // MARK: private methods
@@ -152,7 +135,7 @@ public class SwiftyStoreKit {
 extension SwiftyStoreKit {
 
     // MARK: Singleton
-    private static let sharedInstance = SwiftyStoreKit()
+    fileprivate static let sharedInstance = SwiftyStoreKit()
 
     // MARK: Public methods - Purchases
     public class var canMakePayments: Bool {
@@ -191,12 +174,6 @@ extension SwiftyStoreKit {
 
         sharedInstance.finishTransaction(transaction)
     }
-
-    // After verifying receive and have `ReceiptError.NoReceiptData`, refresh receipt using this method
-    public class func refreshReceipt(_ receiptProperties: [String : Any]? = nil, completion: @escaping (RefreshReceiptResult) -> Void) {
-
-        sharedInstance.refreshReceipt(receiptProperties, completion: completion)
-    }
 }
 
 extension SwiftyStoreKit {
@@ -207,38 +184,28 @@ extension SwiftyStoreKit {
      * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
      */
     public static var localReceiptData: Data? {
-        return InAppReceipt.appStoreReceiptData
+        return InAppReceiptVerificator.appStoreReceiptData
     }
 
     /**
      *  Verify application receipt
+     *  - Parameter validator: receipt validator to use
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
-     *  - Parameter session: the session used to make remote call.
      *  - Parameter completion: handler for result
      */
-    public class func verifyReceipt(
-        using validator: ReceiptValidator,
-        password: String? = nil,
-        completion:@escaping (VerifyReceiptResult) -> Void) {
+    public class func verifyReceipt(using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {
 
-        InAppReceipt.verify(using: validator, password: password) { result in
-
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
+        sharedInstance.receiptVerificator.verifyReceipt(using: validator, password: password, completion: completion)
     }
-
+    
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the purchase
      *  - return: either notPurchased or purchased
      */
-    public class func verifyPurchase(
-        productId: String,
-        inReceipt receipt: ReceiptInfo
-        ) -> VerifyPurchaseResult {
+    public class func verifyPurchase(productId: String, inReceipt receipt: ReceiptInfo) -> VerifyPurchaseResult {
+
         return InAppReceipt.verifyPurchase(productId: productId, inReceipt: receipt)
     }
 
@@ -250,12 +217,8 @@ extension SwiftyStoreKit {
      *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
      *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
      */
-    public class func verifySubscription(
-        type: SubscriptionType,
-        productId: String,
-        inReceipt receipt: ReceiptInfo,
-        validUntil date: Date = Date()
-        ) -> VerifySubscriptionResult {
+    public class func verifySubscription(type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
+
         return InAppReceipt.verifySubscription(type: type, productId: productId, inReceipt: receipt, validUntil: date)
     }
 }

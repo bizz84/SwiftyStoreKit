@@ -55,8 +55,7 @@ extension ReceiptItem: Equatable {
             "original_purchase_date_ms": originalPurchaseDate.timeIntervalSince1970.millisecondsNSString,
             "is_trial_period": (isTrialPeriod ? "1" : "0") as NSString,
             "transaction_id": transactionId as NSString,
-            "original_transaction_id": originalTransactionId as NSString,
-            "web_order_line_item_id": webOrderLineItemId as NSString
+            "original_transaction_id": originalTransactionId as NSString
         ]
         if let subscriptionExpirationDate = subscriptionExpirationDate {
             result["expires_date_ms"] = subscriptionExpirationDate.timeIntervalSince1970.millisecondsNSString

@@ -125,7 +125,7 @@ public struct ReceiptItem {
     // For a transaction that restores a previous transaction, the date of the original transaction. This value corresponds to the original transaction’s transactionDate property. In an auto-renewable subscription receipt, this indicates the beginning of the subscription period, even if the subscription has been renewed.
     public let originalPurchaseDate: Date
     // The primary key for identifying subscription purchases.
-    public let webOrderLineItemId: String
+    public let webOrderLineItemId: String?
     // The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is only present for auto-renewable subscription receipts.
     public let subscriptionExpirationDate: Date?
     // For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.

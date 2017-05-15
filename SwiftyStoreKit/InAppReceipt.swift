@@ -45,8 +45,7 @@ extension ReceiptItem {
             let transactionId = receiptInfo["transaction_id"] as? String,
             let originalTransactionId = receiptInfo["original_transaction_id"] as? String,
             let purchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "purchase_date_ms"),
-            let originalPurchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "original_purchase_date_ms"),
-            let webOrderLineItemId = receiptInfo["web_order_line_item_id"] as? String
+            let originalPurchaseDate = ReceiptItem.parseDate(from: receiptInfo, key: "original_purchase_date_ms")
             else {
                 print("could not parse receipt item: \(receiptInfo). Skipping...")
                 return nil
@@ -57,7 +56,7 @@ extension ReceiptItem {
         self.originalTransactionId = originalTransactionId
         self.purchaseDate = purchaseDate
         self.originalPurchaseDate = originalPurchaseDate
-        self.webOrderLineItemId = webOrderLineItemId
+        self.webOrderLineItemId = receiptInfo["web_order_line_item_id"] as? String
         self.subscriptionExpirationDate = ReceiptItem.parseDate(from: receiptInfo, key: "expires_date_ms")
         self.cancellationDate = ReceiptItem.parseDate(from: receiptInfo, key: "cancellation_date_ms")
         if let isTrialPeriod = receiptInfo["is_trial_period"] as? String {

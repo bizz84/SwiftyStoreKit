@@ -184,7 +184,7 @@ extension SwiftyStoreKit {
      * Return receipt data from the application bundle. This is read from Bundle.main.appStoreReceiptURL
      */
     public static var localReceiptData: Data? {
-        return InAppReceiptVerificator.appStoreReceiptData
+        return sharedInstance.receiptVerificator.appStoreReceiptData
     }
 
     /**

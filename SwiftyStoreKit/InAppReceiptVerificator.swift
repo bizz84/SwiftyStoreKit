@@ -27,39 +27,44 @@ import Foundation
 
 class InAppReceiptVerificator: NSObject {
 
-    static var appStoreReceiptUrl: URL? {
-        return Bundle.main.appStoreReceiptURL
+    let appStoreReceiptURL: URL?
+    init(appStoreReceiptURL: URL? = Bundle.main.appStoreReceiptURL) {
+        self.appStoreReceiptURL = appStoreReceiptURL
     }
-    
-    static var appStoreReceiptData: Data? {
-        guard let receiptDataURL = appStoreReceiptUrl, let data = try? Data(contentsOf: receiptDataURL) else {
+
+    var appStoreReceiptData: Data? {
+        guard let receiptDataURL = appStoreReceiptURL,
+            let data = try? Data(contentsOf: receiptDataURL) else {
             return nil
         }
         return data
     }
 
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
-    
+
     /**
      *  Verify application receipt
      *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      *  - Parameter session: the session used to make remote call.
      *  - Parameter completion: handler for result
      */
-    public func verifyReceipt(using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {
+    public func verifyReceipt(using validator: ReceiptValidator,
+                              password: String? = nil,
+                              refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
+                              completion: @escaping (VerifyReceiptResult) -> Void) {
         
-        if let receiptData = InAppReceiptVerificator.appStoreReceiptData {
+        if let receiptData = appStoreReceiptData {
             
             verify(receiptData: receiptData, using: validator, password: password, completion: completion)
         } else {
             
-            receiptRefreshRequest = InAppReceiptRefreshRequest.refresh { result in
+            receiptRefreshRequest = refresh(nil) { result in
                 
                 self.receiptRefreshRequest = nil
                 
                 switch result {
                 case .success:
-                    if let receiptData = InAppReceiptVerificator.appStoreReceiptData {
+                    if let receiptData = self.appStoreReceiptData {
                         self.verify(receiptData: receiptData, using: validator, password: password, completion: completion)
                     } else {
                         completion(.error(error: .noReceiptData))

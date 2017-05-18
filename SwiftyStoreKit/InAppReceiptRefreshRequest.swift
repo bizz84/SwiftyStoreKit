@@ -67,11 +67,15 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
          print("\(k): \(v)")
          }
          }*/
-        callback(.success)
+        performCallback(.success)
     }
     func request(_ request: SKRequest, didFailWithError error: Error) {
         // XXX could here check domain and error code to return typed exception
-        callback(.error(e: error))
+        performCallback(.error(e: error))
     }
-
+    private func performCallback(_ result: ResultType) {
+        DispatchQueue.main.async {
+            self.callback(result)
+        }
+    }
 }

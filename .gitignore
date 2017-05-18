@@ -16,6 +16,7 @@ profile
 *.moved-aside
 DerivedData
 .idea/
+xcodebuild.log
 # Pods - for those of you who use CocoaPods
 Pods
 # emacs

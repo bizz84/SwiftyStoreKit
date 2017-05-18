@@ -320,7 +320,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 ```
 
 #### Auto-Renewable
-```
+```swift
 let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .autoRenewable,
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
@@ -328,7 +328,7 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
 ```
 
 #### Non-Renewing
-```
+```swift
 // validDuration: time interval in seconds
 let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .nonRenewing(validDuration: 3600 * 24 * 30),

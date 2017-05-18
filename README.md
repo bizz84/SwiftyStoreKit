@@ -201,6 +201,28 @@ According to [Apple - Delivering Products](https://developer.apple.com/library/c
 
 > Information about all other kinds of purchases is added to the receipt when they’re paid for and remains in the receipt indefinitely.
 
+When an app is first installed, the app receipt is missing.
+
+As soon as a user completes a purchase or restores purchases, StoreKit creates and stores the receipt locally as a file.
+
+As the local receipt is always encrypted, a verification step is needed to get all the receipt fields in readable form.
+
+This is done with a `verifyReceipt` method which does two things:
+
+- If the receipt is missing, refresh it
+- If the receipt is available or is refreshed, validate it
+
+Receipt validation can be done remotely with Apple via the `AppleReceiptValidator` class, or with a client-supplied validator conforming to the `ReceiptValidator` protocol. 
+
+**Notes**
+
+* If the local receipt is missing when calling `verifyReceipt`, a network call is made to refresh it.
+* If the user is not logged to the App Store, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
+* If the user enters valid credentials, the receipt will be refreshed and verified.
+* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+* Using `AppleReceiptValidator` (see below) does remote receipt validation and also results in a network call.
+* Local receipt validation is not implemented (see [issue #101](https://github.com/bizz84/SwiftyStoreKit/issues/101) for details).
+
 
 ### Retrieve local receipt
 
@@ -215,31 +237,25 @@ let receiptString = receiptData.base64EncodedString(options: [])
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
 SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
-    if case .error(let error) = result {
-        if case .noReceiptData = error {
-            self.refreshReceipt()
-        }
-    }
-}
-
-func refreshReceipt() {
-    SwiftyStoreKit.refreshReceipt { result in
-        switch result {
-        case .success(let receiptData):
-            print("Receipt refresh success: \(receiptData.base64EncodedString)")
-        case .error(let error):
-            print("Receipt refresh failed: \(error)")
-        }
-    }
+    switch result {
+    case .success(let receipt):
+        print("Verify receipt Success: \(receipt)")
+    case .error(let error):
+        print("Verify receipt Failed: \(error)")
+	}
 }
 ```
 
-#### Notes
+## Verifying purchases and subscriptions
 
-* If the user is not logged to iTunes when `refreshReceipt` is called, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
-* If the user enters valid credentials, the receipt will be refreshed.
-* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+Once you have retrieved the receipt using the `verifyReceipt` method, you can verify your purchases and subscriptions by product identifier.
 
+Verifying multiple purchases and subscriptions in one call is not yet supported (see [issue #194](https://github.com/bizz84/SwiftyStoreKit/issues/194) for more details).
+
+If you need to verify multiple purchases / subscriptions, you can either:
+
+* manually parse the receipt dictionary returned by `verifyReceipt`
+* call `verifyPurchase` or `verifySubscription` multiple times with different product identifiers
 
 ### Verify Purchase
 
@@ -304,7 +320,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 ```
 
 #### Auto-Renewable
-```
+```swift
 let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .autoRenewable,
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
@@ -312,7 +328,7 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
 ```
 
 #### Non-Renewing
-```
+```swift
 // validDuration: time interval in seconds
 let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .nonRenewing(validDuration: 3600 * 24 * 30),
@@ -320,7 +336,10 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
             inReceipt: receipt)
 ```
 
-**Note**: When purchasing subscriptions in sandbox mode, the expiry dates are set just minutes after the purchase date for testing purposes.
+**Notes**
+
+* The expiration dates are calculated against the receipt date. This is the date of the last successful call to `verifyReceipt`.
+* When purchasing subscriptions in sandbox mode, the expiry dates are set just minutes after the purchase date for testing purposes.
 
 #### Purchasing and verifying a subscription 
 

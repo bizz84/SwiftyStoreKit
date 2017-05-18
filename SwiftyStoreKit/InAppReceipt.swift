@@ -80,43 +80,6 @@ extension ReceiptItem {
 // MARK - receipt mangement
 internal class InAppReceipt {
 
-    static var appStoreReceiptUrl: URL? {
-        return Bundle.main.appStoreReceiptURL
-    }
-
-    static var appStoreReceiptData: Data? {
-        guard let receiptDataURL = appStoreReceiptUrl, let data = try? Data(contentsOf: receiptDataURL) else {
-            return nil
-        }
-        return data
-    }
-
-    // The base64 encoded receipt data.
-    static var appStoreReceiptBase64Encoded: String? {
-        return appStoreReceiptData?.base64EncodedString(options: [])
-    }
-
-    // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
-
-    /**
-     *  - Parameter receiptVerifyURL: receipt verify url (default: Production)
-     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
-     *  - Parameter session: the session used to make remote call.
-     *  - Parameter completion: handler for result
-     */
-    class func verify(using validator: ReceiptValidator,
-                      password autoRenewPassword: String? = nil,
-                      completion: @escaping (VerifyReceiptResult) -> Void) {
-
-        // If no receipt is present, validation fails.
-        guard let base64EncodedString = appStoreReceiptBase64Encoded else {
-            completion(.error(error: .noReceiptData))
-            return
-        }
-
-        validator.validate(receipt: base64EncodedString, password: autoRenewPassword, completion: completion)
-    }
-
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify

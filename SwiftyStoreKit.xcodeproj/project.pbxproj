@@ -47,6 +47,10 @@
 		65BB6CE81DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CE91DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CEA1DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
+		65CEF0F41ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CEF0F31ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift */; };
+		65E9E0791ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
+		65E9E07A1ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
+		65E9E07B1ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
 		65F70AC71E2ECBB300BF040D /* PaymentTransactionObserverFake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */; };
 		65F70AC91E2EDC3700BF040D /* PaymentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* PaymentsController.swift */; };
 		65F70ACA1E2EDC3700BF040D /* PaymentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* PaymentsController.swift */; };
@@ -179,6 +183,8 @@
 		658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueSpy.swift; sourceTree = "<group>"; };
 		65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptTests.swift; sourceTree = "<group>"; };
 		65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStoreKit+Types.swift"; sourceTree = "<group>"; };
+		65CEF0F31ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptVerificatorTests.swift; sourceTree = "<group>"; };
+		65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptVerificator.swift; sourceTree = "<group>"; };
 		65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionObserverFake.swift; sourceTree = "<group>"; };
 		65F70AC81E2EDC3700BF040D /* PaymentsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsController.swift; sourceTree = "<group>"; };
 		65F7DF681DCD4DF000835D30 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -306,6 +312,7 @@
 				650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */,
 				C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */,
 				C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */,
+				65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */,
 				1592CD4F1E27756500D321E6 /* AppleReceiptValidator.swift */,
 				653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */,
 				C40C680F1C29414C00B60B7E /* OS.swift */,
@@ -333,6 +340,7 @@
 				650307F11E3163AA001332A4 /* RestorePurchasesControllerTests.swift */,
 				C3099C181E3206C700392A54 /* CompleteTransactionsControllerTests.swift */,
 				65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */,
+				65CEF0F31ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift */,
 				658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */,
 				65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */,
 				C3099C081E2FCE3A00392A54 /* TestProduct.swift */,
@@ -710,6 +718,7 @@
 				650307FE1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F61E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08391E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
+				65E9E07B1ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */,
 				653722831DB8290B00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				54B069921CF742D100BAFE38 /* InAppReceipt.swift in Sources */,
 				650307FA1E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,
@@ -740,6 +749,7 @@
 				650307FC1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F41E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08371E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
+				65E9E0791ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */,
 				653722811DB8282600C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				C4A7C7631C29B8D00053ED64 /* InAppReceipt.swift in Sources */,
 				650307F81E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,
@@ -764,6 +774,7 @@
 			files = (
 				C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */,
 				650307F21E3163AA001332A4 /* RestorePurchasesControllerTests.swift in Sources */,
+				65CEF0F41ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift in Sources */,
 				C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */,
 				65F70AC71E2ECBB300BF040D /* PaymentTransactionObserverFake.swift in Sources */,
 				658A084A1E2EC5350074A98F /* PaymentQueueControllerTests.swift in Sources */,
@@ -786,6 +797,7 @@
 				650307FD1E33154F001332A4 /* ProductsInfoController.swift in Sources */,
 				650307F51E3177EF001332A4 /* RestorePurchasesController.swift in Sources */,
 				658A08381E2EC24E0074A98F /* PaymentQueueController.swift in Sources */,
+				65E9E07A1ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */,
 				653722821DB8290A00C8F944 /* SKProduct+LocalizedPrice.swift in Sources */,
 				C4083C551C2AADB500295248 /* InAppReceipt.swift in Sources */,
 				650307F91E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,

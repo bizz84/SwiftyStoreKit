@@ -138,7 +138,7 @@ public struct ReceiptItem {
 public enum ReceiptError: Swift.Error {
     // No receipt data
     case noReceiptData
-    // No data receice
+    // No data received
     case noRemoteData
     // Error when encoding HTTP body into JSON
     case requestBodyEncodeError(error: Swift.Error)

@@ -119,7 +119,6 @@ class ViewController: NSViewController {
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {
 
-        let appleValidator = AppleReceiptValidator(service: .production)
         verifyReceipt { result in
 
             switch result {

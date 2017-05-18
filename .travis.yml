@@ -9,3 +9,4 @@ install:
 script:
   - swiftlint
   - ./scripts/build.sh
+  - bundle exec danger

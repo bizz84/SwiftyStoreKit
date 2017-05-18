@@ -43,9 +43,12 @@ class InAppReceiptVerificator: NSObject {
     private var receiptRefreshRequest: InAppReceiptRefreshRequest?
 
     /**
-     *  Verify application receipt
-     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
-     *  - Parameter session: the session used to make remote call.
+     *  Verify application receipt. This method does two things:
+     *  * If the receipt is missing, refresh it
+     *  * If the receipt is available or is refreshed, validate it
+     *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
+     *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
+     *  - Parameter refresh: closure to perform receipt refresh (this is made explicit for testability)
      *  - Parameter completion: handler for result
      */
     public func verifyReceipt(using validator: ReceiptValidator,
@@ -76,12 +79,10 @@ class InAppReceiptVerificator: NSObject {
         }
     }
     
-    // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
-    
     /**
      *  - Parameter receiptData: encrypted receipt data
-     *  - Parameter validator: the validator to use
-     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
+     *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
+     *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
      *  - Parameter completion: handler for result
      */
     private func verify(receiptData: Data, using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {

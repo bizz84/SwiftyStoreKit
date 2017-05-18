@@ -210,11 +210,19 @@ As the local receipt is always encrypted, a verification step is needed to get a
 This is done with a `verifyReceipt` method which does two things:
 
 - If the receipt is missing, refresh it
-- If the receipt is available, validate it
+- If the receipt is available or is refreshed, validate it
 
 Receipt validation can be done remotely with Apple via the `AppleReceiptValidator` class, or with a client-supplied validator conforming to the `ReceiptValidator` protocol. 
 
-**Note**: As of version 0.10.0, _clients no longer need to refresh the receipt explicitly_.
+**Notes**
+
+* If the local receipt is missing when calling `verifyReceipt`, a network call is made to refresh it.
+* If the user is not logged to the App Store, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
+* If the user enters valid credentials, the receipt will be refreshed and verified.
+* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+* Using `AppleReceiptValidator` (see below) does remote receipt validation and also results in a network call.
+* Local receipt validation is not implemented (see [issue #101](https://github.com/bizz84/SwiftyStoreKit/issues/101) for details).
+
 
 ### Retrieve local receipt
 
@@ -238,13 +246,16 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 }
 ```
 
-#### Notes
+## Verifying purchases and subscriptions
 
-* If the user is not logged to iTunes when `verifyReceipt` is called, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
-* If the user enters valid credentials, the receipt will be refreshed and verified.
-* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
-* The receipt is only refreshed if it's not already stored in `Bundle.main.appStoreReceiptURL`.
+Once you have retrieved the receipt using the `verifyReceipt` method, you can verify your purchases and subscriptions by product identifier.
 
+Verifying multiple purchases and subscriptions in one call is not yet supported (see [issue #194](https://github.com/bizz84/SwiftyStoreKit/issues/194) for more details).
+
+If you need to verify multiple purchases / subscriptions, you can either:
+
+* manually parse the receipt dictionary returned by `verifyReceipt`
+* call `verifyPurchase` or `verifySubscription` multiple times with different product identifiers
 
 ### Verify Purchase
 
@@ -325,7 +336,10 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
             inReceipt: receipt)
 ```
 
-**Note**: When purchasing subscriptions in sandbox mode, the expiry dates are set just minutes after the purchase date for testing purposes.
+**Notes**
+
+* The expiration dates are calculated against the receipt date. This is the date of the last successful call to `verifyReceipt`.
+* When purchasing subscriptions in sandbox mode, the expiry dates are set just minutes after the purchase date for testing purposes.
 
 #### Purchasing and verifying a subscription 
 

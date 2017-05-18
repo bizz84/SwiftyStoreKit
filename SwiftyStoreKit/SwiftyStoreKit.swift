@@ -33,11 +33,12 @@ public class SwiftyStoreKit {
     fileprivate let receiptVerificator: InAppReceiptVerificator
 
     init(productsInfoController: ProductsInfoController = ProductsInfoController(),
-         paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default())) {
+         paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default()),
+         receiptVerificator: InAppReceiptVerificator = InAppReceiptVerificator()) {
 
         self.productsInfoController = productsInfoController
         self.paymentQueueController = paymentQueueController
-        self.receiptVerificator = InAppReceiptVerificator()
+        self.receiptVerificator = receiptVerificator
     }
 
     // MARK: Internal methods
@@ -138,10 +139,16 @@ extension SwiftyStoreKit {
     fileprivate static let sharedInstance = SwiftyStoreKit()
 
     // MARK: Public methods - Purchases
+    
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }
 
+    /**
+     *  Retrieve products information
+     *  - Parameter productIds: The set of product identifiers to retrieve corresponding products for
+     *  - Parameter completion: handler for result
+     */
     public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
 
         return sharedInstance.retrieveProductsInfo(productIds, completion: completion)
@@ -160,16 +167,32 @@ extension SwiftyStoreKit {
         sharedInstance.purchaseProduct(productId, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
 
+    /**
+     *  Restore purchases
+     *  - Parameter atomically: whether the product is purchased atomically (e.g. finishTransaction is called immediately)
+     *  - Parameter applicationUsername: an opaque identifier for the user’s account on your system
+     *  - Parameter completion: handler for result
+     */
     public class func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> Void) {
 
         sharedInstance.restorePurchases(atomically: atomically, applicationUsername: applicationUsername, completion: completion)
     }
 
+    /**
+     *  Complete transactions
+     *  - Parameter atomically: whether the product is purchased atomically (e.g. finishTransaction is called immediately)
+     *  - Parameter completion: handler for result
+     */
     public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Purchase]) -> Void) {
 
         sharedInstance.completeTransactions(atomically: atomically, completion: completion)
     }
 
+    /**
+     *  Finish a transaction
+     *  Once the content has been delivered, call this method to finish a transaction that was performed non-atomically
+     *  - Parameter transaction: transaction to finish
+     */
     public class func finishTransaction(_ transaction: PaymentTransaction) {
 
         sharedInstance.finishTransaction(transaction)
@@ -211,11 +234,11 @@ extension SwiftyStoreKit {
 
     /**
      *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  - Parameter type: autoRenewable or nonRenewing
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the subscription
      *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
-     *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
-     *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
+     *  - return: either .notPurchased or .purchased / .expired with the expiry date found in the receipt
      */
     public class func verifySubscription(type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 

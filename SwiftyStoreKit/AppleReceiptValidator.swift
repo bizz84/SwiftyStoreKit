@@ -25,6 +25,8 @@
 
 import Foundation
 
+// https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
+
 public struct AppleReceiptValidator: ReceiptValidator {
 
 	public enum VerifyReceiptURLType: String {

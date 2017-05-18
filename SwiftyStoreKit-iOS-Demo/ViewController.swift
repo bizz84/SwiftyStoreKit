@@ -254,7 +254,7 @@ extension ViewController {
             print("Verify receipt Failed: \(error)")
             switch error {
             case .noReceiptData:
-                return alertWithTitle("Receipt verification", message: "No receipt data, application will try to get a new one. Try again.")
+                return alertWithTitle("Receipt verification", message: "No receipt data. Try again.")
             case .networkError(let error):
                 return alertWithTitle("Receipt verification", message: "Network error while verifying receipt: \(error)")
             default:

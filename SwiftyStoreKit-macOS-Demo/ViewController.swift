@@ -105,9 +105,9 @@ class ViewController: NSViewController {
 
     @IBAction func verifyReceipt(_ sender: Any?) {
 
-        verifyReceipt { result in
+        verifyReceipt(completion: { result in
             self.showAlert(self.alertForVerifyReceipt(result))
-        }
+        })
     }
     
     func verifyReceipt(completion: @escaping (VerifyReceiptResult) -> Void) {

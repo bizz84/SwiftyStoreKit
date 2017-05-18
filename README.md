@@ -201,6 +201,20 @@ According to [Apple - Delivering Products](https://developer.apple.com/library/c
 
 > Information about all other kinds of purchases is added to the receipt when they’re paid for and remains in the receipt indefinitely.
 
+When an app is first installed, the app receipt is missing.
+
+As soon as a user completes a purchase or restores purchases, StoreKit creates and stores the receipt locally as a file.
+
+As the local receipt is always encrypted, a verification step is needed to get all the receipt fields in readable form.
+
+This is done with a `verifyReceipt` method which does two things:
+
+- If the receipt is missing, refresh it
+- If the receipt is available, validate it
+
+Receipt validation can be done remotely with Apple via the `AppleReceiptValidator` class, or with a client-supplied validator conforming to the `ReceiptValidator` protocol. 
+
+**Note**: As of version 0.10.0, _clients no longer need to refresh the receipt explicitly_.
 
 ### Retrieve local receipt
 
@@ -214,8 +228,7 @@ let receiptString = receiptData.base64EncodedString(options: [])
 
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
-let password = "your-shared-secret"
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: password) { result in
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
     switch result {
     case .success(let receipt):
         print("Verify receipt Success: \(receipt)")

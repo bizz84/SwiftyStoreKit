@@ -2,10 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
-## [WIP] 0.10.1 Danger, xcpretty integration
+## 0.10.1 Danger, xcpretty integration
 
 * Adds Danger for better Pull Request etiquette ([#215](https://github.com/bizz84/SwiftyStoreKit/pull/215)).
 * Adds xcpretty to improve build logs ([#217](https://github.com/bizz84/SwiftyStoreKit/pull/217))
+* Update SwiftLint to 0.18.1 ([#218](https://github.com/bizz84/SwiftyStoreKit/pull/218))
 
 ## [0.10.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.0) `verifyReceipt` now automatically refreshes the receipt if needed
 

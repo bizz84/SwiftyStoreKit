@@ -7,7 +7,9 @@ before_install:
 
 install:
   - ./scripts/install_swiftlint.sh
+  - bundle install --path vendor/bundle
 
 script:
   - swiftlint
   - ./scripts/build.sh
+  - bundle exec danger --verbose

@@ -59,7 +59,7 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
         let retrievedProducts = Set<SKProduct>(response.products)
         let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
-        callback(RetrieveResults(retrievedProducts: retrievedProducts,
+        performCallback(RetrieveResults(retrievedProducts: retrievedProducts,
             invalidProductIDs: invalidProductIDs, error: nil))
     }
 
@@ -68,6 +68,12 @@ class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
     }
 
     func request(_ request: SKRequest, didFailWithError error: Error) {
-        callback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
+        performCallback(RetrieveResults(retrievedProducts: Set<SKProduct>(), invalidProductIDs: Set<String>(), error: error))
+    }
+    
+    private func performCallback(_ results: RetrieveResults) {
+        DispatchQueue.main.async {
+            self.callback(results)
+        }
     }
 }

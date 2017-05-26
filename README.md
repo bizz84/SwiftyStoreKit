@@ -397,6 +397,9 @@ SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
 ## Notes
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
+[Making in-app purchases doesn't work in the simulator](https://developer.apple.com/library/content/technotes/tn2413/_index.html#//apple_ref/doc/uid/DTS40016228-CH1-ERROR_MESSAGES-CANNOT_CONNECT_TO_ITUNES_STORE).
+You have to test it on a real iOS device.
+
 ## Installation
 
 ### CocoaPods

@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [WIP] 0.10.2 Remove SKProduct caching
+## 0.10.2 Remove SKProduct caching
 
 * Remove SKProduct caching ([#222](https://github.com/bizz84/SwiftyStoreKit/pull/222), related issue: [#212](https://github.com/bizz84/SwiftyStoreKit/issues/212))
 * Adds new purchase product method based on SKProduct

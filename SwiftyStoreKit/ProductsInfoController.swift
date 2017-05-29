@@ -27,43 +27,15 @@ import StoreKit
 
 class ProductsInfoController: NSObject {
 
-    // MARK: Private declarations
-
     // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
     private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
 
-    private(set) var products: [String: SKProduct] = [:]
-
-    private func addProduct(_ product: SKProduct) {
-        products[product.productIdentifier] = product
-    }
-
-    private func allProductsMatching(_ productIds: Set<String>) -> Set<SKProduct> {
-
-        return Set(productIds.flatMap { self.products[$0] })
-    }
-
-    private func requestProducts(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
+    func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
 
         inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
-
+            
             self.inflightQueries[productIds] = nil
-            for product in result.retrievedProducts {
-                self.addProduct(product)
-            }
             completion(result)
         }
     }
-
-    func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
-
-        let products = allProductsMatching(productIds)
-        guard products.count == productIds.count else {
-
-            requestProducts(productIds, completion: completion)
-            return
-        }
-        completion(RetrieveResults(retrievedProducts: products, invalidProductIDs: [], error: nil))
-    }
-
 }

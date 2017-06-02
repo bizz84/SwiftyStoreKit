@@ -262,7 +262,7 @@ let receiptString = receiptData.base64EncodedString(options: [])
 
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret", forceRefresh: false) { result in
     switch result {
     case .success(let receipt):
         print("Verify receipt Success: \(receipt)")
@@ -271,6 +271,8 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 	}
 }
 ```
+
+Note: you can specify `forceRefresh: true` to force SwiftyStoreKit to refresh the receipt with Apple, even if a local receipt is already stored.
 
 ## Verifying purchases and subscriptions
 

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.10.3 Add `forceRefresh` option to `verifyReceipt`
+
+* Add `forceRefresh` option to `verifyReceipt` ([#224](https://github.com/bizz84/SwiftyStoreKit/pull/224), fix for [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223))
+
 ## 0.10.2 Remove SKProduct caching
 
 * Remove SKProduct caching ([#222](https://github.com/bizz84/SwiftyStoreKit/pull/222), related issue: [#212](https://github.com/bizz84/SwiftyStoreKit/issues/212))

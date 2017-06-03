@@ -76,7 +76,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
         var refreshCalled = false
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -95,7 +95,27 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
         var refreshCalled = false
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+            
+            refreshCalled = true
+            return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
+            
+        }) { _ in
+            
+        }
+        XCTAssertTrue(refreshCalled)
+    }
+    
+    func testVerifyReceipt_when_appStoreReceiptURLIsNotNil_hasReceiptData_forceRefreshIsTrue_then_callsRefresh() {
+        
+        let testReceiptURL = makeReceiptURL()
+        writeReceiptData(to: testReceiptURL)
+        
+        let validator = TestReceiptValidator()
+        let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
+        
+        var refreshCalled = false
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: true, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -112,7 +132,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         let refreshError = NSError(domain: "", code: 0, userInfo: nil)
         
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             callback(.error(e: refreshError))
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -128,7 +148,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             callback(.success)
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -147,7 +167,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             writeReceiptData(to: testReceiptURL)
             callback(.success)
@@ -168,7 +188,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             writeReceiptData(to: testReceiptURL)
             callback(.success)
@@ -182,7 +202,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
     }
     
     // MARK: non-refresh tests (receipt url and data are set)
-    func testVerifyReceipt_when_appStoreReceiptURLIsNotNil_hasReceiptData_then_refreshNotCalled_validateIsCalled() {
+    func testVerifyReceipt_when_appStoreReceiptURLIsNotNil_hasReceiptData_forceRefreshIsFalse_then_refreshNotCalled_validateIsCalled() {
         
         let testReceiptURL = makeReceiptURL()
         writeReceiptData(to: testReceiptURL)
@@ -190,7 +210,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
-        verificator.verifyReceipt(using: validator, password: nil, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        verificator.verifyReceipt(using: validator, password: nil, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             XCTFail("refresh should not be called if we already have a receipt")
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)

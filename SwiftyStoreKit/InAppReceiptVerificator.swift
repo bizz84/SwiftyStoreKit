@@ -48,15 +48,17 @@ class InAppReceiptVerificator: NSObject {
      *  * If the receipt is available or is refreshed, validate it
      *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
      *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
+     *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter refresh: closure to perform receipt refresh (this is made explicit for testability)
      *  - Parameter completion: handler for result
      */
     public func verifyReceipt(using validator: ReceiptValidator,
                               password: String? = nil,
+                              forceRefresh: Bool,
                               refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
                               completion: @escaping (VerifyReceiptResult) -> Void) {
         
-        if let receiptData = appStoreReceiptData {
+        if let receiptData = appStoreReceiptData, forceRefresh == false {
             
             verify(receiptData: receiptData, using: validator, password: password, completion: completion)
         } else {

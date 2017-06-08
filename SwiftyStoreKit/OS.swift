@@ -32,4 +32,15 @@ import StoreKit
             self.productIdentifier = product.productIdentifier
         }
     }
+    
+    // error codes for the SKErrorDomain
+    public enum SKErrorCode: Int {
+        
+        case unknown
+        case clientInvalid // client is not allowed to issue the request, etc.
+        case paymentCancelled // user cancelled the request, etc.
+        case paymentInvalid // purchase identifier was invalid, etc.
+        case paymentNotAllowed // this device is not allowed to make the payment
+    }
+    
 #endif

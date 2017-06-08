@@ -120,7 +120,6 @@ public class SwiftyStoreKit {
         }
         return RestoreResults(restoredPurchases: restoredPurchases, restoreFailedPurchases: restoreFailedPurchases)
     }
-
     private func storeInternalError(code: SKErrorCode = .unknown, description: String = "") -> NSError {
         return NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
     }

@@ -20,6 +20,10 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
 
+## About Xcode 9 / Swift 4.x
+
+#### Development has started on the [swift-4.0](https://github.com/bizz84/SwiftyStoreKit/tree/swift-4.0) branch, aiming to have a compilable version of SwiftyStoreKit on Xcode 9 betas.
+
 ## App startup
 
 ### Complete Transactions
@@ -438,11 +442,12 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-## Swift 2.2 / 2.3 / 3.0
+## Swift 2.x / 3.x / 4.x
 
 | Language  | Branch | Pod version | Xcode version |
 | --------- | ------ | ----------- | ------------- |
-| Swift 3.0 | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8 or greater|
+| Swift 4.x | [swift-4.0](https://github.com/bizz84/SwiftyStoreKit/tree/swift-4.0) | TBA | Xcode 9 or greater|
+| Swift 3.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8.x |
 | Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
 | Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |
 

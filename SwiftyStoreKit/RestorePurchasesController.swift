@@ -84,7 +84,7 @@ class RestorePurchasesController: TransactionController {
             print("Callback already called. Returning")
             return
         }
-        restoredPurchases.append(.failed(error: SKError(_nsError: error as NSError)))
+        restoredPurchases.append(.failed(error: error as NSError))
         restorePurchases.callback(restoredPurchases)
 
         // Reset state after error received

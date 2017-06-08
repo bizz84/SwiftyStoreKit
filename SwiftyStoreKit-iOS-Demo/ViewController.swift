@@ -208,7 +208,8 @@ extension ViewController {
             return alertWithTitle("Thank You", message: "Purchase completed")
         case .error(let error):
             print("Purchase Failed: \(error)")
-            switch error.code {
+            let errorCode = SKErrorCode(rawValue: error.code) ?? SKErrorCode.unknown
+            switch errorCode {
             case .unknown: return alertWithTitle("Purchase failed", message: "Unknown error. Please contact support")
             case .clientInvalid: // client is not allowed to issue the request, etc.
                 return alertWithTitle("Purchase failed", message: "Not allowed to make the payment")

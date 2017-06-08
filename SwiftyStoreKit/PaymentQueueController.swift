@@ -38,7 +38,7 @@ protocol TransactionController {
 public enum TransactionResult {
     case purchased(purchase: PurchaseDetails)
     case restored(purchase: Purchase)
-    case failed(error: SKError)
+    case failed(error: NSError)
 }
 
 public protocol PaymentQueue: class {

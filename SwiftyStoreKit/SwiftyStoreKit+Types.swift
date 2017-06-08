@@ -67,13 +67,13 @@ public struct RetrieveResults {
 // Purchase result
 public enum PurchaseResult {
     case success(purchase: PurchaseDetails)
-    case error(error: SKError)
+    case error(error: NSError)
 }
 
 // Restore purchase results
 public struct RestoreResults {
     public let restoredPurchases: [Purchase]
-    public let restoreFailedPurchases: [(SKError, String?)]
+    public let restoreFailedPurchases: [(NSError, String?)]
 }
 
 // MARK: Receipt verification

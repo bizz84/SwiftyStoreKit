@@ -98,11 +98,10 @@ class PaymentsController: TransactionController {
         return false
     }
 
-    func transactionError(for error: NSError?) -> SKError {
+    func transactionError(for error: NSError?) -> NSError {
         let message = "Unknown error"
-        let altError = NSError(domain: SKErrorDomain, code: SKError.unknown.rawValue, userInfo: [ NSLocalizedDescriptionKey: message ])
-        let nsError = error ?? altError
-        return SKError(_nsError: nsError)
+        let altError = NSError(domain: SKErrorDomain, code: SKErrorCode.unknown.rawValue, userInfo: [ NSLocalizedDescriptionKey: message ])
+        return error ?? altError
     }
 
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {

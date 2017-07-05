@@ -39,25 +39,6 @@ class CompleteTransactionsController: TransactionController {
 
     var completeTransactions: CompleteTransactions?
 
-	var unhandledTransactions: [Purchase] {
-		guard let completeTransactions = completeTransactions else {
-			return []
-		}
-		let purchases = SKPaymentQueue.default().transactions.flatMap { transaction -> Purchase? in
-			guard transaction.transactionState != .purchasing else {
-				return nil
-			}
-			return Purchase(
-				productId: transaction.payment.productIdentifier,
-				quantity: transaction.payment.quantity,
-				transaction: transaction, originalTransaction: transaction.original,
-				needsFinishTransaction:
-				!completeTransactions.atomically
-			)
-		}
-		return purchases
-	}
-
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
 
         guard let completeTransactions = completeTransactions else {

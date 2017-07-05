@@ -91,6 +91,25 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.remove(self)
     }
 
+	var unhandledTransactions: [Purchase] {
+		guard let completeTransactions = completeTransactionsController.completeTransactions else {
+			return []
+		}
+		let purchases = SKPaymentQueue.default().transactions.flatMap { transaction -> Purchase? in
+			guard transaction.transactionState != .purchasing else {
+				return nil
+			}
+			return Purchase(
+				productId: transaction.payment.productIdentifier,
+				quantity: transaction.payment.quantity,
+				transaction: transaction, originalTransaction: transaction.original,
+				needsFinishTransaction:
+				!completeTransactions.atomically
+			)
+		}
+		return purchases
+	}
+
     init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
          paymentsController: PaymentsController = PaymentsController(),
          restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),

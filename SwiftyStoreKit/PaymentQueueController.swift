@@ -102,9 +102,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 			return Purchase(
 				productId: transaction.payment.productIdentifier,
 				quantity: transaction.payment.quantity,
-				transaction: transaction, originalTransaction: transaction.original,
-				needsFinishTransaction:
-				!completeTransactions.atomically
+				transaction: transaction,
+				originalTransaction: transaction.original,
+				needsFinishTransaction: !completeTransactions.atomically
 			)
 		}
 		return purchases

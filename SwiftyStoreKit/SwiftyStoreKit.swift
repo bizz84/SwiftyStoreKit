@@ -134,6 +134,10 @@ extension SwiftyStoreKit {
 
     // MARK: Public methods - Purchases
 
+	/** 
+	 *	Retrieve unhandled transactions from default payment queue
+	 *	- Returns: Array of unhandled Purchases, empty if there is no unhandled transaction
+	 */
 	public class var unhandledTransactions: [Purchase] {
 		return sharedInstance.paymentQueueController.unhandledTransactions
 	}

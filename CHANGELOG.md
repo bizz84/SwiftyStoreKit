@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## Next Release
+
+* Add `unhandledTransactions` class variable to provide access to unhandled transactions on the PaymentQueue, add `transactions` variable to `PaymentQueue` protocol
+([#242](https://github.com/bizz84/SwiftyStoreKit/pull/242))
+
 ## 0.10.3 Add `forceRefresh` option to `verifyReceipt`
 
 * Add `forceRefresh` option to `verifyReceipt` ([#224](https://github.com/bizz84/SwiftyStoreKit/pull/224), fix for [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223))

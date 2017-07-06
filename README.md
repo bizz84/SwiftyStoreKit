@@ -541,6 +541,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Drops](https://itunes.apple.com/app/id939540371) - Language learning app
 * [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
 * [Zmeu Grand Canyon](http://grandcanyon.zmeu.guide/) - Interactive hiking map & planner
+* [OB Monitor](https://geo.itunes.apple.com/us/app/ob-monitor/id1073398446) - The app for Texas Longhorns athletics fans
 
 
 ## License

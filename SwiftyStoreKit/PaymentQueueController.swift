@@ -43,7 +43,10 @@ public enum TransactionResult {
 
 public protocol PaymentQueue: class {
 
+	var transactions: [SKPaymentTransaction] { get }
+
     func add(_ observer: SKPaymentTransactionObserver)
+
     func remove(_ observer: SKPaymentTransactionObserver)
 
     func add(_ payment: SKPayment)
@@ -93,9 +96,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
 	var unhandledTransactions: [Purchase] {
 		guard let completeTransactions = completeTransactionsController.completeTransactions else {
+			print("SwiftyStoreKit.completeTransactions() should be called once when the app launches. Returning no results")
 			return []
 		}
-		let purchases = SKPaymentQueue.default().transactions.flatMap { transaction -> Purchase? in
+		let purchases = paymentQueue.transactions.flatMap { transaction -> Purchase? in
 			guard transaction.transactionState != .purchasing else {
 				return nil
 			}

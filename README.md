@@ -64,6 +64,8 @@ If there are no pending transactions, the completion block will **not** be calle
 
 Note that `completeTransactions()` **should only be called once** in your code, in `application(:didFinishLaunchingWithOptions:)`.
 
+In addition, at any point in time, array of unfinished transactions on the payment queue can be accessed via `SwiftyStoreKit.unhandledTransactions`. Only valid while the queue has observers.
+
 ## Purchases
 
 ### Retrieve products info

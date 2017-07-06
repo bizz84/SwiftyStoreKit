@@ -28,7 +28,7 @@ public class SwiftyStoreKit {
 
     private let productsInfoController: ProductsInfoController
 
-    private let paymentQueueController: PaymentQueueController
+    fileprivate let paymentQueueController: PaymentQueueController
 
     fileprivate let receiptVerificator: InAppReceiptVerificator
 
@@ -133,6 +133,14 @@ extension SwiftyStoreKit {
     fileprivate static let sharedInstance = SwiftyStoreKit()
 
     // MARK: Public methods - Purchases
+
+	/** 
+	 *	Retrieve unhandled transactions from payment queue
+	 *	- Returns: Array of unhandled Purchases, empty if there are no unhandled transaction
+	 */
+	public class var unhandledTransactions: [Purchase] {
+		return sharedInstance.paymentQueueController.unhandledTransactions
+	}
     
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()

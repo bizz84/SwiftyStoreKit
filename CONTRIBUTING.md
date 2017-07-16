@@ -23,7 +23,7 @@ SwiftyStoreKit aims to be a lightweight wrapper on top of [StoreKit](https://dev
 
 While SwiftyStoreKit offers access to the [local receipt data](https://developer.apple.com/reference/foundation/bundle/1407276-appstorereceipturl), it is a non-goal to add support for persisting IAP data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
-**Swift Version**: SwiftyStoreKit includes [Swift 2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and [Swift 2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) branches. These legacy versions of the library are no longer maintained and all active development happens on Swift 3.0+.
+**Swift Version**: SwiftyStoreKit includes [Swift 2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) and [Swift 2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) branches. These legacy versions are no longer maintained and all active development happens on [master](https://github.com/bizz84/SwiftyStoreKit) and [develop](https://github.com/bizz84/SwiftyStoreKit/tree/develop), which support Swift 3.x and Swift 4.x.
 
 **Objective-C**: Currently, SwiftyStoreKit cannot be used in Objective-C projects. The main limitation is that most classes and types in the library are Swift-only. See [related issue](https://github.com/bizz84/SwiftyStoreKit/issues/123).
 

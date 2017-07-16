@@ -24,9 +24,12 @@ I'm building **Eco Buddy**, an iOS app to help you **reduce your carbon footprin
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
 
-## About Xcode 9 / Swift 4.x
+## About Xcode 9 / Swift 4
 
-#### Development has started on the [swift-4.0](https://github.com/bizz84/SwiftyStoreKit/tree/swift-4.0) branch, aiming to have a compilable version of SwiftyStoreKit on Xcode 9 betas.
+#### SwiftyStoreKit is compatible with Xcode 8.x (Swift 3.x) and Xcode 9 beta 3 or later (Swift 4).
+
+**NOTE**: Apple had removed [`SKError`](https://developer.apple.com/documentation/storekit/skerror) from the iOS 11 public API on Xcode 9 betas 1 and 2. This was a bug that has been fixed on Xcode 9 beta 3.
+
 
 ## App startup
 

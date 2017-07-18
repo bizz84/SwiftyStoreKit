@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.10.4 Documentation and updates for Xcode 9
+
+* Update to Xcode 9 recommended project settings ([#247](https://github.com/bizz84/SwiftyStoreKit/pull/247))
+* Update build script iOS version to 10.3.1 ([#245](https://github.com/bizz84/SwiftyStoreKit/pull/245))
+* Update notes about Xcode 9, Swift 4 support to README
+
 ## 0.10.3 Add `forceRefresh` option to `verifyReceipt`
 
 * Add `forceRefresh` option to `verifyReceipt` ([#224](https://github.com/bizz84/SwiftyStoreKit/pull/224), fix for [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223))

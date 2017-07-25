@@ -167,16 +167,20 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
          * 3. complete transactions (transactionState: .purchased, .failed, .restored, .deferred)
          * Any transactions where state == .purchasing are ignored.
          */
-        var unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
-
-        unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
-
-        unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
-
-        unhandledTransactions = unhandledTransactions.filter { $0.transactionState != .purchasing }
+        var unhandledTransactions = transactions.filter { $0.transactionState != .purchasing }
+        
         if unhandledTransactions.count > 0 {
-            let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
-            print("unhandledTransactions:\n\(strings)")
+        
+            unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
+
+            unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
+
+            unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
+
+            if unhandledTransactions.count > 0 {
+                let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
+                print("unhandledTransactions:\n\(strings)")
+            }
         }
     }
 

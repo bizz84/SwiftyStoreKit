@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.10.5 Filter out transactions in purchasing state
+* Filter out all transactions with state == .purchasing early in purchase flows (related to [#169](https://github.com/bizz84/SwiftyStoreKit/issues/169), [#188](https://github.com/bizz84/SwiftyStoreKit/pull/188), [#179](https://github.com/bizz84/SwiftyStoreKit/issues/179))
+* Sample app: print localized description when a purchase fails with `.unknown` error
+
 ## 0.10.4 Documentation and updates for Xcode 9
 
 * Update to Xcode 9 recommended project settings ([#247](https://github.com/bizz84/SwiftyStoreKit/pull/247))

@@ -45,7 +45,7 @@ extension VerifyReceiptResult: Equatable {
     
     static public func == (lhs: VerifyReceiptResult, rhs: VerifyReceiptResult) -> Bool {
         switch (lhs, rhs) {
-        case (.success(_), .success(_)): return true
+        case (.success, .success): return true
         case (.error(let lhsError), .error(let rhsError)): return lhsError == rhsError
         default: return false
         }
@@ -58,10 +58,10 @@ extension ReceiptError: Equatable {
         switch (lhs, rhs) {
         case (.noReceiptData, .noReceiptData): return true
         case (.noRemoteData, .noRemoteData): return true
-        case (.requestBodyEncodeError(_), .requestBodyEncodeError(_)): return true
-        case (.networkError(_), .networkError(_)): return true
-        case (.jsonDecodeError(_), .jsonDecodeError(_)): return true
-        case (.receiptInvalid(_, _), .receiptInvalid(_, _)): return true
+        case (.requestBodyEncodeError, .requestBodyEncodeError): return true
+        case (.networkError, .networkError): return true
+        case (.jsonDecodeError, .jsonDecodeError): return true
+        case (.receiptInvalid, .receiptInvalid): return true
         default: return false
         }
     }

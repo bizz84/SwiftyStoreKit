@@ -149,7 +149,7 @@ class ViewController: NSViewController {
                     self.showAlert(self.alertForVerifyPurchase(purchaseResult))
                 }
 
-            case .error(_):
+            case .error:
                 self.showAlert(self.alertForVerifyReceipt(result))
             }
         }

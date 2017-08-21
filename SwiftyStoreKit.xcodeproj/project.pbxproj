@@ -47,6 +47,7 @@
 		65BB6CE81DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CE91DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
 		65BB6CEA1DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
+		65BF8E301F4AEEBA00CBFC00 /* ProductsInfoControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BF8E2F1F4AEEBA00CBFC00 /* ProductsInfoControllerTests.swift */; };
 		65CEF0F41ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65CEF0F31ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift */; };
 		65E9E0791ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
 		65E9E07A1ECADF5E005CF7B4 /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
@@ -183,6 +184,7 @@
 		658A084B1E2EC5960074A98F /* PaymentQueueSpy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentQueueSpy.swift; sourceTree = "<group>"; };
 		65B8C9281EC0BE62009439D9 /* InAppReceiptTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptTests.swift; sourceTree = "<group>"; };
 		65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SwiftyStoreKit+Types.swift"; sourceTree = "<group>"; };
+		65BF8E2F1F4AEEBA00CBFC00 /* ProductsInfoControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsInfoControllerTests.swift; sourceTree = "<group>"; };
 		65CEF0F31ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptVerificatorTests.swift; sourceTree = "<group>"; };
 		65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InAppReceiptVerificator.swift; sourceTree = "<group>"; };
 		65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentTransactionObserverFake.swift; sourceTree = "<group>"; };
@@ -345,6 +347,7 @@
 				65F70AC61E2ECBB300BF040D /* PaymentTransactionObserverFake.swift */,
 				C3099C081E2FCE3A00392A54 /* TestProduct.swift */,
 				C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */,
+				65BF8E2F1F4AEEBA00CBFC00 /* ProductsInfoControllerTests.swift */,
 			);
 			path = SwiftyStoreKitTests;
 			sourceTree = "<group>";
@@ -774,6 +777,7 @@
 			files = (
 				C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */,
 				650307F21E3163AA001332A4 /* RestorePurchasesControllerTests.swift in Sources */,
+				65BF8E301F4AEEBA00CBFC00 /* ProductsInfoControllerTests.swift in Sources */,
 				65CEF0F41ECC80D9007DC3B6 /* InAppReceiptVerificatorTests.swift in Sources */,
 				C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */,
 				65F70AC71E2ECBB300BF040D /* PaymentTransactionObserverFake.swift in Sources */,

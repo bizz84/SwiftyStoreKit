@@ -28,7 +28,7 @@ public class SwiftyStoreKit {
 
     private let productsInfoController: ProductsInfoController
 
-    private let paymentQueueController: PaymentQueueController
+    fileprivate let paymentQueueController: PaymentQueueController
 
     fileprivate let receiptVerificator: InAppReceiptVerificator
 
@@ -203,6 +203,15 @@ extension SwiftyStoreKit {
     public class func finishTransaction(_ transaction: PaymentTransaction) {
 
         sharedInstance.finishTransaction(transaction)
+    }
+    
+    /**
+     * Register a handler for SKPaymentQueue.shouldAddStorePayment delegate method in iOS 11
+     */
+    public static var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler? {
+        didSet {
+            sharedInstance.paymentQueueController.shouldAddStorePaymentHandler = shouldAddStorePaymentHandler
+        }
     }
 }
 

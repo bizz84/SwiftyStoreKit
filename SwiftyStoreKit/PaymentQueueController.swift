@@ -142,6 +142,8 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         }
         paymentQueue.finishTransaction(skTransaction)
     }
+    
+    var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler?
 
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -202,4 +204,8 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
     }
 
+    func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
+        
+        return shouldAddStorePaymentHandler?(payment, product) ?? false
+    }
 }

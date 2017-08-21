@@ -76,6 +76,8 @@ public struct RestoreResults {
     public let restoreFailedPurchases: [(SKError, String?)]
 }
 
+public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product: SKProduct) -> Bool
+
 // MARK: Receipt verification
 
 // Info for receipt returned by server

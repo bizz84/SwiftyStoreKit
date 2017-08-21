@@ -77,7 +77,7 @@ extension ReceiptItem {
     }
 }
 
-// MARK - receipt mangement
+// MARK: - receipt mangement
 internal class InAppReceipt {
 
     /**

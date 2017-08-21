@@ -24,27 +24,35 @@
 
 import StoreKit
 
+typealias InAppProductRequestCallback = (RetrieveResults) -> Void
+
+protocol InAppProductRetriever: class {
+    func retrieveProducts(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductQueryRequest
+}
+
+class InAppProductQueryRetriever: InAppProductRetriever {
+    
+    func retrieveProducts(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductQueryRequest {
+        let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
+        request.start()
+        return request
+    }
+}
+
 class InAppProductQueryRequest: NSObject, SKProductsRequestDelegate {
 
-    typealias RequestCallback = (RetrieveResults) -> Void
-    private let callback: RequestCallback
+    private let callback: InAppProductRequestCallback
     private let request: SKProductsRequest
     // http://stackoverflow.com/questions/24011575/what-is-the-difference-between-a-weak-reference-and-an-unowned-reference
     deinit {
         request.delegate = nil
     }
-    private init(productIds: Set<String>, callback: @escaping RequestCallback) {
+    init(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) {
 
         self.callback = callback
         request = SKProductsRequest(productIdentifiers: productIds)
         super.init()
         request.delegate = self
-    }
-
-    class func startQuery(_ productIds: Set<String>, callback: @escaping RequestCallback) -> InAppProductQueryRequest {
-        let request = InAppProductQueryRequest(productIds: productIds, callback: callback)
-        request.start()
-        return request
     }
 
     func start() {

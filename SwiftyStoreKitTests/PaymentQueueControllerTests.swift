@@ -249,6 +249,44 @@ class PaymentQueueControllerTests: XCTestCase {
         XCTAssertTrue(restorePurchasesCallbackCalled)
         XCTAssertTrue(completeTransactionsCallbackCalled)
     }
+    
+    // MARK: shouldAddStorePayment tests
+    func testPaymentQueue_when_shouldAddStorePaymentHandlerIsNil_then_shouldAddStorePaymentReturnsFalse() {
+        
+        let spy = PaymentQueueSpy()
+        
+        let paymentQueueController = PaymentQueueController(paymentQueue: spy)
+        
+        paymentQueueController.shouldAddStorePaymentHandler = nil
+        
+        XCTAssertFalse(paymentQueueController.paymentQueue(SKPaymentQueue(), shouldAddStorePayment: SKPayment(), for: SKProduct()))
+    }
+
+    func testPaymentQueue_when_shouldAddStorePaymentHandlerReturnsTrue_then_shouldAddStorePaymentReturnsTrue() {
+        
+        let spy = PaymentQueueSpy()
+        
+        let paymentQueueController = PaymentQueueController(paymentQueue: spy)
+        
+        paymentQueueController.shouldAddStorePaymentHandler = { payment, product in
+            return true
+        }
+        
+        XCTAssertTrue(paymentQueueController.paymentQueue(SKPaymentQueue(), shouldAddStorePayment: SKPayment(), for: SKProduct()))
+    }
+
+    func testPaymentQueue_when_shouldAddStorePaymentHandlerReturnsFalse_then_shouldAddStorePaymentReturnsFalse() {
+        
+        let spy = PaymentQueueSpy()
+        
+        let paymentQueueController = PaymentQueueController(paymentQueue: spy)
+        
+        paymentQueueController.shouldAddStorePaymentHandler = { payment, product in
+            return false
+        }
+        
+        XCTAssertFalse(paymentQueueController.paymentQueue(SKPaymentQueue(), shouldAddStorePayment: SKPayment(), for: SKProduct()))
+    }
 
     // MARK: Helpers
     func makeTestPaymentTransaction(productIdentifier: String, transactionState: SKPaymentTransactionState) -> TestPaymentTransaction {

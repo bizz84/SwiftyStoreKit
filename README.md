@@ -159,7 +159,7 @@ According to [Apple - Restoring Purchased Products](https://developer.apple.com/
 
 See the **Receipt Verification** section below for how to restore previous purchases using the receipt.
 
-This section shows how to restore completed transactions with the `restorePurchases` method instead.
+This section shows how to restore completed transactions with the `restorePurchases` method instead. When successful, the method returns all non-consumable purchases, as well as all auto-renewable subscription purchases, **regardless of whether they are expired or not**.
 
 * **Atomic**: to be used when the content is delivered immediately.
 

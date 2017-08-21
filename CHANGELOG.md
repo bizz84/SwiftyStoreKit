@@ -2,10 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.10.7 Fix for concurrent retrieveProductsInfo calls
+
+* `ProductsInfoController`: Keep track of multiple completion blocks for the same request ([#259](https://github.com/bizz84/SwiftyStoreKit/pull/259), fix for [#250](https://github.com/bizz84/SwiftyStoreKit/issues/250))
+
 ## 0.10.6 Add support for shouldAddStorePayment
 
-* Add support for the new SKPaymentTransactionObserver.shouldAddStorePayment method in iOS 11
-* Update swiftlint to version 0.21.0
+* Add support for the new SKPaymentTransactionObserver.shouldAddStorePayment method in iOS 11 ([#257](https://github.com/bizz84/SwiftyStoreKit/pull/257), related issue: [#240](https://github.com/bizz84/SwiftyStoreKit/pull/257))
+* Update swiftlint to version 0.21.0 ([#258](https://github.com/bizz84/SwiftyStoreKit/pull/258))
 
 ## 0.10.5 Filter out transactions in purchasing state
 * Filter out all transactions with state == .purchasing early in purchase flows (related to [#169](https://github.com/bizz84/SwiftyStoreKit/issues/169), [#188](https://github.com/bizz84/SwiftyStoreKit/pull/188), [#179](https://github.com/bizz84/SwiftyStoreKit/issues/179))

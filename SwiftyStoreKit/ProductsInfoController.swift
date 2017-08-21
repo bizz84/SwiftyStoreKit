@@ -27,15 +27,29 @@ import StoreKit
 
 class ProductsInfoController: NSObject {
 
+    struct InAppProductQuery {
+        let request: InAppProductQueryRequest
+        var completionHandlers: [InAppProductQueryRequest.RequestCallback]
+    }
+    
     // As we can have multiple inflight queries and purchases, we store them in a dictionary by product id
-    private var inflightQueries: [Set<String>: InAppProductQueryRequest] = [:]
+    private var inflightQueries: [Set<String>: InAppProductQuery] = [:]
 
     func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
 
-        inflightQueries[productIds] = InAppProductQueryRequest.startQuery(productIds) { result in
-            
-            self.inflightQueries[productIds] = nil
-            completion(result)
+        if inflightQueries[productIds] == nil {
+            let request = InAppProductQueryRequest.startQuery(productIds) { results in
+                
+                if let query = self.inflightQueries[productIds] {
+                    for completion in query.completionHandlers {
+                        completion(results)
+                    }
+                    self.inflightQueries[productIds] = nil
+                }
+            }
+            inflightQueries[productIds] = InAppProductQuery(request: request, completionHandlers: [completion])
+        } else {
+            inflightQueries[productIds]!.completionHandlers.append(completion)
         }
     }
 }

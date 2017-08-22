@@ -149,6 +149,38 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 
 Using this `purchaseProduct` method guarantees that only one network call is made to StoreKit to perform the purchase, as opposed to one call to get the product and another to perform the purchase.
 
+### Should add store payment handling (iOS 11)
+
+iOS 11 adds a new delegate method on `SKPaymentTransactionObserver`:
+
+```swift
+@available(iOS 11.0, *)
+optional public func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool
+```
+
+From [Apple Docs](https://developer.apple.com/documentation/storekit/skpaymenttransactionobserver/2877502-paymentqueue):
+
+> This delegate method is called when the user has started an in-app purchase in the App Store, and is continuing the transaction in your app. Specifically, if your app is already installed, the method is called automatically.
+If your app is not yet installed when the user starts the in-app purchase in the App Store, the user gets a notification when the app installation is complete. This method is called when the user taps the notification. Otherwise, if the user opens the app manually, this method is called only if the app is opened soon after the purchase was started.
+
+SwiftyStoreKit supports this with a new handler, called like this:
+
+```swift
+SwiftyStoreKit.shouldAddStorePaymentHandler = { payment, product in
+	// return true if the content can be delivered by your app
+	// return false otherwise
+}
+```
+
+To test this in sandbox mode, open this URL in Safari:
+
+```
+itms-services://?action=purchaseIntent&bundleId=com.example.app&productIdentifier=product_name
+```
+
+More information on the [WWDC17 session What's New in StoreKit](https://developer.apple.com/videos/play/wwdc2017/303)
+([slide number 165](https://devstreaming-cdn.apple.com/videos/wwdc/2017/303f0u5froddl13/303/303_whats_new_in_storekit.pdf) shows the link above).
+
 ### Restore previous purchases
 
 According to [Apple - Restoring Purchased Products](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/Restoring.html#//apple_ref/doc/uid/TP40008267-CH8-SW9):

@@ -2,35 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.10.7 Fix for concurrent retrieveProductsInfo calls
+## [0.10.7](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.7) Fix for concurrent `retrieveProductsInfo` calls
 
 * `ProductsInfoController`: Keep track of multiple completion blocks for the same request ([#259](https://github.com/bizz84/SwiftyStoreKit/pull/259), fix for [#250](https://github.com/bizz84/SwiftyStoreKit/issues/250))
 
-## 0.10.6 Add support for shouldAddStorePayment
+## [0.10.6](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.6) Add support for shouldAddStorePayment
 
-* Add support for the new SKPaymentTransactionObserver.shouldAddStorePayment method in iOS 11 ([#257](https://github.com/bizz84/SwiftyStoreKit/pull/257), related issue: [#240](https://github.com/bizz84/SwiftyStoreKit/pull/257))
+* Add support for the new `SKPaymentTransactionObserver.shouldAddStorePayment` method in iOS 11 ([#257](https://github.com/bizz84/SwiftyStoreKit/pull/257), related issue: [#240](https://github.com/bizz84/SwiftyStoreKit/pull/257))
 * Update swiftlint to version 0.21.0 ([#258](https://github.com/bizz84/SwiftyStoreKit/pull/258))
 
-## 0.10.5 Filter out transactions in purchasing state
-* Filter out all transactions with state == .purchasing early in purchase flows (related to [#169](https://github.com/bizz84/SwiftyStoreKit/issues/169), [#188](https://github.com/bizz84/SwiftyStoreKit/pull/188), [#179](https://github.com/bizz84/SwiftyStoreKit/issues/179))
+## [0.10.5](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.5) Filter out transactions in purchasing state
+* Filter out all transactions with `state == .purchasing` early in purchase flows (related to [#169](https://github.com/bizz84/SwiftyStoreKit/issues/169), [#188](https://github.com/bizz84/SwiftyStoreKit/pull/188), [#179](https://github.com/bizz84/SwiftyStoreKit/issues/179))
 * Sample app: print localized description when a purchase fails with `.unknown` error
 
-## 0.10.4 Documentation and updates for Xcode 9
+## [0.10.4](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.4) Documentation and updates for Xcode 9
 
 * Update to Xcode 9 recommended project settings ([#247](https://github.com/bizz84/SwiftyStoreKit/pull/247))
 * Update build script iOS version to 10.3.1 ([#245](https://github.com/bizz84/SwiftyStoreKit/pull/245))
 * Update notes about Xcode 9, Swift 4 support to README
 
-## 0.10.3 Add `forceRefresh` option to `verifyReceipt`
+## [0.10.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.3) Add `forceRefresh` option to `verifyReceipt`
 
 * Add `forceRefresh` option to `verifyReceipt` ([#224](https://github.com/bizz84/SwiftyStoreKit/pull/224), fix for [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223))
 
-## 0.10.2 Remove SKProduct caching
+## [0.10.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.2) Remove SKProduct caching
 
 * Remove SKProduct caching ([#222](https://github.com/bizz84/SwiftyStoreKit/pull/222), related issue: [#212](https://github.com/bizz84/SwiftyStoreKit/issues/212))
 * Adds new purchase product method based on SKProduct
 
-## 0.10.1 Danger, xcpretty integration
+## [0.10.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.1) Danger, xcpretty integration
 
 * Adds Danger for better Pull Request etiquette ([#215](https://github.com/bizz84/SwiftyStoreKit/pull/215)).
 * Adds xcpretty to improve build logs ([#217](https://github.com/bizz84/SwiftyStoreKit/pull/217))

@@ -8,7 +8,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.10.6](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.6) Add support for shouldAddStorePayment
 
-* Add support for the new `SKPaymentTransactionObserver.shouldAddStorePayment` method in iOS 11 ([#257](https://github.com/bizz84/SwiftyStoreKit/pull/257), related issue: [#240](https://github.com/bizz84/SwiftyStoreKit/pull/257))
+* Add support for the new `SKPaymentTransactionObserver.shouldAddStorePayment` method in iOS 11 ([#257](https://github.com/bizz84/SwiftyStoreKit/pull/257), related issue: [#240](https://github.com/bizz84/SwiftyStoreKit/issues/240))
 * Update swiftlint to version 0.21.0 ([#258](https://github.com/bizz84/SwiftyStoreKit/pull/258))
 
 ## [0.10.5](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.5) Filter out transactions in purchasing state

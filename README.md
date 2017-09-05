@@ -18,7 +18,7 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 ### Note from the Author
 
-I'm building **Eco Buddy**, an iOS app to help you **reduce your carbon footprint**, and **take control of your impact on the environment**. **[＞ Get it Here ＜](http://ecobuddyapp.com/)**
+I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), a curated list of all things sustainable. Interested? [It's on GitHub](https://github.com/bizz84/Sustainable-Earth).
 
 ## Contributing
 

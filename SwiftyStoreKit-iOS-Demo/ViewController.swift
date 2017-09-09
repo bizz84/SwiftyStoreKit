@@ -266,11 +266,11 @@ extension ViewController {
     func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> UIAlertController {
 
         switch result {
-        case .purchased(let expiryDate):
-            print("Product is valid until \(expiryDate)")
+        case .purchased(let expiryDate, let items):
+            print("Product is valid until \(expiryDate) \n items \(items)")
             return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
-        case .expired(let expiryDate):
-            print("Product is expired since \(expiryDate)")
+        case .expired(let expiryDate, let items):
+            print("Product is expired since \(expiryDate) \n items \(items)")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
         case .notPurchased:
             print("This product has never been purchased")

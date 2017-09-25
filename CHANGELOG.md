@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.8](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.8) Update to swiftlint 0.22.0
+
+* Update to swiftlint 0.22.0 ([#270](https://github.com/bizz84/SwiftyStoreKit/pull/270), fix for [#273](https://github.com/bizz84/SwiftyStoreKit/issues/273))
+
 ## [0.10.7](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.7) Fix for concurrent `retrieveProductsInfo` calls
 
 * `ProductsInfoController`: Keep track of multiple completion blocks for the same request ([#259](https://github.com/bizz84/SwiftyStoreKit/pull/259), fix for [#250](https://github.com/bizz84/SwiftyStoreKit/issues/250))

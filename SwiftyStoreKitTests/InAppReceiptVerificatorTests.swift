@@ -81,9 +81,9 @@ class InAppReceiptVerificatorTests: XCTestCase {
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { _ in
+        }, completion: { _ in
             
-        }
+        })
         XCTAssertTrue(refreshCalled)
     }
 
@@ -100,9 +100,9 @@ class InAppReceiptVerificatorTests: XCTestCase {
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { _ in
+        }, completion: { _ in
             
-        }
+        })
         XCTAssertTrue(refreshCalled)
     }
     
@@ -120,9 +120,9 @@ class InAppReceiptVerificatorTests: XCTestCase {
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { _ in
+        }, completion: { _ in
             
-        }
+        })
         XCTAssertTrue(refreshCalled)
     }
 
@@ -137,10 +137,10 @@ class InAppReceiptVerificatorTests: XCTestCase {
             callback(.error(e: refreshError))
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { result in
+        }, completion: { result in
             
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.networkError(error: refreshError)))
-        }
+        })
     }
 
     func testVerifyReceipt_when_appStoreReceiptURLIsNil_refreshCallbackSuccess_receiptDataNotWritten_then_errorNoReceiptData_validateNotCalled() {
@@ -152,11 +152,11 @@ class InAppReceiptVerificatorTests: XCTestCase {
             
             callback(.success)
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
-            
-        }) { result in
+
+        }, completion: { result in
 
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.noReceiptData))
-        }
+        })
         XCTAssertFalse(validator.validateCalled)
     }
 
@@ -173,10 +173,10 @@ class InAppReceiptVerificatorTests: XCTestCase {
             callback(.success)
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { result in
+        }, completion: { result in
             
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.noReceiptData))
-        }
+        })
         XCTAssertFalse(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }
@@ -194,9 +194,9 @@ class InAppReceiptVerificatorTests: XCTestCase {
             callback(.success)
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { _ in
+        }, completion: { _ in
             
-        }
+        })
         XCTAssertTrue(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }
@@ -215,9 +215,9 @@ class InAppReceiptVerificatorTests: XCTestCase {
             XCTFail("refresh should not be called if we already have a receipt")
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
             
-        }) { _ in
+        }, completion: { _ in
             
-        }
+        })
         XCTAssertTrue(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }

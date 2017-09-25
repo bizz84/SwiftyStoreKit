@@ -42,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
 
             for purchase in purchases {
-                // swiftlint:disable:next for_where
                 if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
 
                     if purchase.needsFinishTransaction {

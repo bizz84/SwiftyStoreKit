@@ -45,7 +45,7 @@ public struct PurchaseDetails {
 
 //Conform to this protocol to provide custom receipt validator
 public protocol ReceiptValidator {
-	func validate(receipt: String, password autoRenewPassword: String?, completion: @escaping (VerifyReceiptResult) -> Void)
+	func validate(receipt: String, completion: @escaping (VerifyReceiptResult) -> Void)
 }
 
 // Payment transaction

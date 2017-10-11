@@ -237,7 +237,12 @@ extension SwiftyStoreKit {
 
         sharedInstance.receiptVerificator.verifyReceipt(using: validator, password: password, forceRefresh: forceRefresh, completion: completion)
     }
-    
+
+    /**
+     *  Fetch application receipt
+     *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
+     *  - Parameter completion: handler for result
+     */
     public class func fetchReceipt(forceRefresh: Bool, completion: @escaping (FetchReceiptResult) -> Void) {
     
         sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)

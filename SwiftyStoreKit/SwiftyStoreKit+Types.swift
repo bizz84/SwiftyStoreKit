@@ -83,12 +83,6 @@ public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product
 // Info for receipt returned by server
 public typealias ReceiptInfo = [String: AnyObject]
 
-// Refresh receipt result
-public enum RefreshReceiptResult {
-    case success(receiptData: Data)
-    case error(error: Error)
-}
-
 // Fetch receipt result
 public enum FetchReceiptResult {
     case success(receiptData: Data)

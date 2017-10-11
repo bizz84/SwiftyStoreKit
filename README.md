@@ -270,7 +270,7 @@ When an app is first installed, the app receipt is missing.
 
 As soon as a user completes a purchase or restores purchases, StoreKit creates and stores the receipt locally as a file, located by `Bundle.main.appStoreReceiptURL`.
 
-### Retrieve local receipt
+### Retrieve local receipt (encrypted)
 
 This helper can be used to retrieve the (encrypted) local receipt data:
 
@@ -282,7 +282,7 @@ let receiptString = receiptData.base64EncodedString(options: [])
 
 However, the receipt file may be missing or outdated.
 
-### Fetch receipt
+### Fetch receipt (encrypted)
 
 Use this method to get the updated receipt:
 

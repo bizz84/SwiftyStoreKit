@@ -311,7 +311,7 @@ This method works as follows:
 
 If `fetchReceipt` is successful, it will return the **encrypted** receipt as a string. For this reason, a **validation** step is needed to get all the receipt fields in readable form. This can be done in various ways:
 
-1. Validate with Apple via the `AppleReceiptValidator` (see [`verifyReceipt`](#verifyReceipt) below).
+1. Validate with Apple via the `AppleReceiptValidator` (see [`verifyReceipt`](#verify-receipt) below).
 2. Perform local receipt validation (see [#101](https://github.com/bizz84/SwiftyStoreKit/issues/101)).
 3. Post the receipt data and validate on server.
 
@@ -334,9 +334,10 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 **Notes**
 
 * This method is based on `fetchReceipt`, and the same refresh logic discussed above applies. 
-* `AppleReceiptValidator` is a **reference implementation** that does remote receipt validation with Apple and results in a network call. _This is prone to man-in-the-middle attacks._
+* `AppleReceiptValidator` is a **reference implementation** that validates the receipt with Apple and results in a network call. _This is prone to man-in-the-middle attacks._
 * You should implement your secure logic by validating your receipt locally, or sending the encrypted receipt data and validating it in your server.
 * Local receipt validation is not implemented (see [issue #101](https://github.com/bizz84/SwiftyStoreKit/issues/101) for details).
+* You can implement your own receipt validator by conforming to the `ReceiptValidator` protocol and passing it to `verifyReceipt`.
 
 ## Verifying purchases and subscriptions
 

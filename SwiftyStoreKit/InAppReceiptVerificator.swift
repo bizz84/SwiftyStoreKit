@@ -61,7 +61,7 @@ class InAppReceiptVerificator: NSObject {
         fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
             switch result {
             case .success(let encryptedReceipt):
-                self.verify(receipt: encryptedReceipt, using: validator, completion: completion)
+                self.verify(receipt: encryptedReceipt, using: validator, password: password, completion: completion)
             case .error(let error):
                 completion(.error(error: error))
             }

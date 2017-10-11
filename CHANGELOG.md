@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [0.11.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.0) Add `fetchReceipt` method + update `verifyReceipt` and `ReceiptValidator` protocol
 
 * Add `fetchReceipt` method. Update `verifyReceipt` to use it ([#278](https://github.com/bizz84/SwiftyStoreKit/pull/278), related issues: [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272), [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223)).
-* Remove `password` from `ReceiptValidator` protocol as this is specific to `AppleReceiptValidator` ([#280](https://github.com/bizz84/SwiftyStoreKit/pull/280/)). **Note**: This is an API breaking change.
+* Remove `password` from `ReceiptValidator` protocol as this is specific to `AppleReceiptValidator` ([#281](https://github.com/bizz84/SwiftyStoreKit/pull/281/)). **Note**: This is an API breaking change.
 
 
 ## [0.10.8](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.8) Update to swiftlint 0.22.0

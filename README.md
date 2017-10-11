@@ -290,9 +290,9 @@ Use this method to get the updated receipt:
 SwiftyStoreKit.fetchReceipt(forceRefresh: true) { result in
     switch result {
     case .success(let encryptedReceipt):
-        print("fetchReceipt success:\n\(encryptedReceipt)")
+        print("Fetch receipt success:\n\(encryptedReceipt)")
     case .error(let error):
-        print("fetchReceipt error: \(error)")
+        print("Fetch receipt failed: \(error)")
     }
 }
 ```
@@ -306,7 +306,7 @@ This method works as follows:
 
 * If the local receipt is missing or `forceRefresh = true` when calling `fetchReceipt`, a network call is made to refresh it.
 * If the user is not logged to the App Store, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
-* If the user enters valid credentials, the receipt will be refreshed and verified.
+* If the user enters valid credentials, the receipt will be refreshed.
 * If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
 
 If `fetchReceipt` is successful, it will return the **encrypted** receipt as a string. For this reason, a **validation** step is needed to get all the receipt fields in readable form. This can be done in various ways:
@@ -324,9 +324,9 @@ let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "
 SwiftyStoreKit.verifyReceipt(using: appleValidator, forceRefresh: false) { result in
     switch result {
     case .success(let receipt):
-        print("Verify receipt Success: \(receipt)")
+        print("Verify receipt success: \(receipt)")
     case .error(let error):
-        print("Verify receipt Failed: \(error)")
+        print("Verify receipt failed: \(error)")
 	}
 }
 ```
@@ -507,7 +507,7 @@ github "bizz84/SwiftyStoreKit"
 
 | Language  | Branch | Pod version | Xcode version |
 | --------- | ------ | ----------- | ------------- |
-| Swift 4.x | [swift-4.0](https://github.com/bizz84/SwiftyStoreKit/tree/swift-4.0) | TBA | Xcode 9 or greater|
+| Swift 4.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.10.4 | Xcode 9 or greater|
 | Swift 3.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8.x |
 | Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
 | Swift 2.2 | [swift-2.2](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.2) | 0.3.x | Xcode 7.3.x |

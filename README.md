@@ -320,8 +320,8 @@ If `fetchReceipt` is successful, it will return the **encrypted** receipt as a s
 Use this method to (optionally) refresh the receipt and perform validation in one step.
 
 ```swift
-let appleValidator = AppleReceiptValidator(service: .production)
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret", forceRefresh: false) { result in
+let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+SwiftyStoreKit.verifyReceipt(using: appleValidator, forceRefresh: false) { result in
     switch result {
     case .success(let receipt):
         print("Verify receipt Success: \(receipt)")
@@ -353,8 +353,8 @@ If you need to verify multiple purchases / subscriptions, you can either:
 ### Verify Purchase
 
 ```swift
-let appleValidator = AppleReceiptValidator(service: .production)
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of Consumable or NonConsumable
@@ -387,8 +387,8 @@ From [Apple - Working with Subscriptions](https://developer.apple.com/library/co
 When one or more subscriptions are found for a given product id, they are returned as a `ReceiptItem` array ordered by `expiryDate`, with the first one being the newest.
 
 ```swift
-let appleValidator = AppleReceiptValidator(service: .production)
-SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     switch result {
     case .success(let receipt):
         // Verify the purchase of a Subscription
@@ -448,8 +448,8 @@ SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
             SwiftyStoreKit.finishTransaction(purchase.transaction)
         }
         
-        let appleValidator = AppleReceiptValidator(service: .production)
-        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secret") { result in
+        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+        SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
             
             if case .success(let receipt) = result {
                 let purchaseResult = SwiftyStoreKit.verifySubscription(

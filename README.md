@@ -268,28 +268,11 @@ According to [Apple - Delivering Products](https://developer.apple.com/library/c
 
 When an app is first installed, the app receipt is missing.
 
-As soon as a user completes a purchase or restores purchases, StoreKit creates and stores the receipt locally as a file.
+As soon as a user completes a purchase or restores purchases, StoreKit creates and stores the receipt locally as a file, located by `Bundle.main.appStoreReceiptURL`.
 
-As the local receipt is always encrypted, a verification step is needed to get all the receipt fields in readable form.
+### Retrieve local receipt (encrypted)
 
-This is done with a `verifyReceipt` method which does two things:
-
-- If the receipt is missing, refresh it
-- If the receipt is available or is refreshed, validate it
-
-Receipt validation can be done remotely with Apple via the `AppleReceiptValidator` class, or with a client-supplied validator conforming to the `ReceiptValidator` protocol. 
-
-**Notes**
-
-* If the local receipt is missing when calling `verifyReceipt`, a network call is made to refresh it.
-* If the user is not logged to the App Store, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
-* If the user enters valid credentials, the receipt will be refreshed and verified.
-* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
-* Using `AppleReceiptValidator` (see below) does remote receipt validation and also results in a network call.
-* Local receipt validation is not implemented (see [issue #101](https://github.com/bizz84/SwiftyStoreKit/issues/101) for details).
-
-
-### Retrieve local receipt
+This helper can be used to retrieve the (encrypted) local receipt data:
 
 ```swift
 let receiptData = SwiftyStoreKit.localReceiptData
@@ -297,7 +280,44 @@ let receiptString = receiptData.base64EncodedString(options: [])
 // do your receipt validation here
 ```
 
+However, the receipt file may be missing or outdated.
+
+### Fetch receipt (encrypted)
+
+Use this method to get the updated receipt:
+
+```swift
+SwiftyStoreKit.fetchReceipt(forceRefresh: true) { result in
+    switch result {
+    case .success(let encryptedReceipt):
+        print("fetchReceipt success:\n\(encryptedReceipt)")
+    case .error(let error):
+        print("fetchReceipt error: \(error)")
+    }
+}
+```
+
+This method works as follows:
+
+* If `forceRefresh = false`, it returns the local receipt from file, or refreshes it if missing.
+* If `forceRefresh = true`, it always refreshes the receipt regardless.
+
+**Notes**
+
+* If the local receipt is missing or `forceRefresh = true` when calling `fetchReceipt`, a network call is made to refresh it.
+* If the user is not logged to the App Store, StoreKit will present a popup asking to **Sign In to the iTunes Store**.
+* If the user enters valid credentials, the receipt will be refreshed and verified.
+* If the user cancels, receipt refresh will fail with a **Cannot connect to iTunes Store** error.
+
+If `fetchReceipt` is successful, it will return the **encrypted** receipt as a string. For this reason, a **validation** step is needed to get all the receipt fields in readable form. This can be done in various ways:
+
+1. Validate with Apple via the `AppleReceiptValidator` (see [`verifyReceipt`](#verify-receipt) below).
+2. Perform local receipt validation (see [#101](https://github.com/bizz84/SwiftyStoreKit/issues/101)).
+3. Post the receipt data and validate on server.
+
 ### Verify Receipt
+
+Use this method to (optionally) refresh the receipt and perform validation in one step.
 
 ```swift
 let appleValidator = AppleReceiptValidator(service: .production)
@@ -311,7 +331,13 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, password: "your-shared-secre
 }
 ```
 
-Note: you can specify `forceRefresh: true` to force SwiftyStoreKit to refresh the receipt with Apple, even if a local receipt is already stored.
+**Notes**
+
+* This method is based on `fetchReceipt`, and the same refresh logic discussed above applies. 
+* `AppleReceiptValidator` is a **reference implementation** that validates the receipt with Apple and results in a network call. _This is prone to man-in-the-middle attacks._
+* You should implement your secure logic by validating your receipt locally, or sending the encrypted receipt data and validating it in your server.
+* Local receipt validation is not implemented (see [issue #101](https://github.com/bizz84/SwiftyStoreKit/issues/101) for details).
+* You can implement your own receipt validator by conforming to the `ReceiptValidator` protocol and passing it to `verifyReceipt`.
 
 ## Verifying purchases and subscriptions
 

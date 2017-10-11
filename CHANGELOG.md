@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.10.9](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.9) Add `fetchReceipt` method
+
+* Add `fetchReceipt` method. Update `verifyReceipt` to use it ([#278](https://github.com/bizz84/SwiftyStoreKit/pull/278), related issues: [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272), [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223)).
+
 ## [0.10.8](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.10.8) Update to swiftlint 0.22.0
 
 * Update to swiftlint 0.22.0 ([#270](https://github.com/bizz84/SwiftyStoreKit/pull/270), fix for [#273](https://github.com/bizz84/SwiftyStoreKit/issues/273))

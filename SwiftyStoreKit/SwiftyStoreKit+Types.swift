@@ -89,6 +89,12 @@ public enum RefreshReceiptResult {
     case error(error: Error)
 }
 
+// Fetch receipt result
+public enum FetchReceiptResult {
+    case success(encryptedReceipt: String)
+    case error(error: ReceiptError)
+}
+
 // Verify receipt result
 public enum VerifyReceiptResult {
     case success(receipt: ReceiptInfo)

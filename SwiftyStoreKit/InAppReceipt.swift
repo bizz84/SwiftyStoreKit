@@ -92,9 +92,10 @@ internal class InAppReceipt {
     ) -> VerifyPurchaseResult {
 
         // Get receipts info for the product
-        let receipts = receipt["receipt"]?["in_app"] as? [ReceiptInfo]
-        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
-        let nonCancelledReceiptsInfo = receiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
+        let appReceipt = receipt["receipt"] as? [String: AnyObject]
+        let receiptsInfo = appReceipt?["in_app"] as? [ReceiptInfo]
+        let filteredReceiptsInfo = filterReceiptsInfo(receipts: receiptsInfo, withProductId: productId)
+        let nonCancelledReceiptsInfo = filteredReceiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
 
         let receiptItems = nonCancelledReceiptsInfo.flatMap { ReceiptItem(receiptInfo: $0) }
         // Verify that at least one receipt has the right product id
@@ -174,7 +175,8 @@ internal class InAppReceipt {
         case .autoRenewable:
             return (receipt["latest_receipt_info"] as? [ReceiptInfo], nil)
         case .nonRenewing(let duration):
-            return (receipt["receipt"]?["in_app"] as? [ReceiptInfo], duration)
+            let appReceipt = receipt["receipt"] as? [String: AnyObject]
+            return (appReceipt?["in_app"] as? [ReceiptInfo], duration)
         }
     }
 

@@ -45,7 +45,6 @@ class InAppReceiptVerificator: NSObject {
     /**
      *  Verify application receipt.
      *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
-     *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
      *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter refresh: closure to perform receipt refresh (this is made explicit for testability)
      *  - Parameter completion: handler for result

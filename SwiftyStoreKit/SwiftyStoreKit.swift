@@ -229,7 +229,6 @@ extension SwiftyStoreKit {
     /**
      *  Verify application receipt
      *  - Parameter validator: receipt validator to use
-     *  - Parameter password: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter completion: handler for result
      */

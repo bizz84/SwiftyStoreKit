@@ -37,6 +37,11 @@ public struct AppleReceiptValidator: ReceiptValidator {
     private let service: VerifyReceiptURLType
     private let sharedSecret: String?
 
+    /**
+     * Reference Apple Receipt Validator
+     *  - Parameter service: Either .production or .sandbox
+     *  - Parameter sharedSecret: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
+     */
     public init(service: VerifyReceiptURLType = .production, sharedSecret: String? = nil) {
 		self.service = service
         self.sharedSecret = sharedSecret

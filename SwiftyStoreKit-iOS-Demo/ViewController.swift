@@ -116,9 +116,8 @@ class ViewController: UIViewController {
     
     func verifyReceipt(completion: @escaping (VerifyReceiptResult) -> Void) {
         
-        let appleValidator = AppleReceiptValidator(service: .production)
-        let password = "your-shared-secret"
-        SwiftyStoreKit.verifyReceipt(using: appleValidator, password: password, completion: completion)
+        let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+        SwiftyStoreKit.verifyReceipt(using: appleValidator, completion: completion)
     }
 
     func verifyPurchase(_ purchase: RegisteredPurchase) {

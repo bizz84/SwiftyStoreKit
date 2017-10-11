@@ -51,7 +51,6 @@ class InAppReceiptVerificator: NSObject {
      *  - Parameter completion: handler for result
      */
     public func verifyReceipt(using validator: ReceiptValidator,
-                              password: String? = nil,
                               forceRefresh: Bool,
                               refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
                               completion: @escaping (VerifyReceiptResult) -> Void) {
@@ -59,7 +58,7 @@ class InAppReceiptVerificator: NSObject {
         fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
             switch result {
             case .success(let encryptedReceipt):
-                self.verify(receipt: encryptedReceipt, using: validator, password: password, completion: completion)
+                self.verify(receipt: encryptedReceipt, using: validator, completion: completion)
             case .error(let error):
                 completion(.error(error: error))
             }
@@ -79,9 +78,7 @@ class InAppReceiptVerificator: NSObject {
                              completion: @escaping (FetchReceiptResult) -> Void) {
 
         if let receiptData = appStoreReceiptData, forceRefresh == false {
-
             fetchReceiptSuccessHandler(receiptData: receiptData, completion: completion)
-
         } else {
             
             receiptRefreshRequest = refresh(nil) { result in
@@ -111,12 +108,11 @@ class InAppReceiptVerificator: NSObject {
     /**
      *  - Parameter receiptData: encrypted receipt data
      *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
-     *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
      *  - Parameter completion: handler for result
      */
-    private func verify(receipt: String, using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {
-
-        validator.validate(receipt: receipt, password: password) { result in
+    private func verify(receipt: String, using validator: ReceiptValidator, completion: @escaping (VerifyReceiptResult) -> Void) {
+     
+        validator.validate(receipt: receipt) { result in
             
             DispatchQueue.main.async {
                 completion(result)

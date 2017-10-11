@@ -233,9 +233,9 @@ extension SwiftyStoreKit {
      *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter completion: handler for result
      */
-    public class func verifyReceipt(using validator: ReceiptValidator, password: String? = nil, forceRefresh: Bool = false, completion: @escaping (VerifyReceiptResult) -> Void) {
+    public class func verifyReceipt(using validator: ReceiptValidator, forceRefresh: Bool = false, completion: @escaping (VerifyReceiptResult) -> Void) {
 
-        sharedInstance.receiptVerificator.verifyReceipt(using: validator, password: password, forceRefresh: forceRefresh, completion: completion)
+        sharedInstance.receiptVerificator.verifyReceipt(using: validator, forceRefresh: forceRefresh, completion: completion)
     }
 
     /**

@@ -58,9 +58,24 @@ class InAppReceiptVerificator: NSObject {
                               refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
                               completion: @escaping (VerifyReceiptResult) -> Void) {
         
+        fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
+            switch result {
+            case .success(let encryptedReceipt):
+                self.verify(receipt: encryptedReceipt, using: validator, completion: completion)
+            case .error(let error):
+                completion(.error(error: error))
+            }
+        }
+    }
+    
+    public func fetchReceipt(forceRefresh: Bool,
+                             refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
+                             completion: @escaping (FetchReceiptResult) -> Void) {
+
         if let receiptData = appStoreReceiptData, forceRefresh == false {
-            
-            verify(receiptData: receiptData, using: validator, password: password, completion: completion)
+
+            fetchReceiptHandler(receiptData: receiptData, completion: completion)
+
         } else {
             
             receiptRefreshRequest = refresh(nil) { result in
@@ -70,7 +85,7 @@ class InAppReceiptVerificator: NSObject {
                 switch result {
                 case .success:
                     if let receiptData = self.appStoreReceiptData {
-                        self.verify(receiptData: receiptData, using: validator, password: password, completion: completion)
+                        self.fetchReceiptHandler(receiptData: receiptData, completion: completion)
                     } else {
                         completion(.error(error: .noReceiptData))
                     }
@@ -80,6 +95,12 @@ class InAppReceiptVerificator: NSObject {
             }
         }
     }
+
+    private func fetchReceiptHandler(receiptData: Data, completion: (FetchReceiptResult) -> Void) {
+    
+        let base64EncodedString = receiptData.base64EncodedString(options: [])
+        completion(.success(encryptedReceipt: base64EncodedString))
+    }
     
     /**
      *  - Parameter receiptData: encrypted receipt data
@@ -87,12 +108,9 @@ class InAppReceiptVerificator: NSObject {
      *  - Parameter password: Your app’s shared secret (a hexadecimal string). Only used for receipts that contain auto-renewable subscriptions.
      *  - Parameter completion: handler for result
      */
-    private func verify(receiptData: Data, using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {
-     
-        // The base64 encoded receipt data.
-        let base64EncodedString = receiptData.base64EncodedString(options: [])
+    private func verify(receipt: String, using validator: ReceiptValidator, password: String? = nil, completion: @escaping (VerifyReceiptResult) -> Void) {
 
-        validator.validate(receipt: base64EncodedString, password: password) { result in
+        validator.validate(receipt: receipt, password: password) { result in
             
             DispatchQueue.main.async {
                 completion(result)

@@ -238,6 +238,11 @@ extension SwiftyStoreKit {
         sharedInstance.receiptVerificator.verifyReceipt(using: validator, password: password, forceRefresh: forceRefresh, completion: completion)
     }
     
+    public class func fetchReceipt(forceRefresh: Bool, completion: @escaping (FetchReceiptResult) -> Void) {
+    
+        sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)
+    }
+    
     /**
      *  Verify the purchase of a Consumable or NonConsumable product in a receipt
      *  - Parameter productId: the product id of the purchase to verify

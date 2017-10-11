@@ -42,9 +42,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
         self.sharedSecret = sharedSecret
 	}
 
-	public func validate(
-		receipt: String,
-		completion: @escaping (VerifyReceiptResult) -> Void) {
+	public func validate(receipt: String, completion: @escaping (VerifyReceiptResult) -> Void) {
 
 		let storeURL = URL(string: service.rawValue)! // safe (until no more)
 		let storeRequest = NSMutableURLRequest(url: storeURL)

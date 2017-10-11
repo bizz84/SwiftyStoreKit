@@ -45,7 +45,7 @@ public struct PurchaseDetails {
 
 //Conform to this protocol to provide custom receipt validator
 public protocol ReceiptValidator {
-	func validate(receipt: String, completion: @escaping (VerifyReceiptResult) -> Void)
+	func validate(receiptData: Data, completion: @escaping (VerifyReceiptResult) -> Void)
 }
 
 // Payment transaction
@@ -91,7 +91,7 @@ public enum RefreshReceiptResult {
 
 // Fetch receipt result
 public enum FetchReceiptResult {
-    case success(encryptedReceipt: String)
+    case success(receiptData: Data)
     case error(error: ReceiptError)
 }
 

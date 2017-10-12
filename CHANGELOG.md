@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [0.11.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.0) Add `fetchReceipt` method + update `verifyReceipt` and `ReceiptValidator` protocol
 
 * Add `fetchReceipt` method. Update `verifyReceipt` to use it ([#278](https://github.com/bizz84/SwiftyStoreKit/pull/278), related issues: [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272), [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223)).
-* Remove `password` from `ReceiptValidator` protocol as this is specific to `AppleReceiptValidator` ([#281](https://github.com/bizz84/SwiftyStoreKit/pull/281/)). **Note**: This is an API breaking change.
+* Update `fetchReceipt` and `ReceiptValidator` to use receipt as `Data` rather than `String`. This is consistent with `localReceiptData` ([#284](https://github.com/bizz84/SwiftyStoreKit/pull/284), see [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272)).
+* Remove `password` from `ReceiptValidator` protocol as this is specific to `AppleReceiptValidator` ([#281](https://github.com/bizz84/SwiftyStoreKit/pull/281/), see [#263](https://github.com/bizz84/SwiftyStoreKit/issues/263)). **Note**: This is an API breaking change.
 * Unwrap `receipt["receipt"]?["in_app"]` in two steps (addresses casting problems) ([#283](https://github.com/bizz84/SwiftyStoreKit/pull/283), related issue [#256](https://github.com/bizz84/SwiftyStoreKit/issues/256)).
 
 

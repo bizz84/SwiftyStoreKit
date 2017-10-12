@@ -47,12 +47,13 @@ public struct AppleReceiptValidator: ReceiptValidator {
         self.sharedSecret = sharedSecret
 	}
 
-	public func validate(receipt: String, completion: @escaping (VerifyReceiptResult) -> Void) {
+	public func validate(receiptData: Data, completion: @escaping (VerifyReceiptResult) -> Void) {
 
 		let storeURL = URL(string: service.rawValue)! // safe (until no more)
 		let storeRequest = NSMutableURLRequest(url: storeURL)
 		storeRequest.httpMethod = "POST"
 
+        let receipt = receiptData.base64EncodedString(options: [])
 		let requestContents: NSMutableDictionary = [ "receipt-data": receipt ]
 		// password if defined
 		if let password = sharedSecret {
@@ -106,7 +107,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
 				let receiptStatus = ReceiptStatus(rawValue: status) ?? ReceiptStatus.unknown
 				if case .testReceipt = receiptStatus {
                     let sandboxValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: self.sharedSecret)
-					sandboxValidator.validate(receipt: receipt, completion: completion)
+					sandboxValidator.validate(receiptData: receiptData, completion: completion)
 				} else {
 					if receiptStatus.isValid {
 						completion(.success(receipt: receiptInfo))

@@ -28,7 +28,7 @@ import XCTest
 
 class TestReceiptValidator: ReceiptValidator {
     var validateCalled = false
-    func validate(receipt: String, completion: @escaping (VerifyReceiptResult) -> Void) {
+    func validate(receiptData: Data, completion: @escaping (VerifyReceiptResult) -> Void) {
         validateCalled = true
         completion(.success(receipt: [:]))
     }

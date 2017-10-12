@@ -56,8 +56,8 @@ class InAppReceiptVerificator: NSObject {
         
         fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
             switch result {
-            case .success(let encryptedReceipt):
-                self.verify(receipt: encryptedReceipt, using: validator, completion: completion)
+            case .success(let receiptData):
+                self.verify(receiptData: receiptData, using: validator, completion: completion)
             case .error(let error):
                 completion(.error(error: error))
             }
@@ -77,7 +77,7 @@ class InAppReceiptVerificator: NSObject {
                              completion: @escaping (FetchReceiptResult) -> Void) {
 
         if let receiptData = appStoreReceiptData, forceRefresh == false {
-            fetchReceiptSuccessHandler(receiptData: receiptData, completion: completion)
+            completion(.success(receiptData: receiptData))
         } else {
             
             receiptRefreshRequest = refresh(nil) { result in
@@ -87,7 +87,7 @@ class InAppReceiptVerificator: NSObject {
                 switch result {
                 case .success:
                     if let receiptData = self.appStoreReceiptData {
-                        self.fetchReceiptSuccessHandler(receiptData: receiptData, completion: completion)
+                        completion(.success(receiptData: receiptData))
                     } else {
                         completion(.error(error: .noReceiptData))
                     }
@@ -97,21 +97,15 @@ class InAppReceiptVerificator: NSObject {
             }
         }
     }
-
-    private func fetchReceiptSuccessHandler(receiptData: Data, completion: (FetchReceiptResult) -> Void) {
-    
-        let base64EncodedString = receiptData.base64EncodedString(options: [])
-        completion(.success(encryptedReceipt: base64EncodedString))
-    }
     
     /**
      *  - Parameter receiptData: encrypted receipt data
      *  - Parameter validator: Validator to check the encrypted receipt and return the receipt in readable format
      *  - Parameter completion: handler for result
      */
-    private func verify(receipt: String, using validator: ReceiptValidator, completion: @escaping (VerifyReceiptResult) -> Void) {
+    private func verify(receiptData: Data, using validator: ReceiptValidator, completion: @escaping (VerifyReceiptResult) -> Void) {
      
-        validator.validate(receipt: receipt) { result in
+        validator.validate(receiptData: receiptData) { result in
             
             DispatchQueue.main.async {
                 completion(result)

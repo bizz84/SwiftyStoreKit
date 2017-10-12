@@ -92,7 +92,7 @@ internal class InAppReceipt {
     ) -> VerifyPurchaseResult {
 
         // Get receipts info for the product
-        let receipts = getInAppReceipt(receipt: receipt)
+        let receipts = getInAppReceipts(receipt: receipt)
         let filteredReceiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
         let nonCancelledReceiptsInfo = filteredReceiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
 
@@ -174,7 +174,7 @@ internal class InAppReceipt {
         case .autoRenewable:
             return (receipt["latest_receipt_info"] as? [ReceiptInfo], nil)
         case .nonRenewing(let duration):
-            return (getInAppReceipt(receipt: receipt), duration)
+            return (getInAppReceipts(receipt: receipt), duration)
         }
     }
 
@@ -187,7 +187,7 @@ internal class InAppReceipt {
         return Date(millisecondsSince1970: requestDateString)
     }
     
-    private class func getInAppReceipt(receipt: ReceiptInfo) -> [ReceiptInfo]? {
+    private class func getInAppReceipts(receipt: ReceiptInfo) -> [ReceiptInfo]? {
         
         let appReceipt = receipt["receipt"] as? ReceiptInfo
         return appReceipt?["in_app"] as? [ReceiptInfo]

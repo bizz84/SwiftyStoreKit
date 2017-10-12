@@ -289,7 +289,8 @@ Use this method to get the updated receipt:
 ```swift
 SwiftyStoreKit.fetchReceipt(forceRefresh: true) { result in
     switch result {
-    case .success(let encryptedReceipt):
+    case .success(let receiptData):
+        let encryptedReceipt = receiptData.base64EncodedString(options: [])
         print("Fetch receipt success:\n\(encryptedReceipt)")
     case .error(let error):
         print("Fetch receipt failed: \(error)")

@@ -40,9 +40,26 @@ Apple recommends to register a transaction observer [as soon as the app starts](
 
 SwiftyStoreKit supports this by calling `completeTransactions()` when the app starts:
 
+* **Atomic**: to be used when the content is delivered immediately.
+
 ```swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+        for purchase in purchases {
+            if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
+                print("purchased: \(purchase)")
+            }
+        }
+    }
+    return true
+}
+```
+
+* **Non-Atomic**: to be used when the content is delivered by the server.
+
+```swift
+func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    SwiftyStoreKit.completeTransactions(atomically: false) { purchases in
         for purchase in purchases {
             if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
                 if purchase.needsFinishTransaction {

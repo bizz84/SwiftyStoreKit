@@ -609,6 +609,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
 * [Zmeu Grand Canyon](http://grandcanyon.zmeu.guide/) - Interactive hiking map & planner
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
+* [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
 
 
 ## License

@@ -24,13 +24,6 @@ I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), 
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
 
-## About Xcode 9 / Swift 4
-
-#### SwiftyStoreKit is compatible with Xcode 8.x (Swift 3.x) and Xcode 9 beta 3 or later (Swift 4).
-
-**NOTE**: Apple had removed [`SKError`](https://developer.apple.com/documentation/storekit/skerror) from the iOS 11 public API on Xcode 9 betas 1 and 2. This was a bug that has been fixed on Xcode 9 beta 3.
-
-
 ## App startup
 
 ### Complete Transactions

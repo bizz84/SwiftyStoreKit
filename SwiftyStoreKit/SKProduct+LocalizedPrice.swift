@@ -28,9 +28,21 @@ import StoreKit
 public extension SKProduct {
 
     public var localizedPrice: String? {
+        return formattedPrice(price: price, locale: priceLocale)
+    }
+
+    @available(iOS 11.2, OSX 10.13.2, tvOS 11.2, *)
+    public var localizedIntroductoryPrice: String? {
+        guard let introductoryPrice = introductoryPrice else {
+            return nil
+        }
+        return formattedPrice(price: introductoryPrice.price, locale: introductoryPrice.priceLocale)
+    }
+
+    private func formattedPrice(price: NSDecimalNumber, locale: Locale) -> String? {
         let numberFormatter = NumberFormatter()
-        numberFormatter.locale = self.priceLocale
+        numberFormatter.locale = locale
         numberFormatter.numberStyle = .currency
-        return numberFormatter.string(from: self.price)
+        return numberFormatter.string(from: price)
     }
 }

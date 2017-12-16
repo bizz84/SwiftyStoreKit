@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-## [0.11.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.1) Add `transactionDate` to `PaymentTransaction`
+## [0.11.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.1) Add `PaymentTransaction.transactionDate` and  `SKProduct.localizedIntroductoryPrice`
 
 * Add `transactionDate` to `PaymentTransaction` ([#316](https://github.com/bizz84/SwiftyStoreKit/pull/316), see [#312](https://github.com/bizz84/SwiftyStoreKit/issues/312)).
+* Add `localizedIntroductoryPrice` to `SKProduct` ([#318](https://github.com/bizz84/SwiftyStoreKit/pull/318)).
 
 ## [0.11.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.0) Add `fetchReceipt` method + update `verifyReceipt` and `ReceiptValidator` protocol
 

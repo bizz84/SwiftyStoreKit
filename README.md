@@ -24,8 +24,6 @@ I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), 
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
 
-#### Note from the Author: I'll be traveling between 2017-11-07 and 2017-12-16 with very limited Internet connectivity, and won't be maintaining this project during these dates. PRs are still welcome but won't be merged until after I'm back. 
-
 ## About Xcode 9 / Swift 4
 
 #### SwiftyStoreKit is compatible with Xcode 8.x (Swift 3.x) and Xcode 9 beta 3 or later (Swift 4).

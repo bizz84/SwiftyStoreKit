@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.1) Add `transactionDate` to `PaymentTransaction`
+
+* Add `transactionDate` to `PaymentTransaction` ([#316](https://github.com/bizz84/SwiftyStoreKit/pull/316), see [#312](https://github.com/bizz84/SwiftyStoreKit/issues/312)).
+
 ## [0.11.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.0) Add `fetchReceipt` method + update `verifyReceipt` and `ReceiptValidator` protocol
 
 * Add `fetchReceipt` method. Update `verifyReceipt` to use it ([#278](https://github.com/bizz84/SwiftyStoreKit/pull/278), related issues: [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272), [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223)).

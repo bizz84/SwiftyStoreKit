@@ -50,6 +50,7 @@ public protocol ReceiptValidator {
 
 // Payment transaction
 public protocol PaymentTransaction {
+    var transactionDate: Date? { get }
     var transactionState: SKPaymentTransactionState { get }
     var transactionIdentifier: String? { get }
 }

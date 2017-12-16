@@ -31,7 +31,7 @@ public extension SKProduct {
         return formattedPrice(price: price, locale: priceLocale)
     }
 
-    @available(iOS 11.2, OSX 10.13.2, *)
+    @available(iOS 11.2, OSX 10.13.2, tvOS 11.2, *)
     public var localizedIntroductoryPrice: String? {
         guard let introductoryPrice = introductoryPrice else {
             return nil

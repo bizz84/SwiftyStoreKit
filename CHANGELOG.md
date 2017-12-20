@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.2) Remove `SKProduct.localizedIntroductoryPrice`
+
+* Remove `localizedIntroductoryPrice` ([#320](https://github.com/bizz84/SwiftyStoreKit/pull/320/files), see [#319](https://github.com/bizz84/SwiftyStoreKit/issues/319), [#318](https://github.com/bizz84/SwiftyStoreKit/pull/318), [#315](https://github.com/bizz84/SwiftyStoreKit/pull/315))
+
 ## [0.11.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.1) Add `PaymentTransaction.transactionDate` and  `SKProduct.localizedIntroductoryPrice`
 
 * Add `transactionDate` to `PaymentTransaction` ([#316](https://github.com/bizz84/SwiftyStoreKit/pull/316), see [#312](https://github.com/bizz84/SwiftyStoreKit/issues/312)).

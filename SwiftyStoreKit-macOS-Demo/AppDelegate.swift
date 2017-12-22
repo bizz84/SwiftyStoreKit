@@ -38,13 +38,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
 
             for purchase in purchases {
-                if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
-
+                switch purchase.transaction.transactionState {
+                case .purchased, .restored:
                     if purchase.needsFinishTransaction {
                         // Deliver content from server, then:
                         SwiftyStoreKit.finishTransaction(purchase.transaction)
                     }
-                    print("purchased: \(purchase.productId)")
+                    print("\(purchase.transaction.transactionState.debugDescription): \(purchase.productId)")
+                case .failed, .purchasing, .deferred:
+                    break // do nothing
                 }
             }
         }

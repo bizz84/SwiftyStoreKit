@@ -187,7 +187,6 @@ class CompleteTransactionsControllerTests: XCTestCase {
 
         XCTAssertEqual(spy.finishTransactionCalledCount, 0)
     }
-
     
     func makeTestPaymentTransaction(productIdentifier: String, transactionState: SKPaymentTransactionState) -> TestPaymentTransaction {
 

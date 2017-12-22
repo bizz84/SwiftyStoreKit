@@ -35,17 +35,21 @@ SwiftyStoreKit supports this by calling `completeTransactions()` when the app st
 
 ```swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-    SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
-        for purchase in purchases {
-            if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
-                if purchase.needsFinishTransaction {
-                    // Deliver content from server, then:
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
-                }
-                print("purchased: \(purchase)")
-            }
-        }
-    }
+	// see notes below for the meaning of Atomic / Non-Atomic
+	SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
+	    for purchase in purchases {
+	        switch purchase.transaction.transactionState {
+	        case .purchased, .restored:
+	            if purchase.needsFinishTransaction {
+	                // Deliver content from server, then:
+	                SwiftyStoreKit.finishTransaction(purchase.transaction)
+	            }
+	            // Unlock content
+	        case .failed, .purchasing, .deferred:
+	            break // do nothing
+	        }
+	    }
+	}
     return true
 }
 ```

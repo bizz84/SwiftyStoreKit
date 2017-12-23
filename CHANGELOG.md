@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 
 ## [0.11.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.3) `completeTransactions` should finish failed transactions if `atomically: false`
 
+* Add `originalTransaction` to `PurchaseDetails` ([#323](https://github.com/bizz84/SwiftyStoreKit/pull/323), fix for [#302](https://github.com/bizz84/SwiftyStoreKit/issues/302))
 * `completeTransactions` should finish failed transactions if `atomically: false` ([#322](https://github.com/bizz84/SwiftyStoreKit/pull/322), related issues: [#307](https://github.com/bizz84/SwiftyStoreKit/issues/307), [#288](https://github.com/bizz84/SwiftyStoreKit/issues/288))
 
 ## [0.11.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.2) Remove `SKProduct.localizedIntroductoryPrice`

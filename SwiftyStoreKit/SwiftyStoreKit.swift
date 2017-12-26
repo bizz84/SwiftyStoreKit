@@ -134,6 +134,9 @@ extension SwiftyStoreKit {
 
     // MARK: Public methods - Purchases
     
+    /**
+     * Return NO if this device is not able or allowed to make payments
+     */
     public class var canMakePayments: Bool {
         return SKPaymentQueue.canMakePayments()
     }

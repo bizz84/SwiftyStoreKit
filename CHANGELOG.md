@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.11.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.3) `completeTransactions` finishes failed transactions if `atomically: false`
+
+* Add `originalTransaction` to `PurchaseDetails` ([#323](https://github.com/bizz84/SwiftyStoreKit/pull/323), fix for [#302](https://github.com/bizz84/SwiftyStoreKit/issues/302))
+* Bug fix: `completeTransactions` finishes failed transactions if `atomically: false` ([#322](https://github.com/bizz84/SwiftyStoreKit/pull/322), related issues: [#307](https://github.com/bizz84/SwiftyStoreKit/issues/307), [#288](https://github.com/bizz84/SwiftyStoreKit/issues/288))
+
+## [0.11.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.2) Remove `SKProduct.localizedIntroductoryPrice`
+
+* Remove `localizedIntroductoryPrice` ([#320](https://github.com/bizz84/SwiftyStoreKit/pull/320), see [#319](https://github.com/bizz84/SwiftyStoreKit/issues/319), [#318](https://github.com/bizz84/SwiftyStoreKit/pull/318), [#315](https://github.com/bizz84/SwiftyStoreKit/pull/315))
+
+## [0.11.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.1) Add `PaymentTransaction.transactionDate` and  `SKProduct.localizedIntroductoryPrice`
+
+* Add `transactionDate` to `PaymentTransaction` ([#316](https://github.com/bizz84/SwiftyStoreKit/pull/316), see [#312](https://github.com/bizz84/SwiftyStoreKit/issues/312)).
+* Add `localizedIntroductoryPrice` to `SKProduct` ([#318](https://github.com/bizz84/SwiftyStoreKit/pull/318)).
+
 ## [0.11.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.0) Add `fetchReceipt` method + update `verifyReceipt` and `ReceiptValidator` protocol
 
 * Add `fetchReceipt` method. Update `verifyReceipt` to use it ([#278](https://github.com/bizz84/SwiftyStoreKit/pull/278), related issues: [#272](https://github.com/bizz84/SwiftyStoreKit/issues/272), [#223](https://github.com/bizz84/SwiftyStoreKit/issues/223)).

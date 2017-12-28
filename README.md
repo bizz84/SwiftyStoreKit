@@ -24,13 +24,6 @@ I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), 
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).
 
-## About Xcode 9 / Swift 4
-
-#### SwiftyStoreKit is compatible with Xcode 8.x (Swift 3.x) and Xcode 9 beta 3 or later (Swift 4).
-
-**NOTE**: Apple had removed [`SKError`](https://developer.apple.com/documentation/storekit/skerror) from the iOS 11 public API on Xcode 9 betas 1 and 2. This was a bug that has been fixed on Xcode 9 beta 3.
-
-
 ## App startup
 
 ### Complete Transactions
@@ -46,10 +39,13 @@ SwiftyStoreKit supports this by calling `completeTransactions()` when the app st
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
         for purchase in purchases {
-            if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
-                print("purchased: \(purchase)")
-            }
-        }
+	        switch purchase.transaction.transactionState {
+	        case .purchased, .restored:
+	            // Unlock content
+	        case .failed, .purchasing, .deferred:
+	            break // do nothing
+	        }
+	    }
     }
     return true
 }
@@ -60,17 +56,20 @@ func application(application: UIApplication, didFinishLaunchingWithOptions launc
 ```swift
 func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
     SwiftyStoreKit.completeTransactions(atomically: false) { purchases in
-        for purchase in purchases {
-            if purchase.transaction.transactionState == .purchased || purchase.transaction.transactionState == .restored {
-                if purchase.needsFinishTransaction {
-                    // Deliver content from server, then:
-                    SwiftyStoreKit.finishTransaction(purchase.transaction)
-                }
-                print("purchased: \(purchase)")
-            }
-        }
-    }
-    return true
+	    for purchase in purchases {
+	        switch purchase.transaction.transactionState {
+	        case .purchased, .restored:
+	            if purchase.needsFinishTransaction {
+	                // Deliver content from server, then:
+	                SwiftyStoreKit.finishTransaction(purchase.transaction)
+	            }
+	            // Unlock content
+	        case .failed, .purchasing, .deferred:
+	            break // do nothing
+	        }
+	    }
+	}
+  return true
 }
 ```
 
@@ -624,6 +623,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Fresh Snow](https://itunes.apple.com/app/id1063000470) - Colorado Ski Report
 * [Zmeu Grand Canyon](http://grandcanyon.zmeu.guide/) - Interactive hiking map & planner
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
+* [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
 
 
 ## License

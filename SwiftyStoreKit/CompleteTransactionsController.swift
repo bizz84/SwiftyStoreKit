@@ -55,13 +55,13 @@ class CompleteTransactionsController: TransactionController {
 
             if transactionState != .purchasing {
 
-                let purchase = Purchase(productId: transaction.payment.productIdentifier, quantity: transaction.payment.quantity, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !completeTransactions.atomically)
+                let willFinishTransaction = completeTransactions.atomically || transactionState == .failed
+                let purchase = Purchase(productId: transaction.payment.productIdentifier, quantity: transaction.payment.quantity, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !willFinishTransaction)
 
                 purchases.append(purchase)
 
-                print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.debugDescription)")
-
-                if completeTransactions.atomically {
+                if willFinishTransaction {
+                    print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.debugDescription)")
                     paymentQueue.finishTransaction(transaction)
                 }
             } else {

@@ -73,7 +73,7 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
         print("Invalid product identifier: \(invalidProductId)")
     }
     else {
-	     print("Error: \(result.error)")
+        print("Error: \(result.error)")
     }
 }
 ```
@@ -164,8 +164,8 @@ SwiftyStoreKit supports this with a new handler, called like this:
 
 ```swift
 SwiftyStoreKit.shouldAddStorePaymentHandler = { payment, product in
-	// return true if the content can be delivered by your app
-	// return false otherwise
+    // return true if the content can be delivered by your app
+    // return false otherwise
 }
 ```
 

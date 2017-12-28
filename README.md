@@ -70,7 +70,7 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
         print("Product: \(product.localizedDescription), price: \(priceString)")
     }
     else if let invalidProductId = result.invalidProductIDs.first {
-        return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
+        print("Invalid product identifier: \(invalidProductId)")
     }
     else {
 	     print("Error: \(result.error)")

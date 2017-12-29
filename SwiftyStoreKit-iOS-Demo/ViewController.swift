@@ -32,37 +32,90 @@ enum RegisteredPurchase: String {
     case purchase2
     case nonConsumablePurchase
     case consumablePurchase
-    case autoRenewablePurchase
     case nonRenewingPurchase
+    case autoRenewableWeekly
+    case autoRenewableMonthly
+    case autoRenewableYearly
 }
 
 class ViewController: UIViewController {
 
     let appBundleId = "com.musevisions.iOS.SwiftyStoreKit"
-
-    let purchase1Suffix = RegisteredPurchase.purchase1
-    let purchase2Suffix = RegisteredPurchase.autoRenewablePurchase
-
-    // MARK: actions
-    @IBAction func getInfo1() {
-        getInfo(purchase1Suffix)
+    
+#if os(iOS)
+    // UISwitch is unavailable on tvOS
+    @IBOutlet var nonConsumableAtomicSwitch: UISwitch!
+    @IBOutlet var consumableAtomicSwitch: UISwitch!
+    @IBOutlet var nonRenewingAtomicSwitch: UISwitch!
+    @IBOutlet var autoRenewableAtomicSwitch: UISwitch!
+    var nonConsumableIsAtomic: Bool { return nonConsumableAtomicSwitch.isOn }
+    var consumableIsAtomic: Bool { return consumableAtomicSwitch.isOn }
+    var nonRenewingIsAtomic: Bool { return nonRenewingAtomicSwitch.isOn }
+    var autoRenewableIsAtomic: Bool { return autoRenewableAtomicSwitch.isOn }
+#else
+    let nonConsumableIsAtomic = true
+    let consumableIsAtomic = true
+    let nonRenewingIsAtomic = true
+    let autoRenewableIsAtomic = true
+#endif
+    // MARK: non consumable
+    @IBAction func nonConsumableGetInfo() {
+        getInfo(.nonConsumablePurchase)
     }
-    @IBAction func purchase1() {
-        purchase(purchase1Suffix)
+    @IBAction func nonConsumablePurchase() {
+        purchase(.nonConsumablePurchase, atomically: nonConsumableIsAtomic)
     }
-    @IBAction func verifyPurchase1() {
-        verifyPurchase(purchase1Suffix)
-    }
-    @IBAction func getInfo2() {
-        getInfo(purchase2Suffix)
-    }
-    @IBAction func purchase2() {
-        purchase(purchase2Suffix)
-    }
-    @IBAction func verifyPurchase2() {
-        verifyPurchase(purchase2Suffix)
+    @IBAction func nonConsumableVerifyPurchase() {
+        verifyPurchase(.nonConsumablePurchase)
     }
     
+    // MARK: consumable
+    @IBAction func consumableGetInfo() {
+        getInfo(.consumablePurchase)
+    }
+    @IBAction func consumablePurchase() {
+        purchase(.consumablePurchase, atomically: consumableIsAtomic)
+    }
+    @IBAction func consumableVerifyPurchase() {
+        verifyPurchase(.consumablePurchase)
+    }
+
+    // MARK: non renewing
+    @IBAction func nonRenewingGetInfo() {
+        getInfo(.nonRenewingPurchase)
+    }
+    @IBAction func nonRenewingPurchase() {
+        purchase(.nonRenewingPurchase, atomically: nonRenewingIsAtomic)
+    }
+    @IBAction func nonRenewingVerifyPurchase() {
+        verifyPurchase(.nonRenewingPurchase)
+    }
+
+    // MARK: auto renewable
+#if os(iOS)
+    @IBOutlet var autoRenewableSubscriptionSegmentedControl: UISegmentedControl!
+    
+    var autoRenewableSubscription: RegisteredPurchase {
+        switch autoRenewableSubscriptionSegmentedControl.selectedSegmentIndex {
+        case 0: return .autoRenewableWeekly
+        case 1: return .autoRenewableMonthly
+        case 2: return .autoRenewableYearly
+        default: return .autoRenewableWeekly
+        }
+    }
+#else
+    let autoRenewableSubscription = RegisteredPurchase.autoRenewableWeekly
+#endif
+    @IBAction func autoRenewableGetInfo() {
+        getInfo(autoRenewableSubscription)
+    }
+    @IBAction func autoRenewablePurchase() {
+        purchase(autoRenewableSubscription, atomically: autoRenewableIsAtomic)
+    }
+    @IBAction func autoRenewableVerifyPurchase() {
+        verifyPurchase(autoRenewableSubscription)
+    }
+
     func getInfo(_ purchase: RegisteredPurchase) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
@@ -73,10 +126,10 @@ class ViewController: UIViewController {
         }
     }
 
-    func purchase(_ purchase: RegisteredPurchase) {
+    func purchase(_ purchase: RegisteredPurchase, atomically: Bool) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
-        SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: true) { result in
+        SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: atomically) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
             if case .success(let purchase) = result {
@@ -132,7 +185,7 @@ class ViewController: UIViewController {
                 let productId = self.appBundleId + "." + purchase.rawValue
 
                 switch purchase {
-                case .autoRenewablePurchase:
+                case .autoRenewableWeekly, .autoRenewableMonthly, .autoRenewableYearly:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
                         type: .autoRenewable,
                         productId: productId,

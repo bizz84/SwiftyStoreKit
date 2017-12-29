@@ -92,6 +92,7 @@ class ViewController: UIViewController {
     }
 
     // MARK: auto renewable
+#if os(iOS)
     @IBOutlet var autoRenewableSubscriptionSegmentedControl: UISegmentedControl!
     
     var autoRenewableSubscription: RegisteredPurchase {
@@ -102,6 +103,9 @@ class ViewController: UIViewController {
         default: return .autoRenewableWeekly
         }
     }
+#else
+    let autoRenewableSubscription = RegisteredPurchase.autoRenewableWeekly
+#endif
     @IBAction func autoRenewableGetInfo() {
         getInfo(autoRenewableSubscription)
     }

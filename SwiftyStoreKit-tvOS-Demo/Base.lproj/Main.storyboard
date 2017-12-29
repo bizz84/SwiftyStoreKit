@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="11762" systemVersion="16A313a" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder.AppleTV.Storyboard" version="3.0" toolsVersion="13771" targetRuntime="AppleTV" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="appleTV" orientation="landscape">
         <adaptation id="light"/>
     </device>
     <dependencies>
         <deployment identifier="tvOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftyStoreKit_tvOS_Demo" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="SwiftyStoreKit_tvOSDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -27,7 +27,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="info 1"/>
                                 <connections>
-                                    <action selector="getInfo1" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="nHA-8L-kz5"/>
+                                    <action selector="nonConsumableGetInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="ume-dC-ozo"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fad-e7-Q2a">
@@ -36,7 +36,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="info 2"/>
                                 <connections>
-                                    <action selector="getInfo2" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="qYx-Ai-IvG"/>
+                                    <action selector="autoRenewableGetInfo" destination="BYZ-38-t0r" eventType="touchUpInside" id="zp7-Sa-oBK"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lOy-18-mr9">
@@ -45,7 +45,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="purchase 1"/>
                                 <connections>
-                                    <action selector="purchase1" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="K3z-2d-B9r"/>
+                                    <action selector="nonConsumablePurchase" destination="BYZ-38-t0r" eventType="touchUpInside" id="ZAn-mQ-dQP"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VG3-26-V8F">
@@ -54,7 +54,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="purchase 2"/>
                                 <connections>
-                                    <action selector="purchase2" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="C85-0E-sl9"/>
+                                    <action selector="autoRenewablePurchase" destination="BYZ-38-t0r" eventType="touchUpInside" id="Fb1-8e-jCh"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="984-qT-rjk">
@@ -63,7 +63,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="restore"/>
                                 <connections>
-                                    <action selector="restorePurchases" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="7nH-dy-bg5"/>
+                                    <action selector="restorePurchases" destination="BYZ-38-t0r" eventType="touchUpInside" id="xfW-BM-XMx"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TE5-kT-3nP">
@@ -72,7 +72,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="verify1"/>
                                 <connections>
-                                    <action selector="verifyPurchase1" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="rJq-xw-YhW"/>
+                                    <action selector="nonConsumableVerifyPurchase" destination="BYZ-38-t0r" eventType="touchUpInside" id="mYN-QE-vxS"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iYp-Z0-czh">
@@ -81,7 +81,7 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="verify2"/>
                                 <connections>
-                                    <action selector="verifyPurchase2" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="d3O-JX-afR"/>
+                                    <action selector="autoRenewableVerifyPurchase" destination="BYZ-38-t0r" eventType="touchUpInside" id="NDh-2m-WSw"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hdi-nV-Cky">
@@ -90,11 +90,11 @@
                                 <inset key="contentEdgeInsets" minX="40" minY="20" maxX="40" maxY="20"/>
                                 <state key="normal" title="receipt"/>
                                 <connections>
-                                    <action selector="verifyReceipt" destination="BYZ-38-t0r" eventType="primaryActionTriggered" id="f73-g0-uzV"/>
+                                    <action selector="verifyReceipt" destination="BYZ-38-t0r" eventType="touchUpInside" id="97B-xd-btg"/>
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.84593750000000001" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

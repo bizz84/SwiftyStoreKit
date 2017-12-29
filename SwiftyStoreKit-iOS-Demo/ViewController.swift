@@ -192,7 +192,7 @@ class ViewController: UIViewController {
                         inReceipt: receipt,
                         validUntil: Date()
                     )
-                    self.showAlert(self.alertForVerifySubscription(purchaseResult))
+                    self.showAlert(self.alertForVerifySubscription(purchaseResult, productId: productId))
                 case .nonRenewingPurchase:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
                         type: .nonRenewing(validDuration: 60),
@@ -200,13 +200,13 @@ class ViewController: UIViewController {
                         inReceipt: receipt,
                         validUntil: Date()
                     )
-                    self.showAlert(self.alertForVerifySubscription(purchaseResult))
+                    self.showAlert(self.alertForVerifySubscription(purchaseResult, productId: productId))
                 default:
                     let purchaseResult = SwiftyStoreKit.verifyPurchase(
                         productId: productId,
                         inReceipt: receipt
                     )
-                    self.showAlert(self.alertForVerifyPurchase(purchaseResult))
+                    self.showAlert(self.alertForVerifyPurchase(purchaseResult, productId: productId))
                 }
 
             case .error:
@@ -257,7 +257,7 @@ extension ViewController {
         switch result {
         case .success(let purchase):
             print("Purchase Success: \(purchase.productId)")
-            return alertWithTitle("Thank You", message: "Purchase completed")
+            return nil
         case .error(let error):
             print("Purchase Failed: \(error)")
             switch error.code {
@@ -315,29 +315,29 @@ extension ViewController {
         }
     }
 
-    func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> UIAlertController {
+    func alertForVerifySubscription(_ result: VerifySubscriptionResult, productId: String) -> UIAlertController {
 
         switch result {
         case .purchased(let expiryDate, let items):
-            print("Product is valid until \(expiryDate) \n items \(items)")
+            print("\(productId) is valid until \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
         case .expired(let expiryDate, let items):
-            print("Product is expired since \(expiryDate) \n items \(items)")
+            print("\(productId) is expired since \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
         case .notPurchased:
-            print("This product has never been purchased")
+            print("\(productId) has never been purchased")
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }
 
-    func alertForVerifyPurchase(_ result: VerifyPurchaseResult) -> UIAlertController {
+    func alertForVerifyPurchase(_ result: VerifyPurchaseResult, productId: String) -> UIAlertController {
 
         switch result {
         case .purchased:
-            print("Product is purchased")
+            print("\(productId) is purchased")
             return alertWithTitle("Product is purchased", message: "Product will not expire")
         case .notPurchased:
-            print("This product has never been purchased")
+            print("\(productId) has never been purchased")
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }

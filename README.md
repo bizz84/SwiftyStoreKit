@@ -354,16 +354,17 @@ let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "
 SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     switch result {
     case .success(let receipt):
+        let productId = "com.musevisions.SwiftyStoreKit.Purchase1"
         // Verify the purchase of Consumable or NonConsumable
         let purchaseResult = SwiftyStoreKit.verifyPurchase(
-            productId: "com.musevisions.SwiftyStoreKit.Purchase1",
+            productId: productId,
             inReceipt: receipt)
             
         switch purchaseResult {
         case .purchased(let receiptItem):
-            print("Product is purchased: \(receiptItem)")
+            print("\(productId) is purchased: \(receiptItem)")
         case .notPurchased:
-            print("The user has never purchased this product")
+            print("The user has never purchased \(productId)")
         }
     case .error(let error):
         print("Receipt verification failed: \(error)")
@@ -388,19 +389,20 @@ let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "
 SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     switch result {
     case .success(let receipt):
+        let productId = "com.musevisions.SwiftyStoreKit.Subscription"
         // Verify the purchase of a Subscription
         let purchaseResult = SwiftyStoreKit.verifySubscription(
             type: .autoRenewable, // or .nonRenewing (see below)
-            productId: "com.musevisions.SwiftyStoreKit.Subscription",
+            productId: productId,
             inReceipt: receipt)
             
         switch purchaseResult {
-        case .purchased(let expiryDate, let receiptItems):
-            print("Product is valid until \(expiryDate)")
-        case .expired(let expiryDate, let receiptItems):
-            print("Product is expired since \(expiryDate)")
+        case .purchased(let expiryDate, let items):
+            print("\(productId) is valid until \(expiryDate)\n\(items)\n")
+        case .expired(let expiryDate, let items):
+            print("\(productId) is expired since \(expiryDate)\n\(items)\n")
         case .notPurchased:
-            print("The user has never purchased this product")
+            print("The user has never purchased \(productId)")
         }
 
     case .error(let error):

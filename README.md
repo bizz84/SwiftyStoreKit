@@ -528,9 +528,11 @@ Note that the pre-registered in app purchases in the demo apps are for illustrat
 
 ## Video Tutorials
 
-[@rebeloper](https://github.com/rebeloper) has created a step-by-step video guide to IAP / SwiftyStoreKit on YouTube:
+[@rebeloper](https://github.com/rebeloper) has created a step-by-step video guide about IAP / SwiftyStoreKit on [YouTube](https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb):
 
-#### [Ultimate In-app Purchases Guide | Xcode 9, Swift 4, iOS](https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb)
+<a href="https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb"><img src="https://raw.githubusercontent.com/bizz84/SwiftyStoreKit/master/Screenshots/VideoTutorial.jpg"></a>
+
+
 
 ## Essential Reading
 * [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)

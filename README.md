@@ -19,6 +19,8 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), a curated list of all things sustainable. Interested? [It's on GitHub](https://github.com/bizz84/Sustainable-Earth).
 
+### Like SwiftyStoreKit? Please consider [becoming a Patron](https://www.patreon.com/biz84).
+
 ## Contributing
 
 #### Got issues / pull requests / want to contribute? [Read here](CONTRIBUTING.md).

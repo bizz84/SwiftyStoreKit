@@ -42,47 +42,56 @@ class ViewController: UIViewController {
 
     let appBundleId = "com.musevisions.iOS.SwiftyStoreKit"
     
-    // MARK: non consumable
+#if os(iOS)
+    // UISwitch is unavailable on tvOS
     @IBOutlet var nonConsumableAtomicSwitch: UISwitch!
-
+    @IBOutlet var consumableAtomicSwitch: UISwitch!
+    @IBOutlet var nonRenewingAtomicSwitch: UISwitch!
+    @IBOutlet var autoRenewableAtomicSwitch: UISwitch!
+    var nonConsumableIsAtomic: Bool { return nonConsumableAtomicSwitch.isOn }
+    var consumableIsAtomic: Bool { return consumableAtomicSwitch.isOn }
+    var nonRenewingIsAtomic: Bool { return nonRenewingAtomicSwitch.isOn }
+    var autoRenewableIsAtomic: Bool { return autoRenewableAtomicSwitch.isOn }
+#else
+    var nonConsumableIsAtomic = true
+    var consumableIsAtomic = true
+    var nonRenewingIsAtomic = true
+    var autoRenewableIsAtomic = true
+#endif
+    // MARK: non consumable
     @IBAction func nonConsumableGetInfo() {
         getInfo(.nonConsumablePurchase)
     }
     @IBAction func nonConsumablePurchase() {
-        purchase(.nonConsumablePurchase, atomically: nonConsumableAtomicSwitch.isOn)
+        purchase(.nonConsumablePurchase, atomically: nonConsumableIsAtomic)
     }
     @IBAction func nonConsumableVerifyPurchase() {
         verifyPurchase(.nonConsumablePurchase)
     }
     
     // MARK: consumable
-    @IBOutlet var consumableAtomicSwitch: UISwitch!
-    
     @IBAction func consumableGetInfo() {
         getInfo(.consumablePurchase)
     }
     @IBAction func consumablePurchase() {
-        purchase(.consumablePurchase, atomically: consumableAtomicSwitch.isOn)
+        purchase(.consumablePurchase, atomically: consumableIsAtomic)
     }
     @IBAction func consumableVerifyPurchase() {
         verifyPurchase(.consumablePurchase)
     }
 
     // MARK: non renewing
-    @IBOutlet var nonRenewingAtomicSwitch: UISwitch!
-    
     @IBAction func nonRenewingGetInfo() {
         getInfo(.nonRenewingPurchase)
     }
     @IBAction func nonRenewingPurchase() {
-        purchase(.nonRenewingPurchase, atomically: nonRenewingAtomicSwitch.isOn)
+        purchase(.nonRenewingPurchase, atomically: nonRenewingIsAtomic)
     }
     @IBAction func nonRenewingVerifyPurchase() {
         verifyPurchase(.nonRenewingPurchase)
     }
 
     // MARK: auto renewable
-    @IBOutlet var autoRenewableAtomicSwitch: UISwitch!
     @IBOutlet var autoRenewableSubscriptionSegmentedControl: UISegmentedControl!
     
     var autoRenewableSubscription: RegisteredPurchase {
@@ -97,7 +106,7 @@ class ViewController: UIViewController {
         getInfo(autoRenewableSubscription)
     }
     @IBAction func autoRenewablePurchase() {
-        purchase(autoRenewableSubscription, atomically: autoRenewableAtomicSwitch.isOn)
+        purchase(autoRenewableSubscription, atomically: autoRenewableIsAtomic)
     }
     @IBAction func autoRenewableVerifyPurchase() {
         verifyPurchase(autoRenewableSubscription)

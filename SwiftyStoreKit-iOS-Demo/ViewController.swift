@@ -53,10 +53,10 @@ class ViewController: UIViewController {
     var nonRenewingIsAtomic: Bool { return nonRenewingAtomicSwitch.isOn }
     var autoRenewableIsAtomic: Bool { return autoRenewableAtomicSwitch.isOn }
 #else
-    var nonConsumableIsAtomic = true
-    var consumableIsAtomic = true
-    var nonRenewingIsAtomic = true
-    var autoRenewableIsAtomic = true
+    let nonConsumableIsAtomic = true
+    let consumableIsAtomic = true
+    let nonRenewingIsAtomic = true
+    let autoRenewableIsAtomic = true
 #endif
     // MARK: non consumable
     @IBAction func nonConsumableGetInfo() {

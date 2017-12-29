@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'SwiftyStoreKit/*.{swift}'
 
-  s.screenshots  = ["https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.png","https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview2.png"]
+  s.screenshots  = ["https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg"]
 
   s.requires_arc = true
 end

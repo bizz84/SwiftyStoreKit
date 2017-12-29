@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 
 * Add video tutorials section in README ([#328](https://github.com/bizz84/SwiftyStoreKit/pull/328), [#330](https://github.com/bizz84/SwiftyStoreKit/pull/330), see [#326](https://github.com/bizz84/SwiftyStoreKit/issues/326))
-* Update iOS Demo App ([#327](https://github.com/bizz84/SwiftyStoreKit/pull/327))
+* Update iOS Demo App ([#327](https://github.com/bizz84/SwiftyStoreKit/pull/327), see [#147](https://github.com/bizz84/SwiftyStoreKit/issues/147))
 
 ## [0.11.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.11.3) `completeTransactions` finishes failed transactions if `atomically: false`
 

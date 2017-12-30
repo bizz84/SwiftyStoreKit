@@ -271,7 +271,7 @@ extension SwiftyStoreKit {
      *  - Parameter validUntil: Date to check against the expiry date of the subscription. This is only used if a date is not found in the receipt.
      *  - return: Either .notPurchased or .purchased / .expired with the expiry date found in the receipt.
      */
-    public class func verifySubscription(type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
+    public class func verifySubscription(ofType type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 
         return InAppReceipt.verifySubscriptions(type: type, productIds: [productId], inReceipt: receipt, validUntil: date)
     }

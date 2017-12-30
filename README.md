@@ -394,7 +394,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
         let productId = "com.musevisions.SwiftyStoreKit.Subscription"
         // Verify the purchase of a Subscription
         let purchaseResult = SwiftyStoreKit.verifySubscription(
-            type: .autoRenewable, // or .nonRenewing (see below)
+            ofType: .autoRenewable, // or .nonRenewing (see below)
             productId: productId,
             inReceipt: receipt)
             
@@ -416,7 +416,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
 #### Auto-Renewable
 ```swift
 let purchaseResult = SwiftyStoreKit.verifySubscription(
-            type: .autoRenewable,
+            ofType: .autoRenewable,
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
             inReceipt: receipt)
 ```
@@ -425,7 +425,7 @@ let purchaseResult = SwiftyStoreKit.verifySubscription(
 ```swift
 // validDuration: time interval in seconds
 let purchaseResult = SwiftyStoreKit.verifySubscription(
-            type: .nonRenewing(validDuration: 3600 * 24 * 30),
+            ofType: .nonRenewing(validDuration: 3600 * 24 * 30),
             productId: "com.musevisions.SwiftyStoreKit.Subscription",
             inReceipt: receipt)
 ```
@@ -454,7 +454,7 @@ SwiftyStoreKit.purchaseProduct(productId, atomically: true) { result in
             
             if case .success(let receipt) = result {
                 let purchaseResult = SwiftyStoreKit.verifySubscription(
-                    type: .autoRenewable,
+                    ofType: .autoRenewable,
                     productId: productId,
                     inReceipt: receipt)
                 

@@ -187,7 +187,7 @@ class ViewController: UIViewController {
                 switch purchase {
                 case .autoRenewableWeekly, .autoRenewableMonthly, .autoRenewableYearly:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
-                        type: .autoRenewable,
+                        ofType: .autoRenewable,
                         productId: productId,
                         inReceipt: receipt,
                         validUntil: Date()
@@ -195,7 +195,7 @@ class ViewController: UIViewController {
                     self.showAlert(self.alertForVerifySubscriptions(purchaseResult, productIds: [productId]))
                 case .nonRenewingPurchase:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
-                        type: .nonRenewing(validDuration: 60),
+                        ofType: .nonRenewing(validDuration: 60),
                         productId: productId,
                         inReceipt: receipt,
                         validUntil: Date()

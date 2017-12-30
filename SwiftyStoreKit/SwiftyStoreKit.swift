@@ -262,7 +262,7 @@ extension SwiftyStoreKit {
     }
 
     /**
-     *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  Verify the validity of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
      *  - Parameter type: autoRenewable or nonRenewing
      *  - Parameter productId: the product id of the purchase to verify
      *  - Parameter inReceipt: the receipt to use for looking up the subscription
@@ -271,6 +271,19 @@ extension SwiftyStoreKit {
      */
     public class func verifySubscription(type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 
-        return InAppReceipt.verifySubscription(type: type, productId: productId, inReceipt: receipt, validUntil: date)
+        return InAppReceipt.verifySubscriptions(type: type, productIds: [productId], inReceipt: receipt, validUntil: date)
+    }
+    
+    /**
+     *  Verify the validity of a set of auto-renewable subscriptions in a receipt. This method extracts all transactions mathing the given productIds and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  - Note: you can use this method to check the validity of subscriptions in a subscription group
+     *  - Parameter productIds: the product ids of the subscriptions to verify
+     *  - Parameter inReceipt: the receipt to use for looking up the subscription
+     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
+     *  - return: either .notPurchased or .purchased / .expired with the expiry date found in the receipt
+     */
+    public class func verifySubscriptions(productIds: Set<String>, inReceipt receipt: ReceiptInfo) -> VerifySubscriptionResult {
+
+        return InAppReceipt.verifySubscriptions(type: .autoRenewable, productIds: productIds, inReceipt: receipt)
     }
 }

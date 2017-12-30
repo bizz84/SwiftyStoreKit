@@ -262,11 +262,11 @@ extension SwiftyStoreKit {
     }
 
     /**
-     *  Verify the validity of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  Verify the validity of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the receipt date.
      *  - Parameter type: autoRenewable or nonRenewing
-     *  - Parameter productId: the product id of the purchase to verify
+     *  - Parameter productId: the product id of the subscription to verify
      *  - Parameter inReceipt: the receipt to use for looking up the subscription
-     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
+     *  - Parameter validUntil: date to check against the expiry date of the subscription. This is only used if a date is not found in the receipt.
      *  - return: either .notPurchased or .purchased / .expired with the expiry date found in the receipt
      */
     public class func verifySubscription(type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
@@ -275,15 +275,17 @@ extension SwiftyStoreKit {
     }
     
     /**
-     *  Verify the validity of a set of auto-renewable subscriptions in a receipt. This method extracts all transactions mathing the given productIds and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
+     *  Verify the validity of a set of subscriptions in a receipt. This method extracts all transactions mathing the given productIds and sorts them by date in descending order, then compares the first transaction expiry date against the receipt date.
      *  - Note: you can use this method to check the validity of subscriptions in a subscription group
+     *  - Remark: the type parameter determines how the expiration dates are calculated for all subscriptions. Make sure all productIds match the specified subscription type to avoid incorrect results.
+     *  - Parameter type: autoRenewable or nonRenewing
      *  - Parameter productIds: the product ids of the subscriptions to verify
-     *  - Parameter inReceipt: the receipt to use for looking up the subscription
-     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
+     *  - Parameter inReceipt: the receipt to use for looking up the subscriptions
+     *  - Parameter validUntil: date to check against the expiry date of the subscriptions. This is only used if a date is not found in the receipt.
      *  - return: either .notPurchased or .purchased / .expired with the expiry date found in the receipt
      */
-    public class func verifySubscriptions(productIds: Set<String>, inReceipt receipt: ReceiptInfo) -> VerifySubscriptionResult {
+    public class func verifySubscriptions(type: SubscriptionType = .autoRenewable, productIds: Set<String>, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 
-        return InAppReceipt.verifySubscriptions(type: .autoRenewable, productIds: productIds, inReceipt: receipt)
+        return InAppReceipt.verifySubscriptions(type: type, productIds: productIds, inReceipt: receipt, validUntil: date)
     }
 }

@@ -264,7 +264,7 @@ extension SwiftyStoreKit {
     /**
      *  Verify the validity of a subscription (auto-renewable, free or non-renewing) in a receipt.
      *
-     *  This method extracts all transactions mathing the given productId and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date to determine its validity.
+     *  This method extracts all transactions matching the given productId and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date to determine its validity.
      *  - Parameter type: .autoRenewable or .nonRenewing.
      *  - Parameter productId: The product id of the subscription to verify.
      *  - Parameter receipt: The receipt to use for looking up the subscription.
@@ -279,7 +279,7 @@ extension SwiftyStoreKit {
     /**
      *  Verify the validity of a set of subscriptions in a receipt.
      *
-     *  This method extracts all transactions mathing the given productIds and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date, to determine its validity.
+     *  This method extracts all transactions matching the given productIds and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date, to determine its validity.
      *  - Note: You can use this method to check the validity of (mutually exclusive) subscriptions in a subscription group.
      *  - Remark: The type parameter determines how the expiration dates are calculated for all subscriptions. Make sure all productIds match the specified subscription type to avoid incorrect results.
      *  - Parameter type: .autoRenewable or .nonRenewing.

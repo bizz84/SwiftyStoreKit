@@ -113,7 +113,7 @@ class ViewController: UIViewController {
         purchase(autoRenewableSubscription, atomically: autoRenewableIsAtomic)
     }
     @IBAction func autoRenewableVerifyPurchase() {
-        verifyPurchase(autoRenewableSubscription)
+        verifySubscriptions([.autoRenewableWeekly, .autoRenewableMonthly, .autoRenewableYearly])
     }
 
     func getInfo(_ purchase: RegisteredPurchase) {
@@ -172,7 +172,7 @@ class ViewController: UIViewController {
         let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
         SwiftyStoreKit.verifyReceipt(using: appleValidator, completion: completion)
     }
-
+    
     func verifyPurchase(_ purchase: RegisteredPurchase) {
 
         NetworkActivityIndicatorManager.networkOperationStarted()
@@ -192,7 +192,7 @@ class ViewController: UIViewController {
                         inReceipt: receipt,
                         validUntil: Date()
                     )
-                    self.showAlert(self.alertForVerifySubscription(purchaseResult, productId: productId))
+                    self.showAlert(self.alertForVerifySubscriptions(purchaseResult, productIds: [productId]))
                 case .nonRenewingPurchase:
                     let purchaseResult = SwiftyStoreKit.verifySubscription(
                         type: .nonRenewing(validDuration: 60),
@@ -200,7 +200,7 @@ class ViewController: UIViewController {
                         inReceipt: receipt,
                         validUntil: Date()
                     )
-                    self.showAlert(self.alertForVerifySubscription(purchaseResult, productId: productId))
+                    self.showAlert(self.alertForVerifySubscriptions(purchaseResult, productIds: [productId]))
                 default:
                     let purchaseResult = SwiftyStoreKit.verifyPurchase(
                         productId: productId,
@@ -214,6 +214,24 @@ class ViewController: UIViewController {
             }
         }
     }
+    
+    func verifySubscriptions(_ purchases: Set<RegisteredPurchase>) {
+        
+        NetworkActivityIndicatorManager.networkOperationStarted()
+        verifyReceipt { result in
+            NetworkActivityIndicatorManager.networkOperationFinished()
+            
+            switch result {
+            case .success(let receipt):
+                let productIds = Set(purchases.map { self.appBundleId + "." + $0.rawValue })
+                let purchaseResult = SwiftyStoreKit.verifySubscriptions(productIds: productIds, inReceipt: receipt)
+                self.showAlert(self.alertForVerifySubscriptions(purchaseResult, productIds: productIds))
+            case .error:
+                self.showAlert(self.alertForVerifyReceipt(result))
+            }
+        }
+    }
+
 
 #if os(iOS)
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -315,17 +333,17 @@ extension ViewController {
         }
     }
 
-    func alertForVerifySubscription(_ result: VerifySubscriptionResult, productId: String) -> UIAlertController {
+    func alertForVerifySubscriptions(_ result: VerifySubscriptionResult, productIds: Set<String>) -> UIAlertController {
 
         switch result {
         case .purchased(let expiryDate, let items):
-            print("\(productId) is valid until \(expiryDate)\n\(items)\n")
+            print("\(productIds) is valid until \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
         case .expired(let expiryDate, let items):
-            print("\(productId) is expired since \(expiryDate)\n\(items)\n")
+            print("\(productIds) is expired since \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
         case .notPurchased:
-            print("\(productId) has never been purchased")
+            print("\(productIds) has never been purchased")
             return alertWithTitle("Not purchased", message: "This product has never been purchased")
         }
     }

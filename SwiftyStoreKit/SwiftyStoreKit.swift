@@ -273,7 +273,7 @@ extension SwiftyStoreKit {
      */
     public class func verifySubscription(ofType type: SubscriptionType, productId: String, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 
-        return InAppReceipt.verifySubscriptions(type: type, productIds: [productId], inReceipt: receipt, validUntil: date)
+        return InAppReceipt.verifySubscriptions(ofType: type, productIds: [productId], inReceipt: receipt, validUntil: date)
     }
     
     /**
@@ -290,6 +290,6 @@ extension SwiftyStoreKit {
      */
     public class func verifySubscriptions(ofType type: SubscriptionType = .autoRenewable, productIds: Set<String>, inReceipt receipt: ReceiptInfo, validUntil date: Date = Date()) -> VerifySubscriptionResult {
 
-        return InAppReceipt.verifySubscriptions(type: type, productIds: productIds, inReceipt: receipt, validUntil: date)
+        return InAppReceipt.verifySubscriptions(ofType: type, productIds: productIds, inReceipt: receipt, validUntil: date)
     }
 }

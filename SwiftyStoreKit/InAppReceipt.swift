@@ -105,15 +105,19 @@ internal class InAppReceipt {
     }
 
     /**
-     *  Verify the validity of a set of subscriptions (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productIds and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
-     *  - parameter type: .autoRenewable or .nonRenewing(duration)
-     *  - Parameter productIds: the product ids of the subscriptions to verify
-     *  - Parameter inReceipt: the receipt to use for looking up the subscriptions
-     *  - Parameter validUntil: date to check against the expiry date of the subscriptions.
-     *  - return: either notPurchased or purchased / expired with the expiry date found in the receipt
+     *  Verify the validity of a set of subscriptions in a receipt.
+     *
+     *  This method extracts all transactions matching the given productIds and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date, to determine its validity.
+     *  - Note: You can use this method to check the validity of (mutually exclusive) subscriptions in a subscription group.
+     *  - Remark: The type parameter determines how the expiration dates are calculated for all subscriptions. Make sure all productIds match the specified subscription type to avoid incorrect results.
+     *  - Parameter type: .autoRenewable or .nonRenewing.
+     *  - Parameter productIds: The product ids of the subscriptions to verify.
+     *  - Parameter receipt: The receipt to use for looking up the subscriptions
+     *  - Parameter validUntil: Date to check against the expiry date of the subscriptions. This is only used if a date is not found in the receipt.
+     *  - return: Either .notPurchased or .purchased / .expired with the expiry date found in the receipt.
      */
     class func verifySubscriptions(
-        type: SubscriptionType,
+        ofType type: SubscriptionType,
         productIds: Set<String>,
         inReceipt receipt: ReceiptInfo,
         validUntil date: Date = Date()

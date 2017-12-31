@@ -93,7 +93,7 @@ internal class InAppReceipt {
 
         // Get receipts info for the product
         let receipts = getInAppReceipts(receipt: receipt)
-        let filteredReceiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
+        let filteredReceiptsInfo = filterReceiptsInfo(receipts: receipts, withProductIds: [productId])
         let nonCancelledReceiptsInfo = filteredReceiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
 
         let receiptItems = nonCancelledReceiptsInfo.flatMap { ReceiptItem(receiptInfo: $0) }
@@ -105,24 +105,27 @@ internal class InAppReceipt {
     }
 
     /**
-     *  Verify the purchase of a subscription (auto-renewable, free or non-renewing) in a receipt. This method extracts all transactions mathing the given productId and sorts them by date in descending order, then compares the first transaction expiry date against the validUntil value.
-     *  - parameter type: .autoRenewable or .nonRenewing(duration)
-     *  - Parameter productId: the product id of the purchase to verify
-     *  - Parameter inReceipt: the receipt to use for looking up the subscription
-     *  - Parameter validUntil: date to check against the expiry date of the subscription. If nil, no verification
-     *  - Parameter validDuration: the duration of the subscription. Only required for non-renewable subscription.
-     *  - return: either NotPurchased or Purchased / Expired with the expiry date found in the receipt
+     *  Verify the validity of a set of subscriptions in a receipt.
+     *
+     *  This method extracts all transactions matching the given productIds and sorts them by date in descending order. It then compares the first transaction expiry date against the receipt date, to determine its validity.
+     *  - Note: You can use this method to check the validity of (mutually exclusive) subscriptions in a subscription group.
+     *  - Remark: The type parameter determines how the expiration dates are calculated for all subscriptions. Make sure all productIds match the specified subscription type to avoid incorrect results.
+     *  - Parameter type: .autoRenewable or .nonRenewing.
+     *  - Parameter productIds: The product ids of the subscriptions to verify.
+     *  - Parameter receipt: The receipt to use for looking up the subscriptions
+     *  - Parameter validUntil: Date to check against the expiry date of the subscriptions. This is only used if a date is not found in the receipt.
+     *  - return: Either .notPurchased or .purchased / .expired with the expiry date found in the receipt.
      */
-    class func verifySubscription(
-        type: SubscriptionType,
-        productId: String,
+    class func verifySubscriptions(
+        ofType type: SubscriptionType,
+        productIds: Set<String>,
         inReceipt receipt: ReceiptInfo,
         validUntil date: Date = Date()
     ) -> VerifySubscriptionResult {
 
         // The values of the latest_receipt and latest_receipt_info keys are useful when checking whether an auto-renewable subscription is currently active. By providing any transaction receipt for the subscription and checking these values, you can get information about the currently-active subscription period. If the receipt being validated is for the latest renewal, the value for latest_receipt is the same as receipt-data (in the request) and the value for latest_receipt_info is the same as receipt.
         let (receipts, duration) = getReceiptsAndDuration(for: type, inReceipt: receipt)
-        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductId: productId)
+        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withProductIds: productIds)
         let nonCancelledReceiptsInfo = receiptsInfo.filter { receipt in receipt["cancellation_date"] == nil }
         if nonCancelledReceiptsInfo.count == 0 {
             return .notPurchased
@@ -198,19 +201,21 @@ internal class InAppReceipt {
      *  - Parameter receipts: the receipts array to grab info from
      *  - Parameter productId: the product id
      */
-    private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withProductId productId: String) -> [ReceiptInfo] {
+    private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withProductIds productIds: Set<String>) -> [ReceiptInfo] {
 
         guard let receipts = receipts else {
             return []
         }
 
-        // Filter receipts with matching product id
-        let receiptsMatchingProductId = receipts
+        // Filter receipts with matching product ids
+        let receiptsMatchingProductIds = receipts
             .filter { (receipt) -> Bool in
-                let product_id = receipt["product_id"] as? String
-                return product_id == productId
+                if let productId = receipt["product_id"] as? String {
+                    return productIds.contains(productId)
+                }
+                return false
             }
 
-        return receiptsMatchingProductId
+        return receiptsMatchingProductIds
     }
 }

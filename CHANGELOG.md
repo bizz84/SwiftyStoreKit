@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [0.12.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.12.0) Add `verifySubscriptions` method for subscription groups 
 
 * Add `verifySubscriptions` method to check all subscriptions in a group at once ([#333](https://github.com/bizz84/SwiftyStoreKit/pull/333), related issue: [#194](https://github.com/bizz84/SwiftyStoreKit/issues/194))
+* Rename `verifySubscription(type:productId:inReceipt:validUntil:)` to `verifySubscription(ofType:productId:inReceipt:validUntil:)` ([#333](https://github.com/bizz84/SwiftyStoreKit/pull/333))
 * Add video tutorials section in README ([#328](https://github.com/bizz84/SwiftyStoreKit/pull/328), [#330](https://github.com/bizz84/SwiftyStoreKit/pull/330), see [#326](https://github.com/bizz84/SwiftyStoreKit/issues/326))
 * Update iOS Demo App ([#327](https://github.com/bizz84/SwiftyStoreKit/pull/327), see [#147](https://github.com/bizz84/SwiftyStoreKit/issues/147))
 

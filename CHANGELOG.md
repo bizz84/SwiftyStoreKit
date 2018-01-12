@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.12.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.12.1) Assert that `completeTransactions` was called when the app launches.
+
+* Assert that `completeTransactions()` was called when the app launches ([#337](https://github.com/bizz84/SwiftyStoreKit/pull/337), related issue: [#287](https://github.com/bizz84/SwiftyStoreKit/issues/287))
+
 ## [0.12.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.12.0) Add `verifySubscriptions` method for subscription groups 
 
 * Add `verifySubscriptions` method to check all subscriptions in a group at once ([#333](https://github.com/bizz84/SwiftyStoreKit/pull/333), related issue: [#194](https://github.com/bizz84/SwiftyStoreKit/issues/194))

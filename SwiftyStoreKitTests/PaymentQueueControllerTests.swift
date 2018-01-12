@@ -69,6 +69,8 @@ class PaymentQueueControllerTests: XCTestCase {
 
         let payment = makeTestPayment(productIdentifier: "com.SwiftyStoreKit.product1") { _ in }
 
+        paymentQueueController.completeTransactions(CompleteTransactions(atomically: true) { _ in })
+
         paymentQueueController.startPayment(payment)
 
         XCTAssertEqual(spy.payments.count, 1)
@@ -127,11 +129,11 @@ class PaymentQueueControllerTests: XCTestCase {
         }
 
         // run
+        paymentQueueController.completeTransactions(completeTransactions)
+
         paymentQueueController.startPayment(testPayment)
 
         paymentQueueController.restorePurchases(restorePurchases)
-
-        paymentQueueController.completeTransactions(completeTransactions)
 
         paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
         paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())
@@ -183,9 +185,9 @@ class PaymentQueueControllerTests: XCTestCase {
         }
 
         // run
-        paymentQueueController.startPayment(testPayment)
-
         paymentQueueController.completeTransactions(completeTransactions)
+
+        paymentQueueController.startPayment(testPayment)
 
         paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
         paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())
@@ -238,9 +240,9 @@ class PaymentQueueControllerTests: XCTestCase {
         }
 
         // run
-        paymentQueueController.restorePurchases(restorePurchases)
-
         paymentQueueController.completeTransactions(completeTransactions)
+
+        paymentQueueController.restorePurchases(restorePurchases)
 
         paymentQueueController.paymentQueue(SKPaymentQueue(), updatedTransactions: transactions)
         paymentQueueController.paymentQueueRestoreCompletedTransactionsFinished(SKPaymentQueue())

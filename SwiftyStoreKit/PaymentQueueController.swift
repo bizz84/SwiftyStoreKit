@@ -48,6 +48,11 @@ public protocol PaymentQueue: class {
 
     func add(_ payment: SKPayment)
     
+    func start(_ downloads: [SKDownload])
+    func pause(_ downloads: [SKDownload])
+    func resume(_ downloads: [SKDownload])
+    func cancel(_ downloads: [SKDownload])
+    
     func restoreCompletedTransactions(withApplicationUsername username: String?)
 
     func finishTransaction(_ transaction: SKPaymentTransaction)
@@ -151,6 +156,19 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentQueue.finishTransaction(skTransaction)
     }
     
+    func start(_ downloads: [SKDownload]) {
+        paymentQueue.start(downloads)
+    }
+    func pause(_ downloads: [SKDownload]) {
+        paymentQueue.pause(downloads)
+    }
+    func resume(_ downloads: [SKDownload]) {
+        paymentQueue.resume(downloads)
+    }
+    func cancel(_ downloads: [SKDownload]) {
+        paymentQueue.cancel(downloads)
+    }
+
     var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler?
     var updatedDownloadsHandler: UpdatedDownloadsHandler?
 

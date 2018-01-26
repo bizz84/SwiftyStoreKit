@@ -225,6 +225,19 @@ extension SwiftyStoreKit {
             sharedInstance.paymentQueueController.updatedDownloadsHandler = updatedDownloadsHandler
         }
     }
+    
+    public class func start(_ downloads: [SKDownload]) {
+        sharedInstance.paymentQueueController.start(downloads)
+    }
+    public class func pause(_ downloads: [SKDownload]) {
+        sharedInstance.paymentQueueController.pause(downloads)
+    }
+    public class func resume(_ downloads: [SKDownload]) {
+        sharedInstance.paymentQueueController.resume(downloads)
+    }
+    public class func cancel(_ downloads: [SKDownload]) {
+        sharedInstance.paymentQueueController.cancel(downloads)
+    }
 }
 
 extension SwiftyStoreKit {

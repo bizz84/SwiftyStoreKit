@@ -69,7 +69,7 @@ public struct RetrieveResults {
 
 // Purchase result
 public enum PurchaseResult {
-    case success(purchase: PurchaseDetails)
+    case success(purchase: PurchaseDetails, downloads: [SKDownload])
     case error(error: SKError)
 }
 
@@ -80,6 +80,7 @@ public struct RestoreResults {
 }
 
 public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product: SKProduct) -> Bool
+public typealias UpdatedDownloadsHandler = (_ downloads: [SKDownload]) -> Void
 
 // MARK: Receipt verification
 

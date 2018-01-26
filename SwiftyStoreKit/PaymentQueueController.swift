@@ -36,7 +36,7 @@ protocol TransactionController {
 }
 
 public enum TransactionResult {
-    case purchased(purchase: PurchaseDetails)
+    case purchased(purchase: PurchaseDetails, downloads: [SKDownload])
     case restored(purchase: Purchase)
     case failed(error: SKError)
 }
@@ -47,7 +47,7 @@ public protocol PaymentQueue: class {
     func remove(_ observer: SKPaymentTransactionObserver)
 
     func add(_ payment: SKPayment)
-
+    
     func restoreCompletedTransactions(withApplicationUsername username: String?)
 
     func finishTransaction(_ transaction: SKPaymentTransaction)
@@ -152,6 +152,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler?
+    var updatedDownloadsHandler: UpdatedDownloadsHandler?
 
     // MARK: SKPaymentTransactionObserver
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
@@ -210,6 +211,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
 
     func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
 
+        updatedDownloadsHandler?(downloads)
     }
 
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {

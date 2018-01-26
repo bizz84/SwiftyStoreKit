@@ -95,8 +95,8 @@ public class SwiftyStoreKit {
 
     private func processPurchaseResult(_ result: TransactionResult) -> PurchaseResult {
         switch result {
-        case .purchased(let purchase):
-            return .success(purchase: purchase)
+        case .purchased(let purchase, let downloads):
+            return .success(purchase: purchase, downloads: downloads)
         case .failed(let error):
             return .error(error: error)
         case .restored(let purchase):
@@ -109,7 +109,7 @@ public class SwiftyStoreKit {
         var restoreFailedPurchases: [(SKError, String?)] = []
         for result in results {
             switch result {
-            case .purchased(let purchase):
+            case .purchased(let purchase, _):
                 let error = storeInternalError(description: "Cannot purchase product \(purchase.productId) from restore purchases path")
                 restoreFailedPurchases.append((error, purchase.productId))
             case .failed(let error):
@@ -214,6 +214,15 @@ extension SwiftyStoreKit {
     public static var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler? {
         didSet {
             sharedInstance.paymentQueueController.shouldAddStorePaymentHandler = shouldAddStorePaymentHandler
+        }
+    }
+    
+    /**
+     * Register a handler for paymentQueue(_:updatedDownloads:)
+     */
+    public static var updatedDownloadsHandler: UpdatedDownloadsHandler? {
+        didSet {
+            sharedInstance.paymentQueueController.updatedDownloadsHandler = updatedDownloadsHandler
         }
     }
 }

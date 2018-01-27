@@ -55,6 +55,7 @@ public protocol PaymentTransaction {
     var transactionDate: Date? { get }
     var transactionState: SKPaymentTransactionState { get }
     var transactionIdentifier: String? { get }
+    var downloads: [SKDownload] { get }
 }
 
 // Add PaymentTransaction conformance to SKPaymentTransaction
@@ -69,7 +70,7 @@ public struct RetrieveResults {
 
 // Purchase result
 public enum PurchaseResult {
-    case success(purchase: PurchaseDetails, downloads: [SKDownload])
+    case success(purchase: PurchaseDetails)
     case error(error: SKError)
 }
 

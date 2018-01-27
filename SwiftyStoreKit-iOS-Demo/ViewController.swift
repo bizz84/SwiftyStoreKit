@@ -132,7 +132,8 @@ class ViewController: UIViewController {
         SwiftyStoreKit.purchaseProduct(appBundleId + "." + purchase.rawValue, atomically: atomically) { result in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            if case .success(let purchase, let downloads) = result {
+            if case .success(let purchase) = result {
+                let downloads = purchase.transaction.downloads
                 if !downloads.isEmpty {
                     SwiftyStoreKit.start(downloads)
                 }
@@ -153,9 +154,14 @@ class ViewController: UIViewController {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
-                // Deliver content from server, then:
-                SwiftyStoreKit.finishTransaction(purchase.transaction)
+            for purchase in results.restoredPurchases {
+                let downloads = purchase.transaction.downloads
+                if !downloads.isEmpty {
+                    SwiftyStoreKit.start(downloads)
+                } else if purchase.needsFinishTransaction {
+                    // Deliver content from server, then:
+                    SwiftyStoreKit.finishTransaction(purchase.transaction)
+                }
             }
             self.showAlert(self.alertForRestorePurchases(results))
         }
@@ -270,7 +276,7 @@ extension ViewController {
     // swiftlint:disable cyclomatic_complexity
     func alertForPurchaseResult(_ result: PurchaseResult) -> UIAlertController? {
         switch result {
-        case .success(let purchase, _):
+        case .success(let purchase):
             print("Purchase Success: \(purchase.productId)")
             return nil
         case .error(let error):

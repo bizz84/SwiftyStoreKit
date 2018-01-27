@@ -52,7 +52,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for purchase in purchases {
                 switch purchase.transaction.transactionState {
                 case .purchased, .restored:
-                    if purchase.needsFinishTransaction {
+                    let downloads = purchase.transaction.downloads
+                    if !downloads.isEmpty {
+                        SwiftyStoreKit.start(downloads)
+                    } else if purchase.needsFinishTransaction {
                         // Deliver content from server, then:
                         SwiftyStoreKit.finishTransaction(purchase.transaction)
                     }

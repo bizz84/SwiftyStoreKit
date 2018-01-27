@@ -44,4 +44,20 @@ class PaymentQueueSpy: PaymentQueue {
 
         finishTransactionCalledCount += 1
     }
+    
+    func start(_ downloads: [SKDownload]) {
+        
+    }
+    
+    func pause(_ downloads: [SKDownload]) {
+        
+    }
+    
+    func resume(_ downloads: [SKDownload]) {
+        
+    }
+    
+    func cancel(_ downloads: [SKDownload]) {
+        
+    }
 }

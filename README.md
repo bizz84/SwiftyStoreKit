@@ -265,7 +265,7 @@ Quoting Apple Docs:
 
 > To download the content, you queue a download object on the payment queue and wait for the content to be downloaded. After a download completes, read the download object’s contentURL property to get a URL to the downloaded content. Your app must process the downloaded file before completing the transaction. For example, it might copy the file into a directory whose contents are persistent. When all downloads are complete, you finish the transaction. After the transaction is finished, the download objects cannot be queued to the payment queue and any URLs to the downloaded content are invalid.
 
-To start the downloads:
+To start the downloads (this can be done in `purchaseProduct()`, `completeTransactions()` or `restorePurchases()`):
 
 ```swift
 SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quantity: 1, atomically: false) { result in

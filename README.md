@@ -255,6 +255,48 @@ SwiftyStoreKit provides three operations that can be performed **atomically** or
 * Restoring purchases
 * Completing transactions on app launch
 
+### Downloading content hosted with Apple
+
+Quoting Apple Docs:
+
+> When you create a product in iTunes Connect, you can associate one or more pieces of downloadable content with it. At runtime, when a product is purchased by a user, your app uses SKDownload objects to download the content from the App Store.
+
+> Your app never directly creates a SKDownload object. Instead, after a payment is processed, your app reads the transaction object’s downloads property to retrieve an array of SKDownload objects associated with the transaction.
+
+> To download the content, you queue a download object on the payment queue and wait for the content to be downloaded. After a download completes, read the download object’s contentURL property to get a URL to the downloaded content. Your app must process the downloaded file before completing the transaction. For example, it might copy the file into a directory whose contents are persistent. When all downloads are complete, you finish the transaction. After the transaction is finished, the download objects cannot be queued to the payment queue and any URLs to the downloaded content are invalid.
+
+To start the downloads:
+
+```swift
+SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quantity: 1, atomically: false) { result in
+    switch result {
+    case .success(let product):
+        let downloads = purchase.transaction.downloads
+        if !downloads.isEmpty {
+            SwiftyStoreKit.start(downloads)
+        }
+    case .error(let error):
+        print("\(error)")
+    }
+}
+```
+
+To check the updated downloads, setup a `updatedDownloadsHandler` block in your AppDelegate:
+
+```swift
+SwiftyStoreKit.updatedDownloadsHandler = { downloads in
+
+    // contentURL is not nil if downloadState == .finished
+    let contentURLs = downloads.flatMap { $0.contentURL }
+    if contentURLs.count == downloads.count {
+        // process all downloaded files, then finish the transaction
+        SwiftyStoreKit.finishTransaction(downloads[0].transaction)
+    }
+}
+```
+
+To control the state of the downloads, SwiftyStoreKit offers `start()`, `pause()`, `resume()`, `cancel()` methods.
+
 ## Receipt verification
 
 According to [Apple - Delivering Products](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/StoreKitGuide/Chapters/DeliverProduct.html#//apple_ref/doc/uid/TP40008267-CH5-SW4):

@@ -55,6 +55,7 @@ public protocol PaymentTransaction {
     var transactionDate: Date? { get }
     var transactionState: SKPaymentTransactionState { get }
     var transactionIdentifier: String? { get }
+    var downloads: [SKDownload] { get }
 }
 
 // Add PaymentTransaction conformance to SKPaymentTransaction
@@ -80,6 +81,7 @@ public struct RestoreResults {
 }
 
 public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product: SKProduct) -> Bool
+public typealias UpdatedDownloadsHandler = (_ downloads: [SKDownload]) -> Void
 
 // MARK: Receipt verification
 

@@ -133,6 +133,10 @@ class ViewController: UIViewController {
             NetworkActivityIndicatorManager.networkOperationFinished()
 
             if case .success(let purchase) = result {
+                let downloads = purchase.transaction.downloads
+                if !downloads.isEmpty {
+                    SwiftyStoreKit.start(downloads)
+                }
                 // Deliver content from server, then:
                 if purchase.needsFinishTransaction {
                     SwiftyStoreKit.finishTransaction(purchase.transaction)
@@ -150,9 +154,14 @@ class ViewController: UIViewController {
         SwiftyStoreKit.restorePurchases(atomically: true) { results in
             NetworkActivityIndicatorManager.networkOperationFinished()
 
-            for purchase in results.restoredPurchases where purchase.needsFinishTransaction {
-                // Deliver content from server, then:
-                SwiftyStoreKit.finishTransaction(purchase.transaction)
+            for purchase in results.restoredPurchases {
+                let downloads = purchase.transaction.downloads
+                if !downloads.isEmpty {
+                    SwiftyStoreKit.start(downloads)
+                } else if purchase.needsFinishTransaction {
+                    // Deliver content from server, then:
+                    SwiftyStoreKit.finishTransaction(purchase.transaction)
+                }
             }
             self.showAlert(self.alertForRestorePurchases(results))
         }

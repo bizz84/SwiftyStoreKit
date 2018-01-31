@@ -32,19 +32,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
 
-        completeIAPTransactions()
+        setupIAP()
 
         return true
     }
 
-    func completeIAPTransactions() {
+    func setupIAP() {
 
         SwiftyStoreKit.completeTransactions(atomically: true) { purchases in
 
             for purchase in purchases {
                 switch purchase.transaction.transactionState {
                 case .purchased, .restored:
-                    if purchase.needsFinishTransaction {
+                    let downloads = purchase.transaction.downloads
+                    if !downloads.isEmpty {
+                        SwiftyStoreKit.start(downloads)
+                    } else if purchase.needsFinishTransaction {
                         // Deliver content from server, then:
                         SwiftyStoreKit.finishTransaction(purchase.transaction)
                     }
@@ -52,6 +55,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 case .failed, .purchasing, .deferred:
                     break // do nothing
                 }
+            }
+        }
+        
+        SwiftyStoreKit.updatedDownloadsHandler = { downloads in
+
+            // contentURL is not nil if downloadState == .finished
+            let contentURLs = downloads.flatMap { $0.contentURL }
+            if contentURLs.count == downloads.count {
+                print("Saving: \(contentURLs)")
+                SwiftyStoreKit.finishTransaction(downloads[0].transaction)
             }
         }
     }

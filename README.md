@@ -35,7 +35,7 @@ I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), 
 	- [Retrieve products info](#retrieve-products-info)
 	- [Purchase a product (given a product id)](#purchase-a-product-given-a-product-id)
 	- [Purchase a product (given a SKProduct)](#purchase-a-product-given-a-skproduct)
-	- [Should add store payment handling (iOS 11)](#should-add-store-payment-handling-iOS-11)
+	- [Handle purchases started on the App Store (iOS 11)](#handle-purchases-started-on-the-app-store-ios-11)
 	- [Restore previous purchases](#restore-previous-purchases)
 	- [Downloading content hosted with Apple](#downloading-content-hosted-with-apple)
 - [Receipt verification](#receipt-verification)
@@ -46,13 +46,13 @@ I started [**Sustainable Earth**](https://github.com/bizz84/Sustainable-Earth), 
 	- [Verify Purchase](#verify-purchase)
 	- [Verify Subscription](#verify-subscription)
 	- [Subscription Groups](#subscription-groups)
-- [Change Log](#change-log)
 - [Notes](#notes)
+- [Change Log](#change-log)
 - [Sample Code](#sample-code)
-- [Video Tutorials](#video-tutorials)
 - [Essential Reading](#essential-reading)
 	- [Troubleshooting](#troubleshooting)
-- [Payment flows - implementation details](#payment-flows--implementation-details)
+- [Video Tutorials](#video-tutorials)
+- [Payment flows: implementation details](#payment-flows-implementation-details)
 - [Credits](#credits)
 - [Apps using SwiftyStoreKit](#apps-using-swiftystorekit)
 - [License](#license)
@@ -218,7 +218,7 @@ SwiftyStoreKit.retrieveProductsInfo(["com.musevisions.SwiftyStoreKit.Purchase1"]
 
 Using this `purchaseProduct` method guarantees that only one network call is made to StoreKit to perform the purchase, as opposed to one call to get the product and another to perform the purchase.
 
-### Should add store payment handling (iOS 11)
+### Handle purchases started on the App Store (iOS 11)
 
 iOS 11 adds a new delegate method on `SKPaymentTransactionObserver`:
 
@@ -439,7 +439,7 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator, forceRefresh: false) { resul
         print("Verify receipt success: \(receipt)")
     case .error(let error):
         print("Verify receipt failed: \(error)")
-	}
+    }
 }
 ```
 
@@ -679,7 +679,7 @@ I have also written about building SwiftyStoreKit on Medium:
 
 <a href="https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb"><img src="https://raw.githubusercontent.com/bizz84/SwiftyStoreKit/master/Screenshots/VideoTutorial-Rebeloper.jpg" width="854" /></a>
 
-## Payment flows - implementation details
+## Payment flows: implementation details
 In order to make a purchase, two operations are needed:
 
 - Perform a `SKProductRequest` to obtain the `SKProduct` corresponding to the product identifier.

@@ -240,7 +240,7 @@ class PaymentsControllerTests: XCTestCase {
 
     func makeTestPayment(product: SKProduct, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
-        return Payment(product: product, quantity: 1, atomically: atomically, applicationUsername: "", callback: callback)
+        return Payment(product: product, quantity: 1, atomically: atomically, applicationUsername: "", simulatesAskToBuyInSandbox: false, callback: callback)
     }
 
     func makeTestPayment(productIdentifier: String, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {

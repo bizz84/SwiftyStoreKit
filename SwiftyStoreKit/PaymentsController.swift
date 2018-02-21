@@ -30,6 +30,7 @@ struct Payment: Hashable {
     let quantity: Int
     let atomically: Bool
     let applicationUsername: String
+    let simulatesAskToBuyInSandbox: Bool
     let callback: (TransactionResult) -> Void
 
     var hashValue: Int {

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.1) Add support Ask To Buy
+
+* Add a wrapper for `simulatesAskToBuyInSandbox` ([#349](https://github.com/bizz84/SwiftyStoreKit/pull/349))
+
 ## [0.13.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.0) Add support for downloading content hosted with Apple
 
 * Add support for downloading content hosted with Apple ([#343](https://github.com/bizz84/SwiftyStoreKit/pull/343), related issue: [#128](https://github.com/bizz84/SwiftyStoreKit/issues/128))

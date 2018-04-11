@@ -180,7 +180,7 @@ internal class InAppReceipt {
                     return nil
                 }
             #else
-                return receiptItems.compactMap {
+                return receiptItems.flatMap {
                     if let expirationDate = $0.subscriptionExpirationDate {
                         return (expirationDate, $0)
                     }

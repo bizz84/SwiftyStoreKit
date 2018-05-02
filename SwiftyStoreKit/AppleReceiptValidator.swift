@@ -84,7 +84,7 @@ public struct AppleReceiptValidator: ReceiptValidator {
 			}
 
 			// cannot decode data
-			guard let receiptInfo = try? JSONSerialization.jsonObject(with: data!, options: .mutableLeaves) as? ReceiptInfo ?? [:] else {
+			guard let receiptInfo = try? JSONSerialization.jsonObject(with: safeData, options: .mutableLeaves) as? ReceiptInfo ?? [:] else {
 				let jsonStr = String(data: safeData, encoding: String.Encoding.utf8)
 				completion(.error(error: .jsonDecodeError(string: jsonStr)))
 				return

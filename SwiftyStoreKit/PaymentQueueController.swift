@@ -239,8 +239,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         updatedDownloadsHandler?(downloads)
     }
 
+    #if os(iOS)
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         
         return shouldAddStorePaymentHandler?(payment, product) ?? false
     }
+    #endif
 }

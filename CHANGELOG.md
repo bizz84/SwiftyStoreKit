@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.13.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.3) Fix macOS compile error on Xcode 10.0 beta (10L176w)
+
+* Fix macOS compile error on Xcode 10.0 beta (10L176w) ([#381](https://github.com/bizz84/SwiftyStoreKit/pull/381), see [#380](https://github.com/bizz84/SwiftyStoreKit/issues/380))
+
+## [0.13.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.2) Swift 4.1 / Xcode 9.3 Support
+
+* Swift 4.1 / Xcode 9.3 Support ([#360](https://github.com/bizz84/SwiftyStoreKit/pull/360))
+
 ## [0.13.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.1) Add support Ask To Buy
 
 * Add a wrapper for `simulatesAskToBuyInSandbox` ([#349](https://github.com/bizz84/SwiftyStoreKit/pull/349))

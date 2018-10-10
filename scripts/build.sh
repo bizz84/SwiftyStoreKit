@@ -23,4 +23,4 @@ echo ""
 echo "${bold}/****************************/"
 echo "/* Run: SwiftyStoreKitTests */"
 echo "/****************************/${normal}"
-set -o pipefail && xcodebuild test -project SwiftyStoreKit.xcodeproj -scheme SwiftyStoreKitTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=11.2' | tee xcodebuild.log | xcpretty
+set -o pipefail && xcodebuild test -project SwiftyStoreKit.xcodeproj -scheme SwiftyStoreKitTests -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=12.0' | tee xcodebuild.log | xcpretty

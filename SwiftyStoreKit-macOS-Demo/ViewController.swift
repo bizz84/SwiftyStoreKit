@@ -160,13 +160,13 @@ extension ViewController {
         let alert: NSAlert = NSAlert()
         alert.messageText = title
         alert.informativeText = message
-        alert.alertStyle = NSAlertStyle.informational
+        alert.alertStyle = .informational
         return alert
     }
-    func showAlert(_ alert: NSAlert, handler: ((NSModalResponse) -> Void)? = nil) {
+    func showAlert(_ alert: NSAlert, handler: ((NSApplication.ModalResponse) -> Void)? = nil) {
 
-        if let window = NSApplication.shared().keyWindow {
-            alert.beginSheetModal(for: window) { (response: NSModalResponse) in
+        if let window = NSApplication.shared.keyWindow {
+            alert.beginSheetModal(for: window) { (response: NSApplication.ModalResponse) in
                 handler?(response)
             }
         } else {

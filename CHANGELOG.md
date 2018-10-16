@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.0) Add `isInIntroOfferPeriod` property, update project to Swift 4.2, Xcode 10
+
+* Added new property `isInIntroOfferPeriod` to ReceiptItem ([#404](https://github.com/bizz84/SwiftyStoreKit/pull/404), [#409](https://github.com/bizz84/SwiftyStoreKit/pull/409))
+* Add Swift 4.2 Support ([#408](https://github.com/bizz84/SwiftyStoreKit/pull/408)), update project to Xcode 10 ([#410](https://github.com/bizz84/SwiftyStoreKit/pull/410))
+
 ## [0.13.3](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.13.3) Fix macOS compile error on Xcode 10.0 beta (10L176w)
 
 * Fix macOS compile error on Xcode 10.0 beta (10L176w) ([#381](https://github.com/bizz84/SwiftyStoreKit/pull/381), see [#380](https://github.com/bizz84/SwiftyStoreKit/issues/380))

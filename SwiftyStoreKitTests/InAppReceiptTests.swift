@@ -35,7 +35,7 @@ private extension TimeInterval {
 
 extension ReceiptItem: Equatable {
 
-    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false) {
+    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false) {
         self.productId = productId
         self.quantity = 1
         self.purchaseDate = purchaseDate
@@ -46,6 +46,7 @@ extension ReceiptItem: Equatable {
         self.originalTransactionId = UUID().uuidString
         self.webOrderLineItemId = UUID().uuidString
         self.isTrialPeriod = isTrialPeriod
+        self.isInIntroOfferPeriod = isInIntroOfferPeriod
     }
 
     var receiptInfo: NSDictionary {

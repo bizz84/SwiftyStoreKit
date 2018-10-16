@@ -139,6 +139,8 @@ public struct ReceiptItem {
     public let cancellationDate: Date?
 
     public let isTrialPeriod: Bool
+    
+    public let isInIntroOfferPeriod: Bool
 }
 
 // Error when managing receipt

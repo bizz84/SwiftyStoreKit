@@ -64,6 +64,11 @@ extension ReceiptItem {
         } else {
             self.isTrialPeriod = false
         }
+        if let isInIntroOfferPeriod = receiptInfo["is_in_intro_offer_period"] as? String {
+            self.isInIntroOfferPeriod = Bool(isInIntroOfferPeriod) ?? false
+        } else {
+            self.isInIntroOfferPeriod = false
+        }
     }
 
     private static func parseDate(from receiptInfo: ReceiptInfo, key: String) -> Date? {

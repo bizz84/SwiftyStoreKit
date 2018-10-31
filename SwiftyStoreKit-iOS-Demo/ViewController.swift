@@ -266,6 +266,8 @@ extension ViewController {
             let priceString = product.localizedPrice!
             return alertWithTitle(product.localizedTitle, message: "\(product.localizedDescription) - \(priceString)")
         } else if let invalidProductId = result.invalidProductIDs.first {
+            // check you have setup banking & tax info in itunes connect
+            print("WARNING: Check you have setup banking & tax info in itunes connect")
             return alertWithTitle("Could not retrieve product info", message: "Invalid product identifier: \(invalidProductId)")
         } else {
             let errorString = result.error?.localizedDescription ?? "Unknown error. Please contact support"

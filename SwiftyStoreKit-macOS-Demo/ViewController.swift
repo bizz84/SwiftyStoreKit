@@ -205,6 +205,8 @@ extension ViewController {
                 return alertWithTitle("Purchase failed", message: "The purchase identifier was invalid")
             case .paymentNotAllowed: // this device is not allowed to make the payment
                 return alertWithTitle("Purchase failed", message: "The device is not allowed to make the payment")
+            default:
+                return alertWithTitle("Purchase failed", message: (error as NSError).localizedDescription)
             }
         }
     }

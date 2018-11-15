@@ -170,6 +170,7 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quant
         case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
         case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
         case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+        default: print((error as NSError).localizedDescription)
         }
     }
 }
@@ -197,6 +198,7 @@ SwiftyStoreKit.purchaseProduct("com.musevisions.SwiftyStoreKit.Purchase1", quant
         case .cloudServicePermissionDenied: print("Access to cloud service information is not allowed")
         case .cloudServiceNetworkConnectionFailed: print("Could not connect to the network")
         case .cloudServiceRevoked: print("User has revoked permission to use this cloud service")
+        default: print((error as NSError).localizedDescription)
         }
     }
 }

@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.1) Add missing `else` condition in `SwiftyStoreKit.purchaseProduct`
+
+* Add missing `else` condition in `SwiftyStoreKit.purchaseProduct` ([#426](https://github.com/bizz84/SwiftyStoreKit/pull/426))
+
 ## [0.14.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.0) Add `isInIntroOfferPeriod` property, update project to Swift 4.2, Xcode 10
 
 * Added new property `isInIntroOfferPeriod` to ReceiptItem ([#404](https://github.com/bizz84/SwiftyStoreKit/pull/404), [#409](https://github.com/bizz84/SwiftyStoreKit/pull/409))

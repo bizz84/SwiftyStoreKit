@@ -95,6 +95,8 @@ class PaymentsController: TransactionController {
         if transactionState == .restored {
             print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
         }
+        
+        payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
         return false
     }
 

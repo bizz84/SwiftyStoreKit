@@ -65,12 +65,6 @@ public class SwiftyStoreKit {
     }
 
     fileprivate func purchase(product: SKProduct, quantity: Int, atomically: Bool, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping (PurchaseResult) -> Void) {
-        guard SwiftyStoreKit.canMakePayments else {
-            let error = NSError(domain: SKErrorDomain, code: SKError.paymentNotAllowed.rawValue, userInfo: nil)
-            completion(.error(error: SKError(_nsError: error)))
-            return
-        }
-        
         paymentQueueController.startPayment(Payment(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox) { result in
             
             completion(self.processPurchaseResult(result))

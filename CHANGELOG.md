@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.14.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.2) Remove `canMakePayments` check on purchase method
+
+* Remove `canMakePayments` check on purchase method ([#434](https://github.com/bizz84/SwiftyStoreKit/pull/434))
+
 ## [0.14.1](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.1) Add missing `else` condition in `SwiftyStoreKit.purchaseProduct`
 
 * Add missing `else` condition in `SwiftyStoreKit.purchaseProduct` ([#426](https://github.com/bizz84/SwiftyStoreKit/pull/426))

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.15.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.15.0) Update project to Swift 5, Xcode 10.2
+
+* Update project to Swift 5 ([#457](https://github.com/bizz84/SwiftyStoreKit/pull/457)), related issue: [#456](https://github.com/bizz84/SwiftyStoreKit/issues/456)
+* Add basic SwiftPM manifest file ([#460](https://github.com/bizz84/SwiftyStoreKit/pull/460))
+
 ## [0.14.2](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.14.2) Remove `canMakePayments` check on purchase method
 
 * Remove `canMakePayments` check on purchase method ([#434](https://github.com/bizz84/SwiftyStoreKit/pull/434))

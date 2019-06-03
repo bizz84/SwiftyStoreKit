@@ -28,8 +28,7 @@ import StoreKit
 struct Payment: Hashable {
     let product: SKProduct
     
-    /// SKPaymentDiscount
-    let paymentDiscount: AnyObject?
+    let paymentDiscount: PaymentDiscount?
     let quantity: Int
     let atomically: Bool
     let applicationUsername: String
@@ -46,6 +45,15 @@ struct Payment: Hashable {
     
     static func == (lhs: Payment, rhs: Payment) -> Bool {
         return lhs.product.productIdentifier == rhs.product.productIdentifier
+    }
+}
+
+public struct PaymentDiscount {
+    let discount: AnyObject
+    
+    @available(iOS 12.2, *)
+    init(discount: SKPaymentDiscount) {
+        self.discount = discount
     }
 }
 

@@ -52,7 +52,7 @@ public struct PaymentDiscount {
     let discount: AnyObject
     
     @available(iOS 12.2, *)
-    init(discount: SKPaymentDiscount) {
+    public init(discount: SKPaymentDiscount) {
         self.discount = discount
     }
 }

@@ -64,8 +64,8 @@ public class SwiftyStoreKit {
         }
     }
 
-    fileprivate func purchase(product: SKProduct, quantity: Int, atomically: Bool, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping (PurchaseResult) -> Void) {
-        paymentQueueController.startPayment(Payment(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox) { result in
+    fileprivate func purchase(product: SKProduct, quantity: Int, atomically: Bool, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, discount: NSObject? = nil, completion: @escaping (PurchaseResult) -> Void) {
+        paymentQueueController.startPayment(Payment(product: product, discount: discount, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox) { result in
             
             completion(self.processPurchaseResult(result))
         })
@@ -172,6 +172,21 @@ extension SwiftyStoreKit {
     public class func purchaseProduct(_ product: SKProduct, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping ( PurchaseResult) -> Void) {
         
         sharedInstance.purchase(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
+    }
+    
+    /**
+     *  Purchase a product with discount
+     *  - Parameter product: product to be purchased
+     *  - Parameter product: optional discount to be applied
+     *  - Parameter quantity: quantity of the product to be purchased
+     *  - Parameter atomically: whether the product is purchased atomically (e.g. finishTransaction is called immediately)
+     *  - Parameter applicationUsername: an opaque identifier for the user’s account on your system
+     *  - Parameter completion: handler for result
+     */
+    @available(iOS 12.2, tvOS 12.2, *)
+    public class func purchaseProductWithDiscount(_ product: SKProduct, discount: SKPaymentDiscount?, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping ( PurchaseResult) -> Void) {
+        
+        sharedInstance.purchase(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, discount: discount, completion: completion)
     }
 
     /**

@@ -123,6 +123,17 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         skPayment.applicationUsername = payment.applicationUsername
         skPayment.quantity = payment.quantity
         
+        if #available(iOS 12.2, tvOS 12.2, *) {
+            
+            if let obj = payment.discount, !(obj is SKPaymentDiscount) {
+                assert(false, "Unrecognized type provided for payment discount. Only SKPaymentDiscount is supported")
+            }
+            
+            if let discount = payment.discount as? SKPaymentDiscount {
+                skPayment.paymentDiscount = discount
+            }
+        }
+        
 #if os(iOS) || os(tvOS)
         if #available(iOS 8.3, tvOS 9.0, *) {
             skPayment.simulatesAskToBuyInSandbox = payment.simulatesAskToBuyInSandbox

@@ -29,7 +29,7 @@ struct Payment: Hashable {
     let product: SKProduct
     
     /// SKPaymentDiscount
-    let discount: NSObject?
+    let paymentDiscount: AnyObject?
     let quantity: Int
     let atomically: Bool
     let applicationUsername: String

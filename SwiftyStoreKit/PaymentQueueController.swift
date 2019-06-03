@@ -125,11 +125,11 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         
         if #available(iOS 12.2, tvOS 12.2, *) {
             
-            if let obj = payment.discount, !(obj is SKPaymentDiscount) {
+            if let obj = payment.paymentDiscount, !(obj is SKPaymentDiscount) {
                 assert(false, "Unrecognized type provided for payment discount. Only SKPaymentDiscount is supported")
             }
             
-            if let discount = payment.discount as? SKPaymentDiscount {
+            if let discount = payment.paymentDiscount as? SKPaymentDiscount {
                 skPayment.paymentDiscount = discount
             }
         }

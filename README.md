@@ -2,11 +2,12 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://mit-license.org)
 [![Platform](http://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20tvos-lightgrey.svg?style=flat)](https://developer.apple.com/resources/)
-[![Language](https://img.shields.io/badge/swift-3.0-orange.svg)](https://developer.apple.com/swift)
+[![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://developer.apple.com/swift)
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Accio supported](https://img.shields.io/badge/Accio-supported-0A7CF5.svg?style=flat)](https://github.com/JamitLabs/Accio)
 [![Downloads](https://img.shields.io/cocoapods/dm/SwiftyStoreKit.svg)](https://cocoapods.org/pods/SwiftyStoreKit)
 [![Twitter](https://img.shields.io/badge/twitter-@biz84-blue.svg?maxAge=2592000)](http://twitter.com/biz84)
 
@@ -626,10 +627,11 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
 ## Notes
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
 
-#### Swift 2.x / 3.x / 4.x
+#### Swift 2.x / 3.x / 4.x / 5.x
 
 | Language  | Branch | Pod version | Xcode version |
 | --------- | ------ | ----------- | ------------- |
+| Swift 5.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.15.0 | Xcode 10.2 or greater|
 | Swift 4.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.10.4 | Xcode 9 or greater|
 | Swift 3.x | [master](https://github.com/bizz84/SwiftyStoreKit/tree/master) | >= 0.5.x | Xcode 8.x |
 | Swift 2.3 | [swift-2.3](https://github.com/bizz84/SwiftyStoreKit/tree/swift-2.3) | 0.4.x | Xcode 8, Xcode 7.3.x |
@@ -722,6 +724,7 @@ Many thanks to [phimage](https://github.com/phimage) for adding macOS support an
 
 It would be great to showcase apps using SwiftyStoreKit here. Pull requests welcome :)
 
+* [Countdown](https://countdowns.download/ssk) - Countdown the days until your next vacation, deadline, or event
 * [MDacne](https://itunes.apple.com/app/id1044050208) - Acne analysis and treatment
 * [Pixel Picker](https://itunes.apple.com/app/id930804327) - Image Color Picker
 * [KType](https://itunes.apple.com/app/id1037000234) - Space shooter game

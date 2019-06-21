@@ -94,7 +94,7 @@ public protocol PaymentTransaction {
 }
 
 // Add PaymentTransaction conformance to SKPaymentTransaction
-extension SKPaymentTransaction : PaymentTransaction { }
+extension SKPaymentTransaction: PaymentTransaction { }
 
 // Products information
 public struct RetrieveResults {

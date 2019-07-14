@@ -81,6 +81,12 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
+### Swift Package Manager
+
+You can add SwiftyStoreKit as an SPM dependency using this URL: `https://github.com/bizz84/SwiftyStoreKit.git`.
+
+If you are using Xcode 11 or later, click `File`, `Swift Packages`, `Add Package Dependency...` and specify the URL there.
+
 ## Features
 
 - Super easy to use block based API

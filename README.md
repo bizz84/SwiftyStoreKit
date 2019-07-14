@@ -24,7 +24,7 @@ SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/
 ### Maintainers Wanted
 
 - The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI
-) and enter the [#maintainer](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
+) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
 - Going forward, SwiftyStoreKit should be made for the community, by the community. 
 
 More info here:

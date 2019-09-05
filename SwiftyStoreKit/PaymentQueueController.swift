@@ -240,7 +240,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         updatedDownloadsHandler?(downloads)
     }
 
-    #if os(iOS)
+    #if os(iOS) && !targetEnvironment(UIKitForMac)
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         
         return shouldAddStorePaymentHandler?(payment, product) ?? false

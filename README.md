@@ -5,10 +5,10 @@
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://developer.apple.com/swift)
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
+[![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI)
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Accio supported](https://img.shields.io/badge/Accio-supported-0A7CF5.svg?style=flat)](https://github.com/JamitLabs/Accio)
-[![Downloads](https://img.shields.io/cocoapods/dm/SwiftyStoreKit.svg)](https://cocoapods.org/pods/SwiftyStoreKit)
 [![Twitter](https://img.shields.io/badge/twitter-@biz84-blue.svg?maxAge=2592000)](http://twitter.com/biz84)
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
@@ -17,11 +17,19 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg" width="320">
 
-### Note from the Author
+### Join on Slack 
 
-I started [**Coding with Flutter**](https://www.youtube.com/playlist?list=PLNnAcB93JKV9iZ2cwk9MEx3_JG8BRikMP), a YouTube video series on building apps with Flutter. Interested? [**Subscribe here**](https://mailchi.mp/908b29bd9311/coding-with-flutter).
+SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI).
 
-### Like SwiftyStoreKit? Please consider [becoming a Patron](https://www.patreon.com/biz84).
+### Maintainers Wanted
+
+- The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI
+) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
+- Going forward, SwiftyStoreKit should be made for the community, by the community. 
+
+More info here:
+
+- [The Future of SwiftyStoreKit: Maintainers Wanted](https://medium.com/@biz84/the-future-of-swiftystorekit-maintainers-needed-f60d01572c91)
 
 ## Content
 
@@ -80,6 +88,12 @@ github "bizz84/SwiftyStoreKit"
 ```
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
+
+### Swift Package Manager
+
+You can add SwiftyStoreKit as an SPM dependency using this URL: `https://github.com/bizz84/SwiftyStoreKit.git`.
+
+If you are using Xcode 11 or later, click `File`, `Swift Packages`, `Add Package Dependency...` and specify the URL there.
 
 ## Features
 
@@ -724,6 +738,7 @@ Many thanks to [phimage](https://github.com/phimage) for adding macOS support an
 
 It would be great to showcase apps using SwiftyStoreKit here. Pull requests welcome :)
 
+* [Every Plant, Ever](https://itunes.apple.com/us/app/every-plant-ever/id1433967019) - The sticker pack of every plant, ever.
 * [Countdown](https://countdowns.download/ssk) - Countdown the days until your next vacation, deadline, or event
 * [MDacne](https://itunes.apple.com/app/id1044050208) - Acne analysis and treatment
 * [Pixel Picker](https://itunes.apple.com/app/id930804327) - Image Color Picker
@@ -738,6 +753,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Zmeu Grand Canyon](http://grandcanyon.zmeu.guide/) - Interactive hiking map & planner
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
 * [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
+* [Sluggard](https://itunes.apple.com/app/id1160131071) - Perform simple exercises to reduce the risks of sedentary lifestyle
 
 A full list of apps is published [on AppSight](https://www.appsight.io/sdk/574154).
 

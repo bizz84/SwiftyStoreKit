@@ -44,8 +44,18 @@ class ProductsInfoController: NSObject {
     }
     
     let inAppProductRequestBuilder: InAppProductRequestBuilder
+  
+    private var unfairLock: os_unfair_lock_s!
+    private var spinLock: OSSpinLock!
+  
     init(inAppProductRequestBuilder: InAppProductRequestBuilder = InAppProductQueryRequestBuilder()) {
         self.inAppProductRequestBuilder = inAppProductRequestBuilder
+        if #available(iOSApplicationExtension 10.0, *) {
+          self.unfairLock = os_unfair_lock()
+        } else {
+          self.spinLock = OSSpinLock()
+        }
+        super.init()
     }
     
     // As we can have multiple inflight requests, we store them in a dictionary by product ids
@@ -72,4 +82,22 @@ class ProductsInfoController: NSObject {
             inflightRequests[productIds]!.completionHandlers.append(completion)
         }
     }
+  
+  
+      
+    private func lock() {
+      if #available(iOSApplicationExtension 10.0, *) {
+        os_unfair_lock_lock(&self.unfairLock)
+      } else {
+        OSSpinLockLock(&self.spinLock)
+      }
+    }
+  
+  private func unlock() {
+    if #available(iOSApplicationExtension 10.0, *) {
+      os_unfair_lock_unlock(&self.unfairLock)
+    } else {
+      OSSpinLockUnlock(&self.spinLock)
+    }
+  }
 }

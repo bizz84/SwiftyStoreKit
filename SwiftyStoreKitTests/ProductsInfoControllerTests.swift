@@ -84,27 +84,7 @@ class ProductsInfoControllerTests: XCTestCase {
                                      "com.iap.purchase07",
                                      "com.iap.purchase08",
                                      "com.iap.purchase09",
-                                     "com.iap.purchase10",
-                                     "com.iap.purchase11",
-                                     "com.iap.purchase12",
-                                     "com.iap.purchase13",
-                                     "com.iap.purchase14",
-                                     "com.iap.purchase15",
-                                     "com.iap.purchase16",
-                                     "com.iap.purchase17",
-                                     "com.iap.purchase18",
-                                     "com.iap.purchase19",
-                                     "com.iap.purchase20",
-                                     "com.iap.purchase21",
-                                     "com.iap.purchase22",
-                                     "com.iap.purchase23",
-                                     "com.iap.purchase24",
-                                     "com.iap.purchase25",
-                                     "com.iap.purchase26",
-                                     "com.iap.purchase27",
-                                     "com.iap.purchase28",
-                                     "com.iap.purchase29",
-                                     "com.iap.purchase30",]
+                                     "com.iap.purchase10"]
 
     func testRetrieveProductsInfo_when_calledOnce_then_completionCalledOnce() {
         

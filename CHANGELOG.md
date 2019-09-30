@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file.
 
+* Make `ProductsInfoController`'s `retrieveProductsInfo` thread safe ([#405]https://github.com/bizz84/SwiftyStoreKit/pull/495), related issues: [#344](https://github.com/bizz84/SwiftyStoreKit/issues/344) and [#468](https://github.com/bizz84/SwiftyStoreKit/issues/468)
+
 ## [0.15.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.15.0) Update project to Swift 5, Xcode 10.2
 
 * Update project to Swift 5 ([#457](https://github.com/bizz84/SwiftyStoreKit/pull/457)), related issue: [#456](https://github.com/bizz84/SwiftyStoreKit/issues/456)

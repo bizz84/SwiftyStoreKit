@@ -23,6 +23,7 @@
 // THE SOFTWARE.
 
 import XCTest
+import Foundation
 @testable import SwiftyStoreKit
 
 class TestInAppProductRequest: InAppProductRequest {
@@ -50,8 +51,14 @@ class TestInAppProductRequest: InAppProductRequest {
 class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
     
     var requests: [ TestInAppProductRequest ] = []
+    var os_unfair_lock_s = os_unfair_lock()
     
     func request(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductRequest {
+        os_unfair_lock_lock(&self.os_unfair_lock_s)
+        defer {
+          os_unfair_lock_unlock(&self.os_unfair_lock_s)
+        }
+      
         let request = TestInAppProductRequest(productIds: productIds, callback: callback)
         requests.append(request)
         return request
@@ -68,6 +75,36 @@ class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
 class ProductsInfoControllerTests: XCTestCase {
     
     let sampleProductIdentifiers: Set<String> = ["com.iap.purchase1"]
+    let testProducts: Set<String> = ["com.iap.purchase01",
+                                     "com.iap.purchase02",
+                                     "com.iap.purchase03",
+                                     "com.iap.purchase04",
+                                     "com.iap.purchase05",
+                                     "com.iap.purchase06",
+                                     "com.iap.purchase07",
+                                     "com.iap.purchase08",
+                                     "com.iap.purchase09",
+                                     "com.iap.purchase10",
+                                     "com.iap.purchase11",
+                                     "com.iap.purchase12",
+                                     "com.iap.purchase13",
+                                     "com.iap.purchase14",
+                                     "com.iap.purchase15",
+                                     "com.iap.purchase16",
+                                     "com.iap.purchase17",
+                                     "com.iap.purchase18",
+                                     "com.iap.purchase19",
+                                     "com.iap.purchase20",
+                                     "com.iap.purchase21",
+                                     "com.iap.purchase22",
+                                     "com.iap.purchase23",
+                                     "com.iap.purchase24",
+                                     "com.iap.purchase25",
+                                     "com.iap.purchase26",
+                                     "com.iap.purchase27",
+                                     "com.iap.purchase28",
+                                     "com.iap.purchase29",
+                                     "com.iap.purchase30",]
 
     func testRetrieveProductsInfo_when_calledOnce_then_completionCalledOnce() {
         
@@ -117,4 +154,30 @@ class ProductsInfoControllerTests: XCTestCase {
         requestBuilder.fireCallbacks()
         XCTAssertEqual(completionCount, 2)
     }
+  
+  func testRetrieveProductsInfo_when_calledConcurrentlyInDifferentThreads_then_eachcompletionCalledOnce_noCrashes() {
+    let requestBuilder = TestInAppProductRequestBuilder()
+    let productInfoController = ProductsInfoController(inAppProductRequestBuilder: requestBuilder)
+    
+    var completionCalledSet: Set<String> = []
+    
+    let expectation = XCTestExpectation(description: "Expect downloads of product informations")
+    let group = DispatchGroup()
+    
+    for product in testProducts {
+      DispatchQueue.global().async {
+        group.enter()
+        productInfoController.retrieveProductsInfo([product]) { _ in
+          completionCalledSet.insert(product)
+          group.leave()
+        }
+      }
+    }
+    
+    group.notify(queue: DispatchQueue.global()) {
+      expectation.fulfill()
+    }
+    
+    XCTAssertEqual(completionCalledSet, testProducts)
+  }
 }

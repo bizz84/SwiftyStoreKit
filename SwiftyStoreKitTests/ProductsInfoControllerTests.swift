@@ -160,7 +160,7 @@ class ProductsInfoControllerTests: XCTestCase {
         }
       }
     }
-    DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+    DispatchQueue.global().asyncAfter(deadline: .now()+0.1) {
       requestBuilder.fireCallbacks()
     }
     // Fullfil the expectation when every thread finishes

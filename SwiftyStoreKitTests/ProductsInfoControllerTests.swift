@@ -141,7 +141,7 @@ class ProductsInfoControllerTests: XCTestCase {
     let requestBuilder = TestInAppProductRequestBuilder()
     let productInfoController = ProductsInfoController(inAppProductRequestBuilder: requestBuilder)
     
-    var completionCalledSet: Set<String> = []
+    var completionCallbackCount = 0
     
     // Create the expectation not to let the test finishes before the other threads complete
     let expectation = XCTestExpectation(description: "Expect downloads of product informations")
@@ -155,17 +155,21 @@ class ProductsInfoControllerTests: XCTestCase {
       DispatchQueue.global().async {
         group.enter()
         productInfoController.retrieveProductsInfo([product]) { _ in
-          completionCalledSet.insert(product)
+          completionCallbackCount += 1
           group.leave()
         }
       }
     }
-    
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+      requestBuilder.fireCallbacks()
+    }
     // Fullfil the expectation when every thread finishes
     group.notify(queue: DispatchQueue.global()) {
+      
+      XCTAssertEqual(completionCallbackCount, self.testProducts.count)
       expectation.fulfill()
     }
     
-    XCTAssertEqual(completionCalledSet, testProducts)
+    wait(for: [expectation], timeout: 10.0)
   }
 }

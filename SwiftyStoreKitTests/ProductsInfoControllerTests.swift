@@ -54,6 +54,7 @@ class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
     var os_unfair_lock_s = os_unfair_lock()
     
     func request(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductRequest {
+        // add locks to make sure the test does not fail in preparation
         os_unfair_lock_lock(&self.os_unfair_lock_s)
         defer {
           os_unfair_lock_unlock(&self.os_unfair_lock_s)
@@ -75,6 +76,7 @@ class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
 class ProductsInfoControllerTests: XCTestCase {
     
     let sampleProductIdentifiers: Set<String> = ["com.iap.purchase1"]
+    // Set of in app purchases to ask in different threads
     let testProducts: Set<String> = ["com.iap.purchase01",
                                      "com.iap.purchase02",
                                      "com.iap.purchase03",
@@ -141,9 +143,14 @@ class ProductsInfoControllerTests: XCTestCase {
     
     var completionCalledSet: Set<String> = []
     
+    // Create the expectation not to let the test finishes before the other threads complete
     let expectation = XCTestExpectation(description: "Expect downloads of product informations")
+    
+    // Create the dispatch group to let the test verifies the assert only when
+    // everything else finishes.
     let group = DispatchGroup()
     
+    // Dispatch a request for every product in a different thread
     for product in testProducts {
       DispatchQueue.global().async {
         group.enter()
@@ -154,6 +161,7 @@ class ProductsInfoControllerTests: XCTestCase {
       }
     }
     
+    // Fullfil the expectation when every thread finishes
     group.notify(queue: DispatchQueue.global()) {
       expectation.fulfill()
     }

@@ -697,6 +697,10 @@ I have also written about building SwiftyStoreKit on Medium:
 
 <a href="https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb"><img src="https://raw.githubusercontent.com/bizz84/SwiftyStoreKit/master/Screenshots/VideoTutorial-Rebeloper.jpg" width="854" /></a>
 
+#### [@rebeloper](https://github.com/rebeloper): StoreKit - In App Purchases Tutorial | SwiftyStoreKit | Xcode 11
+
+<a href="https://youtu.be/MP-U5gQylHc"><img src="Screenshots/StoreKit - In App Purchases Tutorial - SwiftyStoreKit - Xcode 11 - consumables, non-cons, auto and non-renewing subscriptions Thubmnail.png" width="854" /></a>
+
 ## Payment flows: implementation details
 In order to make a purchase, two operations are needed:
 

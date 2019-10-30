@@ -49,11 +49,15 @@ struct Payment: Hashable {
 }
 
 public struct PaymentDiscount {
-    let discount: AnyObject
+    let discount: AnyObject?
     
     @available(iOS 12.2, tvOS 12.2, OSX 10.14.4, *)
     public init(discount: SKPaymentDiscount) {
         self.discount = discount
+    }
+    
+    private init() {
+        self.discount = nil
     }
 }
 

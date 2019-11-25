@@ -25,7 +25,7 @@
 import StoreKit
 
 // MARK: - missing SKMutablePayment init with product on OSX
-#if os(OSX)
+#if os(OSX) || targetEnvironment(macCatalyst)
     extension SKMutablePayment {
         convenience init(product: SKProduct) {
             self.init()

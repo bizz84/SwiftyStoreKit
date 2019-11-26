@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = '0.16.0'
   s.summary      = 'Lightweight In App Purchases Swift framework for iOS 8.0+, tvOS 9.0+ and OSX 10.10+'
   s.license      = 'MIT'
-  s.homepage     = 'https://github.com/bizz84/SwiftyStoreKit'
+  s.homepage     = 'https://github.com/lampateam/SwiftyStoreKit'
   s.author       = { 'Andrea Bizzotto' => 'bizz84@gmail.com' }
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.10'

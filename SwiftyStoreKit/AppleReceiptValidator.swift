@@ -37,12 +37,23 @@ public struct AppleReceiptValidator: ReceiptValidator {
     private let service: VerifyReceiptURLType
     private let sharedSecret: String?
 
+
+// the enum VerifyReceiptURLType is very dangerous to let the user remember
+// if .sandbox or .production should be used.
+//
+// By using this mechanism, the correct URL will compile at debug and at production times.
+#if DEBUG
+let storeMode : AppleReceiptValidator.VerifyReceiptURLType = .sandbox
+#else
+let storeMode : AppleReceiptValidator.VerifyReceiptURLType = .production
+#endif
+	
     /**
      * Reference Apple Receipt Validator
      *  - Parameter service: Either .production or .sandbox
      *  - Parameter sharedSecret: Only used for receipts that contain auto-renewable subscriptions. Your app’s shared secret (a hexadecimal string).
      */
-    public init(service: VerifyReceiptURLType = .production, sharedSecret: String? = nil) {
+    public init(service: VerifyReceiptURLType = storeMode, sharedSecret: String? = nil) {
 		self.service = service
         self.sharedSecret = sharedSecret
 	}

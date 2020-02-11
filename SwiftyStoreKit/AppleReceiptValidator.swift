@@ -110,9 +110,15 @@ public struct AppleReceiptValidator: ReceiptValidator {
 					sandboxValidator.validate(receiptData: receiptData, completion: completion)
 				} else {
 					if receiptStatus.isValid {
-						completion(.success(receipt: receiptInfo))
+                        if case .sandbox = self.service {
+                            var mutableReceiptInfo = receiptInfo
+                            mutableReceiptInfo["is_sandbox"] = "1" as AnyObject
+                            completion(.success(receipt: mutableReceiptInfo))
+                        } else {
+                            completion(.success(receipt: receiptInfo))
+                        }
 					} else {
-						completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
+                        completion(.error(error: .receiptInvalid(receipt: receiptInfo, status: receiptStatus)))
 					}
 				}
 			} else {

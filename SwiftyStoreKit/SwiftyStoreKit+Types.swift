@@ -86,6 +86,7 @@ public typealias UpdatedDownloadsHandler = (_ downloads: [SKDownload]) -> Void
 // MARK: Receipt verification
 
 // Info for receipt returned by server
+// Sandbox environment will add extra ["is_sandbox": "1"]
 public typealias ReceiptInfo = [String: AnyObject]
 
 // Fetch receipt result

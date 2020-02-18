@@ -35,7 +35,7 @@ More info here:
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
-	- [Swift Package Manager](#swift package manager)
+	- [Swift Package Manager](#swift-package-manager)
 - [Features](#features)
 - [Contributing](#contributing)
 - [App startup](#app-startup)

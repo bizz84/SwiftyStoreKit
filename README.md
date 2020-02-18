@@ -754,6 +754,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
 * [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
 * [Sluggard](https://itunes.apple.com/app/id1160131071) - Perform simple exercises to reduce the risks of sedentary lifestyle
+* [Debts](debts.ivanvorobei.by) - The application Debt is a great tool for tracking debts
 
 A full list of apps is published [on AppSight](https://www.appsight.io/sdk/574154).
 

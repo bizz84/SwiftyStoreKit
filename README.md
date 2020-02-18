@@ -695,7 +695,7 @@ I have also written about building SwiftyStoreKit on Medium:
 
 #### [@rebeloper](https://github.com/rebeloper): Ultimate In-app Purchases Guide
 
-<a href="https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb"><img src="https://raw.githubusercontent.com/bizz84/SwiftyStoreKit/master/Screenshots/VideoTutorial-Rebeloper.jpg" width="854" /></a>
+<a href="https://www.youtube.com/watch?v=MP-U5gQylHc"><img src="https://user-images.githubusercontent.com/2488011/65576278-55cccc80-df7a-11e9-8db5-244e2afa3e46.png" width="100%" /></a>
 
 ## Payment flows: implementation details
 In order to make a purchase, two operations are needed:
@@ -754,7 +754,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
 * [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
 * [Sluggard](https://itunes.apple.com/app/id1160131071) - Perform simple exercises to reduce the risks of sedentary lifestyle
-* [Debts](debts.ivanvorobei.by) - The application Debt is a great tool for tracking debts
+* [Debts](debts.ivanvorobei.by) - Track amounts owed
 
 A full list of apps is published [on AppSight](https://www.appsight.io/sdk/574154).
 

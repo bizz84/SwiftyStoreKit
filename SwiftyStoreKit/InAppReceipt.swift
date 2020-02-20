@@ -168,6 +168,39 @@ internal class InAppReceipt {
             return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
         }
     }
+    
+    /**
+     *  Get the distintc product identifiers from receipt.
+     *
+     *  This Method extracts all product identifiers. (Including cancelled ones).
+     *  - Note: You can use this method to get all unique product identifiers from receipt.
+     *  - Parameter type: .autoRenewable or .nonRenewing.
+     *  - Parameter receipt: The receipt to use for looking up the product identifiers.
+     *  - return: Either Set<String> or nil.
+     */
+    class func getDistinctPurchaseIds(
+        ofType type: SubscriptionType,
+        inReceipt receipt: ReceiptInfo
+    ) -> Set<String>? {
+        
+        // Get receipts array from receipt
+        guard let receipts = getReceipts(for: type, inReceipt: receipt) else {
+            return nil
+        }
+        
+        #if swift(>=4.1)
+            let receiptIds = receipts.compactMap { ReceiptItem(receiptInfo: $0)?.productId }
+        #else
+            let receiptIds = receipts.flatMap { ReceiptItem(receiptInfo: $0)?.productId }
+        #endif
+        
+        if receiptIds.count == 0 {
+            return nil
+        }
+        
+        let distintcIds = Set.init(receiptIds)
+        return distintcIds
+    }
 
     private class func expiryDatesAndItems(receiptItems: [ReceiptItem], duration: TimeInterval?) -> [(Date, ReceiptItem)] {
 
@@ -192,6 +225,15 @@ internal class InAppReceipt {
                     return nil
                 }
             #endif
+        }
+    }
+    
+    private class func getReceipts(for subscriptionType: SubscriptionType, inReceipt receipt: ReceiptInfo) -> [ReceiptInfo]? {
+        switch subscriptionType {
+        case .autoRenewable:
+            return receipt["latest_receipt_info"] as? [ReceiptInfo]
+        case .nonRenewing:
+            return getInAppReceipts(receipt: receipt)
         }
     }
 

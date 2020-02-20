@@ -33,6 +33,14 @@ public struct Purchase {
     public let transaction: PaymentTransaction
     public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
+    
+    internal init(productId: String, quantity: Int, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
+        self.productId = productId
+        self.quantity = quantity
+        self.transaction = transaction
+        self.originalTransaction = originalTransaction
+        self.needsFinishTransaction = needsFinishTransaction
+    }
 }
 
 // Purchased product
@@ -43,6 +51,15 @@ public struct PurchaseDetails {
     public let transaction: PaymentTransaction
     public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
+    
+    internal init(productId: String, quantity: Int, product: SKProduct, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
+        self.productId = productId
+        self.quantity = quantity
+        self.product = product
+        self.transaction = transaction
+        self.originalTransaction = originalTransaction
+        self.needsFinishTransaction = needsFinishTransaction
+    }
 }
 
 //Conform to this protocol to provide custom receipt validator
@@ -66,6 +83,12 @@ public struct RetrieveResults {
     public let retrievedProducts: Set<SKProduct>
     public let invalidProductIDs: Set<String>
     public let error: Error?
+    
+    internal init(retrievedProducts: Set<SKProduct>, invalidProductIDs: Set<String>, error: Error?) {
+        self.retrievedProducts = retrievedProducts
+        self.invalidProductIDs = invalidProductIDs
+        self.error = error
+    }
 }
 
 // Purchase result
@@ -78,6 +101,11 @@ public enum PurchaseResult {
 public struct RestoreResults {
     public let restoredPurchases: [Purchase]
     public let restoreFailedPurchases: [(SKError, String?)]
+    
+    internal init(restoredPurchases: [Purchase], restoreFailedPurchases: [(SKError, String?)]) {
+        self.restoredPurchases = restoredPurchases
+        self.restoreFailedPurchases = restoreFailedPurchases
+    }
 }
 
 public typealias ShouldAddStorePaymentHandler = (_ payment: SKPayment, _ product: SKProduct) -> Bool
@@ -141,6 +169,20 @@ public struct ReceiptItem {
     public let isTrialPeriod: Bool
     
     public let isInIntroOfferPeriod: Bool
+    
+    internal init(productId: String, quantity: Int, transactionId: String, originalTransactionId: String, purchaseDate: Date, originalPurchaseDate: Date, webOrderLineItemId: String?, subscriptionExpirationDate: Date?, cancellationDate: Date?, isTrialPeriod: Bool, isInIntroOfferPeriod: Bool) {
+        self.productId = productId
+        self.quantity = quantity
+        self.transactionId = transactionId
+        self.originalTransactionId = originalTransactionId
+        self.purchaseDate = purchaseDate
+        self.originalPurchaseDate = originalPurchaseDate
+        self.webOrderLineItemId = webOrderLineItemId
+        self.subscriptionExpirationDate = subscriptionExpirationDate
+        self.cancellationDate = cancellationDate
+        self.isTrialPeriod = isTrialPeriod
+        self.isInIntroOfferPeriod = isInIntroOfferPeriod
+    }
 }
 
 // Error when managing receipt

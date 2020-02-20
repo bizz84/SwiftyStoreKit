@@ -55,6 +55,7 @@ More info here:
 	- [Verify Purchase](#verify-purchase)
 	- [Verify Subscription](#verify-subscription)
 	- [Subscription Groups](#subscription-groups)
+        - [Get distinct purchase identifiers](#get-distinct-purchase-identifiers)
 - [Notes](#notes)
 - [Change Log](#change-log)
 - [Sample Code](#sample-code)
@@ -637,6 +638,31 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     }
 }
 ```
+#### Get distinct purchase identifiers 
+
+You can retrieve all product identifiers with the `getDistinctPurchaseIds` method:
+
+```swift
+let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
+    switch result {
+    case .success(let receipt):
+        let productIds = SwiftyStoreKit.getDistinctPurchaseIds(inReceipt receipt: ReceiptInfo)
+        let purchaseResult = SwiftyStoreKit.verifySubscriptions(productIds: productIds, inReceipt: receipt)
+        switch purchaseResult {
+        case .purchased(let expiryDate, let items):
+            print("\(productIds) are valid until \(expiryDate)\n\(items)\n")
+        case .expired(let expiryDate, let items):
+            print("\(productIds) are expired since \(expiryDate)\n\(items)\n")
+        case .notPurchased:
+            print("The user has never purchased \(productIds)")
+        }
+    case .error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
 
 ## Notes
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).

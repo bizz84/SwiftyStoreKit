@@ -1,5 +1,5 @@
 //
-//  ProductsInfoControllerTests.swift
+// ProductsInfoControllerTests.swift
 // SwiftyStoreKit
 //
 // Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)

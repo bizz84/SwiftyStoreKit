@@ -170,7 +170,7 @@ internal class InAppReceipt {
     }
     
     /**
-     *  Get the distintc product identifiers from receipt.
+     *  Get the distinct product identifiers from receipt.
      *
      *  This Method extracts all product identifiers. (Including cancelled ones).
      *  - Note: You can use this method to get all unique product identifiers from receipt.

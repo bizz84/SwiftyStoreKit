@@ -198,8 +198,7 @@ internal class InAppReceipt {
             return nil
         }
         
-        let distintcIds = Set.init(receiptIds)
-        return distintcIds
+        return Set(receiptIds)
     }
 
     private class func expiryDatesAndItems(receiptItems: [ReceiptItem], duration: TimeInterval?) -> [(Date, ReceiptItem)] {

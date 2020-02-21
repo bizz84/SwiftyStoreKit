@@ -435,7 +435,7 @@ class InAppReceiptTests: XCTestCase {
         let receipt = makeReceipt(items: [product1, product2, product3, product4], requestDate: receiptRequestDateOne)
 
         let getdistinctProductIdsResult = SwiftyStoreKit.getDistinctPurchaseIds(ofType: .autoRenewable, inReceipt: receipt)
-        let expectedProductIdsResult = Set.init([productId1, productId2, productId3, productId4])
+        let expectedProductIdsResult = Set([productId1, productId2, productId3, productId4])
         XCTAssertEqual(getdistinctProductIdsResult, expectedProductIdsResult)
     }
 

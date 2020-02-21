@@ -194,7 +194,7 @@ internal class InAppReceipt {
             let receiptIds = receipts.flatMap { ReceiptItem(receiptInfo: $0)?.productId }
         #endif
         
-        if receiptIds.count == 0 {
+        if receiptIds.isEmpty {
             return nil
         }
         

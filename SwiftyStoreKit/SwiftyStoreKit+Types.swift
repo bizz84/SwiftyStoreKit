@@ -27,6 +27,41 @@ import StoreKit
 // MARK: Purchases
 
 // Restored product
+// The Purchased protocol allows different purchase flows to be handled by common code in simple cases
+// For example you could route through to
+//
+// func didPurchase<P:Purchased>(item:P) { ... }
+//
+// for example
+// SwiftyStoreKit.completeTransactions (in .purchased and .restored cases)
+// SwiftyStoreKit.restorePurchases (for results.restoredPurchases)
+// SwiftyStoreKit.purchaseProducd (in .success case)
+public protocol Purchased {
+    var productId: String {get}
+    var quantity: Int {get}
+    var originalPurchaseDate: Date {get}
+}
+
+extension Purchase: Purchased {
+    public var originalPurchaseDate: Date {
+        guard let date = originalTransaction?.transactionDate ?? transaction.transactionDate else {
+            fatalError("there should always be a transaction date, so this should not happen...")
+        }
+        return  date
+    }
+}
+
+extension PurchaseDetails: Purchased {
+    public var originalPurchaseDate: Date {
+        guard let date = originalTransaction?.transactionDate ?? transaction.transactionDate else {
+            fatalError("there should always be a transaction date, so this should not happen...")
+        }
+        return  date
+    }
+}
+
+
+// Restored product
 public struct Purchase {
     public let productId: String
     public let quantity: Int
@@ -146,7 +181,7 @@ public enum SubscriptionType {
     case nonRenewing(validDuration: TimeInterval)
 }
 
-public struct ReceiptItem {
+public struct ReceiptItem: Purchased {
     // The product identifier of the item that was purchased. This value corresponds to the productIdentifier property of the SKPayment object stored in the transaction’s payment property.
     public let productId: String
     // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.

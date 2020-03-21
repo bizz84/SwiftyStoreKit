@@ -29,7 +29,8 @@ import StoreKit
 @testable import SwiftyStoreKit
 
 extension Payment {
-    init(product: SKProduct, quantity: Int, atomically: Bool, applicationUsername: String, simulatesAskToBuyInSandbox: Bool, callback: @escaping (TransactionResult) -> Void) {
+    init(product: SKProduct, paymentDiscount: PaymentDiscount, quantity: Int, atomically: Bool, applicationUsername: String, simulatesAskToBuyInSandbox: Bool, callback: @escaping (TransactionResult) -> Void) {
+        self.paymentDiscount = paymentDiscount
         self.product = product
         self.quantity = quantity
         self.atomically = atomically
@@ -301,6 +302,6 @@ class PaymentQueueControllerTests: XCTestCase {
     func makeTestPayment(productIdentifier: String, quantity: Int = 1, atomically: Bool = true, callback: @escaping (TransactionResult) -> Void) -> Payment {
 
         let testProduct = TestProduct(productIdentifier: productIdentifier)
-        return Payment(product: testProduct, quantity: quantity, atomically: atomically, applicationUsername: "", simulatesAskToBuyInSandbox: false, callback: callback)
+        return Payment(product: testProduct, paymentDiscount: nil, quantity: quantity, atomically: atomically, applicationUsername: "", simulatesAskToBuyInSandbox: false, callback: callback)
     }
 }

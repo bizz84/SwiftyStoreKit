@@ -28,9 +28,9 @@ import StoreKit
 protocol TransactionController {
 
     /**
-     * - param transactions: transactions to process
-     * - param paymentQueue: payment queue for finishing transactions
-     * - return: array of unhandled transactions
+     * - parameter transactions: transactions to process
+     * - parameter paymentQueue: payment queue for finishing transactions
+     * - returns: array of unhandled transactions
      */
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction]
 }

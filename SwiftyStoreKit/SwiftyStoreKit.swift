@@ -48,7 +48,7 @@ public class SwiftyStoreKit {
     
     fileprivate func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping ( PurchaseResult) -> Void) -> InAppProductRequest {
 
-        retrieveProductsInfo(Set([productId])) { result -> Void in
+        return retrieveProductsInfo(Set([productId])) { result -> Void in
             if let product = result.retrievedProducts.first {
                 self.purchase(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
             } else if let error = result.error {
@@ -160,7 +160,7 @@ extension SwiftyStoreKit {
     @discardableResult
     public class func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping (PurchaseResult) -> Void) -> InAppRequest {
 
-        sharedInstance.purchaseProduct(productId, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
+        return sharedInstance.purchaseProduct(productId, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
     }
     
     /**
@@ -260,7 +260,7 @@ extension SwiftyStoreKit {
     @discardableResult
     public class func verifyReceipt(using validator: ReceiptValidator, forceRefresh: Bool = false, completion: @escaping (VerifyReceiptResult) -> Void) -> InAppRequest? {
 
-        sharedInstance.receiptVerificator.verifyReceipt(using: validator, forceRefresh: forceRefresh, completion: completion)
+        return sharedInstance.receiptVerificator.verifyReceipt(using: validator, forceRefresh: forceRefresh, completion: completion)
     }
 
     /**
@@ -271,7 +271,7 @@ extension SwiftyStoreKit {
     @discardableResult
     public class func fetchReceipt(forceRefresh: Bool, completion: @escaping (FetchReceiptResult) -> Void) -> InAppRequest? {
     
-        sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)
+        return sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)
     }
     
     /**

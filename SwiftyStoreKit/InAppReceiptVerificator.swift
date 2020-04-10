@@ -49,10 +49,11 @@ class InAppReceiptVerificator: NSObject {
      *  - Parameter refresh: closure to perform receipt refresh (this is made explicit for testability)
      *  - Parameter completion: handler for result
      */
+    @discardableResult
     public func verifyReceipt(using validator: ReceiptValidator,
                               forceRefresh: Bool,
                               refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
-                              completion: @escaping (VerifyReceiptResult) -> Void) {
+                              completion: @escaping (VerifyReceiptResult) -> Void) -> InAppRequest? {
         
         fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
             switch result {
@@ -72,12 +73,14 @@ class InAppReceiptVerificator: NSObject {
      *  - Parameter refresh: closure to perform receipt refresh (this is made explicit for testability)
      *  - Parameter completion: handler for result
      */
+    @discardableResult
     public func fetchReceipt(forceRefresh: Bool,
                              refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
-                             completion: @escaping (FetchReceiptResult) -> Void) {
+                             completion: @escaping (FetchReceiptResult) -> Void) -> InAppRequest? {
 
         if let receiptData = appStoreReceiptData, forceRefresh == false {
             completion(.success(receiptData: receiptData))
+            return nil
         } else {
             
             receiptRefreshRequest = refresh(nil) { result in
@@ -95,6 +98,7 @@ class InAppReceiptVerificator: NSObject {
                     completion(.error(error: .networkError(error: e)))
                 }
             }
+            return receiptRefreshRequest
         }
     }
     

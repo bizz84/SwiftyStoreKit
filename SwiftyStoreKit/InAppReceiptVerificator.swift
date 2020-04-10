@@ -55,7 +55,7 @@ class InAppReceiptVerificator: NSObject {
                               refresh: InAppReceiptRefreshRequest.ReceiptRefresh = InAppReceiptRefreshRequest.refresh,
                               completion: @escaping (VerifyReceiptResult) -> Void) -> InAppRequest? {
         
-        fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
+        return fetchReceipt(forceRefresh: forceRefresh, refresh: refresh) { result in
             switch result {
             case .success(let receiptData):
                 self.verify(receiptData: receiptData, using: validator, completion: completion)

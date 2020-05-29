@@ -316,4 +316,18 @@ extension SwiftyStoreKit {
 
         return InAppReceipt.verifySubscriptions(ofType: type, productIds: productIds, inReceipt: receipt, validUntil: date)
     }
+    
+    /**
+     *  Get the distinct product identifiers from receipt.
+     *
+     *  This Method extracts all product identifiers. (Including cancelled ones).
+     *  - Note: You can use this method to get all unique product identifiers from receipt.
+     *  - Parameter type: .autoRenewable or .nonRenewing.
+     *  - Parameter receipt: The receipt to use for looking upproduct identifiers.
+     *  - return: Either Set<String> or nil.
+     */
+    public class func getDistinctPurchaseIds(ofType type: SubscriptionType = .autoRenewable, inReceipt receipt: ReceiptInfo) -> Set<String>? {
+        
+        return InAppReceipt.getDistinctPurchaseIds(ofType: type, inReceipt: receipt)
+    }
 }

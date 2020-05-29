@@ -5,7 +5,7 @@
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://developer.apple.com/swift)
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
-[![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI)
+[![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 [![Accio supported](https://img.shields.io/badge/Accio-supported-0A7CF5.svg?style=flat)](https://github.com/JamitLabs/Accio)
@@ -19,12 +19,11 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.
 
 ### Join on Slack 
 
-SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI).
+SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM).
 
 ### Maintainers Wanted
 
-- The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtNjkzNTg5NTMyMTgwLTcyZGIzMTg0MWFmMTQyMDYxNDcyYWNhOTlmNjUyM2E0OTllNjE2ZDJiNDI0ZDAzMWU2Mzc3Nzk1YzJmMTE2NjI
-) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
+- The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
 - Going forward, SwiftyStoreKit should be made for the community, by the community. 
 
 More info here:
@@ -36,6 +35,7 @@ More info here:
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
+	- [Swift Package Manager](#swift-package-manager)
 - [Features](#features)
 - [Contributing](#contributing)
 - [App startup](#app-startup)
@@ -55,6 +55,7 @@ More info here:
 	- [Verify Purchase](#verify-purchase)
 	- [Verify Subscription](#verify-subscription)
 	- [Subscription Groups](#subscription-groups)
+        - [Get distinct purchase identifiers](#get-distinct-purchase-identifiers)
 - [Notes](#notes)
 - [Change Log](#change-log)
 - [Sample Code](#sample-code)
@@ -637,6 +638,31 @@ SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
     }
 }
 ```
+#### Get distinct purchase identifiers 
+
+You can retrieve all product identifiers with the `getDistinctPurchaseIds` method:
+
+```swift
+let appleValidator = AppleReceiptValidator(service: .production, sharedSecret: "your-shared-secret")
+SwiftyStoreKit.verifyReceipt(using: appleValidator) { result in
+    switch result {
+    case .success(let receipt):
+        let productIds = SwiftyStoreKit.getDistinctPurchaseIds(inReceipt receipt: ReceiptInfo)
+        let purchaseResult = SwiftyStoreKit.verifySubscriptions(productIds: productIds, inReceipt: receipt)
+        switch purchaseResult {
+        case .purchased(let expiryDate, let items):
+            print("\(productIds) are valid until \(expiryDate)\n\(items)\n")
+        case .expired(let expiryDate, let items):
+            print("\(productIds) are expired since \(expiryDate)\n\(items)\n")
+        case .notPurchased:
+            print("The user has never purchased \(productIds)")
+        }
+    case .error(let error):
+        print("Receipt verification failed: \(error)")
+    }
+}
+```
+
 
 ## Notes
 The framework provides a simple block based API with robust error handling on top of the existing StoreKit framework. It does **NOT** persist in app purchases data locally. It is up to clients to do this with a storage solution of choice (i.e. NSUserDefaults, CoreData, Keychain).
@@ -695,7 +721,7 @@ I have also written about building SwiftyStoreKit on Medium:
 
 #### [@rebeloper](https://github.com/rebeloper): Ultimate In-app Purchases Guide
 
-<a href="https://www.youtube.com/watch?v=bIyj6BZ1-Qw&list=PL_csAAO9PQ8b9kqrltk2_SpYslTwyrwjb"><img src="https://raw.githubusercontent.com/bizz84/SwiftyStoreKit/master/Screenshots/VideoTutorial-Rebeloper.jpg" width="854" /></a>
+<a href="https://www.youtube.com/watch?v=MP-U5gQylHc"><img src="https://user-images.githubusercontent.com/2488011/65576278-55cccc80-df7a-11e9-8db5-244e2afa3e46.png" width="100%" /></a>
 
 ## Payment flows: implementation details
 In order to make a purchase, two operations are needed:
@@ -754,6 +780,7 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [OB Monitor](https://itunes.apple.com/app/id1073398446) - The app for Texas Longhorns athletics fans
 * [Talk Dim Sum](https://itunes.apple.com/us/app/talk-dim-sum/id953929066) - Your dim sum companion
 * [Sluggard](https://itunes.apple.com/app/id1160131071) - Perform simple exercises to reduce the risks of sedentary lifestyle
+* [Debts iOS](https://debts.ivanvorobei.by/ios) & [Debts macOS](https://debts.ivanvorobei.by/macos) - Track amounts owed
 
 A full list of apps is published [on AppSight](https://www.appsight.io/sdk/574154).
 

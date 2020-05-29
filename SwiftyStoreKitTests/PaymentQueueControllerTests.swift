@@ -28,18 +28,6 @@ import XCTest
 import StoreKit
 @testable import SwiftyStoreKit
 
-extension Payment {
-    init(product: SKProduct, paymentDiscount: PaymentDiscount, quantity: Int, atomically: Bool, applicationUsername: String, simulatesAskToBuyInSandbox: Bool, callback: @escaping (TransactionResult) -> Void) {
-        self.paymentDiscount = paymentDiscount
-        self.product = product
-        self.quantity = quantity
-        self.atomically = atomically
-        self.applicationUsername = applicationUsername
-        self.simulatesAskToBuyInSandbox = simulatesAskToBuyInSandbox
-        self.callback = callback
-    }
-}
-
 class PaymentQueueControllerTests: XCTestCase {
 
     // MARK: init/deinit

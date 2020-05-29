@@ -181,30 +181,45 @@ public enum SubscriptionType {
 }
 
 public struct ReceiptItem: Purchased, Codable {
-    // The product identifier of the item that was purchased. This value corresponds to the productIdentifier property of the SKPayment object stored in the transaction’s payment property.
-    public let productId: String
-    // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.
-    public let quantity: Int
-    // The transaction identifier of the item that was purchased. This value corresponds to the transaction’s transactionIdentifier property.
-    public let transactionId: String
-    // For a transaction that restores a previous transaction, the transaction identifier of the original transaction. Otherwise, identical to the transaction identifier. This value corresponds to the original transaction’s transactionIdentifier property. All receipts in a chain of renewals for an auto-renewable subscription have the same value for this field.
-    public let originalTransactionId: String
-    // The date and time that the item was purchased. This value corresponds to the transaction’s transactionDate property.
-    public let purchaseDate: Date
-    // For a transaction that restores a previous transaction, the date of the original transaction. This value corresponds to the original transaction’s transactionDate property. In an auto-renewable subscription receipt, this indicates the beginning of the subscription period, even if the subscription has been renewed.
-    public let originalPurchaseDate: Date
-    // The primary key for identifying subscription purchases.
-    public let webOrderLineItemId: String?
-    // The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is only present for auto-renewable subscription receipts.
-    public let subscriptionExpirationDate: Date?
-    // For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.
-    public let cancellationDate: Date?
-
-    public let isTrialPeriod: Bool
     
-    public let isInIntroOfferPeriod: Bool
+    /// The product identifier of the item that was purchased. This value corresponds to the `productIdentifier` property of the `SKPayment` object stored in the transaction’s payment property.
+    public var productId: String
     
-    internal init(productId: String, quantity: Int, transactionId: String, originalTransactionId: String, purchaseDate: Date, originalPurchaseDate: Date, webOrderLineItemId: String?, subscriptionExpirationDate: Date?, cancellationDate: Date?, isTrialPeriod: Bool, isInIntroOfferPeriod: Bool) {
+    /// The number of items purchased. This value corresponds to the `quantity` property of the `SKPayment` object stored in the transaction’s payment property.
+    public var quantity: Int
+    
+    /// The transaction identifier of the item that was purchased. This value corresponds to the transaction’s `transactionIdentifier` property.
+    public var transactionId: String
+    
+    /// For a transaction that restores a previous transaction, the transaction identifier of the original transaction. 
+    /// 
+    /// Otherwise, identical to the transaction identifier. This value corresponds to the original transaction’s `transactionIdentifier` property. All receipts in a chain of renewals for an auto-renewable subscription have the same value for this field.
+    public var originalTransactionId: String
+    
+    /// The date and time that the item was purchased. This value corresponds to the transaction’s `transactionDate` property.
+    public var purchaseDate: Date
+    
+    /// For a transaction that restores a previous transaction, the date of the original transaction. This value corresponds to the original transaction’s `transactionDate` property. In an auto-renewable subscription receipt, this indicates the beginning of the subscription period, even if the subscription has been renewed.
+    public var originalPurchaseDate: Date
+    
+    /// The primary key for identifying subscription purchases.
+    public var webOrderLineItemId: String?
+    
+    /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is **only** present for **auto-renewable** subscription receipts.
+    public var subscriptionExpirationDate: Date?
+    
+    /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation. 
+    /// 
+    /// Treat a canceled receipt the same as if no purchase had ever been made.
+    public var cancellationDate: Date?
+    
+    /// Indicates whether or not the subscription item is currently within a given trial period.
+    public var isTrialPeriod: Bool
+    
+    /// Indicates whether or not the subscription item is currently within an intro offer period.
+    public var isInIntroOfferPeriod: Bool
+    
+    public init(productId: String, quantity: Int, transactionId: String, originalTransactionId: String, purchaseDate: Date, originalPurchaseDate: Date, webOrderLineItemId: String?, subscriptionExpirationDate: Date?, cancellationDate: Date?, isTrialPeriod: Bool, isInIntroOfferPeriod: Bool) {
         self.productId = productId
         self.quantity = quantity
         self.transactionId = transactionId
@@ -219,19 +234,19 @@ public struct ReceiptItem: Purchased, Codable {
     }
 }
 
-// Error when managing receipt
+/// Error when managing receipt
 public enum ReceiptError: Swift.Error {
-    // No receipt data
+    /// No receipt data
     case noReceiptData
-    // No data received
+    /// No data received
     case noRemoteData
-    // Error when encoding HTTP body into JSON
+    /// Error when encoding HTTP body into JSON
     case requestBodyEncodeError(error: Swift.Error)
-    // Error when proceeding request
+    /// Error when proceeding request
     case networkError(error: Swift.Error)
-    // Error when decoding response
+    /// Error when decoding response
     case jsonDecodeError(string: String?)
-    // Receive invalid - bad status returned
+    /// Receive invalid - bad status returned
     case receiptInvalid(receipt: ReceiptInfo, status: ReceiptStatus)
 }
 

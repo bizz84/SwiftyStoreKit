@@ -42,13 +42,13 @@ public class SwiftyStoreKit {
     }
 
     // MARK: private methods
-    fileprivate func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
+    fileprivate func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) -> InAppProductRequest {
         return productsInfoController.retrieveProductsInfo(productIds, completion: completion)
     }
     
-    fileprivate func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping ( PurchaseResult) -> Void) {
+    fileprivate func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping ( PurchaseResult) -> Void) -> InAppProductRequest {
 
-        retrieveProductsInfo(Set([productId])) { result -> Void in
+        return retrieveProductsInfo(Set([productId])) { result -> Void in
             if let product = result.retrievedProducts.first {
                 self.purchase(product: product, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
             } else if let error = result.error {
@@ -143,7 +143,8 @@ extension SwiftyStoreKit {
      *  - Parameter productIds: The set of product identifiers to retrieve corresponding products for
      *  - Parameter completion: handler for result
      */
-    public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) {
+    @discardableResult
+    public class func retrieveProductsInfo(_ productIds: Set<String>, completion: @escaping (RetrieveResults) -> Void) -> InAppRequest {
 
         return sharedInstance.retrieveProductsInfo(productIds, completion: completion)
     }
@@ -156,9 +157,10 @@ extension SwiftyStoreKit {
      *  - Parameter applicationUsername: an opaque identifier for the user’s account on your system
      *  - Parameter completion: handler for result
      */
-    public class func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping (PurchaseResult) -> Void) {
+    @discardableResult
+    public class func purchaseProduct(_ productId: String, quantity: Int = 1, atomically: Bool = true, applicationUsername: String = "", simulatesAskToBuyInSandbox: Bool = false, completion: @escaping (PurchaseResult) -> Void) -> InAppRequest {
 
-        sharedInstance.purchaseProduct(productId, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
+        return sharedInstance.purchaseProduct(productId, quantity: quantity, atomically: atomically, applicationUsername: applicationUsername, simulatesAskToBuyInSandbox: simulatesAskToBuyInSandbox, completion: completion)
     }
     
     /**
@@ -255,9 +257,10 @@ extension SwiftyStoreKit {
      *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter completion: handler for result
      */
-    public class func verifyReceipt(using validator: ReceiptValidator, forceRefresh: Bool = false, completion: @escaping (VerifyReceiptResult) -> Void) {
+    @discardableResult
+    public class func verifyReceipt(using validator: ReceiptValidator, forceRefresh: Bool = false, completion: @escaping (VerifyReceiptResult) -> Void) -> InAppRequest? {
 
-        sharedInstance.receiptVerificator.verifyReceipt(using: validator, forceRefresh: forceRefresh, completion: completion)
+        return sharedInstance.receiptVerificator.verifyReceipt(using: validator, forceRefresh: forceRefresh, completion: completion)
     }
 
     /**
@@ -265,9 +268,10 @@ extension SwiftyStoreKit {
      *  - Parameter forceRefresh: If true, refreshes the receipt even if one already exists.
      *  - Parameter completion: handler for result
      */
-    public class func fetchReceipt(forceRefresh: Bool, completion: @escaping (FetchReceiptResult) -> Void) {
+    @discardableResult
+    public class func fetchReceipt(forceRefresh: Bool, completion: @escaping (FetchReceiptResult) -> Void) -> InAppRequest? {
     
-        sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)
+        return sharedInstance.receiptVerificator.fetchReceipt(forceRefresh: forceRefresh, completion: completion)
     }
     
     /**

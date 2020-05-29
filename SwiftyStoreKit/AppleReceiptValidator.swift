@@ -27,14 +27,17 @@ import Foundation
 
 // https://developer.apple.com/library/ios/releasenotes/General/ValidateAppStoreReceipt/Chapters/ValidateRemotely.html
 
-public struct AppleReceiptValidator: ReceiptValidator {
+public class AppleReceiptValidator: ReceiptValidator {
 
 	public enum VerifyReceiptURLType: String {
 		case production = "https://buy.itunes.apple.com/verifyReceipt"
 		case sandbox = "https://sandbox.itunes.apple.com/verifyReceipt"
 	}
 
-    private let service: VerifyReceiptURLType
+    /// You should always verify your receipt first with the `production` service
+    /// Note: will auto change to `.sandbox` and validate again if received a 21007 status code from Apple
+    public var service: VerifyReceiptURLType
+
     private let sharedSecret: String?
 
     /**
@@ -106,8 +109,8 @@ public struct AppleReceiptValidator: ReceiptValidator {
 				*/
 				let receiptStatus = ReceiptStatus(rawValue: status) ?? ReceiptStatus.unknown
 				if case .testReceipt = receiptStatus {
-                    let sandboxValidator = AppleReceiptValidator(service: .sandbox, sharedSecret: self.sharedSecret)
-					sandboxValidator.validate(receiptData: receiptData, completion: completion)
+                    self.service = .sandbox
+                    self.validate(receiptData: receiptData, completion: completion)
 				} else {
 					if receiptStatus.isValid {
 						completion(.success(receipt: receiptInfo))

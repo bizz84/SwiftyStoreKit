@@ -180,7 +180,7 @@ public enum SubscriptionType {
     case nonRenewing(validDuration: TimeInterval)
 }
 
-public struct ReceiptItem: Purchased {
+public struct ReceiptItem: Purchased, Codable {
     // The product identifier of the item that was purchased. This value corresponds to the productIdentifier property of the SKPayment object stored in the transaction’s payment property.
     public let productId: String
     // The number of items purchased. This value corresponds to the quantity property of the SKPayment object stored in the transaction’s payment property.

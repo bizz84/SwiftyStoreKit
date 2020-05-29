@@ -26,7 +26,6 @@
 import XCTest
 import SwiftyStoreKit
 
-// swiftlint:disable file_length
 private extension TimeInterval {
     var millisecondsNSString: NSString {
         return String(format: "%.0f", self * 1000) as NSString
@@ -107,6 +106,7 @@ extension VerifyPurchaseResult: Equatable {
     }
 }
 
+// swiftlint:disable file_length
 class InAppReceiptTests: XCTestCase {
 
     // MARK: Verify Purchase

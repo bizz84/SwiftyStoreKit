@@ -68,7 +68,7 @@ public struct Purchase {
     public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
     
-    internal init(productId: String, quantity: Int, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
+    public init(productId: String, quantity: Int, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
         self.productId = productId
         self.quantity = quantity
         self.transaction = transaction
@@ -86,7 +86,7 @@ public struct PurchaseDetails {
     public let originalTransaction: PaymentTransaction?
     public let needsFinishTransaction: Bool
     
-    internal init(productId: String, quantity: Int, product: SKProduct, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
+    public init(productId: String, quantity: Int, product: SKProduct, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
         self.productId = productId
         self.quantity = quantity
         self.product = product
@@ -118,7 +118,7 @@ public struct RetrieveResults {
     public let invalidProductIDs: Set<String>
     public let error: Error?
     
-    internal init(retrievedProducts: Set<SKProduct>, invalidProductIDs: Set<String>, error: Error?) {
+    public init(retrievedProducts: Set<SKProduct>, invalidProductIDs: Set<String>, error: Error?) {
         self.retrievedProducts = retrievedProducts
         self.invalidProductIDs = invalidProductIDs
         self.error = error
@@ -136,7 +136,7 @@ public struct RestoreResults {
     public let restoredPurchases: [Purchase]
     public let restoreFailedPurchases: [(SKError, String?)]
     
-    internal init(restoredPurchases: [Purchase], restoreFailedPurchases: [(SKError, String?)]) {
+    public init(restoredPurchases: [Purchase], restoreFailedPurchases: [(SKError, String?)]) {
         self.restoredPurchases = restoredPurchases
         self.restoreFailedPurchases = restoreFailedPurchases
     }

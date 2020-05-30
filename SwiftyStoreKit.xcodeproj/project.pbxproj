@@ -71,6 +71,9 @@
 		65F7DF9A1DCD536700835D30 /* SwiftyStoreKit-iOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF971DCD536100835D30 /* SwiftyStoreKit-iOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F7DF9B1DCD537800835D30 /* SwiftyStoreKit-macOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F7DF9C1DCD537F00835D30 /* SwiftyStoreKit-tvOS.h in Headers */ = {isa = PBXBuildFile; fileRef = 65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A61BF4BE2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
+		A61BF4BF2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
+		A61BF4C02481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
 		C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */; };
 		C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C081E2FCE3A00392A54 /* TestProduct.swift */; };
 		C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */; };
@@ -207,6 +210,7 @@
 		65F7DF971DCD536100835D30 /* SwiftyStoreKit-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-iOS.h"; sourceTree = "<group>"; };
 		65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-macOS.h"; sourceTree = "<group>"; };
 		65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-tvOS.h"; sourceTree = "<group>"; };
+		A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProductDiscount+LocalizedPrice.swift"; sourceTree = "<group>"; };
 		C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsControllerTests.swift; sourceTree = "<group>"; };
 		C3099C081E2FCE3A00392A54 /* TestProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestProduct.swift; sourceTree = "<group>"; };
 		C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPaymentTransaction.swift; sourceTree = "<group>"; };
@@ -317,6 +321,7 @@
 				65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */,
 				1592CD4F1E27756500D321E6 /* AppleReceiptValidator.swift */,
 				653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */,
+				A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */,
 				C40C680F1C29414C00B60B7E /* OS.swift */,
 				65F7DF931DCD536100835D30 /* Platforms */,
 			);
@@ -728,6 +733,7 @@
 				650307FA1E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,
 				65BB6CEA1DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */,
 				54B069941CF742D600BAFE38 /* InAppProductQueryRequest.swift in Sources */,
+				A61BF4C02481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -759,6 +765,7 @@
 				650307F81E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,
 				65BB6CE81DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */,
 				6502F63C1B985CA4004E342D /* SwiftyStoreKit.swift in Sources */,
+				A61BF4BE2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,6 +815,7 @@
 				650307F91E317BCF001332A4 /* CompleteTransactionsController.swift in Sources */,
 				65BB6CE91DDB018900218A0B /* SwiftyStoreKit+Types.swift in Sources */,
 				C4D74BC51C24CEDC0071AD3E /* SwiftyStoreKit.swift in Sources */,
+				A61BF4BF2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

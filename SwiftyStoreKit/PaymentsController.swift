@@ -51,7 +51,7 @@ struct Payment: Hashable {
 public struct PaymentDiscount {
     let discount: AnyObject?
     
-    @available(iOS 12.2, tvOS 12.2, OSX 10.14.4, *)
+    @available(iOS 12.2, tvOS 12.2, OSX 10.14.4, watchOS 6.2, macCatalyst 13.0, *)
     public init(discount: SKPaymentDiscount) {
         self.discount = discount
     }

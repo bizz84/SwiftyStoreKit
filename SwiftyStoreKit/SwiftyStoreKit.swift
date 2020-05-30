@@ -118,10 +118,17 @@ public class SwiftyStoreKit {
         return RestoreResults(restoredPurchases: restoredPurchases, restoreFailedPurchases: restoreFailedPurchases)
     }
     
+    #if os(watchOS)
+    private func storeInternalError(code: SKErrorCode = SKErrorCode.unknown, description: String = "") -> SKError {
+        let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
+        return SKError.init(Code: code, _nsError: error)
+    }
+    #else
     private func storeInternalError(code: SKError.Code = SKError.unknown, description: String = "") -> SKError {
         let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
         return SKError(_nsError: error)
     }
+    #endif
 }
 
 extension SwiftyStoreKit {

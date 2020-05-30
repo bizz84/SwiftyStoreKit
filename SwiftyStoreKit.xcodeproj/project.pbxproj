@@ -74,6 +74,22 @@
 		A61BF4BE2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
 		A61BF4BF2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
 		A61BF4C02481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
+		A61BF4C62481F4970017D9BC /* OS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C40C680F1C29414C00B60B7E /* OS.swift */; };
+		A61BF4C72481F4970017D9BC /* AppleReceiptValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1592CD4F1E27756500D321E6 /* AppleReceiptValidator.swift */; };
+		A61BF4C82481F4970017D9BC /* InAppProductQueryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6231B98586A004E342D /* InAppProductQueryRequest.swift */; };
+		A61BF4C92481F4970017D9BC /* InAppReceiptRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4083C561C2AB0A900295248 /* InAppReceiptRefreshRequest.swift */; };
+		A61BF4CA2481F4970017D9BC /* PaymentsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F70AC81E2EDC3700BF040D /* PaymentsController.swift */; };
+		A61BF4CB2481F4970017D9BC /* ProductsInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307FB1E33154F001332A4 /* ProductsInfoController.swift */; };
+		A61BF4CC2481F4970017D9BC /* RestorePurchasesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307F31E3177EF001332A4 /* RestorePurchasesController.swift */; };
+		A61BF4CD2481F4970017D9BC /* PaymentQueueController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658A08361E2EC24E0074A98F /* PaymentQueueController.swift */; };
+		A61BF4CE2481F4970017D9BC /* InAppReceiptVerificator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E9E0781ECADF5E005CF7B4 /* InAppReceiptVerificator.swift */; };
+		A61BF4CF2481F4970017D9BC /* SKProduct+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653722801DB8282600C8F944 /* SKProduct+LocalizedPrice.swift */; };
+		A61BF4D02481F4970017D9BC /* InAppReceipt.swift in Sources */ = {isa = PBXBuildFile; fileRef = C4A7C7621C29B8D00053ED64 /* InAppReceipt.swift */; };
+		A61BF4D12481F4970017D9BC /* CompleteTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650307F71E317BCF001332A4 /* CompleteTransactionsController.swift */; };
+		A61BF4D22481F4970017D9BC /* SwiftyStoreKit+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65BB6CE71DDB018900218A0B /* SwiftyStoreKit+Types.swift */; };
+		A61BF4D32481F4970017D9BC /* SwiftyStoreKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502F6241B98586A004E342D /* SwiftyStoreKit.swift */; };
+		A61BF4D42481F4970017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */; };
+		A61BF4E02481F7400017D9BC /* SwiftyStoreKit-watchOS.h in Headers */ = {isa = PBXBuildFile; fileRef = A61BF4DF2481F7150017D9BC /* SwiftyStoreKit-watchOS.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C3099C071E2FCDAA00392A54 /* PaymentsControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */; };
 		C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C081E2FCE3A00392A54 /* TestProduct.swift */; };
 		C3099C0B1E2FD13200392A54 /* TestPaymentTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */; };
@@ -211,6 +227,9 @@
 		65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-macOS.h"; sourceTree = "<group>"; };
 		65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-tvOS.h"; sourceTree = "<group>"; };
 		A61BF4BD2481F0560017D9BC /* SKProductDiscount+LocalizedPrice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKProductDiscount+LocalizedPrice.swift"; sourceTree = "<group>"; };
+		A61BF4DD2481F4970017D9BC /* SwiftyStoreKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyStoreKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A61BF4DF2481F7150017D9BC /* SwiftyStoreKit-watchOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftyStoreKit-watchOS.h"; sourceTree = "<group>"; };
+		A61BF4E12481F7B00017D9BC /* Info-watchOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-watchOS.plist"; sourceTree = "<group>"; };
 		C3099C061E2FCDAA00392A54 /* PaymentsControllerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaymentsControllerTests.swift; sourceTree = "<group>"; };
 		C3099C081E2FCE3A00392A54 /* TestProduct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestProduct.swift; sourceTree = "<group>"; };
 		C3099C0A1E2FD13200392A54 /* TestPaymentTransaction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestPaymentTransaction.swift; sourceTree = "<group>"; };
@@ -261,6 +280,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A61BF4D52481F4970017D9BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4D74BB71C24CEC90071AD3E /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -301,6 +327,7 @@
 				54C0D52C1CF7404500F90BCE /* SwiftyStoreKit.framework */,
 				658A083E1E2EC5120074A98F /* SwiftyStoreKitTests.xctest */,
 				654287EE1E79F5A000F61800 /* SwiftyStoreKit_tvOSDemo.app */,
+				A61BF4DD2481F4970017D9BC /* SwiftyStoreKit.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -389,9 +416,11 @@
 				65F7DF941DCD536100835D30 /* Info-iOS.plist */,
 				65F7DF951DCD536100835D30 /* Info-macOS.plist */,
 				65F7DF961DCD536100835D30 /* Info-tvOS.plist */,
+				A61BF4E12481F7B00017D9BC /* Info-watchOS.plist */,
 				65F7DF971DCD536100835D30 /* SwiftyStoreKit-iOS.h */,
 				65F7DF981DCD536100835D30 /* SwiftyStoreKit-macOS.h */,
 				65F7DF991DCD536100835D30 /* SwiftyStoreKit-tvOS.h */,
+				A61BF4DF2481F7150017D9BC /* SwiftyStoreKit-watchOS.h */,
 			);
 			path = Platforms;
 			sourceTree = "<group>";
@@ -412,6 +441,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				65F7DF9A1DCD536700835D30 /* SwiftyStoreKit-iOS.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61BF4D62481F4970017D9BC /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A61BF4E02481F7400017D9BC /* SwiftyStoreKit-watchOS.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -520,6 +557,25 @@
 			productReference = 658A083E1E2EC5120074A98F /* SwiftyStoreKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		A61BF4C42481F4970017D9BC /* SwiftyStoreKit_watchOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A61BF4DA2481F4970017D9BC /* Build configuration list for PBXNativeTarget "SwiftyStoreKit_watchOS" */;
+			buildPhases = (
+				A61BF4C52481F4970017D9BC /* Sources */,
+				A61BF4D62481F4970017D9BC /* Headers */,
+				A61BF4D52481F4970017D9BC /* Frameworks */,
+				A61BF4D82481F4970017D9BC /* Resources */,
+				A61BF4D92481F4970017D9BC /* swiftlint */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftyStoreKit_watchOS;
+			productName = SwiftyStoreKit;
+			productReference = A61BF4DD2481F4970017D9BC /* SwiftyStoreKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		C4D74BBA1C24CEC90071AD3E /* SwiftyStoreKit_macOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C4D74BC21C24CECA0071AD3E /* Build configuration list for PBXNativeTarget "SwiftyStoreKit_macOS" */;
@@ -616,6 +672,7 @@
 				6502F62C1B985C40004E342D /* SwiftyStoreKit_iOS */,
 				C4D74BBA1C24CEC90071AD3E /* SwiftyStoreKit_macOS */,
 				54C0D52B1CF7404500F90BCE /* SwiftyStoreKit_tvOS */,
+				A61BF4C42481F4970017D9BC /* SwiftyStoreKit_watchOS */,
 				6502F5FD1B985833004E342D /* SwiftyStoreKit_iOSDemo */,
 				C4FD3A001C2954C10035CFF3 /* SwiftyStoreKit_macOSDemo */,
 				654287ED1E79F5A000F61800 /* SwiftyStoreKit_tvOSDemo */,
@@ -665,6 +722,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A61BF4D82481F4970017D9BC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		C4D74BB91C24CEC90071AD3E /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -684,6 +748,20 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		A61BF4D92481F4970017D9BC /* swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = swiftlint;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"SwiftLint does not exist, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
 		C4B298341E5C25DD007C87C2 /* swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -794,6 +872,28 @@
 				658A084C1E2EC5960074A98F /* PaymentQueueSpy.swift in Sources */,
 				C3099C091E2FCE3A00392A54 /* TestProduct.swift in Sources */,
 				65B8C9291EC0BE62009439D9 /* InAppReceiptTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A61BF4C52481F4970017D9BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A61BF4C62481F4970017D9BC /* OS.swift in Sources */,
+				A61BF4C72481F4970017D9BC /* AppleReceiptValidator.swift in Sources */,
+				A61BF4C82481F4970017D9BC /* InAppProductQueryRequest.swift in Sources */,
+				A61BF4C92481F4970017D9BC /* InAppReceiptRefreshRequest.swift in Sources */,
+				A61BF4CA2481F4970017D9BC /* PaymentsController.swift in Sources */,
+				A61BF4CB2481F4970017D9BC /* ProductsInfoController.swift in Sources */,
+				A61BF4CC2481F4970017D9BC /* RestorePurchasesController.swift in Sources */,
+				A61BF4CD2481F4970017D9BC /* PaymentQueueController.swift in Sources */,
+				A61BF4CE2481F4970017D9BC /* InAppReceiptVerificator.swift in Sources */,
+				A61BF4CF2481F4970017D9BC /* SKProduct+LocalizedPrice.swift in Sources */,
+				A61BF4D02481F4970017D9BC /* InAppReceipt.swift in Sources */,
+				A61BF4D12481F4970017D9BC /* CompleteTransactionsController.swift in Sources */,
+				A61BF4D22481F4970017D9BC /* SwiftyStoreKit+Types.swift in Sources */,
+				A61BF4D32481F4970017D9BC /* SwiftyStoreKit.swift in Sources */,
+				A61BF4D42481F4970017D9BC /* SKProductDiscount+LocalizedPrice.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1214,6 +1314,61 @@
 			};
 			name = Release;
 		};
+		A61BF4DB2481F4970017D9BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftyStoreKit/Platforms/Info-watchOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.iOS.SwiftyStoreKit;
+				PRODUCT_NAME = SwiftyStoreKit;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		A61BF4DC2481F4970017D9BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "$(SRCROOT)/SwiftyStoreKit/Platforms/Info-watchOS.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.musevisions.iOS.SwiftyStoreKit;
+				PRODUCT_NAME = SwiftyStoreKit;
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "watchsimulator watchos";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		C4D74BC01C24CECA0071AD3E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1349,6 +1504,15 @@
 			buildConfigurations = (
 				658A08471E2EC5120074A98F /* Debug */,
 				658A08481E2EC5120074A98F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A61BF4DA2481F4970017D9BC /* Build configuration list for PBXNativeTarget "SwiftyStoreKit_watchOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A61BF4DB2481F4970017D9BC /* Debug */,
+				A61BF4DC2481F4970017D9BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

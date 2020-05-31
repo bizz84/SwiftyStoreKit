@@ -38,7 +38,7 @@ public extension SKProduct {
         return formatter
     }
     
-    @available(iOSApplicationExtension 11.2, OSX 10.13.2, tvOS 11.2, watchOS 6.2, macCatalyst 13.0, *)
+    @available(iOSApplicationExtension 11.2, iOS 11.2, OSX 10.13.2, tvOS 11.2, watchOS 6.2, macCatalyst 13.0, *)
     var localizedSubscriptionPeriod: String {
         guard let subscriptionPeriod = self.subscriptionPeriod else { return "" }
         

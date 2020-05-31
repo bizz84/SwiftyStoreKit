@@ -25,7 +25,7 @@
 
 import StoreKit
 
-@available(iOSApplicationExtension 11.2, OSX 10.13.2, tvOS 11.2, watchOS 4.2, macCatalyst 13.0, *)
+@available(iOSApplicationExtension 11.2, iOS 11.2, OSX 10.13.2, tvOS 11.2, watchOS 4.2, macCatalyst 13.0, *)
 public extension SKProductDiscount {
     
     /// The formatted discount price of the product using the local currency.

@@ -26,7 +26,6 @@
 import XCTest
 import SwiftyStoreKit
 
-// swiftlint:disable file_length
 private extension TimeInterval {
     var millisecondsNSString: NSString {
         return String(format: "%.0f", self * 1000) as NSString
@@ -36,6 +35,7 @@ private extension TimeInterval {
 extension ReceiptItem: Equatable {
 
     init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false) {
+        self.init(productId: productId, quantity: 1, transactionId: UUID().uuidString, originalTransactionId: UUID().uuidString, purchaseDate: purchaseDate, originalPurchaseDate: purchaseDate, webOrderLineItemId: UUID().uuidString, subscriptionExpirationDate: subscriptionExpirationDate, cancellationDate: cancellationDate, isTrialPeriod: isTrialPeriod, isInIntroOfferPeriod: isInIntroOfferPeriod)
         self.productId = productId
         self.quantity = 1
         self.purchaseDate = purchaseDate
@@ -107,6 +107,7 @@ extension VerifyPurchaseResult: Equatable {
     }
 }
 
+// swiftlint:disable file_length
 class InAppReceiptTests: XCTestCase {
 
     // MARK: Verify Purchase
@@ -381,6 +382,62 @@ class InAppReceiptTests: XCTestCase {
         
         let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, items: [newerItem, olderItem])
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
+    }
+    
+    // MARK: Get Distinct Purchase Identifiers, empty receipt item tests
+    func testGetDistinctPurchaseIds_when_noReceipt_then_resultIsNil() {
+
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
+        let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
+
+        let getdistinctProductIdsResult = SwiftyStoreKit.getDistinctPurchaseIds(ofType: .autoRenewable, inReceipt: receipt)
+        XCTAssertNil(getdistinctProductIdsResult)
+    }
+    
+    // MARK: Get Distinct Purchase Identifiers, multiple receipt item tests
+    func testGetDistinctPurchaseIds_when_Receipt_then_resultIsNotNil() {
+
+        let receiptRequestDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 20)
+        let purchaseDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 1)
+        let purchaseDateTwo = makeDateAtMidnight(year: 2020, month: 1, day: 1)
+        
+        let productId1 = "product1"
+        let productId2 = "product2"
+        
+        let product1 = ReceiptItem(productId: productId1, purchaseDate: purchaseDateOne)
+        let product2 = ReceiptItem(productId: productId2, purchaseDate: purchaseDateTwo)
+        
+        let receipt = makeReceipt(items: [product1, product2], requestDate: receiptRequestDateOne)
+
+        let getdistinctProductIdsResult = SwiftyStoreKit.getDistinctPurchaseIds(ofType: .autoRenewable, inReceipt: receipt)
+                
+        XCTAssertNotNil(getdistinctProductIdsResult)
+    }
+    
+    // MARK: Get Distinct Purchase Identifiers, multiple non unique product identifiers tests
+    func testGetDistinctPurchaseIds_when_nonUniqueIdentifiers_then_resultIsUnique() {
+
+        let receiptRequestDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 20)
+        let purchaseDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 1)
+        let purchaseDateTwo = makeDateAtMidnight(year: 2020, month: 2, day: 2)
+        let purchaseDateThree = makeDateAtMidnight(year: 2020, month: 2, day: 3)
+        let purchaseDateFour = makeDateAtMidnight(year: 2020, month: 2, day: 4)
+
+        let productId1 = "product1"
+        let productId2 = "product2"
+        let productId3 = "product1"
+        let productId4 = "product2"
+
+        let product1 = ReceiptItem(productId: productId1, purchaseDate: purchaseDateOne)
+        let product2 = ReceiptItem(productId: productId2, purchaseDate: purchaseDateTwo)
+        let product3 = ReceiptItem(productId: productId3, purchaseDate: purchaseDateThree)
+        let product4 = ReceiptItem(productId: productId4, purchaseDate: purchaseDateFour)
+
+        let receipt = makeReceipt(items: [product1, product2, product3, product4], requestDate: receiptRequestDateOne)
+
+        let getdistinctProductIdsResult = SwiftyStoreKit.getDistinctPurchaseIds(ofType: .autoRenewable, inReceipt: receipt)
+        let expectedProductIdsResult = Set([productId1, productId2, productId3, productId4])
+        XCTAssertEqual(getdistinctProductIdsResult, expectedProductIdsResult)
     }
 
     // MARK: Helper methods

@@ -26,10 +26,12 @@ import StoreKit
 
 typealias InAppProductRequestCallback = (RetrieveResults) -> Void
 
-protocol InAppProductRequest: class {
+public protocol InAppRequest: class {
     func start()
     func cancel()
 }
+
+protocol InAppProductRequest: InAppRequest { }
 
 class InAppProductQueryRequest: NSObject, InAppProductRequest, SKProductsRequestDelegate {
 

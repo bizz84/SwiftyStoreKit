@@ -26,7 +26,7 @@
 import StoreKit
 import Foundation
 
-class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
+class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate, InAppRequest {
 
     enum ResultType {
         case success
@@ -60,6 +60,10 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate {
         self.refreshReceiptRequest.start()
     }
 
+    func cancel() {
+        self.refreshReceiptRequest.cancel()
+    }
+    
     func requestDidFinish(_ request: SKRequest) {
         /*if let resoreRequest = request as? SKReceiptRefreshRequest {
          let receiptProperties = resoreRequest.receiptProperties ?? [:]

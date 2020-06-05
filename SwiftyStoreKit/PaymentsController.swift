@@ -27,6 +27,8 @@ import StoreKit
 
 struct Payment: Hashable {
     let product: SKProduct
+    
+    let paymentDiscount: PaymentDiscount?
     let quantity: Int
     let atomically: Bool
     let applicationUsername: String
@@ -43,6 +45,19 @@ struct Payment: Hashable {
     
     static func == (lhs: Payment, rhs: Payment) -> Bool {
         return lhs.product.productIdentifier == rhs.product.productIdentifier
+    }
+}
+
+public struct PaymentDiscount {
+    let discount: AnyObject?
+    
+    @available(iOS 12.2, tvOS 12.2, OSX 10.14.4, watchOS 6.2, macCatalyst 13.0, *)
+    public init(discount: SKPaymentDiscount) {
+        self.discount = discount
+    }
+    
+    private init() {
+        self.discount = nil
     }
 }
 
@@ -88,6 +103,21 @@ class PaymentsController: TransactionController {
             payments.remove(at: paymentIndex)
             return true
         }
+
+        if transactionState == .restored {
+            print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
+
+            let purchase = PurchaseDetails(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, product: payment.product, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !payment.atomically)
+
+            payment.callback(.purchased(purchase: purchase))
+
+            if payment.atomically {
+                paymentQueue.finishTransaction(transaction)
+            }
+            payments.remove(at: paymentIndex)
+            return true
+        }
+
         if transactionState == .failed {
 
             payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
@@ -97,9 +127,6 @@ class PaymentsController: TransactionController {
             return true
         }
 
-        if transactionState == .restored {
-            print("Unexpected restored transaction for payment \(transactionProductIdentifier)")
-        }
         return false
     }
 

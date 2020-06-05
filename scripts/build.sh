@@ -20,6 +20,12 @@ echo "/******************************/${normal}"
 set -o pipefail && xcodebuild -project SwiftyStoreKit.xcodeproj -target SwiftyStoreKit_tvOS | tee xcodebuild.log | xcpretty
 
 echo ""
+echo "${bold}/******************************/"
+echo "/* Build: SwiftyStoreKit_watchOS */"
+echo "/******************************/${normal}"
+set -o pipefail && xcodebuild -project SwiftyStoreKit.xcodeproj -target SwiftyStoreKit_watchOS | tee xcodebuild.log | xcpretty
+
+echo ""
 echo "${bold}/****************************/"
 echo "/* Run: SwiftyStoreKitTests */"
 echo "/****************************/${normal}"

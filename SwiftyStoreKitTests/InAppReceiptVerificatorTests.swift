@@ -76,7 +76,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
         var refreshCalled = false
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -84,6 +84,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         }, completion: { _ in
             
         })
+        XCTAssertNotNil(request)
         XCTAssertTrue(refreshCalled)
     }
 
@@ -95,7 +96,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
         var refreshCalled = false
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -103,6 +104,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         }, completion: { _ in
             
         })
+        XCTAssertNotNil(request)
         XCTAssertTrue(refreshCalled)
     }
     
@@ -115,7 +117,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
         var refreshCalled = false
-        verificator.verifyReceipt(using: validator, forceRefresh: true, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: true, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             refreshCalled = true
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -123,6 +125,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         }, completion: { _ in
             
         })
+        XCTAssertNotNil(request)
         XCTAssertTrue(refreshCalled)
     }
 
@@ -132,7 +135,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         let refreshError = NSError(domain: "", code: 0, userInfo: nil)
         
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             callback(.error(e: refreshError))
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -141,6 +144,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
             
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.networkError(error: refreshError)))
         })
+        XCTAssertNotNil(request)
     }
 
     func testVerifyReceipt_when_appStoreReceiptURLIsNil_refreshCallbackSuccess_receiptDataNotWritten_then_errorNoReceiptData_validateNotCalled() {
@@ -148,7 +152,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             callback(.success)
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -157,6 +161,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
 
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.noReceiptData))
         })
+        XCTAssertNotNil(request)
         XCTAssertFalse(validator.validateCalled)
     }
 
@@ -167,7 +172,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: nil)
         
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             writeReceiptData(to: testReceiptURL)
             callback(.success)
@@ -177,6 +182,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
             
             XCTAssertEqual(result, VerifyReceiptResult.error(error: ReceiptError.noReceiptData))
         })
+        XCTAssertNotNil(request)
         XCTAssertFalse(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }
@@ -188,7 +194,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             writeReceiptData(to: testReceiptURL)
             callback(.success)
@@ -197,6 +203,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         }, completion: { _ in
             
         })
+        XCTAssertNil(request)
         XCTAssertTrue(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }
@@ -210,7 +217,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         let validator = TestReceiptValidator()
         let verificator = InAppReceiptVerificator(appStoreReceiptURL: testReceiptURL)
         
-        verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
+        let request = verificator.verifyReceipt(using: validator, forceRefresh: false, refresh: { (properties, callback) -> InAppReceiptRefreshRequest in
             
             XCTFail("refresh should not be called if we already have a receipt")
             return TestInAppReceiptRefreshRequest(receiptProperties: properties, callback: callback)
@@ -218,6 +225,7 @@ class InAppReceiptVerificatorTests: XCTestCase {
         }, completion: { _ in
             
         })
+        XCTAssertNil(request)
         XCTAssertTrue(validator.validateCalled)
         removeReceiptData(at: testReceiptURL)
     }

@@ -27,11 +27,10 @@ import StoreKit
 
 protocol TransactionController {
 
-    /**
-     * - param transactions: transactions to process
-     * - param paymentQueue: payment queue for finishing transactions
-     * - return: array of unhandled transactions
-     */
+    /// Process the supplied transactions on a given queue.
+    /// - parameter transactions: transactions to process
+    /// - parameter paymentQueue: payment queue for finishing transactions
+    /// - returns: array of unhandled transactions
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction]
 }
 
@@ -50,7 +49,11 @@ public protocol PaymentQueue: class {
     
     func start(_ downloads: [SKDownload])
     func pause(_ downloads: [SKDownload])
+    #if os(watchOS)
+    func resumeDownloads(_ downloads: [SKDownload])
+    #else
     func resume(_ downloads: [SKDownload])
+    #endif
     func cancel(_ downloads: [SKDownload])
     
     func restoreCompletedTransactions(withApplicationUsername username: String?)
@@ -123,8 +126,14 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         skPayment.applicationUsername = payment.applicationUsername
         skPayment.quantity = payment.quantity
         
+        if #available(iOS 12.2, tvOS 12.2, OSX 10.14.4, *) {
+            if let discount = payment.paymentDiscount?.discount as? SKPaymentDiscount {
+                skPayment.paymentDiscount = discount
+            }
+        }
+        
 #if os(iOS) || os(tvOS)
-        if #available(iOS 8.3, tvOS 9.0, *) {
+        if #available(iOS 8.3, *) {
             skPayment.simulatesAskToBuyInSandbox = payment.simulatesAskToBuyInSandbox
         }
 #endif
@@ -170,8 +179,13 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     func pause(_ downloads: [SKDownload]) {
         paymentQueue.pause(downloads)
     }
+    
     func resume(_ downloads: [SKDownload]) {
+        #if os(watchOS)
+        paymentQueue.resumeDownloads(downloads)
+        #else
         paymentQueue.resume(downloads)
+        #endif
     }
     func cancel(_ downloads: [SKDownload]) {
         paymentQueue.cancel(downloads)

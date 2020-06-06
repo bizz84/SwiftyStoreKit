@@ -9,7 +9,7 @@
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
 
 ### Preview
 
@@ -30,6 +30,7 @@ More info here:
 
 ## Content
 
+- [Requirements](#requirements)
 - [Installation](#installation)
 	- [CocoaPods](#cocoapods)
 	- [Carthage](#carthage)
@@ -65,6 +66,13 @@ More info here:
 - [Apps using SwiftyStoreKit](#apps-using-swiftystorekit)
 - [License](#license)
 	
+## Requirements
+If you've shipped an app in the last five years, you're probably good to go. Some features (like discounts) are only available on new OS versions, but most features are available as far back as:
+
+| iOS | watchOS | tvOS | macOS | Mac Catalyst |
+|-----|---------|------|-------|--------------|
+| 8.0 | 6.2     | 9.0  | 10.10 | 10.15        |
+
 ## Installation
 
 ### CocoaPods

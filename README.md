@@ -1,15 +1,13 @@
-![](https://github.com/bizz84/SwiftyStoreKit/raw/master/SwiftyStoreKit-logo.png)
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/SwiftyStoreKit-logo.png" width=100%>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://mit-license.org)
-[![Platform](http://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20tvos-lightgrey.svg?style=flat)](https://developer.apple.com/resources/)
+[![Platform](http://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg?style=flat)](https://developer.apple.com/resources/)
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://developer.apple.com/swift)
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
 [![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Accio supported](https://img.shields.io/badge/Accio-supported-0A7CF5.svg?style=flat)](https://github.com/JamitLabs/Accio)
-[![Twitter](https://img.shields.io/badge/twitter-@biz84-blue.svg?maxAge=2592000)](http://twitter.com/biz84)
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
 
@@ -98,14 +96,15 @@ If you are using Xcode 11 or later, click `File`, `Swift Packages`, `Add Package
 
 ## Features
 
-- Super easy to use block based API
-- Support for consumable, non-consumable in-app purchases
+- Super easy-to-use block-based API
+- Support for consumable and non-consumable in-app purchases
 - Support for free, auto-renewable and non-renewing subscriptions
 - Support for in-app purchases started in the App Store (iOS 11)
+- Support for subscription discounts and offers
 - Remote receipt verification
 - Verify purchases, subscriptions, subscription groups
 - Downloading content hosted with Apple
-- iOS, tvOS and macOS compatible
+- iOS, tvOS, watchOS, macOS, and Catalyst compatible
 
 ## Contributing
 

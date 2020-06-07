@@ -6,7 +6,6 @@
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
-[![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
@@ -32,9 +31,9 @@ More info here:
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-	- [CocoaPods](#cocoapods)
-	- [Carthage](#carthage)
 	- [Swift Package Manager](#swift-package-manager)
+	- [Carthage](#carthage)
+	- [CocoaPods](#cocoapods)
 - [Features](#features)
 - [Contributing](#contributing)
 - [App startup](#app-startup)
@@ -74,17 +73,27 @@ If you've shipped an app in the last five years, you're probably good to go. Som
 | 8.0 | 6.2     | 9.0  | 10.10 | 10.15        |
 
 ## Installation
+There are a number of ways to install SwiftyStoreKit for your project. Swift Package Manager and Carthage integrations are the preferred and recommended approaches. Unfortunately, CocoaPods is currently not supported / outdated (see below for details).
 
-### CocoaPods
+Regardless, make sure to import the project wherever you may use it:
 
-SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
-
-```ruby
-use_frameworks!
-
-pod 'SwiftyStoreKit'
+```swift
+import SwiftyStoreKit
 ```
-Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
+
+### Swift Package Manager
+
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into Xcode and the Swift compiler. **This is the recommended installation method.** Updates to SwiftyStoreKit will always be available immediately to projects with SPM. SPM is also integrated directly with Xcode.
+
+If you are using Xcode 11 or later:
+ 1. Click `File`
+ 2. `Swift Packages`
+ 3. `Add Package Dependency...`
+ 4. Specify the git URL for SwiftyStoreKit.
+
+```swift
+https://github.com/bizz84/SwiftyStoreKit.git
+```
 
 ### Carthage
 
@@ -96,11 +105,18 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-### Swift Package Manager
+### CocoaPods
+**:rotating_light: NOT RECOMMENDED**. Current project maintainers do *not* have push access to the CocoaPod trunk and we are waiting for confirmation from the original repo author / owner. **The CocoaPod pod is already 2 releases behind the current version.** 
 
-You can add SwiftyStoreKit as an SPM dependency using this URL: `https://github.com/bizz84/SwiftyStoreKit.git`.
+**:warning: There is no guarantee of future updates via CocoaPods. Installing with CocoaPods is done at your own risk. :warning:**
 
-If you are using Xcode 11 or later, click `File`, `Swift Packages`, `Add Package Dependency...` and specify the URL there.
+SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
+
+```ruby
+use_frameworks!
+
+pod 'SwiftyStoreKit'
+```
 
 ## Features
 

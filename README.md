@@ -7,6 +7,7 @@
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-orange.svg?style=flat)](https://swift.org/package-manager/)
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
 

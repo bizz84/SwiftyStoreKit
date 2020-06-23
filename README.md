@@ -11,22 +11,21 @@
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
 
-### Preview
-
-<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg" width="320">
-
-### Join on Slack 
-
-SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM).
+## Contributions Wanted
+SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 
 ### Maintainers Wanted
 
-- The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
+- The author is no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
 - Going forward, SwiftyStoreKit should be made for the community, by the community. 
 
 More info here:
 
 - [The Future of SwiftyStoreKit: Maintainers Wanted](https://medium.com/@biz84/the-future-of-swiftystorekit-maintainers-needed-f60d01572c91)
+
+### Join on Slack 
+
+SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM).
 
 ## Content
 
@@ -71,7 +70,7 @@ If you've shipped an app in the last five years, you're probably good to go. Som
 
 | iOS | watchOS | tvOS | macOS | Mac Catalyst |
 |-----|---------|------|-------|--------------|
-| 8.0 | 6.2     | 9.0  | 10.10 | 10.15        |
+| 8.0 | 6.2     | 9.0  | 10.10 | 13.0         |
 
 ## Installation
 There are a number of ways to install SwiftyStoreKit for your project. Swift Package Manager and Carthage integrations are the preferred and recommended approaches. Unfortunately, CocoaPods is currently not supported / outdated (see below for details).

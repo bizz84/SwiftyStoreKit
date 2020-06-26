@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "A61BF4C42481F4970017D9BC"
-               BuildableName = "SwiftyStoreKit_watchOS.framework"
+               BuildableName = "SwiftyStoreKit.framework"
                BlueprintName = "SwiftyStoreKit_watchOS"
                ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "A61BF4C42481F4970017D9BC"
-            BuildableName = "SwiftyStoreKit_watchOS.framework"
+            BuildableName = "SwiftyStoreKit.framework"
             BlueprintName = "SwiftyStoreKit_watchOS"
             ReferencedContainer = "container:SwiftyStoreKit.xcodeproj">
          </BuildableReference>

@@ -1,41 +1,39 @@
-![](https://github.com/bizz84/SwiftyStoreKit/raw/master/SwiftyStoreKit-logo.png)
+<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/SwiftyStoreKit-logo.png" width=100%>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://mit-license.org)
-[![Platform](http://img.shields.io/badge/platform-ios%20%7C%20macos%20%7C%20tvos-lightgrey.svg?style=flat)](https://developer.apple.com/resources/)
+[![Platform](http://img.shields.io/badge/platform-iOS%20%7C%20macOS%20%7C%20tvOS%20%7C%20watchOS-lightgrey.svg?style=flat)](https://developer.apple.com/resources/)
 [![Language](https://img.shields.io/badge/swift-5.0-orange.svg)](https://developer.apple.com/swift)
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
-[![Cocoapod](http://img.shields.io/cocoapods/v/SwiftyStoreKit.svg?style=flat)](http://cocoadocs.org/docsets/SwiftyStoreKit/)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Accio supported](https://img.shields.io/badge/Accio-supported-0A7CF5.svg?style=flat)](https://github.com/JamitLabs/Accio)
-[![Twitter](https://img.shields.io/badge/twitter-@biz84-blue.svg?maxAge=2592000)](http://twitter.com/biz84)
+[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-orange.svg?style=flat)](https://swift.org/package-manager/)
 
-SwiftyStoreKit is a lightweight In App Purchases framework for iOS 8.0+, tvOS 9.0+ and macOS 10.10+.
+SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
 
-### Preview
-
-<img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg" width="320">
-
-### Join on Slack 
-
-SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM).
+## Contributions Wanted
+SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 
 ### Maintainers Wanted
 
-- The author no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
+- The author is no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
 - Going forward, SwiftyStoreKit should be made for the community, by the community. 
 
 More info here:
 
 - [The Future of SwiftyStoreKit: Maintainers Wanted](https://medium.com/@biz84/the-future-of-swiftystorekit-maintainers-needed-f60d01572c91)
 
+### Join on Slack 
+
+SwiftyStoreKit is on Slack. [Join here](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM).
+
 ## Content
 
+- [Requirements](#requirements)
 - [Installation](#installation)
-	- [CocoaPods](#cocoapods)
-	- [Carthage](#carthage)
 	- [Swift Package Manager](#swift-package-manager)
+	- [Carthage](#carthage)
+	- [CocoaPods](#cocoapods)
 - [Features](#features)
 - [Contributing](#contributing)
 - [App startup](#app-startup)
@@ -67,18 +65,35 @@ More info here:
 - [Apps using SwiftyStoreKit](#apps-using-swiftystorekit)
 - [License](#license)
 	
+## Requirements
+If you've shipped an app in the last five years, you're probably good to go. Some features (like discounts) are only available on new OS versions, but most features are available as far back as:
+
+| iOS | watchOS | tvOS | macOS | Mac Catalyst |
+|-----|---------|------|-------|--------------|
+| 8.0 | 6.2     | 9.0  | 10.10 | 13.0         |
+
 ## Installation
+There are a number of ways to install SwiftyStoreKit for your project. Swift Package Manager and Carthage integrations are the preferred and recommended approaches. Unfortunately, CocoaPods is currently not supported / outdated (see below for details).
 
-### CocoaPods
+Regardless, make sure to import the project wherever you may use it:
 
-SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
-
-```ruby
-use_frameworks!
-
-pod 'SwiftyStoreKit'
+```swift
+import SwiftyStoreKit
 ```
-Once installed, just ```import SwiftyStoreKit``` in your classes and you're good to go.
+
+### Swift Package Manager
+
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into Xcode and the Swift compiler. **This is the recommended installation method.** Updates to SwiftyStoreKit will always be available immediately to projects with SPM. SPM is also integrated directly with Xcode.
+
+If you are using Xcode 11 or later:
+ 1. Click `File`
+ 2. `Swift Packages`
+ 3. `Add Package Dependency...`
+ 4. Specify the git URL for SwiftyStoreKit.
+
+```swift
+https://github.com/bizz84/SwiftyStoreKit.git
+```
 
 ### Carthage
 
@@ -90,22 +105,30 @@ github "bizz84/SwiftyStoreKit"
 
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
-### Swift Package Manager
+### CocoaPods
+**:rotating_light: NOT RECOMMENDED**. Current project maintainers do *not* have push access to the CocoaPod trunk and we are waiting for confirmation from the original repo author / owner. **The CocoaPod pod is already 2 releases behind the current version.** 
 
-You can add SwiftyStoreKit as an SPM dependency using this URL: `https://github.com/bizz84/SwiftyStoreKit.git`.
+**:warning: There is no guarantee of future updates via CocoaPods. Installing with CocoaPods is done at your own risk. :warning:**
 
-If you are using Xcode 11 or later, click `File`, `Swift Packages`, `Add Package Dependency...` and specify the URL there.
+SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
+
+```ruby
+use_frameworks!
+
+pod 'SwiftyStoreKit'
+```
 
 ## Features
 
-- Super easy to use block based API
-- Support for consumable, non-consumable in-app purchases
+- Super easy-to-use block-based API
+- Support for consumable and non-consumable in-app purchases
 - Support for free, auto-renewable and non-renewing subscriptions
 - Support for in-app purchases started in the App Store (iOS 11)
+- Support for subscription discounts and offers
 - Remote receipt verification
 - Verify purchases, subscriptions, subscription groups
 - Downloading content hosted with Apple
-- iOS, tvOS and macOS compatible
+- iOS, tvOS, watchOS, macOS, and Catalyst compatible
 
 ## Contributing
 

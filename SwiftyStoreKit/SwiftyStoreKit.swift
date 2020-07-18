@@ -121,7 +121,7 @@ public class SwiftyStoreKit {
     #if os(watchOS)
     private func storeInternalError(code: SKErrorCode = SKErrorCode.unknown, description: String = "") -> SKError {
         let error = NSError(domain: SKErrorDomain, code: code.rawValue, userInfo: [ NSLocalizedDescriptionKey: description ])
-        return SKError.init(Code: code, _nsError: error)
+        return SKError.init(code: code, _nsError: error)
     }
     #else
     private func storeInternalError(code: SKError.Code = SKError.unknown, description: String = "") -> SKError {

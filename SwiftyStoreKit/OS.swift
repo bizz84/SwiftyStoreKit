@@ -38,11 +38,11 @@ import StoreKit
 #if os(watchOS)
 public struct SKError: Error {
     
-    var Code: SKErrorCode = .unknown
-    var _nsError: NSError?
+    public var code: SKErrorCode = .unknown
+    public var _nsError: NSError?
     
-    static var unknown: SKErrorCode = .unknown
-    static var paymentInvalid: SKErrorCode = .paymentInvalid
+    public static var unknown: SKErrorCode = .unknown
+    public static var paymentInvalid: SKErrorCode = .paymentInvalid
     
 }
 #endif

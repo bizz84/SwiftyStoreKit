@@ -35,14 +35,22 @@ import StoreKit
 #endif
 
 // MARK: - Missing SKError on watchOS
-#if os(watchOS)
+#if os(watchOS) && swift(<5.3)
 public struct SKError: Error {
     
-    var Code: SKErrorCode = .unknown
-    var _nsError: NSError?
+    public typealias Code = SKErrorCode
     
-    static var unknown: SKErrorCode = .unknown
-    static var paymentInvalid: SKErrorCode = .paymentInvalid
+    let _nsError: NSError
+
+    init(_nsError: NSError) {
+        self._nsError = _nsError
+    }
     
+    var code: Code {
+        return Code(rawValue: _nsError.code) ?? .unknown
+    }
+    
+    static var unknown: Code = .unknown
+    static var paymentInvalid: Code = .paymentInvalid
 }
 #endif

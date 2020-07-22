@@ -175,7 +175,7 @@ public enum VerifySubscriptionResult {
     case notPurchased
 }
 
-public enum SubscriptionType {
+public enum SubscriptionType: Hashable {
     case autoRenewable
     case nonRenewing(validDuration: TimeInterval)
 }

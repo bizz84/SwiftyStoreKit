@@ -107,12 +107,11 @@ extension VerifyPurchaseResult: Equatable {
     }
 }
 
-// swiftlint:disable file_length
+// swiftlint: disable file_length
 class InAppReceiptTests: XCTestCase {
 
     // MARK: Verify Purchase
     func testVerifyPurchase_when_noPurchases_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
@@ -121,8 +120,8 @@ class InAppReceiptTests: XCTestCase {
 
         XCTAssertEqual(verifyPurchaseResult, .notPurchased)
     }
+    
     func testVerifyPurchase_when_onePurchase_then_resultIsPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let item = ReceiptItem(productId: productId, purchaseDate: receiptRequestDate, subscriptionExpirationDate: nil, cancellationDate: nil, isTrialPeriod: false)
@@ -132,8 +131,8 @@ class InAppReceiptTests: XCTestCase {
 
         XCTAssertEqual(verifyPurchaseResult, .purchased(item: item))
     }
+    
     func testVerifyPurchase_when_oneCancelledPurchase_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let item = ReceiptItem(productId: productId, purchaseDate: receiptRequestDate, subscriptionExpirationDate: nil, cancellationDate: receiptRequestDate, isTrialPeriod: false)
@@ -147,7 +146,6 @@ class InAppReceiptTests: XCTestCase {
     // MARK: Verify Subscription, single receipt item tests
     // auto-renewable, not purchased
     func testVerifyAutoRenewableSubscription_when_noSubscriptions_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
@@ -160,7 +158,6 @@ class InAppReceiptTests: XCTestCase {
 
     // auto-renewable, expired
     func testVerifyAutoRenewableSubscription_when_oneExpiredSubscription_then_resultIsExpired() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
         let productId = "product1"
         let isTrialPeriod = false
@@ -177,7 +174,6 @@ class InAppReceiptTests: XCTestCase {
 
     // auto-renewable, purchased
     func testVerifyAutoRenewableSubscription_when_oneNonExpiredSubscription_then_resultIsPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -194,7 +190,6 @@ class InAppReceiptTests: XCTestCase {
 
     // auto-renewable, cancelled
     func testVerifyAutoRenewableSubscription_when_oneCancelledSubscription_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -212,7 +207,6 @@ class InAppReceiptTests: XCTestCase {
 
     // non-renewing, non purchased
     func testVerifyNonRenewingSubscription_when_noSubscriptions_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
@@ -225,7 +219,6 @@ class InAppReceiptTests: XCTestCase {
 
     // non-renewing, expired
     func testVerifyNonRenewingSubscription_when_oneExpiredSubscription_then_resultIsExpired() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
         let productId = "product1"
         let isTrialPeriod = false
@@ -244,7 +237,6 @@ class InAppReceiptTests: XCTestCase {
 
     // non-renewing, purchased
     func testVerifyNonRenewingSubscription_when_oneNonExpiredSubscription_then_resultIsPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -263,7 +255,6 @@ class InAppReceiptTests: XCTestCase {
 
     // non-renewing, cancelled
     func testVerifyNonRenewingSubscription_when_oneCancelledSubscription_then_resultIsNotPurchased() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let productId = "product1"
         let isTrialPeriod = false
@@ -281,7 +272,6 @@ class InAppReceiptTests: XCTestCase {
 
     // MARK: Verify Subscription, multiple receipt item tests
     func testVerifyAutoRenewableSubscription_when_twoSubscriptions_sameProductId_mostRecentNonExpired_then_resultIsPurchased_itemsSorted() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
 
         let productId = "product1"
@@ -312,7 +302,6 @@ class InAppReceiptTests: XCTestCase {
     }
 
     func testVerifyAutoRenewableSubscription_when_twoSubscriptions_sameProductId_bothExpired_then_resultIsExpired_itemsSorted() {
-        
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         
         let productId = "product1"
@@ -344,7 +333,6 @@ class InAppReceiptTests: XCTestCase {
     
     // MARK: Verify Subscriptions, multiple receipt item tests
     func testVerifyAutoRenewableSubscriptions_when_threeSubscriptions_twoMatchingProductIds_mostRecentNonExpired_then_resultIsPurchased_itemsSorted() {
-        
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         
         let productId1 = "product1"
@@ -386,7 +374,6 @@ class InAppReceiptTests: XCTestCase {
     
     // MARK: Get Distinct Purchase Identifiers, empty receipt item tests
     func testGetDistinctPurchaseIds_when_noReceipt_then_resultIsNil() {
-
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
         let receipt = makeReceipt(items: [], requestDate: receiptRequestDate)
 
@@ -396,7 +383,6 @@ class InAppReceiptTests: XCTestCase {
     
     // MARK: Get Distinct Purchase Identifiers, multiple receipt item tests
     func testGetDistinctPurchaseIds_when_Receipt_then_resultIsNotNil() {
-
         let receiptRequestDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 20)
         let purchaseDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 1)
         let purchaseDateTwo = makeDateAtMidnight(year: 2020, month: 1, day: 1)
@@ -416,7 +402,6 @@ class InAppReceiptTests: XCTestCase {
     
     // MARK: Get Distinct Purchase Identifiers, multiple non unique product identifiers tests
     func testGetDistinctPurchaseIds_when_nonUniqueIdentifiers_then_resultIsUnique() {
-
         let receiptRequestDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 20)
         let purchaseDateOne = makeDateAtMidnight(year: 2020, month: 2, day: 1)
         let purchaseDateTwo = makeDateAtMidnight(year: 2020, month: 2, day: 2)
@@ -442,7 +427,6 @@ class InAppReceiptTests: XCTestCase {
 
     // MARK: Helper methods
     func makeReceipt(items: [ReceiptItem], requestDate: Date) -> [String: AnyObject] {
-
         let receiptInfos = items.map { $0.receiptInfo }
 
         // Creating this with NSArray results in __NSSingleObjectArrayI which fails the cast to [String: AnyObject]
@@ -462,7 +446,6 @@ class InAppReceiptTests: XCTestCase {
     }
 
     func makeDateAtMidnight(year: Int, month: Int, day: Int) -> Date {
-
         var dateComponents = DateComponents()
         dateComponents.day = day
         dateComponents.month = month

@@ -6,8 +6,6 @@
 [![Build](https://img.shields.io/travis/bizz84/SwiftyStoreKit.svg?style=flat)](https://travis-ci.org/bizz84/SwiftyStoreKit)
 [![Issues](https://img.shields.io/github/issues/bizz84/SwiftyStoreKit.svg?style=flat)](https://github.com/bizz84/SwiftyStoreKit/issues)
 [![Slack](https://img.shields.io/badge/Slack-Join-green.svg?style=flat)](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM)
-[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-orange.svg?style=flat)](https://swift.org/package-manager/)
 
 SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchOS, macOS, and Mac Catalyst.
 
@@ -106,10 +104,6 @@ github "bizz84/SwiftyStoreKit"
 **NOTE**: Please ensure that you have the [latest](https://github.com/Carthage/Carthage/releases) Carthage installed.
 
 ### CocoaPods
-**:rotating_light: NOT RECOMMENDED**. Current project maintainers do *not* have push access to the CocoaPod trunk and we are waiting for confirmation from the original repo author / owner. **The CocoaPod pod is already 2 releases behind the current version.** 
-
-**:warning: There is no guarantee of future updates via CocoaPods. Installing with CocoaPods is done at your own risk. :warning:**
-
 SwiftyStoreKit can be installed as a [CocoaPod](https://cocoapods.org/) and builds as a Swift framework. To install, include this in your Podfile.
 
 ```ruby

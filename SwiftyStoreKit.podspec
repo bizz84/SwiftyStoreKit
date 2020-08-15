@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'SwiftyStoreKit'
-  s.version      = '0.16.0'
+  s.version      = '0.16.1'
   s.summary      = 'Lightweight In App Purchases Swift framework for iOS, tvOS, watchOS, macOS and Mac Catalyst.'
   s.license      = 'MIT'
   s.homepage     = 'https://github.com/bizz84/SwiftyStoreKit'
@@ -11,10 +11,7 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '6.2'
   s.swift_version = '5.0'
   s.source       = { :git => "https://github.com/bizz84/SwiftyStoreKit.git", :tag => s.version }
-
-  s.source_files = 'SwiftyStoreKit/*.{swift}'
-
+  s.source_files = 'Sources/SwiftyStoreKit/*.{swift}'
   s.screenshots  = ["https://github.com/bizz84/SwiftyStoreKit/raw/master/Screenshots/Preview.jpg"]
-
   s.requires_arc = true
 end

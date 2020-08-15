@@ -88,6 +88,14 @@ extension SKPaymentTransactionState: CustomDebugStringConvertible {
     }
 }
 
+struct EntitlementRevocation {
+    let callback: ([String]) -> Void
+
+    init(callback: @escaping ([String]) -> Void) {
+        self.callback = callback
+    }
+}
+
 class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let paymentsController: PaymentsController
@@ -97,7 +105,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     private let completeTransactionsController: CompleteTransactionsController
     
     unowned let paymentQueue: PaymentQueue
-    
+
+    private var entitlementRevocation: EntitlementRevocation?
+
     deinit {
         paymentQueue.remove(self)
     }
@@ -145,6 +155,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentsController.append(payment)
     }
     
+    func onEntitlementRevocation(_ revocation: EntitlementRevocation) {
+        self.entitlementRevocation = revocation
+    }
+
     func restorePurchases(_ restorePurchases: RestorePurchases) {
         assertCompleteTransactionsWasCalled()
         
@@ -231,6 +245,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
                 print("unhandledTransactions:\n\(strings)")
             }
         }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+        self.entitlementRevocation?.callback(productIdentifiers)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {

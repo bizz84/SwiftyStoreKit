@@ -248,6 +248,11 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+        guard entitlementRevocation == nil else {
+            print("SwiftyStoreKit.onEntitlementRevocation() should only be called once when the app launches. Ignoring this call")
+            return
+        }
+
         self.entitlementRevocation?.callback(productIdentifiers)
     }
     

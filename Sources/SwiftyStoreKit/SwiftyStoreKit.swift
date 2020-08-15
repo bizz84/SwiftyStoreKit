@@ -84,6 +84,11 @@ public class SwiftyStoreKit {
         
         paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
     }
+
+    fileprivate func onEntitlementRevocation(completion: @escaping ([String]) -> Void) {
+
+        paymentQueueController.onEntitlementRevocation(EntitlementRevocation(callback: completion))
+    }
     
     fileprivate func finishTransaction(_ transaction: PaymentTransaction) {
         
@@ -186,6 +191,14 @@ extension SwiftyStoreKit {
     public class func completeTransactions(atomically: Bool = true, completion: @escaping ([Purchase]) -> Void) {
         
         sharedInstance.completeTransactions(atomically: atomically, completion: completion)
+    }
+
+    /// Entitlement revocation notification
+    ///   - Parameter completion: handler for result (list of product identifiers revoked)
+    @available(iOS 14, tvOS 14, OSX 11, watchOS 7, macCatalyst 14, *)
+    public class func onEntitlementRevocation(completion: @escaping ([String]) -> Void) {
+
+        sharedInstance.onEntitlementRevocation(completion: completion)
     }
     
     /// Finish a transaction

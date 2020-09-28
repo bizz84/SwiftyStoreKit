@@ -31,12 +31,19 @@ public protocol InAppRequest: class {
     func cancel()
 }
 
-protocol InAppProductRequest: InAppRequest { }
+protocol InAppProductRequest: InAppRequest {
+    var hasCompleted: Bool { get }
+    var cachedResults: RetrieveResults? { get }
+}
 
 class InAppProductQueryRequest: NSObject, InAppProductRequest, SKProductsRequestDelegate {
 
     private let callback: InAppProductRequestCallback
     private let request: SKProductsRequest
+
+    private(set) var cachedResults: RetrieveResults?
+
+    var hasCompleted: Bool { cachedResults != nil }
 
     deinit {
         request.delegate = nil
@@ -52,6 +59,7 @@ class InAppProductQueryRequest: NSObject, InAppProductRequest, SKProductsRequest
     func start() {
         request.start()
     }
+
     func cancel() {
         request.cancel()
     }
@@ -61,8 +69,12 @@ class InAppProductQueryRequest: NSObject, InAppProductRequest, SKProductsRequest
 
         let retrievedProducts = Set<SKProduct>(response.products)
         let invalidProductIDs = Set<String>(response.invalidProductIdentifiers)
-        performCallback(RetrieveResults(retrievedProducts: retrievedProducts,
-            invalidProductIDs: invalidProductIDs, error: nil))
+        let results = RetrieveResults(
+            retrievedProducts: retrievedProducts,
+            invalidProductIDs: invalidProductIDs, error: nil
+        )
+        self.cachedResults = results
+        performCallback(results)
     }
 
     func requestDidFinish(_ request: SKRequest) {

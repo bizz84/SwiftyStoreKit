@@ -1,3 +1,5 @@
+<a href="https://github.blog/2020-11-02-commit-your-vote-on-election-day/"><img src="https://i.imgur.com/jI6ihgo.png" width=100%></a>
+
 <img src="https://github.com/bizz84/SwiftyStoreKit/raw/master/SwiftyStoreKit-logo.png" width=100%>
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](http://mit-license.org)

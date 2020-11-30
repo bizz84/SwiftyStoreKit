@@ -32,13 +32,12 @@ public class SwiftyStoreKit {
     
     fileprivate let receiptVerificator: InAppReceiptVerificator
     
-    init(productsInfoController: ProductsInfoController = ProductsInfoController(),
-         paymentQueueController: PaymentQueueController = PaymentQueueController(paymentQueue: SKPaymentQueue.default()),
-         receiptVerificator: InAppReceiptVerificator = InAppReceiptVerificator()) {
-        
-        self.productsInfoController = productsInfoController
-        self.paymentQueueController = paymentQueueController
-        self.receiptVerificator = receiptVerificator
+    fileprivate let skPaymentQueue: SKPaymentQueue = SKPaymentQueue.default()
+    
+    init() {
+        self.productsInfoController = ProductsInfoController()
+        self.paymentQueueController = PaymentQueueController(paymentQueue: skPaymentQueue)
+        self.receiptVerificator = InAppReceiptVerificator()
     }
     
     // MARK: private methods
@@ -309,4 +308,19 @@ extension SwiftyStoreKit {
         
         return InAppReceipt.getDistinctPurchaseIds(ofType: type, inReceipt: receipt)
     }
+    
+    public class func showPresentCodeRedemptionSheet() {
+        if #available(iOSApplicationExtension 14.0, *) {
+            sharedInstance.skPaymentQueue.presentCodeRedemptionSheet()
+        }
+    }
+    
+    public class var paymentQueue: SKPaymentQueue {
+        sharedInstance.skPaymentQueue
+    }
+    
+    // if #available(iOSApplicationExtension 14.0, *) {
+    //      skPaymentQueue.presentCodeRedemptionSheet()
+    // }
+    
 }

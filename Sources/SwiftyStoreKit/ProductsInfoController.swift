@@ -81,9 +81,21 @@ class ProductsInfoController: NSObject {
             }
             inflightRequests[productIds] = InAppProductQuery(request: request, completionHandlers: [completion])
             request.start()
+
             return request
+
         } else {
+            
             inflightRequests[productIds]!.completionHandlers.append(completion)
+
+            let query = inflightRequests[productIds]!
+
+            if query.request.hasCompleted {
+                query.completionHandlers.forEach {
+                    $0(query.request.cachedResults!)
+                }
+            }
+
             return inflightRequests[productIds]!.request
         }
     }

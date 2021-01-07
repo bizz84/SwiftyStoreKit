@@ -6,8 +6,12 @@
 //  Copyright © 2017 musevisions. All rights reserved.
 //
 
+#if os(iOS)
+
 import UIKit
 
 class PaymentTransactionObserverFake: NSObject {
 
 }
+
+#endif

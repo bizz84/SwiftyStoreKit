@@ -46,7 +46,7 @@ public struct SKError: Error {
         self._nsError = _nsError
     }
     
-    var code: Code {
+    public var code: Code {
         return Code(rawValue: _nsError.code) ?? .unknown
     }
     

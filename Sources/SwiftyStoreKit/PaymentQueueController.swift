@@ -88,6 +88,14 @@ extension SKPaymentTransactionState: CustomDebugStringConvertible {
     }
 }
 
+struct EntitlementRevocation {
+    let callback: ([String]) -> Void
+
+    init(callback: @escaping ([String]) -> Void) {
+        self.callback = callback
+    }
+}
+
 class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let paymentsController: PaymentsController
@@ -97,7 +105,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     private let completeTransactionsController: CompleteTransactionsController
     
     unowned let paymentQueue: PaymentQueue
-    
+
+    private var entitlementRevocation: EntitlementRevocation?
+
     deinit {
         paymentQueue.remove(self)
     }
@@ -145,6 +155,15 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         paymentsController.append(payment)
     }
     
+    func onEntitlementRevocation(_ revocation: EntitlementRevocation) {
+        guard entitlementRevocation == nil else {
+            print("SwiftyStoreKit.onEntitlementRevocation() should only be called once when the app launches. Ignoring this call")
+            return
+        }
+
+        self.entitlementRevocation = revocation
+    }
+
     func restorePurchases(_ restorePurchases: RestorePurchases) {
         assertCompleteTransactionsWasCalled()
         
@@ -206,7 +225,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
          * Failed transactions only ever belong to queued payment requests.
          * restoreCompletedTransactionsFailedWithError is always called when a restore purchases request fails.
          * paymentQueueRestoreCompletedTransactionsFinished is always called following 0 or more update transactions when a restore purchases request succeeds.
-         * A complete transactions handler is require to catch any transactions that are updated when the app is not running.
+         * A complete transactions handler is required to catch any transactions that are updated when the app is not running.
          * Registering a complete transactions handler when the app launches ensures that any pending transactions can be cleared.
          * If a complete transactions handler is missing, pending transactions can be mis-attributed to any new incoming payments or restore purchases.
          *
@@ -231,6 +250,11 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
                 print("unhandledTransactions:\n\(strings)")
             }
         }
+    }
+    
+    func paymentQueue(_ queue: SKPaymentQueue, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
+
+        self.entitlementRevocation?.callback(productIdentifiers)
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, removedTransactions transactions: [SKPaymentTransaction]) {

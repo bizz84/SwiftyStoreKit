@@ -32,6 +32,7 @@ protocol TransactionController {
     /// - parameter paymentQueue: payment queue for finishing transactions
     /// - returns: array of unhandled transactions
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction]
+    
 }
 
 public enum TransactionResult {
@@ -58,11 +59,13 @@ public protocol PaymentQueue: class {
 }
 
 extension SKPaymentQueue: PaymentQueue {
+    
     #if os(watchOS) && swift(<5.3)
     public func resume(_ downloads: [SKDownload]) {
         resumeDownloads(downloads)
     }
     #endif
+    
 }
 
 extension SKPaymentTransaction {
@@ -71,12 +74,12 @@ extension SKPaymentTransaction {
         let transactionId = transactionIdentifier ?? "null"
         return "productId: \(payment.productIdentifier), transactionId: \(transactionId), state: \(transactionState), date: \(String(describing: transactionDate))"
     }
+    
 }
 
 extension SKPaymentTransactionState: CustomDebugStringConvertible {
     
     public var debugDescription: String {
-        
         switch self {
         case .purchasing: return "purchasing"
         case .purchased: return "purchased"
@@ -90,7 +93,7 @@ extension SKPaymentTransactionState: CustomDebugStringConvertible {
 
 struct EntitlementRevocation {
     let callback: ([String]) -> Void
-
+    
     init(callback: @escaping ([String]) -> Void) {
         self.callback = callback
     }
@@ -99,15 +102,11 @@ struct EntitlementRevocation {
 class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let paymentsController: PaymentsController
-    
     private let restorePurchasesController: RestorePurchasesController
-    
     private let completeTransactionsController: CompleteTransactionsController
-    
     unowned let paymentQueue: PaymentQueue
-
     private var entitlementRevocation: EntitlementRevocation?
-
+    
     deinit {
         paymentQueue.remove(self)
     }
@@ -160,10 +159,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
             print("SwiftyStoreKit.onEntitlementRevocation() should only be called once when the app launches. Ignoring this call")
             return
         }
-
+        
         self.entitlementRevocation = revocation
     }
-
+    
     func restorePurchases(_ restorePurchases: RestorePurchases) {
         assertCompleteTransactionsWasCalled()
         
@@ -177,7 +176,6 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func completeTransactions(_ completeTransactions: CompleteTransactions) {
-        
         guard completeTransactionsController.completeTransactions == nil else {
             print("SwiftyStoreKit.completeTransactions() should only be called once when the app launches. Ignoring this call")
             return
@@ -197,6 +195,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     func start(_ downloads: [SKDownload]) {
         paymentQueue.start(downloads)
     }
+    
     func pause(_ downloads: [SKDownload]) {
         paymentQueue.pause(downloads)
     }
@@ -204,6 +203,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     func resume(_ downloads: [SKDownload]) {
         paymentQueue.resume(downloads)
     }
+    
     func cancel(_ downloads: [SKDownload]) {
         paymentQueue.cancel(downloads)
     }
@@ -211,9 +211,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     var shouldAddStorePaymentHandler: ShouldAddStorePaymentHandler?
     var updatedDownloadsHandler: UpdatedDownloadsHandler?
     
-    // MARK: SKPaymentTransactionObserver
+    
+    // MARK: - SKPaymentTransactionObserver
+    
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        
         /*
          * Some notes about how requests are processed by SKPaymentQueue:
          *
@@ -253,7 +254,6 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, didRevokeEntitlementsForProductIdentifiers productIdentifiers: [String]) {
-
         self.entitlementRevocation?.callback(productIdentifiers)
     }
     
@@ -262,24 +262,20 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        
         restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        
         restorePurchasesController.restoreCompletedTransactionsFinished()
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {
-        
         updatedDownloadsHandler?(downloads)
     }
     
-    #if os(iOS) && !targetEnvironment(macCatalyst)
+    // #if os(iOS) && !targetEnvironment(macCatalyst)
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
-        
         return shouldAddStorePaymentHandler?(payment, product) ?? false
     }
-    #endif
+    // #endif
 }

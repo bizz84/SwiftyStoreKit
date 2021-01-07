@@ -28,12 +28,16 @@ import Foundation
 
 class TestInAppProductRequest: InAppProductRequest {
     
+    var hasCompleted: Bool
+    var cachedResults: RetrieveResults?
+    
     private let productIds: Set<String>
     private let callback: InAppProductRequestCallback
 
     init(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) {
         self.productIds = productIds
         self.callback = callback
+        self.hasCompleted = false
     }
     
     func start() {
@@ -51,15 +55,8 @@ class TestInAppProductRequest: InAppProductRequest {
 class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
     
     var requests: [ TestInAppProductRequest ] = []
-    var os_unfair_lock_s = os_unfair_lock()
     
     func request(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductRequest {
-        // add locks to make sure the test does not fail in preparation
-        os_unfair_lock_lock(&self.os_unfair_lock_s)
-        defer {
-          os_unfair_lock_unlock(&self.os_unfair_lock_s)
-        }
-      
         let request = TestInAppProductRequest(productIds: productIds, callback: callback)
         requests.append(request)
         return request

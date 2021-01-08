@@ -64,12 +64,18 @@ public struct PaymentDiscount {
 class PaymentsController: TransactionController {
 
     private var payments: [Payment] = []
+    private var failedPayments: [Payment] = []
 
     private func findPaymentIndex(withProductIdentifier identifier: String) -> Int? {
-        for payment in payments where payment.product.productIdentifier == identifier {
-            return payments.firstIndex(of: payment)
-        }
-        return nil
+        return payments.enumerated()
+            .first { $0.element.product.productIdentifier == identifier }
+            .map { $0.offset }
+    }
+
+    private func findFailedPaymentIndex(withProductIdentifier identifier: String) -> Int? {
+        return failedPayments.enumerated()
+            .first { $0.element.product.productIdentifier == identifier }
+            .map { $0.offset }
     }
 
     func hasPayment(_ payment: Payment) -> Bool {
@@ -83,14 +89,13 @@ class PaymentsController: TransactionController {
     func processTransaction(_ transaction: SKPaymentTransaction, on paymentQueue: PaymentQueue) -> Bool {
 
         let transactionProductIdentifier = transaction.payment.productIdentifier
+        let transactionState = transaction.transactionState
 
-        guard let paymentIndex = findPaymentIndex(withProductIdentifier: transactionProductIdentifier) else {
-
+        guard let handler = getPaymentHandler(for: transaction) else {
             return false
         }
-        let payment = payments[paymentIndex]
 
-        let transactionState = transaction.transactionState
+        let payment = handler.payment
 
         if transactionState == .purchased {
             let purchase = PurchaseDetails(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, product: payment.product, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !payment.atomically)
@@ -100,7 +105,7 @@ class PaymentsController: TransactionController {
             if payment.atomically {
                 paymentQueue.finishTransaction(transaction)
             }
-            payments.remove(at: paymentIndex)
+            handler.cleanup()
             return true
         }
 
@@ -114,7 +119,7 @@ class PaymentsController: TransactionController {
             if payment.atomically {
                 paymentQueue.finishTransaction(transaction)
             }
-            payments.remove(at: paymentIndex)
+            handler.cleanup()
             return true
         }
 
@@ -123,7 +128,8 @@ class PaymentsController: TransactionController {
             payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
 
             paymentQueue.finishTransaction(transaction)
-            payments.remove(at: paymentIndex)
+            handler.cleanup()
+            failedPayments.append(payment)
             return true
         }
 
@@ -140,5 +146,41 @@ class PaymentsController: TransactionController {
     func processTransactions(_ transactions: [SKPaymentTransaction], on paymentQueue: PaymentQueue) -> [SKPaymentTransaction] {
 
         return transactions.filter { !processTransaction($0, on: paymentQueue) }
+    }
+
+    private struct PaymentHandler {
+        var payment: Payment
+        var cleanup: () -> Void
+    }
+
+    private func getPaymentHandler(for transaction: SKPaymentTransaction) -> PaymentHandler? {
+        let transactionProductIdentifier = transaction.payment.productIdentifier
+        let transactionState = transaction.transactionState
+
+        if let paymentIndex = findPaymentIndex(withProductIdentifier: transactionProductIdentifier) {
+            return PaymentHandler(
+                payment: payments[paymentIndex],
+                cleanup: {
+                    self.payments.remove(at: paymentIndex)
+                }
+            )
+        }
+
+        // Interrupted purchases will send notifications with state == .purchased after a notification where
+        // it's already sent one with failed, so we need to keep track of failed transactions
+        // See https://developer.apple.com/documentation/storekit/in-app_purchase/testing_in-app_purchases_with_sandbox
+        if transactionState == .purchased,
+           let failedPaymentIndex = findFailedPaymentIndex(withProductIdentifier: transactionProductIdentifier),
+           case let payment = failedPayments[failedPaymentIndex],
+           payment.quantity == transaction.payment.quantity {
+            return PaymentHandler(
+                payment: payment,
+                cleanup: {
+                    self.failedPayments.remove(at: failedPaymentIndex)
+                }
+            )
+        }
+
+        return nil
     }
 }

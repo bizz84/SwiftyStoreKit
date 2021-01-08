@@ -229,6 +229,86 @@ class PaymentsControllerTests: XCTestCase {
         XCTAssertEqual(spy.finishTransactionCalledCount, 1)
     }
 
+    func testProcessTransaction_when_onePayment_transactionStateFailed_then_transactionStatePurchased() {
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let testProduct = TestProduct(productIdentifier: productIdentifier)
+
+        let failedStateExpectation = self.expectation(description: "should complete with state failed")
+        let purchasedStateExpectation = self.expectation(description: "should complete with state purchased")
+
+        let payment = makeTestPayment(product: testProduct) { result in
+            switch result {
+            case .purchased(let payment):
+                XCTAssertEqual(payment.productId, productIdentifier)
+                purchasedStateExpectation.fulfill()
+
+            case .failed:
+                failedStateExpectation.fulfill()
+
+            default:
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+
+        let paymentsController = makePaymentsController(appendPayments: [payment])
+        let failedPayment = SKPayment(product: testProduct)
+        let failedTransaction = TestPaymentTransaction(payment: failedPayment, transactionState: .failed)
+
+        let successfulPayment = SKPayment(product: testProduct)
+        let purchasedTransaction = TestPaymentTransaction(payment: successfulPayment, transactionState: .purchased)
+
+        let spy = PaymentQueueSpy()
+        let remainingTransactions = paymentsController.processTransactions([failedTransaction, purchasedTransaction], on: spy)
+
+        XCTAssertEqual(remainingTransactions.count, 0)
+        XCTAssertFalse(paymentsController.hasPayment(payment))
+        XCTAssertEqual(spy.finishTransactionCalledCount, 2)
+
+        wait(for: [failedStateExpectation, purchasedStateExpectation], timeout: 1.0, enforceOrder: true)
+    }
+
+    func testProcessTransaction_when_onePayment_transactionStateFailed_then_transactionStatePurchased_no_callback_for_incorrect_quantity() {
+        let productIdentifier = "com.SwiftyStoreKit.product1"
+        let testProduct = TestProduct(productIdentifier: productIdentifier)
+
+        let failedStateExpectation = self.expectation(description: "should complete with state failed")
+        let purchasedStateExpectation = self.expectation(description: "should complete with state purchased")
+        purchasedStateExpectation.isInverted = true
+
+        let payment = makeTestPayment(product: testProduct) { result in
+            switch result {
+            case .purchased(let payment):
+                XCTAssertEqual(payment.productId, productIdentifier)
+                purchasedStateExpectation.fulfill()
+
+            case .failed:
+                failedStateExpectation.fulfill()
+
+            default:
+                XCTFail("expected purchased callback with product id")
+            }
+        }
+
+        let paymentsController = makePaymentsController(appendPayments: [payment])
+
+        let failedPayment = SKMutablePayment(product: testProduct)
+        failedPayment.quantity = 1
+        let failedTransaction = TestPaymentTransaction(payment: failedPayment, transactionState: .failed)
+
+        let successfulPayment = SKMutablePayment(product: testProduct)
+        successfulPayment.quantity = 2
+        let purchasedTransaction = TestPaymentTransaction(payment: successfulPayment, transactionState: .purchased)
+
+        let spy = PaymentQueueSpy()
+        let remainingTransactions = paymentsController.processTransactions([failedTransaction, purchasedTransaction], on: spy)
+
+        XCTAssertEqual(remainingTransactions.count, 1)
+        XCTAssertFalse(paymentsController.hasPayment(payment))
+        XCTAssertEqual(spy.finishTransactionCalledCount, 1)
+
+        wait(for: [failedStateExpectation, purchasedStateExpectation], timeout: 1.0, enforceOrder: true)
+    }
+
     func makePaymentsController(appendPayments payments: [Payment]) -> PaymentsController {
 
         let paymentsController = PaymentsController()

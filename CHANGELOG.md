@@ -3,6 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 * Make `ProductsInfoController`'s `retrieveProductsInfo` thread safe ([#405]https://github.com/bizz84/SwiftyStoreKit/pull/495), related issues: [#344](https://github.com/bizz84/SwiftyStoreKit/issues/344) and [#468](https://github.com/bizz84/SwiftyStoreKit/issues/468)
+* Add support for interrupted purchases ([#615](https://github.com/bizz84/SwiftyStoreKit/pull/615)), related issues: [#593](https://github.com/bizz84/SwiftyStoreKit/issues/593) and [#606](https://github.com/bizz84/SwiftyStoreKit/issues/606)
 
 ## [0.15.0](https://github.com/bizz84/SwiftyStoreKit/releases/tag/0.15.0) Update project to Swift 5, Xcode 10.2
 

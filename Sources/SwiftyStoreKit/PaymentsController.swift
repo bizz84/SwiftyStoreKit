@@ -66,20 +66,8 @@ class PaymentsController: TransactionController {
     private var payments: [Payment] = []
     private var failedPayments: [Payment] = []
 
-    private func findPaymentIndex(withProductIdentifier identifier: String) -> Int? {
-        return payments.enumerated()
-            .first { $0.element.product.productIdentifier == identifier }
-            .map { $0.offset }
-    }
-
-    private func findFailedPaymentIndex(withProductIdentifier identifier: String) -> Int? {
-        return failedPayments.enumerated()
-            .first { $0.element.product.productIdentifier == identifier }
-            .map { $0.offset }
-    }
-
     func hasPayment(_ payment: Payment) -> Bool {
-        return findPaymentIndex(withProductIdentifier: payment.product.productIdentifier) != nil
+        return payments.firstIndex(withProductIdentifier: payment.product.productIdentifier) != nil
     }
 
     func append(_ payment: Payment) {
@@ -157,7 +145,7 @@ class PaymentsController: TransactionController {
         let transactionProductIdentifier = transaction.payment.productIdentifier
         let transactionState = transaction.transactionState
 
-        if let paymentIndex = findPaymentIndex(withProductIdentifier: transactionProductIdentifier) {
+        if let paymentIndex = payments.firstIndex(withProductIdentifier: transactionProductIdentifier) {
             return PaymentHandler(
                 payment: payments[paymentIndex],
                 cleanup: {
@@ -170,7 +158,7 @@ class PaymentsController: TransactionController {
         // it's already sent one with failed, so we need to keep track of failed transactions
         // See https://developer.apple.com/documentation/storekit/in-app_purchase/testing_in-app_purchases_with_sandbox
         if transactionState == .purchased,
-           let failedPaymentIndex = findFailedPaymentIndex(withProductIdentifier: transactionProductIdentifier),
+           let failedPaymentIndex = failedPayments.firstIndex(withProductIdentifier: transactionProductIdentifier),
            case let payment = failedPayments[failedPaymentIndex],
            payment.quantity == transaction.payment.quantity {
             return PaymentHandler(
@@ -183,4 +171,10 @@ class PaymentsController: TransactionController {
 
         return nil
     }
+}
+
+private extension Array where Element == Payment {
+  func firstIndex(withProductIdentifier identifier: String) -> Int? {
+     return firstIndex { $0.product.productIdentifier == identifier }
+  }
 }

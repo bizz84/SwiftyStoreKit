@@ -174,7 +174,7 @@ class PaymentsController: TransactionController {
 }
 
 private extension Array where Element == Payment {
-  func firstIndex(withProductIdentifier identifier: String) -> Int? {
-     return firstIndex { $0.product.productIdentifier == identifier }
-  }
+    func firstIndex(withProductIdentifier identifier: String) -> Int? {
+        return firstIndex { $0.product.productIdentifier == identifier }
+    }
 }

@@ -3,7 +3,7 @@
 //  SwiftyStoreKit
 //
 //  Created by Andrea Bizzotto on 08/05/2017.
-// Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
+//  Copyright (c) 2017 Andrea Bizzotto (bizz84@gmail.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal

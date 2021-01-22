@@ -443,40 +443,6 @@ I have also written about building SwiftyStoreKit on Medium:
 
 <a href="https://www.youtube.com/watch?v=MP-U5gQylHc"><img src="https://user-images.githubusercontent.com/2488011/65576278-55cccc80-df7a-11e9-8db5-244e2afa3e46.png" width="50%" /></a>
 
-## Payment flows: implementation details
-In order to make a purchase, two operations are needed:
-
-- Perform a `SKProductRequest` to obtain the `SKProduct` corresponding to the product identifier.
-
-- Submit the payment and listen for updated transactions on the `SKPaymentQueue`.
-
-The framework takes care of caching SKProducts so that future requests for the same `SKProduct` don't need to perform a new `SKProductRequest`.
-
-#### Payment queue
-
-The following list outlines how requests are processed by SwiftyStoreKit.
-
-* `SKPaymentQueue` is used to queue payments or restore purchases requests.
-* Payments are processed serially and in-order and require user interaction.
-* Restore purchases requests don't require user interaction and can jump ahead of the queue.
-* `SKPaymentQueue` rejects multiple restore purchases calls.
-* Failed transactions only ever belong to queued payment requests.
-* `restoreCompletedTransactionsFailedWithError` is always called when a restore purchases request fails.
-* `paymentQueueRestoreCompletedTransactionsFinished` is always called following 0 or more update transactions when a restore purchases request succeeds.
-* A complete transactions handler is require to catch any transactions that are updated when the app is not running.
-* Registering a complete transactions handler when the app launches ensures that any pending transactions can be cleared.
-* If a complete transactions handler is missing, pending transactions can be mis-attributed to any new incoming payments or restore purchases.
-
-The order in which transaction updates are processed is:
-
-1. payments (transactionState: `.purchased` and `.failed` for matching product identifiers)
-2. restore purchases (transactionState: `.restored`, or `restoreCompletedTransactionsFailedWithError`, or `paymentQueueRestoreCompletedTransactionsFinished`)
-3. complete transactions (transactionState: `.purchased`, `.failed`, `.restored`, `.deferred`)
-
-Any transactions where state is `.purchasing` are ignored.
-
-See [this pull request](https://github.com/bizz84/SwiftyStoreKit/pull/131) for full details about how the payment flows have been implemented.
-
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.
 

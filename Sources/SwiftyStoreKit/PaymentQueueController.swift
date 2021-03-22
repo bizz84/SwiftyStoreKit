@@ -37,6 +37,7 @@ protocol TransactionController {
 
 public enum TransactionResult {
     case purchased(purchase: PurchaseDetails)
+    case redeemed(purchase: PurchaseCodeRedemptionDetails)
     case restored(purchase: Purchase)
     case failed(error: SKError)
 }
@@ -56,6 +57,9 @@ public protocol PaymentQueue: class {
     func restoreCompletedTransactions(withApplicationUsername username: String?)
     
     func finishTransaction(_ transaction: SKPaymentTransaction)
+    
+    @available(iOS 14.0, *)
+    func presentCodeRedemptionSheet()
 }
 
 extension SKPaymentQueue: PaymentQueue {
@@ -102,6 +106,7 @@ struct EntitlementRevocation {
 class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     private let paymentsController: PaymentsController
+    private let codeRedemptionController: CodeRedemptionController
     private let restorePurchasesController: RestorePurchasesController
     private let completeTransactionsController: CompleteTransactionsController
     unowned let paymentQueue: PaymentQueue
@@ -113,11 +118,13 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     
     init(paymentQueue: PaymentQueue = SKPaymentQueue.default(),
          paymentsController: PaymentsController = PaymentsController(),
+         codeRedemptionController: CodeRedemptionController = CodeRedemptionController(),
          restorePurchasesController: RestorePurchasesController = RestorePurchasesController(),
          completeTransactionsController: CompleteTransactionsController = CompleteTransactionsController()) {
         
         self.paymentQueue = paymentQueue
         self.paymentsController = paymentsController
+        self.codeRedemptionController = codeRedemptionController
         self.restorePurchasesController = restorePurchasesController
         self.completeTransactionsController = completeTransactionsController
         super.init()
@@ -130,7 +137,15 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         assert(completeTransactionsController.completeTransactions != nil, message)
     }
     
+    /**
+     This method is used to clean up the callback of the controller that handles the offer code redemptions (CodeRedemptionController) each time a normal purchase or a purchase restore is to be made. As the code redemption is managed by Apple and we do not find out if the Apple modal that we use to redeem the code (presentCodeRedemptionSheet ()) is closed, we have to delete the callback assigned previously so that there is no crossing of flows in SKPaymentTransactionObserver, thus, the controller in charge of managing the code exchanges will not manage any transaction.
+     */
+    private func clearCompletionCodeRedemptionController() {
+        codeRedemptionController.clearCodeRedemption()
+    }
+    
     func startPayment(_ payment: Payment) {
+        clearCompletionCodeRedemptionController()
         assertCompleteTransactionsWasCalled()
         
         let skPayment = SKMutablePayment(product: payment.product)
@@ -164,6 +179,7 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func restorePurchases(_ restorePurchases: RestorePurchases) {
+        clearCompletionCodeRedemptionController()
         assertCompleteTransactionsWasCalled()
         
         if restorePurchasesController.restorePurchases != nil {
@@ -190,6 +206,15 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
             return
         }
         paymentQueue.finishTransaction(skTransaction)
+    }
+    
+    @available(iOS 14.0, *)
+    func presentCodeRedemptionSheet(_ codeRedemption: CodeRedemption) {
+        assertCompleteTransactionsWasCalled()
+        
+        codeRedemptionController.set(codeRedemption)
+        
+        paymentQueue.presentCodeRedemptionSheet()
     }
     
     func start(_ downloads: [SKDownload]) {
@@ -241,6 +266,8 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         if unhandledTransactions.count > 0 {
             
             unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
+            
+            unhandledTransactions = codeRedemptionController.processTransactions(unhandledTransactions, on: paymentQueue)
             
             unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
             

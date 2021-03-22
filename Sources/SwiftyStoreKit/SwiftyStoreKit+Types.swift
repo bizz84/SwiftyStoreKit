@@ -96,6 +96,23 @@ public struct PurchaseDetails {
     }
 }
 
+/// Purchased product with offer code
+public struct PurchaseCodeRedemptionDetails {
+    public let productId: String
+    public let quantity: Int
+    public let transaction: PaymentTransaction
+    public let originalTransaction: PaymentTransaction?
+    public let needsFinishTransaction: Bool
+    
+    public init(productId: String, quantity: Int, transaction: PaymentTransaction, originalTransaction: PaymentTransaction?, needsFinishTransaction: Bool) {
+        self.productId = productId
+        self.quantity = quantity
+        self.transaction = transaction
+        self.originalTransaction = originalTransaction
+        self.needsFinishTransaction = needsFinishTransaction
+    }
+}
+
 /// Conform to this protocol to provide custom receipt validator
 public protocol ReceiptValidator {
 	func validate(receiptData: Data, completion: @escaping (VerifyReceiptResult) -> Void)
@@ -128,6 +145,12 @@ public struct RetrieveResults {
 /// Purchase result
 public enum PurchaseResult {
     case success(purchase: PurchaseDetails)
+    case error(error: SKError)
+}
+
+/// CodeRedemption result
+public enum CodeRedemptionResult {
+    case redeemed(purchase: PurchaseCodeRedemptionDetails)
     case error(error: SKError)
 }
 

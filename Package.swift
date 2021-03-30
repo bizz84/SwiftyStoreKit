@@ -6,9 +6,8 @@ let package = Package(
     platforms: [.iOS("9.0"), .macOS("10.10"), .tvOS("9.0"), .watchOS("6.2")],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
-        .library(
-            name: "SwiftyStoreKit",
-            targets: ["SwiftyStoreKit"])
+        .library(name: "SwiftyStoreKit", targets: ["SwiftyStoreKit"]),
+        .library(name: "SwiftyStoreKit-Dynamic", type: .dynamic, targets: ["SwiftyStoreKit"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.

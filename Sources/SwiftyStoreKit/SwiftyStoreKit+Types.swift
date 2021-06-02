@@ -172,6 +172,7 @@ public enum VerifyPurchaseResult {
 public enum VerifySubscriptionResult {
     case purchased(expiryDate: Date, items: [ReceiptItem])
     case expired(expiryDate: Date, items: [ReceiptItem])
+    case inGracePeriod(endDate: Date, items: [ReceiptItem], pendingRenewals: [PendingRenewalInfo])
     case notPurchased
 }
 

@@ -353,6 +353,21 @@ public struct PendingRenewalInfo: Codable {
         case userDidNotConsent = "0"
         case userDidConsent = "1"
     }
+    
+    public init(autoRenewProductId: String, autoRenewStatus: AutoRenewStatus, expirationIntent: ExpirationIntent?, gracePeriodExpiresDate: String?, gracePeriodExpiresDateMS: String?, gracePeriodExpiresDatePST: String?, isInBillingRetryPeriod: BillingRetryPeriod?, offerCodeRefName: String?, originalTransactionId: String, priceConsentStatus: PriceConsentStatus?, productId: String, promotionalOfferId: String?) {
+        self.autoRenewProductId = autoRenewProductId
+        self.autoRenewStatus = autoRenewStatus
+        self.expirationIntent = expirationIntent
+        self.gracePeriodExpiresDate = gracePeriodExpiresDate
+        self.gracePeriodExpiresDateMS = gracePeriodExpiresDateMS
+        self.gracePeriodExpiresDatePST = gracePeriodExpiresDatePST
+        self.isInBillingRetryPeriod = isInBillingRetryPeriod
+        self.offerCodeRefName = offerCodeRefName
+        self.originalTransactionId = originalTransactionId
+        self.priceConsentStatus = priceConsentStatus
+        self.productId = productId
+        self.promotionalOfferId = promotionalOfferId
+    }
 }
 
 /// Status code returned by remote server

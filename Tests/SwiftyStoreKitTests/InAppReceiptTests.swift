@@ -455,22 +455,26 @@ class InAppReceiptTests: XCTestCase {
     }
 
     // MARK: Helper methods
-    func makeReceipt(items: [ReceiptItem], requestDate: Date) -> [String: AnyObject] {
+    func makeReceipt(items: [ReceiptItem], requestDate: Date, pendingRenewals: [PendingRenewalInfo] = []) -> [String: AnyObject] {
         let receiptInfos = items.map { $0.receiptInfo }
+        let renewalReceiptInfos = pendingRenewals.map { $0.receiptInfo }
 
         // Creating this with NSArray results in __NSSingleObjectArrayI which fails the cast to [String: AnyObject]
         let array = NSMutableArray()
         array.addObjects(from: receiptInfos)
+        
+        let arrayRenewables = NSMutableArray()
+        arrayRenewables.addObjects(from: renewalReceiptInfos)
 
         return [
-            //"latest_receipt": [:],
             "status": "200" as NSString,
             "environment": "Sandbox" as NSString,
             "receipt": NSDictionary(dictionary: [
                 "request_date_ms": requestDate.timeIntervalSince1970.millisecondsNSString,
                 "in_app": array // non renewing
             ]),
-            "latest_receipt_info": array // autoRenewable
+            "latest_receipt_info": array, // autoRenewable
+            PendingRenewalInfo.KEY_IN_RESPONSE_BODY: arrayRenewables //autoRenewable in case of grace period active
         ]
     }
 

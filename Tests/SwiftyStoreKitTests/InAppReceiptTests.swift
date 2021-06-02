@@ -451,6 +451,65 @@ class InAppReceiptTests: XCTestCase {
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
     
+    func testVerifyAutoRenewableSubscriptions_when_threeSubscriptions_oneInGracePeriodExpired_twoInGracePeriod_then_resultIsPurchased_itemsSorted() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 20)
+        
+        let productId1 = "product1"
+        let productId2 = "product2"
+        let productId3 = "product3"
+        let productIds = Set([ productId1, productId2, productId3 ])
+        let isTrialPeriod = false
+        
+        let id1 = UUID().uuidString
+        let id2 = UUID().uuidString
+        let id3 = UUID().uuidString
+        
+        let purchaseDate1 = makeDateAtMidnight(year: 2017, month: 5, day: 10)
+        let expirationDate1 = purchaseDate1.addingTimeInterval(60 * 60)
+        let item1 = ReceiptItem(productId: productId1,
+                                    purchaseDate: purchaseDate1,
+                                    subscriptionExpirationDate: expirationDate1,
+                                    transactionId: id1,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        let purchaseDate2 = makeDateAtMidnight(year: 2017, month: 5, day: 11)
+        let expirationDate2 = purchaseDate2.addingTimeInterval(60 * 60)
+        let item2 = ReceiptItem(productId: productId2,
+                                    purchaseDate: purchaseDate2,
+                                    subscriptionExpirationDate: expirationDate2,
+                                    transactionId: id2,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        let purchaseDate3 = makeDateAtMidnight(year: 2017, month: 5, day: 12)
+        let expirationDate3 = purchaseDate3.addingTimeInterval(60 * 60)
+        let item3 = ReceiptItem(productId: productId3,
+                                    purchaseDate: purchaseDate3,
+                                    subscriptionExpirationDate: expirationDate3,
+                                    transactionId: id3,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        //Sanity Check: Without pending renewals the result should be expired, and items ordered descending
+        let receipt = makeReceipt(items: [item1, item2, item3], requestDate: receiptRequestDate)
+        let verifySubscriptionResult = SwiftyStoreKit.verifySubscriptions(ofType: .autoRenewable, productIds: productIds, inReceipt: receipt)
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate3, items: [item3, item2, item1])
+        XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
+        
+        let renewalDate1 = makeDateAtMidnight(year: 2017, month: 5, day: 19)
+        let renewalDate2 = makeDateAtMidnight(year: 2017, month: 5, day: 21)
+        let renewalDate3 = makeDateAtMidnight(year: 2017, month: 5, day: 22)
+        
+        let renewal1 = PendingRenewalInfo(productId: productId1, expiryDate: renewalDate1, originalTransactionId: id1)
+        let renewal2 = PendingRenewalInfo(productId: productId2, expiryDate: renewalDate2, originalTransactionId: id2)
+        let renewal3 = PendingRenewalInfo(productId: productId3, expiryDate: renewalDate3, originalTransactionId: id3)
+        
+        //With pending renewals here, renewal1 and thus item 2 should be expired and not returned.
+        //But the result should be `.inGracePeriod` with the items/renewals in descending order.
+        let receiptWithRenewables = makeReceipt(items: [item1, item2, item3], requestDate: receiptRequestDate, pendingRenewals: [renewal1, renewal2, renewal3])
+        let verifySubscriptionResultRenewables = SwiftyStoreKit.verifySubscriptions(ofType: .autoRenewable, productIds: productIds, inReceipt: receiptWithRenewables)
+        let expectedSubscriptionResultRenewables = VerifySubscriptionResult.inGracePeriod(endDate: renewalDate3, items: [item3, item2], pendingRenewals: [renewal3, renewal2])
+        XCTAssertEqual(verifySubscriptionResultRenewables, expectedSubscriptionResultRenewables)
+    }
+    
     // MARK: Get Distinct Purchase Identifiers, empty receipt item tests
     func testGetDistinctPurchaseIds_when_noReceipt_then_resultIsNil() {
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)

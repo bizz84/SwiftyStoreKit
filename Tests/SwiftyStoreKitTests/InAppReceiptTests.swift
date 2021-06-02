@@ -81,6 +81,33 @@ extension ReceiptItem: Equatable {
     }
 }
 
+extension PendingRenewalInfo: Equatable {
+    init(productId: String, expiryDate: Date, originalTransactionId: String) {
+        self.init(autoRenewProductId: productId, autoRenewStatus: .willRenew, expirationIntent: nil, gracePeriodExpiresDate: nil, gracePeriodExpiresDateMS: expiryDate.timeIntervalSince1970.millisecondsNSString as String, gracePeriodExpiresDatePST: nil, isInBillingRetryPeriod: nil, offerCodeRefName: nil, originalTransactionId: originalTransactionId, priceConsentStatus: nil, productId: productId, promotionalOfferId: nil)
+    }
+    
+    var receiptInfo: NSDictionary {
+        var result: [String: AnyObject] = [
+            "auto_renew_product_id": productId as NSString,
+            "auto_renew_status": autoRenewStatus.rawValue as NSString,
+            "product_id": productId as NSString,
+            "original_transaction_id": originalTransactionId as NSString
+        ]
+        if let gracePeriodExpiresDateMS = gracePeriodExpiresDateMS {
+            result["grace_period_expires_date_ms"] = gracePeriodExpiresDateMS as NSString
+        }
+        return NSDictionary(dictionary: result)
+    }
+    
+    public static func == (lhs: PendingRenewalInfo, rhs: PendingRenewalInfo) -> Bool {
+        return
+            lhs.productId == rhs.productId &&
+            lhs.autoRenewProductId == rhs.autoRenewProductId &&
+            lhs.originalTransactionId == rhs.originalTransactionId &&
+            lhs.gracePeriodExpiresDateMS == rhs.gracePeriodExpiresDateMS
+    }
+}
+
 extension VerifySubscriptionResult: Equatable {
 
     public static func == (lhs: VerifySubscriptionResult, rhs: VerifySubscriptionResult) -> Bool {
@@ -90,6 +117,8 @@ extension VerifySubscriptionResult: Equatable {
             return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
         case (.expired(let lhsExpiryDate, let lhsReceiptItem), .expired(let rhsExpiryDate, let rhsReceiptItem)):
             return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
+        case (.inGracePeriod(let lhsEndDate, let lhsReceiptItem, let lhsRenewals), .inGracePeriod(let rhsEndDate, let rhsReceiptItem, let rhsRenewals)):
+            return lhsEndDate == rhsEndDate && lhsReceiptItem == rhsReceiptItem && lhsRenewals == rhsRenewals
         default: return false
         }
     }

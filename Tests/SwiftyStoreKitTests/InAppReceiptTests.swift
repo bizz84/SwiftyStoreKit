@@ -233,6 +233,56 @@ class InAppReceiptTests: XCTestCase {
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
+    
+    // auto-renewable, in grace period
+    func testVerifyAutoRenewableSubscription_when_oneGracePeriodSubscription_then_resultIsPurchased() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
+        let productId = "product1"
+        let purchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
+        let expirationDate = purchaseDate.addingTimeInterval(60 * 60)
+        let transactionId = UUID().uuidString
+        let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: nil, transactionId: transactionId, isTrialPeriod: false)
+        
+        let gracePeriodExpirationDate = makeDateAtMidnight(year: 2017, month: 5, day: 16)
+        let pendingRenewal = PendingRenewalInfo(productId: productId, expiryDate: gracePeriodExpirationDate, originalTransactionId: transactionId)
+        
+        let receiptNormal = makeReceipt(items: [item], requestDate: receiptRequestDate)
+        let verifySubscriptionResultNormal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptNormal)
+        let expectedSubscriptionResultNormal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //Sanity Check: Without the pending renewal info the receipt should have been expired.
+        XCTAssertEqual(verifySubscriptionResultNormal, expectedSubscriptionResultNormal)
+        
+        let receiptWithPendingRenewal = makeReceipt(items: [item], requestDate: receiptRequestDate, pendingRenewals: [pendingRenewal])
+        let verifySubscriptionResultWithPendingRenewal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptWithPendingRenewal)
+        let expectedSubscriptionResultWithPendingRenewal = VerifySubscriptionResult.inGracePeriod(endDate: gracePeriodExpirationDate, items: [item], pendingRenewals: [pendingRenewal])
+        //With the pending renewal info, we're in a grace period
+        XCTAssertEqual(verifySubscriptionResultWithPendingRenewal, expectedSubscriptionResultWithPendingRenewal)
+    }
+    
+    // auto-renewable, in expired grace period
+    func testVerifyAutoRenewableSubscription_when_oneExpiredGracePeriodSubscription_then_resultIsExpired() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 20)
+        let productId = "product1"
+        let purchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
+        let expirationDate = purchaseDate.addingTimeInterval(60 * 60)
+        let transactionId = UUID().uuidString
+        let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: nil, transactionId: transactionId, isTrialPeriod: false)
+        
+        let gracePeriodExpirationDate = makeDateAtMidnight(year: 2017, month: 5, day: 19)
+        let pendingRenewal = PendingRenewalInfo(productId: productId, expiryDate: gracePeriodExpirationDate, originalTransactionId: transactionId)
+        
+        let receiptNormal = makeReceipt(items: [item], requestDate: receiptRequestDate)
+        let verifySubscriptionResultNormal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptNormal)
+        let expectedSubscriptionResultNormal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //Sanity Check: Without the pending renewal info the receipt should have been expired.
+        XCTAssertEqual(verifySubscriptionResultNormal, expectedSubscriptionResultNormal)
+        
+        let receiptWithPendingRenewal = makeReceipt(items: [item], requestDate: receiptRequestDate, pendingRenewals: [pendingRenewal])
+        let verifySubscriptionResultWithPendingRenewal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptWithPendingRenewal)
+        let expectedSubscriptionResultWithPendingRenewal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //With the pending renewal info, we're still in the expired state as the pending renewal info has expired as well
+        XCTAssertEqual(verifySubscriptionResultWithPendingRenewal, expectedSubscriptionResultWithPendingRenewal)
+    }
 
     // non-renewing, non purchased
     func testVerifyNonRenewingSubscription_when_noSubscriptions_then_resultIsNotPurchased() {

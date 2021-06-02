@@ -164,6 +164,20 @@ internal class InAppReceipt {
         let sortedReceiptItems = sortedExpiryDatesAndItems.map { $0.1 }
         if firstExpiryDateItemPair.0 > receiptDate {
             return .purchased(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
+        } else if type == .autoRenewable {
+            
+            //Apple will provide an array by the name "pending_renewal_info" only IF the receipt contains auto-renewable subscriptions. If the application has the grace period feature enabled, entries of the array may have the key "grace_period_expires_date_ms" set in case of billing errors and the likes. If this date is set in the future, the purchase is to be regarded as "in grace period", effectively providing the user with the purchases content up until the point the grace period ends.
+            let matchingRenewals = extractPendingRenewals(inReceipt: receipt, withProductIds: productIds)
+            let filteredExpiryDatesAndRenewals = filterPendingRenewals(renewals: matchingRenewals, toExpireAfter: receiptDate)
+            
+            if filteredExpiryDatesAndRenewals.isEmpty == false {
+                let sortedExpiryDatesAndRenewals = filteredExpiryDatesAndRenewals.sorted(by: {$0.date > $1.date})
+                let sortedPresentRenewals = sortedExpiryDatesAndRenewals.map { $0.info }
+                let originalReceiptItems = getOriginalReceiptItems(fromPendingRenwalInfos: sortedPresentRenewals, foundIn: receipts ?? [])
+                return .inGracePeriod(endDate: sortedExpiryDatesAndRenewals.first!.0, items: originalReceiptItems, pendingRenewals: sortedPresentRenewals)
+            } else {
+                return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
+            }
         } else {
             return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
         }
@@ -261,25 +275,104 @@ internal class InAppReceipt {
     }
 
     /**
-     *  Get all the receipts info for a specific product
+     *  Get all the receipts info for a set of product ids
      *  - Parameter receipts: the receipts array to grab info from
-     *  - Parameter productId: the product id
+     *  - Parameter productIds: the set of product ids
      */
     private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withProductIds productIds: Set<String>) -> [ReceiptInfo] {
+        return filterReceiptsInfo(receipts: receipts, withValues: productIds, forKey: "product_id")
+    }
+    
+    /**
+     *  Get all the receipts info for a set of transaction ids
+     *  - Parameter receipts: the receipts array to grab info from
+     *  - Parameter transactionIds: the set of transaction ids
+     */
+    private class func filterReceiptsInfo(receipts: [ReceiptInfo]?, withTransactionIds transactionIds: Set<String>) -> [ReceiptInfo] {
+        return filterReceiptsInfo(receipts: receipts, withValues: transactionIds, forKey: "transaction_id")
+    }
+    
+    private class func filterReceiptsInfo<T>(receipts: [ReceiptInfo]?, withValues values: Set<T>, forKey key: String) -> [ReceiptInfo] {
 
         guard let receipts = receipts else {
             return []
         }
 
-        // Filter receipts with matching product ids
-        let receiptsMatchingProductIds = receipts
+        // Filter receipts with matching values
+        let receiptsMatchingConstraint = receipts
             .filter { (receipt) -> Bool in
-                if let productId = receipt["product_id"] as? String {
-                    return productIds.contains(productId)
+                if let value = receipt[key] as? T {
+                    return values.contains(value)
                 }
                 return false
             }
 
-        return receiptsMatchingProductIds
+        return receiptsMatchingConstraint
+    }
+    
+    /// Retrieves all `PendingRenewalInfo` from the `pending_renewal_info` array which resides in the receipt and belong to a specific set of product IDs.
+    /// - Parameters:
+    ///   - receipt: The receipt in which to seek for the `pending_renewal_info` array
+    ///   - productIds: A set of productIds which the `PendingRenewalInfo` must represent
+    /// - Returns: An array of `PendingRenewalInfo` found to be representing the specified product IDs
+    private class func extractPendingRenewals(inReceipt receipt: ReceiptInfo, withProductIds productIds: Set<String>) -> [PendingRenewalInfo] {
+        let renewals: [PendingRenewalInfo] = {
+            guard let dictionaries = receipt[PendingRenewalInfo.KEY_IN_RESPONSE_BODY] as? [ReceiptInfo] else { return [] }
+            //Avoid exceptions by validifying the json object
+            guard JSONSerialization.isValidJSONObject(dictionaries) else { return [] }
+            guard let data = try? JSONSerialization.data(withJSONObject: dictionaries, options: .prettyPrinted) else { return [] }
+            guard let array = try? JSONDecoder().decode([PendingRenewalInfo].self, from: data) else { return [] }
+            return array
+        }()
+        
+        let matchingRenewals = renewals.filter { (renewal) in
+            let renewalIds = Set([renewal.autoRenewProductId,
+                                  renewal.productId])
+            return renewalIds.intersection(productIds).isEmpty == false
+        }
+        
+        return matchingRenewals
+    }
+    
+    /// Filters `PendingRenewalInfo` by the existance of a `grace_period_expires_date_ms` field and asserting that the date is greater than the provided date.
+    /// - Parameters:
+    ///   - renewals: Array of `PendingRenewalInfo` to be filtered
+    ///   - expiryDate: The date by which to filter
+    /// - Returns: A filtered array of `PendingRenewalInfo` but in the form of tuples, where the first value is the date their grace period will end and the second being the `PendingRenewalInfo`
+    private class func filterPendingRenewals(renewals: [PendingRenewalInfo], toExpireAfter expiryDate: Date) -> [(date: Date, info: PendingRenewalInfo)] {
+        let tuplingFunction: ((PendingRenewalInfo) -> (Date, PendingRenewalInfo)?) = { (renewal) in
+            guard let date = renewal.gracePeriodExpiresDateMSToDate else { return nil }
+            guard date > expiryDate else { return nil }
+            return (date, renewal)
+        }
+        
+        #if swift(>=4.1)
+        let presentRenewals = renewals.compactMap { tuplingFunction($0) }
+        #else
+        let presentRenewals = renewals.flatMap { tuplingFunction($0) }
+        #endif
+        return presentRenewals
+    }
+    
+    /// Finds `ReceiptItem` to which the passed `PendingRenewalInfo` belong.
+    /// - Parameters:
+    ///   - renewals: `PendingRenewalInfo` whose `original_transaction_id` field is inspected
+    ///   - receipts: An array of `ReceiptInfo` representing individual purchases, the likes of which is found when accessing the `latest_receipt_info` field of the Apple Receipt.
+    /// - Returns: An array of `ReceiptItem` where each item corresponding to an input `PendingRenewalInfo`. The array matches the order of the input `PendingRenewalInfo` as closely as possible, unless a corresponding `ReceiptItem` was not found. Which in theory should not happend, but isn't strongly enforced.
+    private class func getOriginalReceiptItems(fromPendingRenwalInfos renewals: [PendingRenewalInfo], foundIn receipts: [ReceiptInfo]) -> [ReceiptItem] {
+        let transactionIds = Set(renewals.map({$0.originalTransactionId}))
+        let receiptsInfo = filterReceiptsInfo(receipts: receipts, withTransactionIds: transactionIds)
+        #if swift(>=4.1)
+            let receiptItems = receiptsInfo.compactMap { ReceiptItem(receiptInfo: $0) }
+        #else
+            let receiptItems = receiptsInfo.flatMap { ReceiptItem(receiptInfo: $0) }
+        #endif
+        
+        var dict = [String: Int]()
+        renewals.enumerated().forEach({dict[$0.element.productId] = $0.offset})
+        
+        return receiptItems.sorted { a, b in
+            dict[a.productId]! < dict[b.productId]!
+        }
     }
 }

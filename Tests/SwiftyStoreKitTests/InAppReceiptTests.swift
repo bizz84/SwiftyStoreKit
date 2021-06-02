@@ -34,7 +34,7 @@ private extension TimeInterval {
 
 extension ReceiptItem: Equatable {
 
-    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false) {
+    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, transactionId: String? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false) {
         self.init(productId: productId, quantity: 1, transactionId: UUID().uuidString, originalTransactionId: UUID().uuidString, purchaseDate: purchaseDate, originalPurchaseDate: purchaseDate, webOrderLineItemId: UUID().uuidString, subscriptionExpirationDate: subscriptionExpirationDate, cancellationDate: cancellationDate, isTrialPeriod: isTrialPeriod, isInIntroOfferPeriod: isInIntroOfferPeriod)
         self.productId = productId
         self.quantity = 1
@@ -42,7 +42,7 @@ extension ReceiptItem: Equatable {
         self.originalPurchaseDate = purchaseDate
         self.subscriptionExpirationDate = subscriptionExpirationDate
         self.cancellationDate = cancellationDate
-        self.transactionId = UUID().uuidString
+        self.transactionId = transactionId ?? UUID().uuidString
         self.originalTransactionId = UUID().uuidString
         self.webOrderLineItemId = UUID().uuidString
         self.isTrialPeriod = isTrialPeriod
@@ -81,6 +81,33 @@ extension ReceiptItem: Equatable {
     }
 }
 
+extension PendingRenewalInfo: Equatable {
+    init(productId: String, expiryDate: Date, originalTransactionId: String) {
+        self.init(autoRenewProductId: productId, autoRenewStatus: .willRenew, expirationIntent: nil, gracePeriodExpiresDate: nil, gracePeriodExpiresDateMS: expiryDate.timeIntervalSince1970.millisecondsNSString as String, gracePeriodExpiresDatePST: nil, isInBillingRetryPeriod: nil, offerCodeRefName: nil, originalTransactionId: originalTransactionId, priceConsentStatus: nil, productId: productId, promotionalOfferId: nil)
+    }
+    
+    var receiptInfo: NSDictionary {
+        var result: [String: AnyObject] = [
+            "auto_renew_product_id": productId as NSString,
+            "auto_renew_status": autoRenewStatus.rawValue as NSString,
+            "product_id": productId as NSString,
+            "original_transaction_id": originalTransactionId as NSString
+        ]
+        if let gracePeriodExpiresDateMS = gracePeriodExpiresDateMS {
+            result["grace_period_expires_date_ms"] = gracePeriodExpiresDateMS as NSString
+        }
+        return NSDictionary(dictionary: result)
+    }
+    
+    public static func == (lhs: PendingRenewalInfo, rhs: PendingRenewalInfo) -> Bool {
+        return
+            lhs.productId == rhs.productId &&
+            lhs.autoRenewProductId == rhs.autoRenewProductId &&
+            lhs.originalTransactionId == rhs.originalTransactionId &&
+            lhs.gracePeriodExpiresDateMS == rhs.gracePeriodExpiresDateMS
+    }
+}
+
 extension VerifySubscriptionResult: Equatable {
 
     public static func == (lhs: VerifySubscriptionResult, rhs: VerifySubscriptionResult) -> Bool {
@@ -90,6 +117,8 @@ extension VerifySubscriptionResult: Equatable {
             return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
         case (.expired(let lhsExpiryDate, let lhsReceiptItem), .expired(let rhsExpiryDate, let rhsReceiptItem)):
             return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
+        case (.inGracePeriod(let lhsEndDate, let lhsReceiptItem, let lhsRenewals), .inGracePeriod(let rhsEndDate, let rhsReceiptItem, let rhsRenewals)):
+            return lhsEndDate == rhsEndDate && lhsReceiptItem == rhsReceiptItem && lhsRenewals == rhsRenewals
         default: return false
         }
     }
@@ -203,6 +232,56 @@ class InAppReceiptTests: XCTestCase {
 
         let expectedSubscriptionResult = VerifySubscriptionResult.notPurchased
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
+    }
+    
+    // auto-renewable, in grace period
+    func testVerifyAutoRenewableSubscription_when_oneGracePeriodSubscription_then_resultIsPurchased() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 15)
+        let productId = "product1"
+        let purchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
+        let expirationDate = purchaseDate.addingTimeInterval(60 * 60)
+        let transactionId = UUID().uuidString
+        let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: nil, transactionId: transactionId, isTrialPeriod: false)
+        
+        let gracePeriodExpirationDate = makeDateAtMidnight(year: 2017, month: 5, day: 16)
+        let pendingRenewal = PendingRenewalInfo(productId: productId, expiryDate: gracePeriodExpirationDate, originalTransactionId: transactionId)
+        
+        let receiptNormal = makeReceipt(items: [item], requestDate: receiptRequestDate)
+        let verifySubscriptionResultNormal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptNormal)
+        let expectedSubscriptionResultNormal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //Sanity Check: Without the pending renewal info the receipt should have been expired.
+        XCTAssertEqual(verifySubscriptionResultNormal, expectedSubscriptionResultNormal)
+        
+        let receiptWithPendingRenewal = makeReceipt(items: [item], requestDate: receiptRequestDate, pendingRenewals: [pendingRenewal])
+        let verifySubscriptionResultWithPendingRenewal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptWithPendingRenewal)
+        let expectedSubscriptionResultWithPendingRenewal = VerifySubscriptionResult.inGracePeriod(endDate: gracePeriodExpirationDate, items: [item], pendingRenewals: [pendingRenewal])
+        //With the pending renewal info, we're in a grace period
+        XCTAssertEqual(verifySubscriptionResultWithPendingRenewal, expectedSubscriptionResultWithPendingRenewal)
+    }
+    
+    // auto-renewable, in expired grace period
+    func testVerifyAutoRenewableSubscription_when_oneExpiredGracePeriodSubscription_then_resultIsExpired() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 20)
+        let productId = "product1"
+        let purchaseDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
+        let expirationDate = purchaseDate.addingTimeInterval(60 * 60)
+        let transactionId = UUID().uuidString
+        let item = ReceiptItem(productId: productId, purchaseDate: purchaseDate, subscriptionExpirationDate: expirationDate, cancellationDate: nil, transactionId: transactionId, isTrialPeriod: false)
+        
+        let gracePeriodExpirationDate = makeDateAtMidnight(year: 2017, month: 5, day: 19)
+        let pendingRenewal = PendingRenewalInfo(productId: productId, expiryDate: gracePeriodExpirationDate, originalTransactionId: transactionId)
+        
+        let receiptNormal = makeReceipt(items: [item], requestDate: receiptRequestDate)
+        let verifySubscriptionResultNormal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptNormal)
+        let expectedSubscriptionResultNormal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //Sanity Check: Without the pending renewal info the receipt should have been expired.
+        XCTAssertEqual(verifySubscriptionResultNormal, expectedSubscriptionResultNormal)
+        
+        let receiptWithPendingRenewal = makeReceipt(items: [item], requestDate: receiptRequestDate, pendingRenewals: [pendingRenewal])
+        let verifySubscriptionResultWithPendingRenewal = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receiptWithPendingRenewal)
+        let expectedSubscriptionResultWithPendingRenewal = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        //With the pending renewal info, we're still in the expired state as the pending renewal info has expired as well
+        XCTAssertEqual(verifySubscriptionResultWithPendingRenewal, expectedSubscriptionResultWithPendingRenewal)
     }
 
     // non-renewing, non purchased
@@ -372,6 +451,65 @@ class InAppReceiptTests: XCTestCase {
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
     
+    func testVerifyAutoRenewableSubscriptions_when_threeSubscriptions_oneInGracePeriodExpired_twoInGracePeriod_then_resultIsPurchased_itemsSorted() {
+        let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 20)
+        
+        let productId1 = "product1"
+        let productId2 = "product2"
+        let productId3 = "product3"
+        let productIds = Set([ productId1, productId2, productId3 ])
+        let isTrialPeriod = false
+        
+        let id1 = UUID().uuidString
+        let id2 = UUID().uuidString
+        let id3 = UUID().uuidString
+        
+        let purchaseDate1 = makeDateAtMidnight(year: 2017, month: 5, day: 10)
+        let expirationDate1 = purchaseDate1.addingTimeInterval(60 * 60)
+        let item1 = ReceiptItem(productId: productId1,
+                                    purchaseDate: purchaseDate1,
+                                    subscriptionExpirationDate: expirationDate1,
+                                    transactionId: id1,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        let purchaseDate2 = makeDateAtMidnight(year: 2017, month: 5, day: 11)
+        let expirationDate2 = purchaseDate2.addingTimeInterval(60 * 60)
+        let item2 = ReceiptItem(productId: productId2,
+                                    purchaseDate: purchaseDate2,
+                                    subscriptionExpirationDate: expirationDate2,
+                                    transactionId: id2,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        let purchaseDate3 = makeDateAtMidnight(year: 2017, month: 5, day: 12)
+        let expirationDate3 = purchaseDate3.addingTimeInterval(60 * 60)
+        let item3 = ReceiptItem(productId: productId3,
+                                    purchaseDate: purchaseDate3,
+                                    subscriptionExpirationDate: expirationDate3,
+                                    transactionId: id3,
+                                    isTrialPeriod: isTrialPeriod)
+        
+        //Sanity Check: Without pending renewals the result should be expired, and items ordered descending
+        let receipt = makeReceipt(items: [item1, item2, item3], requestDate: receiptRequestDate)
+        let verifySubscriptionResult = SwiftyStoreKit.verifySubscriptions(ofType: .autoRenewable, productIds: productIds, inReceipt: receipt)
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate3, items: [item3, item2, item1])
+        XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
+        
+        let renewalDate1 = makeDateAtMidnight(year: 2017, month: 5, day: 19)
+        let renewalDate2 = makeDateAtMidnight(year: 2017, month: 5, day: 21)
+        let renewalDate3 = makeDateAtMidnight(year: 2017, month: 5, day: 22)
+        
+        let renewal1 = PendingRenewalInfo(productId: productId1, expiryDate: renewalDate1, originalTransactionId: id1)
+        let renewal2 = PendingRenewalInfo(productId: productId2, expiryDate: renewalDate2, originalTransactionId: id2)
+        let renewal3 = PendingRenewalInfo(productId: productId3, expiryDate: renewalDate3, originalTransactionId: id3)
+        
+        //With pending renewals here, renewal1 and thus item 2 should be expired and not returned.
+        //But the result should be `.inGracePeriod` with the items/renewals in descending order.
+        let receiptWithRenewables = makeReceipt(items: [item1, item2, item3], requestDate: receiptRequestDate, pendingRenewals: [renewal1, renewal2, renewal3])
+        let verifySubscriptionResultRenewables = SwiftyStoreKit.verifySubscriptions(ofType: .autoRenewable, productIds: productIds, inReceipt: receiptWithRenewables)
+        let expectedSubscriptionResultRenewables = VerifySubscriptionResult.inGracePeriod(endDate: renewalDate3, items: [item3, item2], pendingRenewals: [renewal3, renewal2])
+        XCTAssertEqual(verifySubscriptionResultRenewables, expectedSubscriptionResultRenewables)
+    }
+    
     // MARK: Get Distinct Purchase Identifiers, empty receipt item tests
     func testGetDistinctPurchaseIds_when_noReceipt_then_resultIsNil() {
         let receiptRequestDate = makeDateAtMidnight(year: 2017, month: 5, day: 14)
@@ -426,22 +564,26 @@ class InAppReceiptTests: XCTestCase {
     }
 
     // MARK: Helper methods
-    func makeReceipt(items: [ReceiptItem], requestDate: Date) -> [String: AnyObject] {
+    func makeReceipt(items: [ReceiptItem], requestDate: Date, pendingRenewals: [PendingRenewalInfo] = []) -> [String: AnyObject] {
         let receiptInfos = items.map { $0.receiptInfo }
+        let renewalReceiptInfos = pendingRenewals.map { $0.receiptInfo }
 
         // Creating this with NSArray results in __NSSingleObjectArrayI which fails the cast to [String: AnyObject]
         let array = NSMutableArray()
         array.addObjects(from: receiptInfos)
+        
+        let arrayRenewables = NSMutableArray()
+        arrayRenewables.addObjects(from: renewalReceiptInfos)
 
         return [
-            //"latest_receipt": [:],
             "status": "200" as NSString,
             "environment": "Sandbox" as NSString,
             "receipt": NSDictionary(dictionary: [
                 "request_date_ms": requestDate.timeIntervalSince1970.millisecondsNSString,
                 "in_app": array // non renewing
             ]),
-            "latest_receipt_info": array // autoRenewable
+            "latest_receipt_info": array, // autoRenewable
+            PendingRenewalInfo.KEY_IN_RESPONSE_BODY: arrayRenewables //autoRenewable in case of grace period active
         ]
     }
 

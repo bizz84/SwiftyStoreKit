@@ -172,6 +172,7 @@ public enum VerifyPurchaseResult {
 public enum VerifySubscriptionResult {
     case purchased(expiryDate: Date, items: [ReceiptItem])
     case expired(expiryDate: Date, items: [ReceiptItem])
+    case inGracePeriod(endDate: Date, items: [ReceiptItem], pendingRenewals: [PendingRenewalInfo])
     case notPurchased
 }
 
@@ -248,6 +249,128 @@ public enum ReceiptError: Swift.Error {
     case jsonDecodeError(string: String?)
     /// Receive invalid - bad status returned
     case receiptInvalid(receipt: ReceiptInfo, status: ReceiptStatus)
+}
+
+/// Pending renewal as defined here: (https://developer.apple.com/documentation/appstorereceipts/responsebody/pending_renewal_info)
+/// - Contains the pending renewal information for a ato-renewable subscription identified by the product_id.
+/// A pending renewal may refer to a renewal that the system scheduled in the future or a renewal that failed in the past for some reason.
+public struct PendingRenewalInfo: Codable {
+    
+    ///The key of the pending renewal array in the response body of the app store receipt
+    public static let KEY_IN_RESPONSE_BODY: String = "pending_renewal_info"
+    
+    ///The value for this key corresponds to the productIdentifier property of the product that the customer’s subscription renews.
+    public let autoRenewProductId: String
+    
+    ///The current renewal status for the auto-renewable subscription.
+    public let autoRenewStatus: AutoRenewStatus
+    
+    ///The reason a subscription expired. This field is only present for a receipt that contains an expired auto-renewable subscription.
+    public let expirationIntent: ExpirationIntent?
+    
+    ///The time at which the grace period for subscription renewals expires, in a date-time format similar to the ISO 8601.
+    public let gracePeriodExpiresDate: String?
+    
+    ///The time at which the grace period for subscription renewals expires, in UNIX epoch time format, in milliseconds.
+    ///This key is only present for apps that have Billing Grace Period enabled and when the user experiences a billing error at the time of renewal. Use this time format for processing dates.
+    public let gracePeriodExpiresDateMS: String?
+    
+    ///The time at which the grace period for subscription renewals expires, in the Pacific Time zone.
+    public let gracePeriodExpiresDatePST: String?
+    
+    ///A flag that indicates Apple is attempting to renew an expired subscription automatically. This field is only present if an auto-renewable subscription is in the billing retry state.
+    public let isInBillingRetryPeriod: BillingRetryPeriod?
+    
+    ///The reference name of a subscription offer that you configured in App Store Connect. This field is present when a customer redeemed a subscription offer code.
+    public let offerCodeRefName: String?
+    
+    ///The transaction identifier of the original purchase.
+    public let originalTransactionId: String
+    
+    ///The price consent status for a subscription price increase. This field is only present if the customer was notified of the price increase.
+    public let priceConsentStatus: PriceConsentStatus?
+    
+    ///The unique identifier of the product purchased. You provide this value when creating the product in App Store Connect,
+    ///and it corresponds to the productIdentifier property of the SKPayment object stored in the transaction's payment property.
+    public let productId: String
+    
+    ///The identifier of the promotional offer for an auto-renewable subscription that the user redeemed.
+    ///You provide this value in the Promotional Offer Identifier field when you create the promotional offer in App Store Connect.
+    public let promotionalOfferId: String?
+    
+    ///Convenience method to retrieve the expiry date of the grace period
+    public var gracePeriodExpiresDateMSToDate: Date? {
+        guard let string = gracePeriodExpiresDateMS else { return nil }
+        return Date(millisecondsSince1970: string)
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case autoRenewProductId = "auto_renew_product_id"
+        case autoRenewStatus = "auto_renew_status"
+        case expirationIntent = "expiration_intent"
+        case gracePeriodExpiresDate = "grace_period_expires_date"
+        case gracePeriodExpiresDateMS = "grace_period_expires_date_ms"
+        case gracePeriodExpiresDatePST = "grace_period_expires_date_pst"
+        case isInBillingRetryPeriod = "is_in_billing_retry_period"
+        case offerCodeRefName = "offer_code_ref_name"
+        case originalTransactionId = "original_transaction_id"
+        case priceConsentStatus = "price_consent_status"
+        case productId = "product_id"
+        case promotionalOfferId = "promotional_offer_id"
+    }
+    
+    ///Auto Renew Status defined here: (https://developer.apple.com/documentation/appstorereceipts/auto_renew_status)
+    public enum AutoRenewStatus: String, Codable {
+        ///The subscription will renew at the end of the current subscription period
+        case willRenew = "1"
+        ///The customer has turned off automatic renewal for the subscription.
+        case willNotRenew = "0"
+    }
+    
+    ///Expiration intent defined here: (https://developer.apple.com/documentation/appstorereceipts/auto_renew_status)
+    public enum ExpirationIntent: String, Codable {
+        ///The customer voluntarily canceled their subscription.
+        case subscriptionCanceled = "1"
+        ///Billing error; for example, the customer's payment information was no longer valid.
+        case billingError = "2"
+        ///The customer did not agree to a recent price increase.
+        case declinedPriceIncrease = "3"
+        ///The product was not available for purchase at the time of renewal.
+        case productWasUnavailable = "4"
+        ///Unknown error.
+        case unknown = "5"
+    }
+    
+    ///Billing Retry Period defined here: (https://developer.apple.com/documentation/appstorereceipts/is_in_billing_retry_period)
+    public enum BillingRetryPeriod: String, Codable {
+        ///The App Store is attempting to renew the subscription.
+        case isAttempting = "1"
+        ///The App Store has stopped attempting to renew the subscription.
+        case stoppedAttempting = "0"
+    }
+    
+    ///Documented as follows:
+    ///The default value is "0" and changes to "1" if the customer consents.
+    ///Possible values: 1, 0
+    public enum PriceConsentStatus: String, Codable {
+        case userDidNotConsent = "0"
+        case userDidConsent = "1"
+    }
+    
+    public init(autoRenewProductId: String, autoRenewStatus: AutoRenewStatus, expirationIntent: ExpirationIntent?, gracePeriodExpiresDate: String?, gracePeriodExpiresDateMS: String?, gracePeriodExpiresDatePST: String?, isInBillingRetryPeriod: BillingRetryPeriod?, offerCodeRefName: String?, originalTransactionId: String, priceConsentStatus: PriceConsentStatus?, productId: String, promotionalOfferId: String?) {
+        self.autoRenewProductId = autoRenewProductId
+        self.autoRenewStatus = autoRenewStatus
+        self.expirationIntent = expirationIntent
+        self.gracePeriodExpiresDate = gracePeriodExpiresDate
+        self.gracePeriodExpiresDateMS = gracePeriodExpiresDateMS
+        self.gracePeriodExpiresDatePST = gracePeriodExpiresDatePST
+        self.isInBillingRetryPeriod = isInBillingRetryPeriod
+        self.offerCodeRefName = offerCodeRefName
+        self.originalTransactionId = originalTransactionId
+        self.priceConsentStatus = priceConsentStatus
+        self.productId = productId
+        self.promotionalOfferId = promotionalOfferId
+    }
 }
 
 /// Status code returned by remote server

@@ -344,6 +344,9 @@ extension ViewController {
         case .purchased(let expiryDate, let items):
             print("\(productIds) is valid until \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
+        case .inGracePeriod(let endDate, let items, let pendingRenewals):
+            print("\(productIds) is in grace period until \(endDate)\n\(items)\n\(pendingRenewals)\n")
+            return alertWithTitle("Product is purchased (grace period)", message: "Product is in grace period until \(endDate)")
         case .expired(let expiryDate, let items):
             print("\(productIds) is expired since \(expiryDate)\n\(items)\n")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")

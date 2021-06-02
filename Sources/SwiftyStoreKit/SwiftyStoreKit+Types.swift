@@ -256,6 +256,9 @@ public enum ReceiptError: Swift.Error {
 /// A pending renewal may refer to a renewal that the system scheduled in the future or a renewal that failed in the past for some reason.
 public struct PendingRenewalInfo: Codable {
     
+    ///The key of the pending renewal array in the response body of the app store receipt
+    public static let KEY_IN_RESPONSE_BODY: String = "pending_renewal_info"
+    
     ///The value for this key corresponds to the productIdentifier property of the product that the customer’s subscription renews.
     public let autoRenewProductId: String
     

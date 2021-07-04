@@ -267,13 +267,13 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        restorationDispatchQueue.async { [weak self] in
+        restorationDispatchQueue.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             self?.restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
         }
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        restorationDispatchQueue.async { [weak self] in
+        restorationDispatchQueue.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
             self?.restorePurchasesController.restoreCompletedTransactionsFinished()
         }
     }

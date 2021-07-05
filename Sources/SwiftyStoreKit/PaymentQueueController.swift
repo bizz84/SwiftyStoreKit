@@ -189,7 +189,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
             print("Object is not a SKPaymentTransaction: \(transaction)")
             return
         }
-        paymentQueue.finishTransaction(skTransaction)
+        if let purchaseStatus = skTransaction.error as NSError?, let error = purchaseStatus.userInfo["NSUnderlyingError"] as? NSError, error.code != 3038 {
+            paymentQueue.finishTransaction(skTransaction)
+        }
     }
     
     func start(_ downloads: [SKDownload]) {

@@ -61,8 +61,10 @@ class CompleteTransactionsController: TransactionController {
                 purchases.append(purchase)
 
                 if willFinishTransaction {
-                    print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.debugDescription)")
-                    paymentQueue.finishTransaction(transaction)
+                    if let purchaseStatus = transaction.error as NSError?, let error = purchaseStatus.userInfo["NSUnderlyingError"] as? NSError, error.code != 3038 {
+                        paymentQueue.finishTransaction(transaction)
+                        print("Finishing transaction for payment \"\(transaction.payment.productIdentifier)\" with state: \(transactionState.debugDescription)")
+                    }
                 }
             } else {
                 unhandledTransactions.append(transaction)

@@ -121,11 +121,9 @@ class PaymentsController: TransactionController {
         if transactionState == .failed {
             // Handle Strong Customer Authentication transactions
             // https://developer.apple.com/support/psd2/#:~:text=For%20in%2Dapp%20purchases%20that,their%20credit%20or%20debit%20card.&text=Handling%20this%20interrupted%20transaction%20is,conditions%20before%20completing%20a%20purchase.
-            if let purchaseStatus = transaction.error as NSError?, let error = purchaseStatus.userInfo["NSUnderlyingError"] as? NSError, error.code == 3038 {
-                return false
+            if let purchaseStatus = transaction.error as NSError?, let error = purchaseStatus.userInfo["NSUnderlyingError"] as? NSError, error.code != 3038 {
+                payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
             }
-            payment.callback(.failed(error: transactionError(for: transaction.error as NSError?)))
-
             paymentQueue.finishTransaction(transaction)
             payments.remove(at: paymentIndex)
             return true

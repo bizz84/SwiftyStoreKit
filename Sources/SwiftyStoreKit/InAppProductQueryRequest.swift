@@ -26,7 +26,7 @@ import StoreKit
 
 typealias InAppProductRequestCallback = (RetrieveResults) -> Void
 
-public protocol InAppRequest: class {
+public protocol InAppRequest: AnyObject {
     func start()
     func cancel()
 }

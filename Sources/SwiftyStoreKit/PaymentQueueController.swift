@@ -41,7 +41,7 @@ public enum TransactionResult {
     case failed(error: SKError)
 }
 
-public protocol PaymentQueue: class {
+public protocol PaymentQueue: AnyObject {
     
     func add(_ observer: SKPaymentTransactionObserver)
     func remove(_ observer: SKPaymentTransactionObserver)
@@ -273,9 +273,9 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
         updatedDownloadsHandler?(downloads)
     }
     
-    // #if os(iOS) && !targetEnvironment(macCatalyst)
+    #if !os(watchOS)
     func paymentQueue(_ queue: SKPaymentQueue, shouldAddStorePayment payment: SKPayment, for product: SKProduct) -> Bool {
         return shouldAddStorePaymentHandler?(payment, product) ?? false
     }
-    // #endif
+    #endif
 }

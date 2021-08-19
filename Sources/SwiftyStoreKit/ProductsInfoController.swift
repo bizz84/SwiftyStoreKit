@@ -25,7 +25,7 @@
 import Foundation
 import StoreKit
 
-protocol InAppProductRequestBuilder: class {
+protocol InAppProductRequestBuilder: AnyObject {
     func request(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductRequest
 }
 

@@ -106,7 +106,10 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     private let completeTransactionsController: CompleteTransactionsController
     unowned let paymentQueue: PaymentQueue
     private var entitlementRevocation: EntitlementRevocation?
-    
+    private let restorationDispatchQueue = DispatchQueue(
+        label: "com.musevisions.SwiftyStoreKit.restorationDispatchQueue",
+        qos: DispatchQoS.background)
+
     deinit {
         paymentQueue.remove(self)
     }
@@ -236,19 +239,21 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
          * 3. complete transactions (transactionState: .purchased, .failed, .restored, .deferred)
          * Any transactions where state == .purchasing are ignored.
          */
-        var unhandledTransactions = transactions.filter { $0.transactionState != .purchasing }
-        
-        if unhandledTransactions.count > 0 {
-            
-            unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
-            
-            unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
-            
-            unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
+        restorationDispatchQueue.sync {
+            var unhandledTransactions = transactions.filter { $0.transactionState != .purchasing }
             
             if unhandledTransactions.count > 0 {
-                let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
-                print("unhandledTransactions:\n\(strings)")
+                
+                unhandledTransactions = paymentsController.processTransactions(transactions, on: paymentQueue)
+                
+                unhandledTransactions = restorePurchasesController.processTransactions(unhandledTransactions, on: paymentQueue)
+                
+                unhandledTransactions = completeTransactionsController.processTransactions(unhandledTransactions, on: paymentQueue)
+                
+                if unhandledTransactions.count > 0 {
+                    let strings = unhandledTransactions.map { $0.debugDescription }.joined(separator: "\n")
+                    print("unhandledTransactions:\n\(strings)")
+                }
             }
         }
     }
@@ -262,11 +267,15 @@ class PaymentQueueController: NSObject, SKPaymentTransactionObserver {
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, restoreCompletedTransactionsFailedWithError error: Error) {
-        restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
+        restorationDispatchQueue.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
+            self?.restorePurchasesController.restoreCompletedTransactionsFailed(withError: error)
+        }
     }
     
     func paymentQueueRestoreCompletedTransactionsFinished(_ queue: SKPaymentQueue) {
-        restorePurchasesController.restoreCompletedTransactionsFinished()
+        restorationDispatchQueue.asyncAfter(deadline: .now() + 0.0001) { [weak self] in
+            self?.restorePurchasesController.restoreCompletedTransactionsFinished()
+        }
     }
     
     func paymentQueue(_ queue: SKPaymentQueue, updatedDownloads downloads: [SKDownload]) {

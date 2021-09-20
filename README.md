@@ -20,6 +20,19 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchO
 - Downloading content hosted with Apple
 - iOS, tvOS, watchOS, macOS, and Catalyst compatible
 
+## UPDATE: SwiftyStoreKit to RevenueCat Migration Guide
+During WWDC21, Apple introduced [StoreKit 2](https://developer.apple.com/videos/play/wwdc2021/10114/), a brand new Swift API for in-app purchases and auto-renewable subscriptions. 
+
+While it would be highly desirable to support StoreKit 2 in this project, [little progress](https://github.com/bizz84/SwiftyStoreKit/issues/550) has been made over the last year and most issues [remain unanswered](https://github.com/bizz84/SwiftyStoreKit/issues).
+
+The good news is that [RevenueCat](https://www.revenuecat.com/) is a great alternative to SwiftyStoreKit, offering great APIs, support, and much more at a very [reasonable price](https://www.revenuecat.com/pricing).
+
+If you've been using SwiftyStoreKit and want to migrate to RevenueCat, this guide covers everything you need:
+
+- [SwiftyStoreKit Migration](https://docs.revenuecat.com/docs/swiftystorekit)
+
+Or if you're just getting started, consider skipping SwiftyStoreKit altogether and signing up for [RevenueCat](https://www.revenuecat.com/).
+
 ## Contributions Wanted
 SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 
@@ -33,7 +46,7 @@ More info here: [The Future of SwiftyStoreKit: Maintainers Wanted](https://mediu
 If you've shipped an app in the last five years, you're probably good to go. Some features (like discounts) are only available on new OS versions, but most features are available as far back as:
 
 | iOS | watchOS | tvOS | macOS | Mac Catalyst |
-|-----|---------|------|-------|--------------|
+| --- | ------- | ---- | ----- | ------------ |
 | 8.0 | 6.2     | 9.0  | 10.10 | 13.0         |
 
 ## Installation

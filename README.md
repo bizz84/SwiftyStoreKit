@@ -456,6 +456,10 @@ I have also written about building SwiftyStoreKit on Medium:
 
 <a href="https://www.youtube.com/watch?v=MP-U5gQylHc"><img src="https://user-images.githubusercontent.com/2488011/65576278-55cccc80-df7a-11e9-8db5-244e2afa3e46.png" width="50%" /></a>
 
+## Written Tutorials
+
+* [In App Purchase (IAP) made simple with SwiftyStoreKit](https://levelup.gitconnected.com/beginner-ios-dev-in-app-purchase-iap-made-simple-with-swiftystorekit-3add60e9065d)
+
 ## Credits
 Many thanks to [phimage](https://github.com/phimage) for adding macOS support and receipt verification.
 

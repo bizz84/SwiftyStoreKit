@@ -33,6 +33,8 @@ If you've been using SwiftyStoreKit and want to migrate to RevenueCat, this guid
 
 Or if you're just getting started, consider skipping SwiftyStoreKit altogether and signing up for [RevenueCat](https://www.revenuecat.com/).
 
+Alternatively, you can also check out [Glassfy](https://glassfy.io/), which also makes it easy to handle in-app subscriptions and much more (here is their [pricing page](https://glassfy.io/pricing.html)).
+
 ## Contributions Wanted
 SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 

@@ -34,8 +34,8 @@ private extension TimeInterval {
 
 extension ReceiptItem: Equatable {
 
-    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false) {
-        self.init(productId: productId, quantity: 1, transactionId: UUID().uuidString, originalTransactionId: UUID().uuidString, purchaseDate: purchaseDate, originalPurchaseDate: purchaseDate, webOrderLineItemId: UUID().uuidString, subscriptionExpirationDate: subscriptionExpirationDate, cancellationDate: cancellationDate, isTrialPeriod: isTrialPeriod, isInIntroOfferPeriod: isInIntroOfferPeriod)
+    init(productId: String, purchaseDate: Date, subscriptionExpirationDate: Date? = nil, cancellationDate: Date? = nil, isTrialPeriod: Bool = false, isInIntroOfferPeriod: Bool = false, isUpgraded: Bool = false) {
+        self.init(productId: productId, quantity: 1, transactionId: UUID().uuidString, originalTransactionId: UUID().uuidString, purchaseDate: purchaseDate, originalPurchaseDate: purchaseDate, webOrderLineItemId: UUID().uuidString, subscriptionExpirationDate: subscriptionExpirationDate, cancellationDate: cancellationDate, isTrialPeriod: isTrialPeriod, isInIntroOfferPeriod: isInIntroOfferPeriod, isUpgraded: isUpgraded)
         self.productId = productId
         self.quantity = 1
         self.purchaseDate = purchaseDate
@@ -47,6 +47,7 @@ extension ReceiptItem: Equatable {
         self.webOrderLineItemId = UUID().uuidString
         self.isTrialPeriod = isTrialPeriod
         self.isInIntroOfferPeriod = isInIntroOfferPeriod
+        self.isUpgraded = isUpgraded
     }
 
     var receiptInfo: NSDictionary {

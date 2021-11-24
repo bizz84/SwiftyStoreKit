@@ -219,7 +219,10 @@ public struct ReceiptItem: Purchased, Codable {
     /// Indicates whether or not the subscription item is currently within an intro offer period.
     public var isInIntroOfferPeriod: Bool
     
-    public init(productId: String, quantity: Int, transactionId: String, originalTransactionId: String, purchaseDate: Date, originalPurchaseDate: Date, webOrderLineItemId: String?, subscriptionExpirationDate: Date?, cancellationDate: Date?, isTrialPeriod: Bool, isInIntroOfferPeriod: Bool) {
+    /// An indicator that a subscription has been canceled due to an upgrade. This field is only present for upgrade transactions.
+    public var isUpgraded: Bool
+    
+    public init(productId: String, quantity: Int, transactionId: String, originalTransactionId: String, purchaseDate: Date, originalPurchaseDate: Date, webOrderLineItemId: String?, subscriptionExpirationDate: Date?, cancellationDate: Date?, isTrialPeriod: Bool, isInIntroOfferPeriod: Bool, isUpgraded: Bool) {
         self.productId = productId
         self.quantity = quantity
         self.transactionId = transactionId
@@ -231,6 +234,7 @@ public struct ReceiptItem: Purchased, Codable {
         self.cancellationDate = cancellationDate
         self.isTrialPeriod = isTrialPeriod
         self.isInIntroOfferPeriod = isInIntroOfferPeriod
+        self.isUpgraded = isUpgraded
     }
 }
 

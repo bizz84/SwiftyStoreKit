@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'SwiftyStoreKit'
-  s.version      = '0.16.1'
+  s.version      = '0.16.4'
   s.summary      = 'Lightweight In App Purchases Swift framework for iOS, tvOS, watchOS, macOS and Mac Catalyst.'
   s.license      = 'MIT'
   s.homepage     = 'https://github.com/bizz84/SwiftyStoreKit'

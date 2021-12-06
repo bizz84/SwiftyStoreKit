@@ -128,6 +128,7 @@ public struct RetrieveResults {
 /// Purchase result
 public enum PurchaseResult {
     case success(purchase: PurchaseDetails)
+    case deferred(purchase: PurchaseDetails)
     case error(error: SKError)
 }
 

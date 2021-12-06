@@ -127,6 +127,15 @@ class PaymentsController: TransactionController {
             return true
         }
 
+        if transactionState == .deferred {
+            let purchase = PurchaseDetails(productId: transactionProductIdentifier, quantity: transaction.payment.quantity, product: payment.product, transaction: transaction, originalTransaction: transaction.original, needsFinishTransaction: !payment.atomically)
+
+            payment.callback(.deferred(purchase: purchase))
+
+            payments.remove(at: paymentIndex)
+            return true
+        }
+
         return false
     }
 

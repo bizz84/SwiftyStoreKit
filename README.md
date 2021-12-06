@@ -484,5 +484,6 @@ It would be great to showcase apps using SwiftyStoreKit here. Pull requests welc
 * [Debts iOS](https://debts.ivanvorobei.by/ios) & [Debts macOS](https://debts.ivanvorobei.by/macos) - Track amounts owed
 * [Botcher](https://itunes.apple.com/us/app/id1522337788) - Good for finding something to do
 * [Hashr](https://apps.apple.com/app/id1166499829) - Generate unique password hashes based on website and master password
+* [QRFi](https://apps.apple.com/app/id1535761355) - Create stylish QR Codes for WiFi
 
 A full list of apps is published [on AppSight](https://www.appsight.io/sdk/574154).

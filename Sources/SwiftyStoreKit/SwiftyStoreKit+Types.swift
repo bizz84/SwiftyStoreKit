@@ -152,6 +152,7 @@ public enum PurchaseResult {
 /// CodeRedemption result
 public enum CodeRedemptionResult {
     case redeemed(purchase: PurchaseCodeRedemptionDetails)
+    case deferred(purchase: PurchaseCodeRedemptionDetails)
     case error(error: SKError)
 }
 

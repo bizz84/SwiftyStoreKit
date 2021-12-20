@@ -10,6 +10,8 @@ import SwiftyStoreKit
 import StoreKit
 
 class PaymentQueueSpy: PaymentQueue {
+    
+    
 
     weak var observer: SKPaymentTransactionObserver?
 
@@ -45,6 +47,10 @@ class PaymentQueueSpy: PaymentQueue {
         finishTransactionCalledCount += 1
     }
     
+    func presentCodeRedemptionSheet() {
+        
+    }
+    
     func start(_ downloads: [SKDownload]) {
         
     }
@@ -60,4 +66,5 @@ class PaymentQueueSpy: PaymentQueue {
     func cancel(_ downloads: [SKDownload]) {
         
     }
+    
 }

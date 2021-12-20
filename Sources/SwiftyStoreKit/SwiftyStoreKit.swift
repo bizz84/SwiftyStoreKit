@@ -85,6 +85,17 @@ public class SwiftyStoreKit {
         paymentQueueController.completeTransactions(CompleteTransactions(atomically: atomically, callback: completion))
     }
 
+    
+    fileprivate func redeemOfferCode(atomically: Bool, completion: @escaping (CodeRedemptionResult) -> Void) {
+
+        if #available(iOS 14.0, *) {
+            paymentQueueController.presentCodeRedemptionSheet(CodeRedemption(atomically: atomically) { result in
+
+                completion(self.processCodeRedemptionResult(result))
+            })
+        }
+    }
+    
     fileprivate func onEntitlementRevocation(completion: @escaping ([String]) -> Void) {
 
         paymentQueueController.onEntitlementRevocation(EntitlementRevocation(callback: completion))
@@ -101,10 +112,28 @@ public class SwiftyStoreKit {
             return .success(purchase: purchase)
         case .deferred(let purchase):
             return .deferred(purchase: purchase)
+        case .redeemed(purchase: let purchase):
+            return .error(error: storeInternalError(description: "Cannot redeemed code product \(purchase.productId) from purchase path"))
         case .failed(let error):
             return .error(error: error)
         case .restored(let purchase):
             return .error(error: storeInternalError(description: "Cannot restore product \(purchase.productId) from purchase path"))
+        }
+    }
+    
+    private func processCodeRedemptionResult(_ result: TransactionResult) -> CodeRedemptionResult {
+        switch result {
+        case .purchased(purchase: let purchase):
+            return .error(error: storeInternalError(description: "Cannot purchase product \(purchase.productId) from code redemption path"))
+        case .redeemed(let purchase):
+            return .redeemed(purchase: purchase)
+        case .deferred(let purchase):
+            let error = storeInternalError(description: "Cannot purchase product \(purchase.productId) from restore purchases path")
+            return .error(error: error)
+        case .failed(let error):
+            return .error(error: error)
+        case .restored(let purchase):
+            return .error(error: storeInternalError(description: "Cannot restore product \(purchase.productId) from code redemption path"))
         }
     }
     
@@ -116,6 +145,9 @@ public class SwiftyStoreKit {
             case .purchased(let purchase):
                 let error = storeInternalError(description: "Cannot purchase product \(purchase.productId) from restore purchases path")
                 restoreFailedPurchases.append((error, purchase.productId))
+            case .redeemed(purchase: let purchase):
+                let error = storeInternalError(description: "Cannot redeem code product \(purchase.productId) from restore purchases path")
+                          restoreFailedPurchases.append((error, purchase.productId))
             case .deferred(let purchase):
                 let error = storeInternalError(description: "Cannot purchase product \(purchase.productId) from restore purchases path")
                 restoreFailedPurchases.append((error, purchase.productId))
@@ -188,6 +220,14 @@ extension SwiftyStoreKit {
     public class func restorePurchases(atomically: Bool = true, applicationUsername: String = "", completion: @escaping (RestoreResults) -> Void) {
         
         sharedInstance.restorePurchases(atomically: atomically, applicationUsername: applicationUsername, completion: completion)
+    }
+    
+    /// RedeemOfferCode
+    ///  - Parameter atomically: whether the code is redeemed atomically (e.g. `finishTransaction` is called immediately)
+    public class func redeemOfferCode(atomically: Bool = true, completion: @escaping (CodeRedemptionResult) -> Void) {
+
+        sharedInstance.redeemOfferCode(atomically: atomically, completion: completion)
+
     }
     
     /// Complete transactions

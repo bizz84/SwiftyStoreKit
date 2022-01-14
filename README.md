@@ -20,12 +20,17 @@ SwiftyStoreKit is a lightweight In App Purchases framework for iOS, tvOS, watchO
 - Downloading content hosted with Apple
 - iOS, tvOS, watchOS, macOS, and Catalyst compatible
 
-## UPDATE: SwiftyStoreKit to RevenueCat Migration Guide
+## SwiftyStoreKit Alternatives
+
 During WWDC21, Apple introduced [StoreKit 2](https://developer.apple.com/videos/play/wwdc2021/10114/), a brand new Swift API for in-app purchases and auto-renewable subscriptions. 
 
 While it would be highly desirable to support StoreKit 2 in this project, [little progress](https://github.com/bizz84/SwiftyStoreKit/issues/550) has been made over the last year and most issues [remain unanswered](https://github.com/bizz84/SwiftyStoreKit/issues).
 
-The good news is that [RevenueCat](https://www.revenuecat.com/) is a great alternative to SwiftyStoreKit, offering great APIs, support, and much more at a very [reasonable price](https://www.revenuecat.com/pricing).
+Fortunately, there are some very good alternatives to SwiftyStoreKit, backed by real companies. By choosing their products, you'll make a safe choice and get much better support.
+
+### RevenueCat
+
+[RevenueCat](https://www.revenuecat.com/) is a great alternative to SwiftyStoreKit, offering great APIs, support, and much more at a very [reasonable price](https://www.revenuecat.com/pricing).
 
 If you've been using SwiftyStoreKit and want to migrate to RevenueCat, this guide covers everything you need:
 
@@ -33,7 +38,14 @@ If you've been using SwiftyStoreKit and want to migrate to RevenueCat, this guid
 
 Or if you're just getting started, consider skipping SwiftyStoreKit altogether and signing up for [RevenueCat](https://www.revenuecat.com/).
 
-Alternatively, you can also check out [Glassfy](https://glassfy.io/), which also makes it easy to handle in-app subscriptions and much more (here is their [pricing page](https://glassfy.io/pricing.html)).
+### Glassfy
+
+[Glassfy](https://glassfy.io/) makes it easy to build, handle, and optimize in-app subscriptions. If you switch to Glassfy from SwiftyStoreKit, you'll get a 20% discount by using this [affiliate link](https://dashboard.glassfy.io/referral?code=SWIFTYSTOREKIT20).
+
+- Glassfy [pricing page](https://glassfy.io/pricing.html) - 20% off
+- Glassfy [migration guide](https://docs.glassfy.io/get-started/migrate-ssk) to support you with the migration
+
+> Note from the author: if you sign up with the link above, I will receive an affiliate commission from Glassfy, at no cost to yourself. I only recommend products that I personally know and believe will help you.
 
 ## Contributions Wanted
 SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).

@@ -209,6 +209,9 @@ public struct ReceiptItem: Purchased, Codable {
     /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is **only** present for **auto-renewable** subscription receipts.
     public var subscriptionExpirationDate: Date?
     
+    /// For an expired subscription, the reason for the subscription expiration.
+    public var expirationIntent: Int?
+
     /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation. 
     /// 
     /// Treat a canceled receipt the same as if no purchase had ever been made.
@@ -316,6 +319,9 @@ public enum ReceiptInfoField: String {
         case original_purchase_date
         /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is only present for auto-renewable subscription receipts.
         case expires_date
+        ///For an expired subscription, the reason for the subscription expiration.
+        case expiration_intent
+        
         /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.
         case cancellation_date
         #if os(iOS) || os(tvOS)

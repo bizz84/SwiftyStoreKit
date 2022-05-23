@@ -58,9 +58,6 @@ extension ReceiptItem {
         self.originalPurchaseDate = originalPurchaseDate
         self.webOrderLineItemId = receiptInfo["web_order_line_item_id"] as? String
         self.subscriptionExpirationDate = ReceiptItem.parseDate(from: receiptInfo, key: "expires_date_ms")
-        if let expirationIntent = receiptInfo["expiration_intent"] as? String {
-            self.expirationIntent = Int(expirationIntent)
-        }
         self.cancellationDate = ReceiptItem.parseDate(from: receiptInfo, key: "cancellation_date_ms")
         if let isTrialPeriod = receiptInfo["is_trial_period"] as? String {
             self.isTrialPeriod = Bool(isTrialPeriod) ?? false
@@ -75,14 +72,55 @@ extension ReceiptItem {
         self.isUpgraded = receiptInfo["is_upgraded"] as? Bool ?? false
     }
 
-    private static func parseDate(from receiptInfo: ReceiptInfo, key: String) -> Date? {
-
+    fileprivate static func parseDate(from receiptInfo: ReceiptInfo, key: String) -> Date? {
         guard
             let requestDateString = receiptInfo[key] as? String,
             let requestDateMs = Double(requestDateString) else {
                 return nil
         }
         return Date(timeIntervalSince1970: requestDateMs / 1000)
+    }
+}
+
+extension PendingRenewalInfo {
+    
+    public init?(receiptInfo: ReceiptInfo) {
+        guard
+            let productId = receiptInfo["auto_renew_product_id"] as? String ?? receiptInfo["product_id"] as? String,
+            let originalTransactionId = receiptInfo["original_transaction_id"] as? String
+        else {
+            print("could not parse receipt item: \(receiptInfo). Skipping...")
+            return nil
+        }
+        self.productId = productId
+        if let statusString = receiptInfo["auto_renew_status"] as? String {
+            status = Int(statusString)
+        } else {
+            status = nil
+        }
+        if let expirationIntent = receiptInfo["expiration_intent"] as? String {
+            self.expirationIntent = Int(expirationIntent)
+        } else {
+            self.expirationIntent = nil
+        }
+        self.gracePeriodExpiresDate = ReceiptItem.parseDate(from: receiptInfo, key: "grace_period_expires_date_ms")
+        if let billingRetryString = receiptInfo["is_in_billing_retry_period"] as? String,
+           let billingRetryInt = Int(billingRetryString) {
+            self.isInBillingRetryPeriod = billingRetryInt == 1
+        } else {
+            self.isInBillingRetryPeriod = nil
+        }
+        self.transactionId = originalTransactionId
+        if let priceConsentStatusString = receiptInfo["price_consent_status"] as? String {
+            self.priceConsentStatus = Int(priceConsentStatusString)
+        } else {
+            self.priceConsentStatus = nil
+        }
+        if let priceIncreaseStatusString = receiptInfo["price_increase_status"] as? String {
+            self.priceIncreaseStatus = Int(priceIncreaseStatusString)
+        } else {
+            self.priceIncreaseStatus = nil
+        }
     }
 }
 
@@ -166,10 +204,16 @@ internal class InAppReceipt {
         }
 
         let sortedReceiptItems = sortedExpiryDatesAndItems.map { $0.1 }
+        let renewalInfo = receipt["pending_renewal_info"] as? [ReceiptInfo]
+        #if swift(>=4.1)
+            let renewal = renewalInfo?.compactMap { PendingRenewalInfo(receiptInfo: $0) }
+        #else
+            let renewal = renewalInfo?.flatMap { PendingRenewalInfo(receiptInfo: $0) }
+        #endif
         if firstExpiryDateItemPair.0 > receiptDate {
-            return .purchased(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
+            return .purchased(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems, renewalInfo: renewal)
         } else {
-            return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems)
+            return .expired(expiryDate: firstExpiryDateItemPair.0, items: sortedReceiptItems, renewalInfo: renewal)
         }
     }
     

@@ -82,15 +82,31 @@ extension ReceiptItem: Equatable {
     }
 }
 
+extension PendingRenewalInfo: Equatable {
+    public static func == (lhs: PendingRenewalInfo, rhs: PendingRenewalInfo) -> Bool {
+        return
+            lhs.productId == rhs.productId &&
+            lhs.status == rhs.status &&
+            lhs.expirationIntent == rhs.expirationIntent &&
+            lhs.gracePeriodExpiresDate == rhs.gracePeriodExpiresDate &&
+            lhs.isInBillingRetryPeriod == rhs.isInBillingRetryPeriod &&
+            lhs.transactionId == rhs.transactionId &&
+            lhs.priceConsentStatus == rhs.priceConsentStatus &&
+            lhs.priceIncreaseStatus == rhs.priceIncreaseStatus
+    }
+}
+
 extension VerifySubscriptionResult: Equatable {
 
     public static func == (lhs: VerifySubscriptionResult, rhs: VerifySubscriptionResult) -> Bool {
         switch (lhs, rhs) {
         case (.notPurchased, .notPurchased): return true
-        case (.purchased(let lhsExpiryDate, let lhsReceiptItem), .purchased(let rhsExpiryDate, let rhsReceiptItem)):
-            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
-        case (.expired(let lhsExpiryDate, let lhsReceiptItem), .expired(let rhsExpiryDate, let rhsReceiptItem)):
-            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem
+        case (.purchased(let lhsExpiryDate, let lhsReceiptItem, let lhsPendingInfo),
+              .purchased(let rhsExpiryDate, let rhsReceiptItem, let rhsPendingInfo)):
+            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem && lhsPendingInfo == rhsPendingInfo
+        case (.expired(let lhsExpiryDate, let lhsReceiptItem, let lhsPendingInfo),
+              .expired(let rhsExpiryDate, let rhsReceiptItem, let rhsPendingInfo)):
+            return lhsExpiryDate == rhsExpiryDate && lhsReceiptItem == rhsReceiptItem && lhsPendingInfo == rhsPendingInfo
         default: return false
         }
     }
@@ -169,7 +185,7 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -185,7 +201,7 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, items: [item])
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, items: [item], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -232,7 +248,7 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .nonRenewing(validDuration: duration), productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item])
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: expirationDate, items: [item], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -250,7 +266,7 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .nonRenewing(validDuration: duration), productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, items: [item])
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: expirationDate, items: [item], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -298,7 +314,7 @@ class InAppReceiptTests: XCTestCase {
 
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receipt)
 
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, items: [newerItem, olderItem])
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, items: [newerItem, olderItem], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
 
@@ -328,7 +344,7 @@ class InAppReceiptTests: XCTestCase {
         
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscription(ofType: .autoRenewable, productId: productId, inReceipt: receipt)
         
-        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: newerExpirationDate, items: [newerItem, olderItem])
+        let expectedSubscriptionResult = VerifySubscriptionResult.expired(expiryDate: newerExpirationDate, items: [newerItem, olderItem], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
     
@@ -369,7 +385,7 @@ class InAppReceiptTests: XCTestCase {
         
         let verifySubscriptionResult = SwiftyStoreKit.verifySubscriptions(ofType: .autoRenewable, productIds: productIds, inReceipt: receipt)
         
-        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, items: [newerItem, olderItem])
+        let expectedSubscriptionResult = VerifySubscriptionResult.purchased(expiryDate: newerExpirationDate, items: [newerItem, olderItem], renewalInfo: nil)
         XCTAssertEqual(verifySubscriptionResult, expectedSubscriptionResult)
     }
     

@@ -49,17 +49,17 @@ class ProductsInfoController: NSObject {
     }
     
     // As we can have multiple inflight requests, we store them in a dictionary by product ids
-    private var _inflightRequests: [Set<String>: InAppProductQuery] = [:]
+    private var inflightRequestsStorage: [Set<String>: InAppProductQuery] = [:]
     private let requestsQueue = DispatchQueue(label: "inflightRequestsQueue", attributes: .concurrent)
     private var inflightRequests: [Set<String>: InAppProductQuery] {
         get {
             requestsQueue.sync {
-                _inflightRequests
+                inflightRequestsStorage
             }
         }
         set {
             requestsQueue.sync(flags: .barrier) {
-                self._inflightRequests = newValue
+                inflightRequestsStorage = newValue
             }
         }
     }

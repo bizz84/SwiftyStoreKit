@@ -53,6 +53,11 @@ Or if you're just getting started, consider skipping SwiftyStoreKit altogether a
 
 Or you can learn [how to migrate your app from SwiftyStoreKit to Apphud](https://docs.apphud.com/getting-started/migrate-from-swiftystorekit).
 
+### Adapty
+
+With Adapty you can set up subscriptions in just an hour following these [simple steps](https://docs.adapty.io/docs/quickstart) and instantly launch in-app purchases with the [Paywall Builder](https://adapty.io/paywall-builder/). Adapty not only gives you the tools to embed purchases but also helps your customers grow.
+And the best part is that [it’s free for apps <$10k](https://adapty.io/pricing/).
+
 ## Contributions Wanted
 SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 

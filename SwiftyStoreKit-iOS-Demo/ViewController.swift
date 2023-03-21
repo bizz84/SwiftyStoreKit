@@ -279,6 +279,8 @@ extension ViewController {
         case .success(let purchase):
             print("Purchase Success: \(purchase.productId)")
             return nil
+        case .deferred(purchase: _):
+            return alertWithTitle("Purchase deferred", message: "The purchase deferred")
         case .error(let error):
             print("Purchase Failed: \(error)")
             switch error.code {

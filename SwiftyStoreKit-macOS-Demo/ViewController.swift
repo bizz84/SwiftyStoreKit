@@ -193,6 +193,8 @@ extension ViewController {
         case .success(let purchase):
             print("Purchase Success: \(purchase.productId)")
             return alertWithTitle("Thank You", message: "Purchase completed")
+        case .deferred(purchase: _):
+            return alertWithTitle("Purchase deferred", message: "The purchase deferred")
         case .error(let error):
             print("Purchase Failed: \(error)")
             switch error.code {
@@ -247,10 +249,10 @@ extension ViewController {
     func alertForVerifySubscription(_ result: VerifySubscriptionResult) -> NSAlert {
 
         switch result {
-        case .purchased(let expiryDate):
+        case .purchased(let expiryDate, _, _):
             print("Product is valid until \(expiryDate)")
             return alertWithTitle("Product is purchased", message: "Product is valid until \(expiryDate)")
-        case .expired(let expiryDate):
+        case .expired(let expiryDate, _, _):
             print("Product is expired since \(expiryDate)")
             return alertWithTitle("Product expired", message: "Product is expired since \(expiryDate)")
         case .notPurchased:

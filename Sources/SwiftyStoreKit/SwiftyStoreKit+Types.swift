@@ -171,8 +171,8 @@ public enum VerifyPurchaseResult {
 
 /// Verify subscription result
 public enum VerifySubscriptionResult {
-    case purchased(expiryDate: Date, items: [ReceiptItem])
-    case expired(expiryDate: Date, items: [ReceiptItem])
+    case purchased(expiryDate: Date, items: [ReceiptItem], renewalInfo: [PendingRenewalInfo]?)
+    case expired(expiryDate: Date, items: [ReceiptItem], renewalInfo: [PendingRenewalInfo]?)
     case notPurchased
 }
 
@@ -209,7 +209,7 @@ public struct ReceiptItem: Purchased, Codable {
     /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is **only** present for **auto-renewable** subscription receipts.
     public var subscriptionExpirationDate: Date?
     
-    /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation. 
+    /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation.
     /// 
     /// Treat a canceled receipt the same as if no purchase had ever been made.
     public var cancellationDate: Date?
@@ -237,6 +237,33 @@ public struct ReceiptItem: Purchased, Codable {
         self.isInIntroOfferPeriod = isInIntroOfferPeriod
         self.isUpgraded = isUpgraded
     }
+}
+
+public struct PendingRenewalInfo: Codable {
+    /// The value for this key corresponds to the `productIdentifier` property of the product that the customer’s subscription renews.
+    /// The unique identifier of the product purchased. You provide this value when creating the product in App Store Connect, and it corresponds to the `productIdentifier` property of the `SKPayment` object stored in the transaction's payment property.
+    public let productId: String
+    
+    /// The current renewal status for the **auto-renewable** subscription. See `auto_renew_status` for more information.
+    public let status: Int?
+    
+    /// The reason a subscription expired. This field is present **only** for a receipt that contains an **expired auto-renewable** subscription.
+    public let expirationIntent: Int?
+    
+    /// The time at which the grace period for subscription renewals expires
+    public let gracePeriodExpiresDate: Date?
+    
+    /// A flag that indicates Apple is attempting to renew an **expired subscription** automatically. This key is **only** present if an **auto-renewable** subscription is in the billing retry state
+    public let isInBillingRetryPeriod: Bool?
+    
+    /// The transaction identifier of the original purchase.
+    public let transactionId: String
+    
+    /// The price consent status for an auto-renewable subscription price increase that requires customer consent. This field is present only if the App Store requested customer consent for a price increase that requires customer consent.
+    public let priceConsentStatus: Int?
+    
+    /// The status that indicates if an **auto-renewable** subscription is subject to a price increase.
+    public let priceIncreaseStatus: Int?
 }
 
 /// Error when managing receipt
@@ -316,6 +343,9 @@ public enum ReceiptInfoField: String {
         case original_purchase_date
         /// The expiration date for the subscription, expressed as the number of milliseconds since January 1, 1970, 00:00:00 GMT. This key is only present for auto-renewable subscription receipts.
         case expires_date
+        ///For an expired subscription, the reason for the subscription expiration.
+        case expiration_intent
+        
         /// For a transaction that was canceled by Apple customer support, the time and date of the cancellation. Treat a canceled receipt the same as if no purchase had ever been made.
         case cancellation_date
         #if os(iOS) || os(tvOS)

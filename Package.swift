@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftyStoreKit",
-    platforms: [.iOS("9.0"), .macOS("10.10"), .tvOS("9.0"), .watchOS("6.2")],
+    platforms: [.iOS("12.0"), .macOS("10.13"), .tvOS("12.0"), .watchOS("10.0")],
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(

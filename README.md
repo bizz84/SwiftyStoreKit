@@ -28,6 +28,17 @@ While it would be highly desirable to support StoreKit 2 in this project, [littl
 
 Fortunately, there are some very good alternatives to SwiftyStoreKit, backed by real companies. By choosing their products, you'll make a safe choice and get much better support.
 
+### Qonversion
+
+[Qonversion](https://go.qonversion.io/vi6M) is an excellent alternative to SwiftyStoreKit. It provides a robust platform for managing in-app subscriptions and purchases and offers advanced analytics, growth tools, and seamless integrations designed to maximize app revenue potential.
+
+- The platform also features comprehensive [Analytics](https://go.qonversion.io/n8yn), an [Apple Search Ads Dashboard](https://go.qonversion.io/DIaT), and [A/B Tests](https://go.qonversion.io/EImk).
+- [Qonversion](https://go.qonversion.io/vi6M) offers the most affordable [pricing](https://go.qonversion.io/8SlU) in the market, ensuring you get the best value for your money, along with highly responsive support.
+
+For a smooth transition from SwiftyStoreKit to Qonversion, refer to this [migration guide](https://documentation.qonversion.io/docs/swiftystorekit-alternative).
+
+You can learn more about Qonversion's features [here](https://go.qonversion.io/vi6M), and check out the pricing details.
+
 ### RevenueCat
 
 [RevenueCat](https://www.revenuecat.com/) is a great alternative to SwiftyStoreKit, offering great APIs, support, and much more at a very [reasonable price](https://www.revenuecat.com/pricing).

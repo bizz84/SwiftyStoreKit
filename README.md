@@ -59,7 +59,7 @@ With Adapty you can set up subscriptions in just an hour following these [simple
 And the best part is that [it’s free for apps <$10k](https://adapty.io/pricing/).
 
 ## Contributions Wanted
-SwiftyStoreKit makes it easy for an incredible number of developers to seemlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
+SwiftyStoreKit makes it easy for an incredible number of developers to seamlessly integrate in-App Purchases. This project, however, is now **community-led**. We need help building out features and writing tests (see [issue #550](https://github.com/bizz84/SwiftyStoreKit/issues/550)).
 
 ### Maintainers Wanted
 The author is no longer maintaining this project actively. If you'd like to become a maintainer, [join the Slack workspace](https://join.slack.com/t/swiftystorekit/shared_invite/enQtODY3OTYxOTExMzE5LWVkNGY4MzcwY2VjNGM4MGU4NDFhMGE5YmUxMGM3ZTQ4NjVjNTRkNTJhNDAyMWZmY2M5OWE5MDE0ODc3OGJjMmM) and enter the [#maintainers](https://app.slack.com/client/TL2JYQ458/CLG62K26A/details/) channel.
@@ -443,7 +443,7 @@ See the [Releases Page](https://github.com/bizz84/SwiftyStoreKit/releases).
 
 ## Sample Code
 The project includes demo apps [for iOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit-iOS-Demo/ViewController.swift) [and macOS](https://github.com/bizz84/SwiftyStoreKit/blob/master/SwiftyStoreKit-macOS-Demo/ViewController.swift) showing how to use SwiftyStoreKit.
-Note that the pre-registered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
+Note that the preregistered in app purchases in the demo apps are for illustration purposes only and may not work as iTunes Connect may invalidate them.
 
 ## Essential Reading
 * [Apple - WWDC16, Session 702: Using Store Kit for In-app Purchases with Swift 3](https://developer.apple.com/videos/play/wwdc2016/702/)

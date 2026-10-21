@@ -46,6 +46,7 @@ class InAppReceiptRefreshRequest: NSObject, SKRequestDelegate, InAppRequest {
     let callback: RequestCallback
 
     deinit {
+        refreshReceiptRequest.cancel()
         refreshReceiptRequest.delegate = nil
     }
 

@@ -54,11 +54,21 @@ class TestInAppProductRequest: InAppProductRequest {
 
 class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
     
-    var requests: [ TestInAppProductRequest ] = []
+    private var _requests: [TestInAppProductRequest] = []
+    private let requestsQueue = DispatchQueue(label: "builderRequestsQueue", attributes: .concurrent)
+    var requests: [ TestInAppProductRequest ] {
+        get {
+            requestsQueue.sync {
+                _requests
+            }
+        }
+    }
     
     func request(productIds: Set<String>, callback: @escaping InAppProductRequestCallback) -> InAppProductRequest {
         let request = TestInAppProductRequest(productIds: productIds, callback: callback)
-        requests.append(request)
+        requestsQueue.sync(flags: .barrier) {
+          _requests.append(request)
+        }
         return request
     }
     
@@ -66,7 +76,7 @@ class TestInAppProductRequestBuilder: InAppProductRequestBuilder {
         requests.forEach {
             $0.fireCallback()
         }
-        requests = []
+        _requests = []
     }
 }
 
@@ -143,25 +153,28 @@ class ProductsInfoControllerTests: XCTestCase {
     // Create the expectation not to let the test finishes before the other threads complete
     let expectation = XCTestExpectation(description: "Expect downloads of product informations")
     
-    // Create the dispatch group to let the test verifies the assert only when
+    // Create the dispatch groups to let the test verifies the assert only when
     // everything else finishes.
-    let group = DispatchGroup()
+    let groupCompletion = DispatchGroup()
+    let groupFire = DispatchGroup()
     
     // Dispatch a request for every product in a different thread
     for product in testProducts {
+      groupCompletion.enter()
+      groupFire.enter()
       DispatchQueue.global().async {
-        group.enter()
         productInfoController.retrieveProductsInfo([product]) { _ in
           completionCallbackCount += 1
-          group.leave()
+          groupCompletion.leave()
         }
+        groupFire.leave()
       }
     }
-    DispatchQueue.global().asyncAfter(deadline: .now()+0.1) {
+    groupFire.notify(queue: DispatchQueue.global()) {
       requestBuilder.fireCallbacks()
     }
     // Fullfil the expectation when every thread finishes
-    group.notify(queue: DispatchQueue.global()) {
+    groupCompletion.notify(queue: DispatchQueue.global()) {
       
       XCTAssertEqual(completionCallbackCount, self.testProducts.count)
       expectation.fulfill()
